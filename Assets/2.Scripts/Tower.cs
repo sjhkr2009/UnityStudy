@@ -8,15 +8,30 @@ public class Tower : MonoBehaviour
     void Update()
     {
         //스크린에 ray를 쏴서 마우스의 위치를 가져온다.
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         Physics.Raycast(ray, out hit); //마우스에서 ray라는 레이저를 쏴서 맞춘 지점의 정보를 hit에 넣는다. ray가 비어 있으면 false를 반환한다.
-        Debug.Log(hit.point); //point: 해당 지점 좌표를 Vector3 값으로 나타낸 것.
+        //Debug.Log(hit.point); //point: 해당 지점 좌표를 Vector3 값으로 나타낸 것.
 
         Vector3 dir = hit.point - transform.position; //마우스 위치를 바라보는 벡터값
-        dir.Normalize();
 
-        transform.rotation = Quaternion.LookRotation(dir);
+        //dir.Normalize();
+
+        //transform.rotation = Quaternion.LookRotation(dir);
+
+        //Debug.Log(Quaternion.LookRotation(dir).eulerAngles);
+        //float rotateLevel = hit.point - transform.position;
+        //Debug.Log(rotateLevel);
+
+        transform.rotation = Quaternion.AngleAxis(Quaternion.LookRotation(dir).eulerAngles.y, Vector3.up);
+    }
+
+    Quaternion SetRotate(Vector2 now, Vector2 target)
+    {
+        Vector2 direction = target - now;
+        float rotateLevel = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        return Quaternion.Euler(new Vector3(0, 0, rotateLevel));
     }
 }
