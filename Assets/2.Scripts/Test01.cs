@@ -15,12 +15,11 @@ public class Test01 : MonoBehaviour
     //클래스 밖에서 변수 선언 불가
 
     //특정 단어에서 F12 누르면 정의로 이동, 다시 돌아가려면 'Ctrl' + '-' 키를 누르면 된다.
+    //변수 위에서 Ctrl + R을 두 번 누르면 해당 변수명 전체가 선택되고, 일괄 변경할 수 있다.
 
     void Start()
     {
         //PrintHelloWorld(10);
-
-        
 
         for (int i = 2; i < 10; i++)
         {

@@ -51,6 +51,8 @@ public class Test02 : MonoBehaviour
         testStruct.n = 30;
         testStruct.n2 = 40; //이렇게 바꿔도 testStruct2의 n, n2의 값은 바뀌지 않고 그대로 3,4다.
     }
+
+    //참고: MonoBehaviour을 상속받는 클래스는 new로 생성하지 말 것.
 }
 
 public class TestClass
