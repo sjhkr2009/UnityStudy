@@ -8,7 +8,14 @@ public class Player : MonoBehaviour
     public GameObject bullet;
     public Transform bulletSpawnPos;
     public Transform bulletsGroup; //public으로 선언하기 싫은 경우 GameObject.Find("Bullets").transform 으로 찾아서 불러올 수 있다.
-        // transform.Find() 를 사용하면 이 오브젝트의 하위 오브젝트 중에서 찾으므로, Bullets를 찾을 수 없다.
+                                   // transform.Find() 를 사용하면 이 오브젝트의 하위 오브젝트 중에서 찾으므로, Bullets를 찾을 수 없다.
+
+    PoolManager poolManager;
+
+    private void Start()
+    {
+        poolManager = FindObjectOfType<PoolManager>();
+    }
 
     void Update()
     {
@@ -26,10 +33,12 @@ public class Player : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            GameObject instance = Instantiate(bullet, bulletSpawnPos.position, transform.rotation, bulletsGroup); //생성할 오브젝트, 생성 위치, 회전, 부모 오브젝트
-            Destroy(instance, 3f);
+            //GameObject instance = Instantiate(bullet, bulletSpawnPos.position, transform.rotation, bulletsGroup); //생성할 오브젝트, 생성 위치, 회전, 부모 오브젝트
+            //Destroy(instance, 3f);
+            poolManager.SpawnBullet(bulletSpawnPos.position);
         }
-        
+
+
     }
 
     private void OnCollisionEnter(Collision collision)
