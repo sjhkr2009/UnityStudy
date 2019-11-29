@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - LaserLauncher
+  - ClickedUI
+  - MoveUI
+  - Goal
+  - Enemy
+  - ItemUI
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Launcher
+  - 
+  - Unit
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - In-GameUI
+  - 
+  - 
+  - PopUpUI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Map
+    uniqueID: 2981474377
+    locked: 0
+  - name: BackgroundFX
+    uniqueID: 1935022029
+    locked: 0
+  - name: Unit
+    uniqueID: 1748341873
+    locked: 0
+  - name: FX
+    uniqueID: 1503924329
+    locked: 0
+  - name: PlayerUI
+    uniqueID: 1445344403
+    locked: 0
+  - name: UI
+    uniqueID: 2188342379
+    locked: 0
