@@ -21,17 +21,22 @@ public class SpawnManager : MonoBehaviour
     [Button("Make Objects")]
     void Awake()
     {
-        playerBulletList = ObjectInstance(playerBulletList, playerBullet, playerBulletGroup);
+        playerBulletList = MakeObjectPool(playerBulletList, playerBullet, playerBulletGroup, objectPoolNormal);
     }
 
-    List<GameObject> ObjectInstance(List<GameObject> objectList, GameObject prefab, Transform group)
+    List<GameObject> MakeObjectPool(List<GameObject> objectList, GameObject prefab, Transform group, int count)
     {
-        for (int i = 0; i < objectPoolNormal; i++)
+        for (int i = 0; i < count; i++)
         {
-            objectList.Add(Instantiate(prefab, group));
-            objectList[objectList.Count - 1].SetActive(false);
+            ObjectInstance(objectList, prefab, group);
         }
         return objectList;
+    }
+
+    void ObjectInstance(List<GameObject> objectList, GameObject prefab, Transform group)
+    {
+        objectList.Add(Instantiate(prefab, group));
+        objectList[objectList.Count - 1].SetActive(false);
     }
 
     int Spawn(List<GameObject> objectList, Vector3 position, Quaternion rotation, int index, int poolAmount)
@@ -48,6 +53,11 @@ public class SpawnManager : MonoBehaviour
     [Button("Spawn Bullet")]
     public void SpawnPlayerBullet(Vector3 position, Quaternion rotation)
     {
-        playerBulletIndex = Spawn(playerBulletList, position, rotation, playerBulletIndex, objectPoolNormal);
+        if (playerBulletList[playerBulletIndex].activeSelf)
+        {
+            ObjectInstance(playerBulletList, playerBullet, playerBulletGroup);
+        }
+        
+        playerBulletIndex = Spawn(playerBulletList, position, rotation, playerBulletIndex, playerBulletList.Count);
     }
 }
