@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using DG.Tweening;
 
 public class BaseFlyingWeapon : MonoBehaviour
 {
@@ -28,8 +29,38 @@ public class BaseFlyingWeapon : MonoBehaviour
     {
         transform.Translate(speed * Time.deltaTime * Vector3.forward);
     }
+    
+    protected IEnumerator Homing(GameObject target)
+    {
+        while (this.gameObject.activeSelf)
+        {
+            Vector3 targetDir = Quaternion.LookRotation(target.transform.position - transform.position).eulerAngles;
+            float targetRotation = targetDir.y;
+            Vector3 currentDir = transform.rotation.eulerAngles;
+            float currentRotation = currentDir.y;
 
-    private void Update()
+            Debug.Log($"타겟: {targetRotation} / 총알: {currentRotation}");
+            //테스트 중
+            if (Mathf.Abs(targetRotation - 180f) - Mathf.Abs(currentRotation - 180f) > 3f)
+            {
+                
+                Quaternion getRotation = Quaternion.Euler(new Vector3(currentDir.x, currentRotation + 3f, currentDir.z));
+                transform.rotation = getRotation;
+            }
+            else if (targetRotation%180f < currentRotation%180f - 3f)
+            {
+                Quaternion getRotation = Quaternion.Euler(new Vector3(currentDir.x, currentRotation - 3f, currentDir.z));
+                transform.rotation = getRotation;
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(targetDir);
+            }
+            yield return new WaitForSeconds(0.04f);
+        }
+    }
+
+    protected void ExpiredCheck()
     {
         Vector3 thisPos = transform.position;
         if(thisPos.x < minX || thisPos.x > maxX || thisPos.z < minY || thisPos.z > maxY)

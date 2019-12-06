@@ -4,14 +4,22 @@ using UnityEngine;
 
 public class PlayerBullet : BaseFlyingWeapon
 {
-    
+    public GameObject target;
     void Start()
     {
         
     }
 
+    private void OnEnable()
+    {
+        target = GameObject.FindWithTag("Enemy");
+        StartCoroutine(Homing(target));
+    }
+
     void Update()
     {
+        //ExpiredCheck();
+
         MoveToward();
     }
 
@@ -19,7 +27,6 @@ public class PlayerBullet : BaseFlyingWeapon
     {
         if (other.CompareTag("Enemy"))
         {
-            //오브젝트의 BaseUnit을 통해 체력 감소
             BaseUnit enemy = other.gameObject.GetComponent<BaseUnit>();
             enemy.Attacked(1);
             UnitDestroy();
