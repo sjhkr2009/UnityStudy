@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2392ba235ec4d47a4e86dc83490c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
+  hp: 40
   speed: 3
   destroyFX: {fileID: 4772139974239324096, guid: 19e3e9722717d3044973cce684f445f9,
     type: 3}
