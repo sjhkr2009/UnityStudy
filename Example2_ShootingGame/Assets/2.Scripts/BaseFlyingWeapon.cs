@@ -6,15 +6,16 @@ using DG.Tweening;
 
 public class BaseFlyingWeapon : MonoBehaviour
 {
-    [TabGroup("Basic")] [SerializeField] protected float speed;
-    [TabGroup("Basic")] [SerializeField] protected GameObject destroyFX;
-    [TabGroup("Basic")] [SerializeField] float minX = -20f;
-    [TabGroup("Basic")] [SerializeField] float maxX = 20f;
-    [TabGroup("Basic")] [SerializeField] float minY = -10f;
-    [TabGroup("Basic")] [SerializeField] float maxY = 20f;
-    [TabGroup("Special")] [SerializeField] float homingRotation = 3f;
-    [TabGroup("Special")] [SerializeField] float homingRotationAdd = 0.5f;
-    [TabGroup("Special")] [SerializeField] float homingStartDelay = 0.2f;
+    [BoxGroup("Common")] [SerializeField] protected float speed;
+    [BoxGroup("Common")] [SerializeField] protected float damage = 1f;
+    [BoxGroup("Common")] [SerializeField] protected GameObject destroyFX;
+    [TabGroup("Normal")] [SerializeField] float minX = -20f;
+    [TabGroup("Normal")] [SerializeField] float maxX = 20f;
+    [TabGroup("Normal")] [SerializeField] float minY = -10f;
+    [TabGroup("Normal")] [SerializeField] float maxY = 20f;
+    [TabGroup("Homing")] [SerializeField] float homingRotation = 3f;
+    [TabGroup("Homing")] [SerializeField] float homingRotationAdd = 0.5f;
+    [TabGroup("Homing")] [SerializeField] float homingStartDelay = 0.2f;
 
     protected float originSpeed;
     float originHomingRotation;
@@ -59,7 +60,7 @@ public class BaseFlyingWeapon : MonoBehaviour
             Vector3 currentDir = transform.rotation.eulerAngles;
             float currentRotation = currentDir.y;
 
-            Debug.Log($"타겟: {targetRotation} / 총알: {currentRotation}");
+            //Debug.Log($"타겟: {targetRotation} / 총알: {currentRotation}");
 
             float difference = targetRotation - currentRotation;
             if(difference > 180f)
@@ -70,7 +71,7 @@ public class BaseFlyingWeapon : MonoBehaviour
             {
                 difference += 360f;
             }
-            Debug.Log($"회전해야 하는 각도: {difference}");
+            //Debug.Log($"회전해야 하는 각도: {difference}");
 
             if (Mathf.Abs(difference) < homingRotation)
             {

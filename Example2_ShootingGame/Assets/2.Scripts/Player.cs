@@ -8,7 +8,8 @@ public class Player : BaseUnit
     Rigidbody rb;
     [BoxGroup("Child Components")] [SerializeField] Transform weapon;
     [BoxGroup("Child Components")] [SerializeField] Transform mainShootPoint;
-    
+    [BoxGroup("Skill")] [SerializeField] int homingMissileCount;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -18,6 +19,8 @@ public class Player : BaseUnit
     
     void Update()
     {
+        DeadCheck();
+
         if (Input.GetButtonDown("Fire1"))
         {
             GameManager.instance.PlayerShooting(mainShootPoint.position, weapon.rotation);
@@ -26,8 +29,10 @@ public class Player : BaseUnit
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("여기에 실험중인 함수 입력");
-            //UnitDestroy();
+            GameManager.instance.PlayerHomingSkill(transform.position, homingMissileCount);
         }
+
+        
     }
 
     public void PlayerMove(float xMove, float yMove)

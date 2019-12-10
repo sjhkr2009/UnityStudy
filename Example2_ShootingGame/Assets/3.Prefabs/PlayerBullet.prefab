@@ -106,7 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 660541eab5f2357469b93b8e069d7c39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 15
+  damage: 2
   destroyFX: {fileID: 7810989737325733454, guid: d76d4c6e3d62e0646aaf751ac2d7f916,
     type: 3}
   minX: -20
@@ -116,8 +117,6 @@ MonoBehaviour:
   homingRotation: 3
   homingRotationAdd: 1
   homingStartDelay: 0.2
-  targets: []
-  target: {fileID: 0}
 --- !u!1001 &2081818063341375177
 PrefabInstance:
   m_ObjectHideFlags: 0

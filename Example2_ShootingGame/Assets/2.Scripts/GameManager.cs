@@ -87,4 +87,15 @@ public class GameManager : MonoBehaviour
     {
         spawnManager.SpawnPlayerBullet(position, rotation);
     }
+
+    public void PlayerHomingSkill(Vector3 position, int count)
+    {
+        
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 vecRotation = new Vector3(0f, (1f/count)*i*360f, 0f);
+            Quaternion rotation = Quaternion.Euler(vecRotation);
+            spawnManager.SpawnPlayerHomingBullet(position, rotation);
+        }
+    }
 }

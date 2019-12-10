@@ -6,22 +6,27 @@ using Sirenix.OdinInspector;
 public class SpawnManager : MonoBehaviour
 {
     [TabGroup("Prefab List")] [SerializeField] GameObject playerBullet;
+    [TabGroup("Prefab List")] [SerializeField] GameObject playerHomingBullet;
     //[TabGroup("Prefab List")] [SerializeField] GameObject enemy1;
 
     List<GameObject> playerBulletList = new List<GameObject>();
+    List<GameObject> playerHomingBulletList = new List<GameObject>();
 
     int playerBulletIndex = 0;
+    int playerHomingBulletIndex = 0;
 
     [BoxGroup("Pool Amount")] [SerializeField] int objectPoolSmall = 30;
     [BoxGroup("Pool Amount")] [SerializeField] int objectPoolNormal = 100;
     [BoxGroup("Pool Amount")] [SerializeField] int objectPoolBig = 500;
 
     [TabGroup("Group")] [SerializeField] Transform playerBulletGroup;
+    [TabGroup("Group")] [SerializeField] Transform playerHomingBulletGroup;
 
     [Button("Make Objects")]
     void Awake()
     {
         playerBulletList = MakeObjectPool(playerBulletList, playerBullet, playerBulletGroup, objectPoolNormal);
+        playerHomingBulletList = MakeObjectPool(playerHomingBulletList, playerHomingBullet, playerHomingBulletGroup, objectPoolNormal);
     }
 
     List<GameObject> MakeObjectPool(List<GameObject> objectList, GameObject prefab, Transform group, int count)
@@ -60,5 +65,15 @@ public class SpawnManager : MonoBehaviour
         }
         
         playerBulletIndex = Spawn(playerBulletList, position, rotation, playerBulletIndex, playerBulletList.Count);
+    }
+
+    public void SpawnPlayerHomingBullet(Vector3 position, Quaternion rotation)
+    {
+        if (playerHomingBulletList[playerHomingBulletIndex].activeSelf)
+        {
+            ObjectInstance(playerHomingBulletList, playerHomingBullet, playerHomingBulletGroup);
+        }
+
+        playerHomingBulletIndex = Spawn(playerHomingBulletList, position, rotation, playerHomingBulletIndex, playerHomingBulletList.Count);
     }
 }

@@ -5,9 +5,19 @@ using Sirenix.OdinInspector;
 
 public class BaseUnit : MonoBehaviour
 {
-    [TabGroup("Basic")] [SerializeField] protected int hp = 1;
+    [TabGroup("Basic")] [SerializeField] protected float hp = 1f;
     [TabGroup("Basic")] [SerializeField] protected float speed = 3.0f;
     [TabGroup("Basic")] [SerializeField] protected GameObject destroyFX;
+
+    protected void DeadCheck()
+    {
+        if (hp <= 0f)
+        {
+            Debug.Log($"사망: {gameObject.name}");
+            hp = 0f;
+            UnitDestroy();
+        }
+    }
 
     protected void UnitDestroy()
     {
@@ -21,13 +31,11 @@ public class BaseUnit : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Attacked(int damage)
+    public void Attacked(float damage)
     {
-        hp--;
-        if (hp <= 0)
-        {
-            UnitDestroy();
-        }
+        hp -= damage;
+
+        DeadCheck();
     }
 
     protected void ShootingEnemyMove()
@@ -37,6 +45,6 @@ public class BaseUnit : MonoBehaviour
 
     protected void CollisionEnemyMove()
     {
-        //충돌하여 공격하면 적의 움직임
+        //충돌하여 공격하는 적의 움직임
     }
 }
