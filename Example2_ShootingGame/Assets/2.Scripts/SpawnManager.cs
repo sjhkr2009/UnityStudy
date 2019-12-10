@@ -53,6 +53,7 @@ public class SpawnManager : MonoBehaviour
     [Button("Spawn Bullet")]
     public void SpawnPlayerBullet(Vector3 position, Quaternion rotation)
     {
+        //리스트의 모든 오브젝트가 활성화 상태이면, 추가로 생성하기
         if (playerBulletList[playerBulletIndex].activeSelf)
         {
             ObjectInstance(playerBulletList, playerBullet, playerBulletGroup);

@@ -12,10 +12,18 @@ public class BaseFlyingWeapon : MonoBehaviour
     [TabGroup("Basic")] [SerializeField] float maxX = 20f;
     [TabGroup("Basic")] [SerializeField] float minY = -10f;
     [TabGroup("Basic")] [SerializeField] float maxY = 20f;
-    [TabGroup("Special")] [SerializeField] float homingRotationStart = 3f;
-    [TabGroup("Special")] [SerializeField] float homingRotationAdd = 0.1f;
-    [TabGroup("Special")] [SerializeField] float homingDelay = 0.2f;
+    [TabGroup("Special")] [SerializeField] float homingRotation = 3f;
+    [TabGroup("Special")] [SerializeField] float homingRotationAdd = 0.5f;
+    [TabGroup("Special")] [SerializeField] float homingStartDelay = 0.2f;
 
+    protected float originSpeed;
+    float originHomingRotation;
+    private void Awake()
+    {
+        originSpeed = speed;
+        originHomingRotation = homingRotation;
+
+    }
 
     protected void UnitDestroy()
     {
@@ -36,10 +44,16 @@ public class BaseFlyingWeapon : MonoBehaviour
     
     protected IEnumerator Homing(GameObject target)
     {
-        yield return new WaitForSeconds(homingDelay);
-        
+        yield return new WaitForSeconds(homingStartDelay);
+        homingRotation = originHomingRotation;
+
         while (this.gameObject.activeSelf)
         {
+            if (!target.activeSelf)
+            {
+                break;
+            }
+            
             Vector3 targetDir = Quaternion.LookRotation(target.transform.position - transform.position).eulerAngles;
             float targetRotation = targetDir.y;
             Vector3 currentDir = transform.rotation.eulerAngles;
@@ -58,30 +72,32 @@ public class BaseFlyingWeapon : MonoBehaviour
             }
             Debug.Log($"회전해야 하는 각도: {difference}");
 
-            if (Mathf.Abs(difference) < homingRotationStart)
+            if (Mathf.Abs(difference) < homingRotation)
             {
                 transform.rotation = Quaternion.Euler(targetDir);
             }
             else if(difference >= 0)
             {
-                Quaternion getRotation = Quaternion.Euler(new Vector3(currentDir.x, currentRotation + homingRotationStart, currentDir.z));
+                Quaternion getRotation = Quaternion.Euler(new Vector3(currentDir.x, currentRotation + homingRotation, currentDir.z));
                 transform.rotation = getRotation;
             } else if(difference < 0)
             {
-                Quaternion getRotation = Quaternion.Euler(new Vector3(currentDir.x, currentRotation - homingRotationStart, currentDir.z));
+                Quaternion getRotation = Quaternion.Euler(new Vector3(currentDir.x, currentRotation - homingRotation, currentDir.z));
                 transform.rotation = getRotation;
             }
             else
             {
                 Debug.Log("Error!");
             }
-            homingRotationStart += homingRotationAdd;
+            homingRotation += homingRotationAdd;
+
+            speed = originSpeed + homingRotation/3f;
 
             yield return new WaitForSeconds(0.04f);
         }
     }
 
-    protected void ExpiredCheck()
+    protected void OutRangeBulletExpire()
     {
         Vector3 thisPos = transform.position;
         if(thisPos.x < minX || thisPos.x > maxX || thisPos.z < minY || thisPos.z > maxY)
