@@ -9,6 +9,7 @@ public class BaseFlyingWeapon : MonoBehaviour
     [BoxGroup("Common")] [SerializeField] protected float speed;
     [BoxGroup("Common")] [SerializeField] protected float damage = 1f;
     [BoxGroup("Common")] [SerializeField] protected GameObject destroyFX;
+    [BoxGroup("Common")] [SerializeField] protected string targetName;
     [TabGroup("Normal")] [SerializeField] float minX = -20f;
     [TabGroup("Normal")] [SerializeField] float maxX = 20f;
     [TabGroup("Normal")] [SerializeField] float minY = -10f;

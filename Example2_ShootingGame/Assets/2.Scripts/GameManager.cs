@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     static GameManager _instance;
     public static GameManager instance => _instance;
 
-    [TabGroup("Scripts")] [SerializeField] Player player;
+    [TabGroup("Scripts")] public Player player;
     [TabGroup("Scripts")] [SerializeField] SpawnManager spawnManager;
     UpgradeManager upgradeManager;
 
@@ -97,5 +97,10 @@ public class GameManager : MonoBehaviour
             Quaternion rotation = Quaternion.Euler(vecRotation);
             spawnManager.SpawnPlayerHomingBullet(position, rotation);
         }
+    }
+
+    public void EnemyBulletShooting(Vector3 position, Quaternion rotation)
+    {
+        spawnManager.SpawnEnemyBullet(position, rotation);
     }
 }

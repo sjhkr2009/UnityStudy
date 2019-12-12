@@ -110,6 +110,7 @@ MonoBehaviour:
   damage: 2
   destroyFX: {fileID: 7810989737325733454, guid: d76d4c6e3d62e0646aaf751ac2d7f916,
     type: 3}
+  targetName: Enemy
   minX: -20
   maxX: 20
   minY: -10

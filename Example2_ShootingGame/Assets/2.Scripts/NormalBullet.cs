@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBullet : BaseFlyingWeapon
+public class NormalBullet : BaseFlyingWeapon
 {
     
-    void Start()
-    {
-        
-    }
 
     private void OnEnable()
     {
@@ -23,10 +19,10 @@ public class PlayerBullet : BaseFlyingWeapon
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.transform.parent.CompareTag(targetName))
         {
-            BaseUnit enemy = other.gameObject.GetComponent<BaseUnit>();
-            enemy.Attacked(damage);
+            BaseUnit target = other.transform.parent.gameObject.GetComponent<BaseUnit>();
+            target.Attacked(damage);
             UnitDestroy();
         }
     }

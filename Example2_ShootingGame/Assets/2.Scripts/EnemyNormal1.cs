@@ -1,19 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 public class EnemyNormal1 : BaseUnit
 {
-    
-    void Start()
+
+    [TabGroup("Enemy")] [SerializeField] Transform shootPoint;
+    [TabGroup("Enemy")] [SerializeField] Transform body;
+    [TabGroup("Enemy")] [SerializeField] Transform player;
+    [TabGroup("Enemy")] [SerializeField] float shootDelay = 1f;
+
+    void OnEnable()
     {
-        
+        StartCoroutine(Shoot());
     }
 
     void Update()
     {
         DeadCheck();
+        MoveToward();
 
+        if (-20f < transform.position.x && transform.position.x < 20f && -5f < transform.position.z && transform.position.z < 16f)
+        {
+            
+            body.LookAt(GameManager.instance.player.transform);
+        }
 
+        if(transform.position.z < -8f)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    IEnumerator Shoot()
+    {
+        while (gameObject.activeSelf)
+        {
+            yield return new WaitForSeconds(shootDelay);
+
+            if(-20f < transform.position.x && transform.position.x < 20f && - 5f < transform.position.z && transform.position.z < 15f)
+            {
+                GameManager.instance.EnemyBulletShooting(shootPoint.position, body.rotation);
+            }
+        }
     }
 }

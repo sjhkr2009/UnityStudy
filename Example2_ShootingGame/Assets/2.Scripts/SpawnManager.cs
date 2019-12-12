@@ -7,26 +7,34 @@ public class SpawnManager : MonoBehaviour
 {
     [TabGroup("Prefab List")] [SerializeField] GameObject playerBullet;
     [TabGroup("Prefab List")] [SerializeField] GameObject playerHomingBullet;
-    //[TabGroup("Prefab List")] [SerializeField] GameObject enemy1;
+    [TabGroup("Prefab List")] [SerializeField] GameObject enemyBullet;
+    [TabGroup("Prefab List")] [SerializeField] GameObject enemy1;
 
     List<GameObject> playerBulletList = new List<GameObject>();
     List<GameObject> playerHomingBulletList = new List<GameObject>();
+    List<GameObject> enemyBulletList = new List<GameObject>();
+    List<GameObject> enemy1List = new List<GameObject>();
 
     int playerBulletIndex = 0;
     int playerHomingBulletIndex = 0;
-
-    [BoxGroup("Pool Amount")] [SerializeField] int objectPoolSmall = 30;
-    [BoxGroup("Pool Amount")] [SerializeField] int objectPoolNormal = 100;
-    [BoxGroup("Pool Amount")] [SerializeField] int objectPoolBig = 500;
+    int enemyBulletIndex = 0;
+    int enemy1Index = 0;
 
     [TabGroup("Group")] [SerializeField] Transform playerBulletGroup;
     [TabGroup("Group")] [SerializeField] Transform playerHomingBulletGroup;
+    [TabGroup("Group")] [SerializeField] Transform enemyBulletGroup;
+    [TabGroup("Group")] [SerializeField] Transform enemy1Group;
 
-    [Button("Make Objects")]
+    [BoxGroup("Pool Amount")] [SerializeField] int smallPool = 30;
+    [BoxGroup("Pool Amount")] [SerializeField] int normalPool = 100;
+    [BoxGroup("Pool Amount")] [SerializeField] int bigPool = 500;
+
     void Awake()
     {
-        playerBulletList = MakeObjectPool(playerBulletList, playerBullet, playerBulletGroup, objectPoolNormal);
-        playerHomingBulletList = MakeObjectPool(playerHomingBulletList, playerHomingBullet, playerHomingBulletGroup, objectPoolNormal);
+        playerBulletList = MakeObjectPool(playerBulletList, playerBullet, playerBulletGroup, normalPool);
+        playerHomingBulletList = MakeObjectPool(playerHomingBulletList, playerHomingBullet, playerHomingBulletGroup, normalPool);
+        enemyBulletList = MakeObjectPool(enemyBulletList, enemyBullet, enemyBulletGroup, normalPool);
+        enemy1List = MakeObjectPool(enemy1List, enemy1, enemy1Group, normalPool);
     }
 
     List<GameObject> MakeObjectPool(List<GameObject> objectList, GameObject prefab, Transform group, int count)
@@ -44,18 +52,17 @@ public class SpawnManager : MonoBehaviour
         objectList[objectList.Count - 1].SetActive(false);
     }
 
-    int Spawn(List<GameObject> objectList, Vector3 position, Quaternion rotation, int index, int poolAmount)
+    int Spawn(List<GameObject> objectList, Vector3 position, Quaternion rotation, int index, int poolListAmount)
     {
         objectList[index].transform.position = position;
         objectList[index].transform.rotation = rotation;
         objectList[index].SetActive(true);
         index++;
-        index %= poolAmount;
+        index %= poolListAmount;
         return index;
 
     }
 
-    [Button("Spawn Bullet")]
     public void SpawnPlayerBullet(Vector3 position, Quaternion rotation)
     {
         //리스트의 모든 오브젝트가 활성화 상태이면, 추가로 생성하기
@@ -75,5 +82,25 @@ public class SpawnManager : MonoBehaviour
         }
 
         playerHomingBulletIndex = Spawn(playerHomingBulletList, position, rotation, playerHomingBulletIndex, playerHomingBulletList.Count);
+    }
+
+    public void SpawnEnemyBullet(Vector3 position, Quaternion rotation)
+    {
+        if (enemyBulletList[enemyBulletIndex].activeSelf)
+        {
+            ObjectInstance(enemyBulletList, enemyBullet, enemyBulletGroup);
+        }
+
+        enemyBulletIndex = Spawn(enemyBulletList, position, rotation, enemyBulletIndex, playerHomingBulletList.Count);
+    }
+
+    public void SpawnEnemy1(Vector3 position)
+    {
+        if (enemy1List[enemy1Index].activeSelf)
+        {
+            ObjectInstance(enemy1List, enemy1, enemy1Group);
+        }
+        Quaternion rotation = Quaternion.Euler(0f, 180f, 0f);
+        enemy1Index = Spawn(enemy1List, position, rotation, enemy1Index, enemy1List.Count);
     }
 }

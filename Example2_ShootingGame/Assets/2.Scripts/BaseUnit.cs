@@ -37,6 +37,10 @@ public class BaseUnit : MonoBehaviour
 
         DeadCheck();
     }
+    protected void MoveToward()
+    {
+        transform.Translate(speed * Time.deltaTime * Vector3.forward);
+    }
 
     protected void ShootingEnemyMove()
     {
