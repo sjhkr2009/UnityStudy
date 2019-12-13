@@ -16,6 +16,7 @@ public class PlayerHomingBullet : BaseFlyingWeapon
         hp = 5f;
         targetList = GameManager.instance.spawnManager.allEnemyList; //나중에 리스트로 변경하고, SpawnManager에서 적 오브젝트를 풀링할 때 여기에 가져올 것
         target = GetNearTarget();
+        targetName = "Enemy";
 
         if(target != null)
         {

@@ -11,6 +11,7 @@ public class EnemyRotate : BaseUnit
 
     void OnEnable()
     {
+        ReSpawn();
         StartCoroutine(Shoot());
     }
 

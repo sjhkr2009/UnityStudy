@@ -4696,7 +4696,7 @@ GameObject:
   - component: {fileID: 5252453687133903962}
   - component: {fileID: 1524804904477045214}
   m_Layer: 0
-  m_Name: PlayerHomingBullet
+  m_Name: PlayerSoulBullet
   m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9482,7 +9482,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  damage: 1
+  damage: 1.5
   destroyFX: {fileID: 6637501944688698079, guid: b8069dc3a505a974ebdf59713c2b84d3,
     type: 3}
   targetName: Enemy
@@ -9493,8 +9493,9 @@ MonoBehaviour:
   homingRotation: 3
   homingRotationAdd: 0.5
   homingStartDelay: 0.2
-  target: {fileID: 0}
   hp: 3
+  targetList: []
+  target: {fileID: 0}
 --- !u!1 &6860504751242238829
 GameObject:
   m_ObjectHideFlags: 0

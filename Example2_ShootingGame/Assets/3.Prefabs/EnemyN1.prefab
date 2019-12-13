@@ -87,7 +87,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8998850689160492630}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -156,11 +156,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 3
   speed: 1.5
+  exp: 5
   destroyFX: {fileID: 4772139974239324096, guid: 19e3e9722717d3044973cce684f445f9,
     type: 3}
   shootPoint: {fileID: 8998850689800165104}
   body: {fileID: 8998850690152561055}
-  player: {fileID: 0}
   shootDelay: 3
 --- !u!1 &8998850689571208720
 GameObject:
@@ -249,7 +249,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8998850689571208720}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2

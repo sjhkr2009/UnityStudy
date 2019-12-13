@@ -10,7 +10,39 @@ public class GameManager : MonoBehaviour
 
     [TabGroup("Scripts")] public Player player;
     [TabGroup("Scripts")] public SpawnManager spawnManager;
-    UpgradeManager upgradeManager;
+    [TabGroup("Scripts")] public EnemySpawner enemySpawner;
+    UIManager uiManager;
+
+    [TabGroup("Level")] [SerializeField] int[] expList;
+
+    int _requiredExp = 1;
+    public int requiredExp => _requiredExp;
+
+    int _currentExp;
+    public int currentExp
+    {
+        get { return _currentExp; }
+        set
+        {
+            _currentExp = value;
+            if (value >= requiredExp)
+            {
+                if(expPerLevel[player.level] == null)
+                {
+                    return;
+                }
+                
+                currentExp = value - requiredExp;
+                _requiredExp = expPerLevel[player.level];
+                player.level++;
+                player.maxHp++;
+                uiManager.requiredExp = requiredExp;
+                uiManager.maxHp = player.maxHp;
+            }
+        }
+    }
+
+    List<int> expPerLevel = new List<int>();
 
     float inputX = 0f;
     float inputY = 0f;
@@ -32,9 +64,12 @@ public class GameManager : MonoBehaviour
             {
                 case State.Ready:
                     _state = State.Ready;
+                    uiManager.StartLoading();
                     break;
                 case State.Play:
+                    Time.timeScale = 1f;
                     _state = State.Play;
+                    enemySpawner.Spawn();
                     break;
                 case State.Upgrade:
                     _state = State.Upgrade;
@@ -53,14 +88,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        uiManager = GetComponent<UIManager>();
+        SetExpLevel();
         state = State.Ready;
-        upgradeManager = GetComponent<UpgradeManager>();
-    }
-
-    void Start()
-    {
-        //임시 코드
-        state = State.Play;
+        _requiredExp = expPerLevel[0];
     }
 
     void Update()
@@ -103,5 +134,17 @@ public class GameManager : MonoBehaviour
     public void EnemyBulletShooting(Vector3 position, Quaternion rotation)
     {
         spawnManager.SpawnEnemyBullet(position, rotation);
+    }
+
+    void SetExpLevel()
+    {
+        for (int i = 0; i < expList.Length; i++)
+        {
+            expPerLevel.Add(expList[i]);
+            if(expPerLevel[i] == 0)
+            {
+                expPerLevel[i] = 1;
+            }
+        }
     }
 }

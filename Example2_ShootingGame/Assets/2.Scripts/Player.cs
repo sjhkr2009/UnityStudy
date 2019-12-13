@@ -9,9 +9,22 @@ public class Player : BaseUnit
     [TabGroup("Child Components")] [SerializeField] Transform weapon;
     [TabGroup("Child Components")] [SerializeField] Transform mainShootPoint;
     [TabGroup("Child Components")] [SerializeField] GameObject soulShooter;
+    [TabGroup("Stats")] public float maxHp = 5f;
     [TabGroup("Stats")] [SerializeField] float shooingDelay = 0.2f;
     [TabGroup("Stats")] [SerializeField] int homingMissileCount = 8;
     [TabGroup("Stats")] [SerializeField] float skillCooldown = 5f;
+
+    public float currentHp => hp;
+
+    int _level = 1;
+    public int level
+    {
+        get { return _level; }
+        set
+        {
+            _level = value;
+        }
+    }
 
     bool canShooting = true;
     bool _canHomingSkill = false;
@@ -36,13 +49,14 @@ public class Player : BaseUnit
         }
     }
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        hp = maxHp;
         rb = GetComponent<Rigidbody>();
-        //weapon = transform.Find("WeaponCenter");
     }
 
-    private void Start()
+    void Start()
     {
         StartCoroutine(SkillCooldown());
     }
@@ -50,6 +64,11 @@ public class Player : BaseUnit
 
     void Update()
     {
+        if(GameManager.instance.state != GameManager.State.Play)
+        {
+            return;
+        }
+        
         DeadCheck();
 
         if (Input.GetButtonDown("Fire1") && canShooting)
@@ -102,5 +121,16 @@ public class Player : BaseUnit
         yield return new WaitForSeconds(skillCooldown);
 
         canHomingSkill = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.parent.CompareTag("Enemy"))
+        {
+            HitParticle();
+            BaseUnit targetObject = other.transform.parent.gameObject.GetComponent<BaseUnit>();
+            targetObject.Attacked(1);
+            Attacked(1);
+        }
     }
 }

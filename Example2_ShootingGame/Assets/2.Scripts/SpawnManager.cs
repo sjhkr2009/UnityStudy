@@ -10,12 +10,18 @@ public class SpawnManager : MonoBehaviour
     [TabGroup("Prefab List")] [SerializeField] GameObject enemyBullet;
     [TabGroup("Prefab List")] [SerializeField] GameObject enemy1;
     [TabGroup("Prefab List")] [SerializeField] GameObject enemy2;
+    [TabGroup("Prefab List")] [SerializeField] GameObject enemy3;
+    [TabGroup("Prefab List")] [SerializeField] GameObject enemy4;
+    [TabGroup("Prefab List")] [SerializeField] GameObject enemy4m;
 
     List<GameObject> playerBulletList = new List<GameObject>();
     List<GameObject> playerHomingBulletList = new List<GameObject>();
     List<GameObject> enemyBulletList = new List<GameObject>();
     List<GameObject> enemy1List = new List<GameObject>();
     List<GameObject> enemy2List = new List<GameObject>();
+    List<GameObject> enemy3List = new List<GameObject>();
+    List<GameObject> enemy4List = new List<GameObject>();
+    List<GameObject> enemy4mList = new List<GameObject>();
 
     public List<GameObject> allEnemyList = new List<GameObject>();
 
@@ -24,12 +30,18 @@ public class SpawnManager : MonoBehaviour
     int enemyBulletIndex = 0;
     int enemy1Index = 0;
     int enemy2Index = 0;
+    int enemy3Index = 0;
+    int enemy4Index = 0;
+    int enemy4mIndex = 0;
 
     [TabGroup("Group")] [SerializeField] Transform playerBulletGroup;
     [TabGroup("Group")] [SerializeField] Transform playerHomingBulletGroup;
     [TabGroup("Group")] [SerializeField] Transform enemyBulletGroup;
     [TabGroup("Group")] [SerializeField] Transform enemy1Group;
     [TabGroup("Group")] [SerializeField] Transform enemy2Group;
+    [TabGroup("Group")] [SerializeField] Transform enemy3Group;
+    [TabGroup("Group")] [SerializeField] Transform enemy4Group;
+    [TabGroup("Group")] [SerializeField] Transform enemy4mGroup;
 
     [BoxGroup("Pool Amount")] [SerializeField] int smallPool = 30;
     [BoxGroup("Pool Amount")] [SerializeField] int normalPool = 100;
@@ -41,10 +53,16 @@ public class SpawnManager : MonoBehaviour
         playerHomingBulletList = MakeObjectPool(playerHomingBulletList, playerHomingBullet, playerHomingBulletGroup, normalPool);
         enemyBulletList = MakeObjectPool(enemyBulletList, enemyBullet, enemyBulletGroup, normalPool);
         enemy1List = MakeObjectPool(enemy1List, enemy1, enemy1Group, normalPool);
-        enemy2List = MakeObjectPool(enemy2List, enemy2, enemy2Group, normalPool);
+        enemy2List = MakeObjectPool(enemy2List, enemy2, enemy2Group, smallPool);
+        enemy3List = MakeObjectPool(enemy3List, enemy3, enemy3Group, normalPool);
+        enemy4List = MakeObjectPool(enemy4List, enemy4, enemy4Group, normalPool);
+        enemy4mList = MakeObjectPool(enemy4mList, enemy4m, enemy4mGroup, normalPool);
 
         MakeTargetingList(enemy1List);
         MakeTargetingList(enemy2List);
+        MakeTargetingList(enemy3List);
+        MakeTargetingList(enemy4List);
+        MakeTargetingList(enemy4mList);
     }
 
     void MakeTargetingList(List<GameObject> objectList)
@@ -133,5 +151,38 @@ public class SpawnManager : MonoBehaviour
         }
         Quaternion rot = Quaternion.Euler(0f, rotation, 0f);
         enemy2Index = Spawn(enemy2List, position, rot, enemy2Index, enemy2List.Count);
+    }
+
+    public void SpawnEnemy3(Vector3 position)
+    {
+        if (enemy3List[enemy3Index].activeSelf)
+        {
+            ObjectInstance(enemy3List, enemy3, enemy3Group);
+            allEnemyList.Add(enemy3List[enemy3List.Count - 1]);
+        }
+        Quaternion rotation = Quaternion.Euler(0f, 180f, 0f);
+        enemy3Index = Spawn(enemy3List, position, rotation, enemy3Index, enemy3List.Count);
+    }
+
+    public void SpawnEnemy4(Vector3 position)
+    {
+        if (enemy4List[enemy4Index].activeSelf)
+        {
+            ObjectInstance(enemy4List, enemy4, enemy4Group);
+            allEnemyList.Add(enemy4List[enemy4List.Count - 1]);
+        }
+        Quaternion rotation = Quaternion.Euler(0f, 180f, 0f);
+        enemy4Index = Spawn(enemy4List, position, rotation, enemy4Index, enemy4List.Count);
+    }
+
+    public void SpawnEnemy4mini(Vector3 position)
+    {
+        if (enemy4mList[enemy4mIndex].activeSelf)
+        {
+            ObjectInstance(enemy4mList, enemy4m, enemy4mGroup);
+            allEnemyList.Add(enemy4mList[enemy4mList.Count - 1]);
+        }
+        Quaternion rotation = Quaternion.Euler(0f, 180f, 0f);
+        enemy4mIndex = Spawn(enemy4mList, position, rotation, enemy4mIndex, enemy4mList.Count);
     }
 }

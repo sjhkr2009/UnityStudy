@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0472: 이 형식의 값은 'null'과 같을 수 없으므로 식의 결과가 항상 동일합니다.
+dotnet_diagnostic.CS0472.severity = none

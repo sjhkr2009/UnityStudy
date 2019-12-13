@@ -12,6 +12,7 @@ public class EnemyNormal1 : BaseUnit
 
     void OnEnable()
     {
+        ReSpawn();
         StartCoroutine(Shoot());
     }
 

@@ -7,19 +7,28 @@ public class BaseUnit : MonoBehaviour
 {
     [TabGroup("Basic")] [SerializeField] protected float hp = 1f;
     [TabGroup("Basic")] [SerializeField] protected float speed = 3.0f;
+    [TabGroup("Basic")] [SerializeField] protected int exp = 0;
     [TabGroup("Basic")] [SerializeField] protected GameObject destroyFX;
+
+    protected float originSpeed;
+    float originHp;
+
+    protected virtual void Awake()
+    {
+        originSpeed = speed;
+        originHp = hp;
+    }
 
     protected void DeadCheck()
     {
         if (hp <= 0f)
         {
-            Debug.Log($"사망: {gameObject.name}");
             hp = 0f;
             UnitDestroy();
         }
     }
 
-    protected void UnitDestroy()
+    protected void HitParticle()
     {
         GameObject _destroyFX = Instantiate(destroyFX, transform.position, transform.rotation);
         ParticleSystem destroyParticle = _destroyFX.GetComponent<ParticleSystem>();
@@ -27,7 +36,12 @@ public class BaseUnit : MonoBehaviour
         destroyParticle.Play();
         destroyAudio.Play();
 
-        Destroy(_destroyFX, destroyParticle.duration);
+        Destroy(_destroyFX, destroyParticle.main.duration);
+    }
+
+    protected void UnitDestroy()
+    {
+        HitParticle();
         gameObject.SetActive(false);
     }
 
@@ -45,13 +59,17 @@ public class BaseUnit : MonoBehaviour
         transform.Translate(speed * Time.deltaTime * Vector3.forward);
     }
 
-    protected void ShootingEnemyMove()
+    protected virtual void ReSpawn()
     {
-        //투사체를 쏘는 적의 움직임
+        speed = originSpeed;
+        hp = originHp;
     }
 
-    protected void CollisionEnemyMove()
+    private void OnDisable()
     {
-        //충돌하여 공격하는 적의 움직임
+        if(GameManager.instance.state == GameManager.State.Play)
+        {
+            GameManager.instance.currentExp += exp;
+        }
     }
 }
