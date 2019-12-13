@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance => _instance;
 
     [TabGroup("Scripts")] public Player player;
-    [TabGroup("Scripts")] [SerializeField] SpawnManager spawnManager;
+    [TabGroup("Scripts")] public SpawnManager spawnManager;
     UpgradeManager upgradeManager;
 
     float inputX = 0f;
@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        state = State.Ready;
         upgradeManager = GetComponent<UpgradeManager>();
     }
 

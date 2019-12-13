@@ -9485,6 +9485,7 @@ MonoBehaviour:
   damage: 1
   destroyFX: {fileID: 6637501944688698079, guid: b8069dc3a505a974ebdf59713c2b84d3,
     type: 3}
+  targetName: Enemy
   minX: -20
   maxX: 20
   minY: -10
@@ -9492,6 +9493,8 @@ MonoBehaviour:
   homingRotation: 3
   homingRotationAdd: 0.5
   homingStartDelay: 0.2
+  target: {fileID: 0}
+  hp: 3
 --- !u!1 &6860504751242238829
 GameObject:
   m_ObjectHideFlags: 0

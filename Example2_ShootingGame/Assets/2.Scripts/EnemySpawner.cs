@@ -6,14 +6,22 @@ using Sirenix.OdinInspector;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] SpawnManager spawnManager;
-    [BoxGroup("Normal")] [SerializeField] float normalPointMinX = -18f;
-    [BoxGroup("Normal")] [SerializeField] float normalPointMaxX = 18f;
-    [BoxGroup("Normal")] [SerializeField] float normalPointMinY = 16f;
-    [BoxGroup("Normal")] [SerializeField] float normalPointMaxY = 20f;
-    [BoxGroup("Normal")] [SerializeField] float spawnDelay = 1f;
+    [TabGroup("Normal")] [SerializeField] float normalPointMinX = -18f;
+    [TabGroup("Normal")] [SerializeField] float normalPointMaxX = 18f;
+    [TabGroup("Normal")] [SerializeField] float normalPointMinY = 16f;
+    [TabGroup("Normal")] [SerializeField] float normalPointMaxY = 20f;
+    [TabGroup("Normal")] [SerializeField] float normalSpawnDelay = 1f;
+    [TabGroup("Rotate")] [SerializeField] float rotPointMinX = -10f;
+    [TabGroup("Rotate")] [SerializeField] float rotPointMaxX = 10f;
+    [TabGroup("Rotate")] [SerializeField] float rotPointMinY = 16f;
+    [TabGroup("Rotate")] [SerializeField] float rotPointMaxY = 20f;
+    [TabGroup("Rotate")] [SerializeField] float rotMinRotation = 172.5f;
+    [TabGroup("Rotate")] [SerializeField] float rotMaxRotation = 187.5f;
+    [TabGroup("Rotate")] [SerializeField] float rotSpawnDelay = 1f;
 
     float spawnXPoint;
     float spawnYPoint;
+    float spawnRotation;
 
     private void Awake()
     {
@@ -22,19 +30,35 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         StartCoroutine("NormalSpawn");
+        StartCoroutine("RotateSpawn");
     }
 
     IEnumerator NormalSpawn()
     {
         while (true)
         {
-            yield return new WaitForSeconds(spawnDelay);
+            yield return new WaitForSeconds(normalSpawnDelay);
 
             spawnXPoint = Random.Range(normalPointMinX, normalPointMaxX);
             spawnYPoint = Random.Range(normalPointMinY, normalPointMaxY);
             Vector3 spawnPoint = new Vector3(spawnXPoint, 0f, spawnYPoint);
 
             spawnManager.SpawnEnemy1(spawnPoint);
+        }
+    }
+
+    IEnumerator RotateSpawn()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(rotSpawnDelay);
+
+            spawnXPoint = Random.Range(rotPointMinX, rotPointMaxX);
+            spawnYPoint = Random.Range(rotPointMinY, rotPointMaxY);
+            spawnRotation = Random.Range(rotMinRotation, rotMaxRotation);
+            Vector3 spawnPoint = new Vector3(spawnXPoint, 0f, spawnYPoint);
+
+            spawnManager.SpawnEnemy2(spawnPoint, spawnRotation);
         }
     }
 }

@@ -8,7 +8,6 @@ public class EnemyNormal1 : BaseUnit
 
     [TabGroup("Enemy")] [SerializeField] Transform shootPoint;
     [TabGroup("Enemy")] [SerializeField] Transform body;
-    [TabGroup("Enemy")] [SerializeField] Transform player;
     [TabGroup("Enemy")] [SerializeField] float shootDelay = 1f;
 
     void OnEnable()
@@ -20,14 +19,9 @@ public class EnemyNormal1 : BaseUnit
     {
         DeadCheck();
         MoveToward();
+        body.LookAt(GameManager.instance.player.transform);
 
-        if (-20f < transform.position.x && transform.position.x < 20f && -5f < transform.position.z && transform.position.z < 16f)
-        {
-            
-            body.LookAt(GameManager.instance.player.transform);
-        }
-
-        if(transform.position.z < -8f)
+        if(transform.position.z < -5.5f)
         {
             gameObject.SetActive(false);
         }

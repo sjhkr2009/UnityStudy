@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class PlayerHomingBullet : BaseFlyingWeapon
 {
-    GameObject[] targets; //스폰 매니저의 리스트로 대체 예정
-    [SerializeField]GameObject target;
-    GameObject newTarget;
+    [SerializeField] float hp = 1f; //여러 번 타격하는 오브젝트 제작 시
 
+    [SerializeField] List<GameObject> targetList = new List<GameObject>(); //스폰 매니저의 리스트로 대체 예정
+    [SerializeField] GameObject target;
+    GameObject newTarget;
 
 
     private void OnEnable()
     {
-        targets = GameObject.FindGameObjectsWithTag("Enemy"); //나중에 리스트로 변경하고, SpawnManager에서 적 오브젝트를 풀링할 때 여기에 가져올 것
+        hp = 5f;
+        targetList = GameManager.instance.spawnManager.allEnemyList; //나중에 리스트로 변경하고, SpawnManager에서 적 오브젝트를 풀링할 때 여기에 가져올 것
         target = GetNearTarget();
 
         if(target != null)
@@ -40,11 +42,17 @@ public class PlayerHomingBullet : BaseFlyingWeapon
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.parent.CompareTag("Enemy"))
+        if (other.transform.parent.CompareTag(targetName))
         {
-            BaseUnit enemy = other.transform.parent.gameObject.GetComponent<BaseUnit>();
-            enemy.Attacked(damage);
-            UnitDestroy();
+            BaseUnit targetObject = other.transform.parent.gameObject.GetComponent<BaseUnit>();
+            targetObject.Attacked(damage);
+            HitParticle();
+            homingRotation = originHomingRotation;
+            hp -= 1f;
+            if(hp <= 0f)
+            {
+                UnitDestroy();
+            }
         }
     }
 
@@ -52,22 +60,25 @@ public class PlayerHomingBullet : BaseFlyingWeapon
     {
         float minDistance = 1000f;
         
-        for (int i = 0; i < targets.Length; i++)
+        for (int i = 0; i < targetList.Count; i++)
         {
-            if (targets[i].activeSelf)
+            if (targetList[i].activeSelf)
             {
-                float distance = Vector3.Distance(transform.position, targets[i].transform.position);
+                float distance = Vector3.Distance(transform.position, targetList[i].transform.position);
                 if(distance < minDistance)
                 {
                     minDistance = distance;
-                    newTarget = targets[i];
+                    newTarget = targetList[i];
                 }
             }
         }
-        if(!newTarget.activeSelf || newTarget == null)
+        if(GameManager.instance.state == GameManager.State.Play)
         {
-            UnitDestroy();
-            return null;
+            if (newTarget == null || !newTarget.activeSelf)
+            {
+                UnitDestroy();
+                return null;
+            }
         }
 
         return newTarget;

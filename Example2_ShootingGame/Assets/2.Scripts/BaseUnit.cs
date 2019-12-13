@@ -33,9 +33,12 @@ public class BaseUnit : MonoBehaviour
 
     public void Attacked(float damage)
     {
-        hp -= damage;
+        if(GameManager.instance.state == GameManager.State.Play)
+        {
+            hp -= damage;
 
-        DeadCheck();
+            DeadCheck();
+        }
     }
     protected void MoveToward()
     {

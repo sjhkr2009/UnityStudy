@@ -14,20 +14,19 @@ public class BaseFlyingWeapon : MonoBehaviour
     [TabGroup("Normal")] [SerializeField] float maxX = 20f;
     [TabGroup("Normal")] [SerializeField] float minY = -10f;
     [TabGroup("Normal")] [SerializeField] float maxY = 20f;
-    [TabGroup("Homing")] [SerializeField] float homingRotation = 3f;
-    [TabGroup("Homing")] [SerializeField] float homingRotationAdd = 0.5f;
-    [TabGroup("Homing")] [SerializeField] float homingStartDelay = 0.2f;
+    [TabGroup("Homing")] [SerializeField] protected float homingRotation = 3f;
+    [TabGroup("Homing")] [SerializeField] protected float homingRotationAdd = 0.5f;
+    [TabGroup("Homing")] [SerializeField] protected float homingStartDelay = 0.2f;
 
     protected float originSpeed;
-    float originHomingRotation;
+    protected float originHomingRotation;
     private void Awake()
     {
         originSpeed = speed;
         originHomingRotation = homingRotation;
 
     }
-
-    protected void UnitDestroy()
+    protected void HitParticle()
     {
         GameObject _destroyFX = Instantiate(destroyFX, transform.position, transform.rotation);
         ParticleSystem destroyParticle = _destroyFX.GetComponent<ParticleSystem>();
@@ -36,6 +35,11 @@ public class BaseFlyingWeapon : MonoBehaviour
         destroyAudio.Play();
 
         Destroy(_destroyFX, destroyParticle.duration);
+    }
+
+    protected void UnitDestroy()
+    {
+        HitParticle();
         gameObject.SetActive(false);
     }
 

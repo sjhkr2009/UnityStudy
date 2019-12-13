@@ -6,9 +6,35 @@ using Sirenix.OdinInspector;
 public class Player : BaseUnit
 {
     Rigidbody rb;
-    [BoxGroup("Child Components")] [SerializeField] Transform weapon;
-    [BoxGroup("Child Components")] [SerializeField] Transform mainShootPoint;
-    [BoxGroup("Skill")] [SerializeField] int homingMissileCount;
+    [TabGroup("Child Components")] [SerializeField] Transform weapon;
+    [TabGroup("Child Components")] [SerializeField] Transform mainShootPoint;
+    [TabGroup("Child Components")] [SerializeField] GameObject soulShooter;
+    [TabGroup("Stats")] [SerializeField] float shooingDelay = 0.2f;
+    [TabGroup("Stats")] [SerializeField] int homingMissileCount = 8;
+    [TabGroup("Stats")] [SerializeField] float skillCooldown = 5f;
+
+    bool canShooting = true;
+    bool _canHomingSkill = false;
+    bool canHomingSkill
+    {
+        set
+        {
+            if (value)
+            {
+                soulShooter.SetActive(true);
+                _canHomingSkill = true;
+            }
+            else if (!value)
+            {
+                soulShooter.SetActive(false);
+                _canHomingSkill = false;
+            }
+        }
+        get
+        {
+            return _canHomingSkill;
+        }
+    }
 
     void Awake()
     {
@@ -16,20 +42,26 @@ public class Player : BaseUnit
         //weapon = transform.Find("WeaponCenter");
     }
 
-    
+    private void Start()
+    {
+        StartCoroutine(SkillCooldown());
+    }
+
+
     void Update()
     {
         DeadCheck();
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && canShooting)
         {
             GameManager.instance.PlayerShooting(mainShootPoint.position, weapon.rotation);
+            StartCoroutine(ShootingCooldown());
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && canHomingSkill)
         {
-            Debug.Log("여기에 실험중인 함수 입력");
             GameManager.instance.PlayerHomingSkill(transform.position, homingMissileCount);
+            StartCoroutine(SkillCooldown());
         }
 
         
@@ -52,5 +84,23 @@ public class Player : BaseUnit
 
         Vector3 dir = mousePos - transform.position;
         weapon.rotation = Quaternion.LookRotation(dir);
+    }
+
+    IEnumerator ShootingCooldown()
+    {
+        canShooting = false;
+
+        yield return new WaitForSeconds(shooingDelay);
+
+        canShooting = true;
+    }
+
+    IEnumerator SkillCooldown()
+    {
+        canHomingSkill = false;
+
+        yield return new WaitForSeconds(skillCooldown);
+
+        canHomingSkill = true;
     }
 }
