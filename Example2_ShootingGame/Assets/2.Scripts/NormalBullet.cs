@@ -9,6 +9,7 @@ public class NormalBullet : BaseFlyingWeapon
     private void OnEnable()
     {
         speed = originSpeed;
+        hp = originHp;
     }
 
     void Update()
@@ -23,7 +24,11 @@ public class NormalBullet : BaseFlyingWeapon
         {
             BaseUnit target = other.transform.parent.gameObject.GetComponent<BaseUnit>();
             target.Attacked(damage);
-            UnitDestroy();
+            hp -= 1f;
+            if (hp <= 0f)
+            {
+                UnitDestroy();
+            }
         }
     }
 }

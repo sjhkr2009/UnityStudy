@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour
 {
     [TabGroup("Prefab List")] [SerializeField] GameObject playerBullet;
     [TabGroup("Prefab List")] [SerializeField] GameObject playerHomingBullet;
+    [TabGroup("Prefab List")] [SerializeField] GameObject fairyBullet;
     [TabGroup("Prefab List")] [SerializeField] GameObject enemyBullet;
     [TabGroup("Prefab List")] [SerializeField] GameObject enemy1;
     [TabGroup("Prefab List")] [SerializeField] GameObject enemy2;
@@ -16,6 +17,7 @@ public class SpawnManager : MonoBehaviour
 
     List<GameObject> playerBulletList = new List<GameObject>();
     List<GameObject> playerHomingBulletList = new List<GameObject>();
+    List<GameObject> fairyBulletList = new List<GameObject>();
     List<GameObject> enemyBulletList = new List<GameObject>();
     List<GameObject> enemy1List = new List<GameObject>();
     List<GameObject> enemy2List = new List<GameObject>();
@@ -27,6 +29,7 @@ public class SpawnManager : MonoBehaviour
 
     int playerBulletIndex = 0;
     int playerHomingBulletIndex = 0;
+    int fairyBulletIndex = 0;
     int enemyBulletIndex = 0;
     int enemy1Index = 0;
     int enemy2Index = 0;
@@ -36,6 +39,7 @@ public class SpawnManager : MonoBehaviour
 
     [TabGroup("Group")] [SerializeField] Transform playerBulletGroup;
     [TabGroup("Group")] [SerializeField] Transform playerHomingBulletGroup;
+    [TabGroup("Group")] [SerializeField] Transform fairyBulletGroup;
     [TabGroup("Group")] [SerializeField] Transform enemyBulletGroup;
     [TabGroup("Group")] [SerializeField] Transform enemy1Group;
     [TabGroup("Group")] [SerializeField] Transform enemy2Group;
@@ -51,6 +55,7 @@ public class SpawnManager : MonoBehaviour
     {
         playerBulletList = MakeObjectPool(playerBulletList, playerBullet, playerBulletGroup, normalPool);
         playerHomingBulletList = MakeObjectPool(playerHomingBulletList, playerHomingBullet, playerHomingBulletGroup, normalPool);
+        fairyBulletList = MakeObjectPool(fairyBulletList, fairyBullet, fairyBulletGroup, smallPool);
         enemyBulletList = MakeObjectPool(enemyBulletList, enemyBullet, enemyBulletGroup, normalPool);
         enemy1List = MakeObjectPool(enemy1List, enemy1, enemy1Group, normalPool);
         enemy2List = MakeObjectPool(enemy2List, enemy2, enemy2Group, smallPool);
@@ -119,6 +124,16 @@ public class SpawnManager : MonoBehaviour
         }
 
         playerHomingBulletIndex = Spawn(playerHomingBulletList, position, rotation, playerHomingBulletIndex, playerHomingBulletList.Count);
+    }
+
+    public void SpawnFairyBullet(Vector3 position, Quaternion rotation)
+    {
+        if (fairyBulletList[fairyBulletIndex].activeSelf)
+        {
+            ObjectInstance(fairyBulletList, fairyBullet, fairyBulletGroup);
+        }
+
+        fairyBulletIndex = Spawn(fairyBulletList, position, rotation, fairyBulletIndex, fairyBulletList.Count);
     }
 
     public void SpawnEnemyBullet(Vector3 position, Quaternion rotation)

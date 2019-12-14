@@ -621,14 +621,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 1
   speed: 3
-  exp: 2
+  exp: 3
   destroyFX: {fileID: 4772139974239324096, guid: 19e3e9722717d3044973cce684f445f9,
     type: 3}
   body: {fileID: 6162612753310098609}
   rotateLevel: 3
   expireTime: 10
   homingRotation: 3
-  homingRotationAdd: 0.03
+  homingRotationAdd: 0.02
   homingStartDelay: 1
   addSpeed: 0.05
 --- !u!1 &6162612752316361895

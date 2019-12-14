@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerHomingBullet : BaseFlyingWeapon
 {
-    [SerializeField] float hp = 1f; //여러 번 타격하는 오브젝트 제작 시
-
     [SerializeField] List<GameObject> targetList = new List<GameObject>(); //스폰 매니저의 리스트로 대체 예정
     [SerializeField] GameObject target;
     GameObject newTarget;
@@ -13,7 +11,7 @@ public class PlayerHomingBullet : BaseFlyingWeapon
 
     private void OnEnable()
     {
-        hp = 5f;
+        hp = originHp;
         targetList = GameManager.instance.spawnManager.allEnemyList; //나중에 리스트로 변경하고, SpawnManager에서 적 오브젝트를 풀링할 때 여기에 가져올 것
         target = GetNearTarget();
         targetName = "Enemy";
@@ -28,7 +26,7 @@ public class PlayerHomingBullet : BaseFlyingWeapon
     {
         //OutRangeBulletExpire(); //범위를 벗어나면 사라지는 총알에 적용
 
-        if (target.activeSelf == false || target == null)
+        if (target == null || target.activeSelf == false)
         {
             speed = originSpeed;
             target = GetNearTarget();

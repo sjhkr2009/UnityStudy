@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     [TabGroup("Ready")] [SerializeField] Slider loadingBar;
     [TabGroup("Player")] [SerializeField] Slider hpBar;
     [TabGroup("Player")] [SerializeField] Slider expBar;
+    [TabGroup("Player")] public Text playerLevel;
 
 
     public float maxHp;

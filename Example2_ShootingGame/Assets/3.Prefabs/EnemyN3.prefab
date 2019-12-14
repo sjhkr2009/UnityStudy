@@ -140,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 2
   speed: 0.85
-  exp: 3
+  exp: 2
   destroyFX: {fileID: 4772139974239324096, guid: 19e3e9722717d3044973cce684f445f9,
     type: 3}
   shootPoint: {fileID: 117650507942516391}

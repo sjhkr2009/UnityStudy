@@ -8,6 +8,7 @@ public class BaseFlyingWeapon : MonoBehaviour
 {
     [BoxGroup("Common")] [SerializeField] protected float speed;
     [BoxGroup("Common")] [SerializeField] protected float damage = 1f;
+    [BoxGroup("Common")] [SerializeField] protected float hp = 1f;
     [BoxGroup("Common")] [SerializeField] protected GameObject destroyFX;
     [BoxGroup("Common")] [SerializeField] protected string targetName;
     [TabGroup("Normal")] [SerializeField] float minX = -20f;
@@ -19,10 +20,12 @@ public class BaseFlyingWeapon : MonoBehaviour
     [TabGroup("Homing")] [SerializeField] protected float homingStartDelay = 0.2f;
 
     protected float originSpeed;
+    protected float originHp;
     protected float originHomingRotation;
     private void Awake()
     {
         originSpeed = speed;
+        originHp = hp;
         originHomingRotation = homingRotation;
 
     }
@@ -34,7 +37,7 @@ public class BaseFlyingWeapon : MonoBehaviour
         destroyParticle.Play();
         destroyAudio.Play();
 
-        Destroy(_destroyFX, destroyParticle.duration);
+        Destroy(_destroyFX, destroyParticle.main.duration);
     }
 
     protected void UnitDestroy()

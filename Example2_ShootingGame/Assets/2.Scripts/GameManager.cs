@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
             _currentExp = value;
             if (value >= requiredExp)
             {
-                if(expPerLevel[player.level] == null)
+                if(expPerLevel.Count <= player.level)
                 {
                     return;
                 }
@@ -35,9 +35,10 @@ public class GameManager : MonoBehaviour
                 currentExp = value - requiredExp;
                 _requiredExp = expPerLevel[player.level];
                 player.level++;
-                player.maxHp++;
                 uiManager.requiredExp = requiredExp;
                 uiManager.maxHp = player.maxHp;
+                uiManager.playerLevel.text = player.level.ToString();
+                enemySpawner.SpawnDelayReduce(0.9f);
             }
         }
     }
@@ -46,6 +47,8 @@ public class GameManager : MonoBehaviour
 
     float inputX = 0f;
     float inputY = 0f;
+    float inputRawX = 0f;
+    float inputRawY = 0f;
     Vector3 mousePos;
 
     public enum State
@@ -101,6 +104,9 @@ public class GameManager : MonoBehaviour
         inputX = Input.GetAxis("Horizontal");
         inputY = Input.GetAxis("Vertical");
 
+        inputRawX = Input.GetAxisRaw("Horizontal");
+        inputRawY = Input.GetAxisRaw("Vertical");
+
         switch (state)
         {
             case State.Play:
@@ -111,7 +117,14 @@ public class GameManager : MonoBehaviour
 
     void PlayerControl()
     {
-        player.PlayerMove(inputX, inputY);
+        if(player.level <= 3)
+        {
+            player.PlayerMove(inputX, inputY);
+        }
+        else
+        {
+            player.PlayerMove(inputRawX, inputRawY);
+        }
         player.FollowMouse(mousePos);
     }
 

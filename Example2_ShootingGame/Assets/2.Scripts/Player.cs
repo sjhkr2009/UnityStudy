@@ -9,10 +9,12 @@ public class Player : BaseUnit
     [TabGroup("Child Components")] [SerializeField] Transform weapon;
     [TabGroup("Child Components")] [SerializeField] Transform mainShootPoint;
     [TabGroup("Child Components")] [SerializeField] GameObject soulShooter;
+    [TabGroup("Child Components")] [SerializeField] GameObject fairy;
     [TabGroup("Stats")] public float maxHp = 5f;
-    [TabGroup("Stats")] [SerializeField] float shooingDelay = 0.2f;
+    [TabGroup("Stats")] [SerializeField] float shootingDelay = 0.3f;
     [TabGroup("Stats")] [SerializeField] int homingMissileCount = 8;
     [TabGroup("Stats")] [SerializeField] float skillCooldown = 5f;
+    [TabGroup("Stats")] [SerializeField] float hpAutoHeal = 0.1f;
 
     public float currentHp => hp;
 
@@ -23,6 +25,56 @@ public class Player : BaseUnit
         set
         {
             _level = value;
+
+            switch (value)
+            {
+                case 2:
+                    maxHp++;
+                    hp += maxHp/2f;
+                    shootingDelay = 0.2f;
+                    break;
+                case 3:
+                    fairy.SetActive(true);
+                    break;
+                case 4:
+                    maxHp++;
+                    hp += maxHp / 2f;
+                    //이동 조작감 개선
+                    break;
+                case 5:
+                    canHomingSkill = true;
+                    break;
+                case 6:
+                    maxHp += 2.5f;
+                    hp += maxHp / 2f;
+                    shootingDelay = 0.15f;
+                    homingMissileCount++;
+                    break;
+                case 7:
+                    shootingDelay = 0.12f;
+                    speed += 50f;
+                    homingMissileCount++;
+                    //연사 가능
+                    break;
+                case 8:
+                    maxHp += 2.5f;
+                    StartCoroutine(AutoHealing());
+                    skillCooldown -= 2f;
+                    homingMissileCount++;
+                    break;
+                case 9:
+                    skillCooldown -= 2f;
+                    homingMissileCount++;
+                    speed += 50f;
+                    break;
+                case 10:
+                    maxHp += 5f;
+                    hpAutoHeal *= 2f;
+                    shootingDelay = 0.07f;
+                    homingMissileCount += 3;
+                    speed += 50f;
+                    break;
+            }
         }
     }
 
@@ -58,7 +110,8 @@ public class Player : BaseUnit
 
     void Start()
     {
-        StartCoroutine(SkillCooldown());
+        canHomingSkill = false;
+        fairy.SetActive(false);
     }
 
 
@@ -77,13 +130,22 @@ public class Player : BaseUnit
             StartCoroutine(ShootingCooldown());
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && canHomingSkill)
+        if (Input.GetButton("Fire1") && canShooting && level >= 7)
+        {
+            GameManager.instance.PlayerShooting(mainShootPoint.position, weapon.rotation);
+            StartCoroutine(ShootingCooldown());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && canHomingSkill && level >= 5)
         {
             GameManager.instance.PlayerHomingSkill(transform.position, homingMissileCount);
             StartCoroutine(SkillCooldown());
         }
 
-        
+        if(hp > maxHp)
+        {
+            hp = maxHp;
+        }
     }
 
     public void PlayerMove(float xMove, float yMove)
@@ -109,7 +171,7 @@ public class Player : BaseUnit
     {
         canShooting = false;
 
-        yield return new WaitForSeconds(shooingDelay);
+        yield return new WaitForSeconds(shootingDelay);
 
         canShooting = true;
     }
@@ -131,6 +193,15 @@ public class Player : BaseUnit
             BaseUnit targetObject = other.transform.parent.gameObject.GetComponent<BaseUnit>();
             targetObject.Attacked(1);
             Attacked(1);
+        }
+    }
+
+    IEnumerator AutoHealing()
+    {
+        while (gameObject.activeSelf)
+        {
+            hp += hpAutoHeal;
+            yield return new WaitForSeconds(0.5f);
         }
     }
 }
