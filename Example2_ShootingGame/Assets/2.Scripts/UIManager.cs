@@ -10,7 +10,8 @@ public class UIManager : MonoBehaviour
     [TabGroup("Ready")] [SerializeField] Slider loadingBar;
     [TabGroup("Player")] [SerializeField] Slider hpBar;
     [TabGroup("Player")] [SerializeField] Slider expBar;
-    [TabGroup("Player")] public Text playerLevel;
+    [TabGroup("Player")] [SerializeField] Text playerLevel;
+    [TabGroup("Player")] [SerializeField] GameObject skillGuideText;
 
 
     public float maxHp;
@@ -75,5 +76,21 @@ public class UIManager : MonoBehaviour
     public void StartLoading()
     {
         StartCoroutine(Loading());
+    }
+    public void LevelUp()
+    {
+        playerLevel.text = GameManager.instance.player.level.ToString();
+    }
+
+    public void SkillGuide(bool isOn)
+    {
+        if (isOn)
+        {
+            skillGuideText.SetActive(true);
+        }
+        else
+        {
+            skillGuideText.SetActive(false);
+        }
     }
 }

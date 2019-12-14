@@ -37,8 +37,13 @@ public class GameManager : MonoBehaviour
                 player.level++;
                 uiManager.requiredExp = requiredExp;
                 uiManager.maxHp = player.maxHp;
-                uiManager.playerLevel.text = player.level.ToString();
+                uiManager.LevelUp();
                 enemySpawner.SpawnDelayReduce(0.9f);
+
+                if(player.level == 7)
+                {
+                    uiManager.SkillGuide(true);
+                }
             }
         }
     }
@@ -142,6 +147,8 @@ public class GameManager : MonoBehaviour
             Quaternion rotation = Quaternion.Euler(vecRotation);
             spawnManager.SpawnPlayerHomingBullet(position, rotation);
         }
+
+        uiManager.SkillGuide(false);
     }
 
     public void EnemyBulletShooting(Vector3 position, Quaternion rotation)
