@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
                 uiManager.requiredExp = requiredExp;
                 uiManager.maxHp = player.maxHp;
                 uiManager.LevelUp();
-                enemySpawner.SpawnDelayReduce(0.9f);
+                enemySpawner.SpawnDelayReduce(0.83f);
 
                 if(player.level == 7)
                 {
