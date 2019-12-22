@@ -11,9 +11,9 @@ public class Player : BaseUnit
     [TabGroup("Child Components")] [SerializeField] GameObject soulShooter;
     [TabGroup("Child Components")] [SerializeField] SubWeaponFairy fairy;
     [TabGroup("Stats")] public float maxHp = 5f;
-    [TabGroup("Stats")] [SerializeField] float shootingDelay = 0.3f;
+    [TabGroup("Stats")] [SerializeField] float shootingDelay = 0.33f;
     [TabGroup("Stats")] [SerializeField] int homingMissileCount = 8;
-    [TabGroup("Stats")] [SerializeField] float skillCooldown = 5f;
+    [TabGroup("Stats")] [SerializeField] float skillCooldown = 10f;
     [TabGroup("Stats")] [SerializeField] float hpAutoHeal = 0.1f;
 
     public float currentHp => hp;
@@ -29,26 +29,26 @@ public class Player : BaseUnit
             switch (value)
             {
                 case 2:
-                    maxHp++;
+                    maxHp += 0.2f;
                     hp += maxHp/2f;
-                    shootingDelay = 0.2f;
+                    shootingDelay = 0.25f;
                     break;
                 case 3:
                     fairy.gameObject.SetActive(true);
                     break;
                 case 4:
-                    maxHp++;
+                    maxHp += 0.5f;
                     hp += maxHp / 2f;
                     speed += 50f;
-                    //이동 조작감 개선
+                    //이동 조작감 개선 (4레벨부터 입력을 GetAxisRaw로 받아옴)
                     break;
                 case 5:
                     canHomingSkill = true;
                     break;
                 case 6:
-                    maxHp += 2.5f;
+                    maxHp += 1.5f;
                     hp += maxHp / 2f;
-                    shootingDelay = 0.15f;
+                    shootingDelay = 0.2f;
                     homingMissileCount++;
                     fairy.shootDelay -= 1f;
                     break;
@@ -56,10 +56,10 @@ public class Player : BaseUnit
                     shootingDelay = 0.12f;
                     speed += 50f;
                     homingMissileCount++;
-                    //연사 가능
+                    //꾹 누르고 있으면 연사 가능
                     break;
                 case 8:
-                    maxHp += 2.5f;
+                    maxHp += 2f;
                     StartCoroutine(AutoHealing());
                     skillCooldown -= 2f;
                     homingMissileCount++;

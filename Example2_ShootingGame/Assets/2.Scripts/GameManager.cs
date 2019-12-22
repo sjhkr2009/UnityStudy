@@ -38,9 +38,9 @@ public class GameManager : MonoBehaviour
                 uiManager.requiredExp = requiredExp;
                 uiManager.maxHp = player.maxHp;
                 uiManager.LevelUp();
-                enemySpawner.SpawnDelayReduce(0.83f);
+                enemySpawner.SpawnDelayReduce(0.88f);
 
-                if(player.level == 7)
+                if(player.level == 5)
                 {
                     uiManager.SkillGuide(true);
                 }

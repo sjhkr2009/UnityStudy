@@ -49,14 +49,14 @@ public class SpawnManager : MonoBehaviour
 
     [BoxGroup("Pool Amount")] [SerializeField] int smallPool = 30;
     [BoxGroup("Pool Amount")] [SerializeField] int normalPool = 100;
-    [BoxGroup("Pool Amount")] [SerializeField] int bigPool = 500;
+    [BoxGroup("Pool Amount")] [SerializeField] int bigPool = 400;
 
     void Awake()
     {
         playerBulletList = MakeObjectPool(playerBulletList, playerBullet, playerBulletGroup, normalPool);
         playerHomingBulletList = MakeObjectPool(playerHomingBulletList, playerHomingBullet, playerHomingBulletGroup, normalPool);
         fairyBulletList = MakeObjectPool(fairyBulletList, fairyBullet, fairyBulletGroup, smallPool);
-        enemyBulletList = MakeObjectPool(enemyBulletList, enemyBullet, enemyBulletGroup, normalPool);
+        enemyBulletList = MakeObjectPool(enemyBulletList, enemyBullet, enemyBulletGroup, bigPool);
         enemy1List = MakeObjectPool(enemy1List, enemy1, enemy1Group, normalPool);
         enemy2List = MakeObjectPool(enemy2List, enemy2, enemy2Group, smallPool);
         enemy3List = MakeObjectPool(enemy3List, enemy3, enemy3Group, normalPool);
