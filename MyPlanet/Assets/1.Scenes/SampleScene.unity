@@ -294,6 +294,7 @@ GameObject:
   - component: {fileID: 1832025697}
   - component: {fileID: 1832025696}
   - component: {fileID: 1832025695}
+  - component: {fileID: 1832025698}
   m_Layer: 0
   m_Name: Star
   m_TagString: Untagged
@@ -314,7 +315,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planet: {fileID: 917706675}
+  rb: {fileID: 1832025698}
   rotateSpeed: 3
+  startSpeed: 3
+  addSpeed: 0.3
   distanceFromPlanet: 2
 --- !u!212 &1832025696
 SpriteRenderer:
@@ -379,3 +383,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1832025698
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1832025694}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4

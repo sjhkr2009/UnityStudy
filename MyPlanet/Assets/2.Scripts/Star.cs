@@ -6,21 +6,27 @@ using DG.Tweening;
 public class Star : MonoBehaviour
 {
     [SerializeField] Transform planet;
+    [SerializeField] Rigidbody2D rb;
     [SerializeField] float rotateSpeed;
+    [SerializeField] float startSpeed;
+    [SerializeField] float addSpeed;
     [SerializeField] float distanceFromPlanet;
+
+    float getTargetRange = 0.4f;
 
     Vector3 mousePos;
     bool isShooting;
+    bool isReturning;
 
     void Start()
     {
         isShooting = false;
+        isReturning = false;
     }
 
     void Update()
     {
         Rotate();
-        //TestMove();
         if (Input.GetMouseButtonDown(0))
         {
             StarShooting();
@@ -31,12 +37,12 @@ public class Star : MonoBehaviour
     {
         isShooting = true;
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
-        Debug.Log(mousePos);
+        
 
         if (isShooting)
         {
-            transform.DOMove(mousePos, 0.5f);
-            Invoke("ReturnToPlanet", 0.3f);
+            StartCoroutine(SmoothMove(mousePos));
+            isReturning = false;
         }
     }
 
@@ -51,19 +57,62 @@ public class Star : MonoBehaviour
         return returnPoint;
     }
 
+    void ReRotate() => isShooting = false;
+
     void ReturnToPlanet()
     {
-        transform.DOMove(ReturnPoint(), 0.5f);
-        isShooting = false;
+        StartCoroutine(SmoothMove(ReturnPoint()));
+        isReturning = true;
     }
 
     void Rotate()
     {
-        transform.RotateAround(planet.position, Vector3.forward, rotateSpeed);
+        if (!isShooting)
+        {
+            transform.RotateAround(planet.position, Vector3.forward, rotateSpeed);
+            Debug.Log("공전 중");
+        }
     }
 
-    void TestMove()
+    IEnumerator SmoothMove(Vector3 targetPoint)
     {
-        transform.Translate(Vector2.up);
+        Debug.Log($"Target: {targetPoint}");
+
+        Vector2 _dir = targetPoint - transform.position;
+        rb.velocity += _dir.normalized * startSpeed;
+
+        while (getTargetRange < Vector2.Distance(transform.position, targetPoint))
+        {
+            _dir = targetPoint - transform.position;
+            rb.velocity += _dir.normalized * addSpeed;
+            //yield return new WaitForSeconds(0.1f);
+            yield return null;
+            Debug.Log($"목표까지의 거리: {Vector2.Distance(transform.position, targetPoint)}");
+        }
+
+        Debug.Log($"{targetPoint}에 도달함");
+
+        if (isReturning)
+        {
+            rb.velocity *= 0f;
+            ReRotate();
+        }
+
+        for (int i = 0; i < 20; i++)
+        {
+            rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, 0.1f);
+            yield return new WaitForSeconds(0.02f);
+        }
+
+        Debug.Log($"{targetPoint}에서 감속 완료");
+
+        if (!isReturning)
+        {
+            ReturnToPlanet();
+        }
+        else
+        {
+            ReRotate();
+        }
     }
 }
