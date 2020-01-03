@@ -315,6 +315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planet: {fileID: 917706675}
   rotateSpeed: 3
+  distanceFromPlanet: 2
 --- !u!212 &1832025696
 SpriteRenderer:
   m_ObjectHideFlags: 0

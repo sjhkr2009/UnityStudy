@@ -7,6 +7,7 @@ public class Star : MonoBehaviour
 {
     [SerializeField] Transform planet;
     [SerializeField] float rotateSpeed;
+    [SerializeField] float distanceFromPlanet;
 
     Vector3 mousePos;
     bool isShooting;
@@ -34,27 +35,31 @@ public class Star : MonoBehaviour
 
         if (isShooting)
         {
-            transform.DOMove(mousePos, 0.35f);
+            transform.DOMove(mousePos, 0.5f);
             Invoke("ReturnToPlanet", 0.3f);
         }
     }
 
+    Vector3 ReturnPoint()
+    {
+        Vector3 dir = (transform.position - planet.position);
+        dir.Normalize();
+
+        Vector3 dirReverse = new Vector3(-dir.y, dir.x, dir.z).normalized;
+        Vector3 returnPoint = (dirReverse * distanceFromPlanet);
+
+        return returnPoint;
+    }
+
     void ReturnToPlanet()
     {
-        //Vector3 dir = (planet.position - transform.position);
-        //dir.Normalize();
-
-        transform.DOMove(Vector2.Lerp(transform.position, planet.position, 0.5f), 0.35f);
+        transform.DOMove(ReturnPoint(), 0.5f);
         isShooting = false;
     }
 
     void Rotate()
     {
-        //Debug.Log("이게 왜 안되지");
-        if (!isShooting)
-        {
-            transform.RotateAround(planet.position, Vector3.forward, rotateSpeed);
-        }
+        transform.RotateAround(planet.position, Vector3.forward, rotateSpeed);
     }
 
     void TestMove()
