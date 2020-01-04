@@ -5,14 +5,23 @@ using DG.Tweening;
 
 public class Star : MonoBehaviour
 {
+    //enum State { Rotate, Shoot, Return }
+    
     [SerializeField] Transform planet;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] float rotateSpeed;
     [SerializeField] float startSpeed;
     [SerializeField] float addSpeed;
+    [SerializeField] float maxSpeed;
     [SerializeField] float distanceFromPlanet;
 
     float getTargetRange = 0.4f;
+    float currentSpeed;
+    float CurrentSpeed
+    {
+        get => currentSpeed;
+        set => currentSpeed = Mathf.Min(value, maxSpeed);
+    }
 
     Vector3 mousePos;
     bool isShooting;
@@ -29,21 +38,16 @@ public class Star : MonoBehaviour
         Rotate();
         if (Input.GetMouseButtonDown(0))
         {
+            isShooting = true;
             StarShooting();
         }
     }
 
     void StarShooting()
     {
-        isShooting = true;
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
-        
-
-        if (isShooting)
-        {
-            StartCoroutine(SmoothMove(mousePos));
-            isReturning = false;
-        }
+        StartCoroutine(SmoothMove(mousePos));
+        isReturning = false;
     }
 
     Vector3 ReturnPoint()
@@ -78,6 +82,8 @@ public class Star : MonoBehaviour
     {
         Debug.Log($"Target: {targetPoint}");
 
+        //currentSpeed = startSpeed;
+        //Vector2 _dir = transform.up;
         Vector2 _dir = targetPoint - transform.position;
         rb.velocity += _dir.normalized * startSpeed;
 

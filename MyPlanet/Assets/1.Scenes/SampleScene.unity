@@ -317,8 +317,9 @@ MonoBehaviour:
   planet: {fileID: 917706675}
   rb: {fileID: 1832025698}
   rotateSpeed: 3
-  startSpeed: 3
-  addSpeed: 0.3
+  startSpeed: 2
+  addSpeed: 0.2
+  maxSpeed: 5
   distanceFromPlanet: 2
 --- !u!212 &1832025696
 SpriteRenderer:
