@@ -1,0 +1,27 @@
+{
+  "a": "a",
+  "b": "b",
+  "c": [
+    {
+      "ca": "cb",
+      "cc": "cd"
+    }
+  ]
+}
+
+//LitJson.dll 파일을 구글링하여 다운받은 다음 유니티에 가져오고, using.LitJson으로 사용가능. (유니티에서 기본 제공하는 parser를 써도 되지만, LitJson이 편함)
+
+//제이슨 파일을 Resources 폴더에 넣고 사용한다고 가정할 때,
+// TextAsset textAsset = Resource.Load<TextAsset>("파일명") 으로 읽기.
+//TextAsset textAsset = Resources.Load("파일명") 또는 TextAsset textAsset = Resources.Load("파일명") as TextAsset 으로도 가능
+
+// A is B: A가 B가 맞는지를 담는 bool 값.
+// if(PlayerMove is MonoBehavior) : PlayerMove가 MonoBehavior를 상속받았다면 if문을 실행한다.
+
+// A as B: A가 B가 맞는지 알아보고, 맞다면 A를 B로 변환하여 돌려준다.
+
+// string jsonstring = textAsset.text;
+// JsonData jsonData = JsonMapper.ToObject(jsonstring);
+// 이후 jsondata["key"] 를 통해서 value에 접근 가능
+  //ex) jsonData[c][1][cc] == "cd"
+
