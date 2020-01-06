@@ -78,10 +78,10 @@ public class Star : MonoBehaviour
     void Rotate()
     {
         currentRadius = Vector2.Distance(transform.position, Vector2.zero);
-        currentAngle = Mathf.Acos(transform.position.x / currentRadius);
-
+        //currentAngle = Mathf.Acos(transform.position.x / currentRadius);
+        currentAngle = Mathf.Atan2(transform.position.y, transform.position.x);
         float _targetAngle = currentAngle + angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
-        if(_targetAngle.)
+        
         float _targetRadius = Mathf.Lerp(currentRadius, originOrbitalRadius, radiusChangeSpeed);
         //Debug.Log(_targetAngle);
         float nextPosX = _targetRadius * Mathf.Cos(_targetAngle);
