@@ -81,6 +81,7 @@ public class Star : MonoBehaviour
         currentAngle = Mathf.Acos(transform.position.x / currentRadius);
 
         float _targetAngle = currentAngle + angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+        if(_targetAngle.)
         float _targetRadius = Mathf.Lerp(currentRadius, originOrbitalRadius, radiusChangeSpeed);
         //Debug.Log(_targetAngle);
         float nextPosX = _targetRadius * Mathf.Cos(_targetAngle);
