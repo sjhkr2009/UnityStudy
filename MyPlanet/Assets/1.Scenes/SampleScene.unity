@@ -316,7 +316,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planet: {fileID: 917706675}
   rb: {fileID: 1832025698}
-  rotateSpeed: 3
+  originOrbitalRadius: 2
+  radiusChangeSpeed: 0.05
+  angulerSpeed: 180
   startSpeed: 2
   addSpeed: 0.2
   maxSpeed: 5
@@ -378,7 +380,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1832025694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: 0}
+  m_LocalPosition: {x: 8, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

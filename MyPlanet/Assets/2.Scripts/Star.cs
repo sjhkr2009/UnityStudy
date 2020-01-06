@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+
 
 public class Star : MonoBehaviour
 {
@@ -9,7 +9,13 @@ public class Star : MonoBehaviour
     
     [SerializeField] Transform planet;
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] float rotateSpeed;
+
+    [SerializeField] float originOrbitalRadius;
+    float currentRadius;
+    [SerializeField] float radiusChangeSpeed;
+    float currentAngle;
+    [SerializeField] float angulerSpeed;
+
     [SerializeField] float startSpeed;
     [SerializeField] float addSpeed;
     [SerializeField] float maxSpeed;
@@ -71,11 +77,16 @@ public class Star : MonoBehaviour
 
     void Rotate()
     {
-        if (!isShooting)
-        {
-            transform.RotateAround(planet.position, Vector3.forward, rotateSpeed);
-            Debug.Log("공전 중");
-        }
+        currentRadius = Vector2.Distance(transform.position, Vector2.zero);
+        currentAngle = Mathf.Acos(transform.position.x / currentRadius);
+
+        float _targetAngle = currentAngle + angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+        float _targetRadius = Mathf.Lerp(currentRadius, originOrbitalRadius, radiusChangeSpeed);
+        //Debug.Log(_targetAngle);
+        float nextPosX = _targetRadius * Mathf.Cos(_targetAngle);
+        float nextPosY = _targetRadius * Mathf.Sin(_targetAngle);
+        Vector2 _nextPos = new Vector2(nextPosX, nextPosY);
+        transform.position = _nextPos;
     }
 
     IEnumerator SmoothMove(Vector3 targetPoint)
