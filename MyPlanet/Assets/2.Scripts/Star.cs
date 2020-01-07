@@ -77,16 +77,20 @@ public class Star : MonoBehaviour
 
     void Rotate()
     {
+        //현재 중심부로부터의 길이와 각도 구하기
         currentRadius = Vector2.Distance(transform.position, Vector2.zero);
-        //currentAngle = Mathf.Acos(transform.position.x / currentRadius);
         currentAngle = Mathf.Atan2(transform.position.y, transform.position.x);
+
+        //회전속도에 따라 변화할 각도를, 원래의 반지름으로 돌아가는 속도에 따라 변화할 반지름 길이를 연산
         float _targetAngle = currentAngle + angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
-        
         float _targetRadius = Mathf.Lerp(currentRadius, originOrbitalRadius, radiusChangeSpeed);
-        //Debug.Log(_targetAngle);
-        float nextPosX = _targetRadius * Mathf.Cos(_targetAngle);
-        float nextPosY = _targetRadius * Mathf.Sin(_targetAngle);
+
+        //다음 프레임에 이동할 위치 출력
+        float _nextPosX = _targetRadius * Mathf.Cos(_targetAngle);
+        float _nextPosY = _targetRadius * Mathf.Sin(_targetAngle);
         Vector2 _nextPos = new Vector2(nextPosX, nextPosY);
+
+        //적용
         transform.position = _nextPos;
     }
 
