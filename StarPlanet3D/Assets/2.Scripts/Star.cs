@@ -146,6 +146,17 @@ public class Star : MonoBehaviour
         }
     }
 
+    Vector3 ReturnPoint()
+    {
+        Vector3 dir = (transform.position - planet.position);
+        dir.Normalize();
+
+        Vector3 dirReverse = new Vector3(-dir.z, dir.y, dir.x).normalized;
+        Vector3 returnPoint = (dirReverse * originOrbitalRadius);
+
+        return returnPoint;
+    }
+
     IEnumerator SmoothRotate(Vector3 targetPos)
     {
         currentRotationSpeed = rotationOriginSpeed;
