@@ -88,7 +88,7 @@ public class Star : MonoBehaviour
         //다음 프레임에 이동할 위치 출력
         float _nextPosX = _targetRadius * Mathf.Cos(_targetAngle);
         float _nextPosY = _targetRadius * Mathf.Sin(_targetAngle);
-        Vector2 _nextPos = new Vector2(nextPosX, nextPosY);
+        Vector2 _nextPos = new Vector2(_nextPosX, _nextPosY);
 
         //적용
         transform.position = _nextPos;

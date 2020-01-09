@@ -491,7 +491,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebde62a803630d14c850e93578f4f897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  rotationOriginSpeed: 3
+  originOrbitalRadius: 2
+  radiusChangeSpeed: 0.05
+  angulerSpeed: 180
+  originMoveSpeed: 5
+  currentMoveSpeed: 0
+  rotationOriginSpeed: 10
   rotationAddSpeed: 1
-  rb: {fileID: 0}
+  planet: {fileID: 840769927}

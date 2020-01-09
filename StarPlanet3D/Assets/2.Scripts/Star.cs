@@ -5,14 +5,25 @@ using UnityEngine;
 public class Star : MonoBehaviour
 {
     public enum State { Rotate, Shoot, Return }
-    
-    [SerializeField] private float moveSpeed;
+
+    //공전
+    [SerializeField] float originOrbitalRadius; //원래의 공전 궤도 반지름
+    float currentRadius;
+    [SerializeField] float radiusChangeSpeed; //프레임당 원래의 궤도에 가까워지는 비율 (mix:0 ~ max:1)
+    float currentAngle;
+    [SerializeField] float angulerSpeed; //초당 회전각
+
+    //사출
+    [SerializeField] private float originMoveSpeed;
+    [SerializeField] private float currentMoveSpeed;
     [SerializeField] private float rotationOriginSpeed;
     [SerializeField] private float rotationAddSpeed;
 
-    [SerializeField] Rigidbody rb;
+    //외부 컴포넌트
+    //[SerializeField] Rigidbody rb;
+    [SerializeField] Transform planet;
 
-    private Vector3 mousePos; // => Controller
+    private Vector3 mousePos; // => Controller 스크립트에서 처리할 것
 
     private Coroutine currentMove;
     private float currentRotationSpeed;
@@ -49,6 +60,7 @@ public class Star : MonoBehaviour
     {
         StarState = State.Rotate;
         currentRotationSpeed = rotationOriginSpeed;
+        currentMoveSpeed = originMoveSpeed;
     }
 
     
@@ -59,6 +71,7 @@ public class Star : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log("발사");
             StarState = State.Shoot;
         }
     }
@@ -81,25 +94,68 @@ public class Star : MonoBehaviour
 
     void RotateMove()
     {
+        //현재 중심부로부터의 길이와 각도 구하기
+        currentRadius = Vector3.Distance(transform.position, Vector3.zero);
+        currentAngle = Mathf.Atan2(transform.position.z, transform.position.x);
 
+        //회전속도에 따라 변화할 각도를, 원래의 반지름으로 돌아가는 속도에 따라 변화할 반지름 길이를 연산
+        float _targetAngle = currentAngle + angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+        float _targetRadius = Mathf.Lerp(currentRadius, originOrbitalRadius, radiusChangeSpeed);
+
+        //다음 프레임에 이동할 위치 출력
+        float _nextPosX = _targetRadius * Mathf.Cos(_targetAngle);
+        float _nextPosY = _targetRadius * Mathf.Sin(_targetAngle);
+        Vector3 _nextPos = new Vector3(_nextPosX, transform.position.y, _nextPosY);
+
+        //방향 조정
+        transform.LookAt(_nextPos);
+
+        //적용
+        transform.position = _nextPos;
     }
 
     void ShootMove()
     {
-        transform.Translate(Time.deltaTime * Vector3.forward * moveSpeed);
+        transform.Translate(Time.deltaTime * Vector3.forward * currentMoveSpeed);
     }
 
     void ReturnMove()
     {
+        currentRadius = Vector3.Distance(transform.position, Vector3.zero);
+        currentAngle = Mathf.Atan2(transform.position.z, transform.position.x);
 
+        float _targetAngle = currentAngle + angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+        float _targetRadius = Mathf.Lerp(currentRadius, originOrbitalRadius, radiusChangeSpeed);
+
+        float _nextPosX = _targetRadius * Mathf.Cos(_targetAngle);
+        float _nextPosY = _targetRadius * Mathf.Sin(_targetAngle);
+        Vector3 _nextPos = new Vector3(_nextPosX, transform.position.y, _nextPosY);
+
+        transform.LookAt(_nextPos);
+
+        currentMoveSpeed = Mathf.Lerp(currentMoveSpeed, originMoveSpeed, 0.05f);
+        transform.Translate(Time.deltaTime * Vector3.forward * currentMoveSpeed);
+
+        if(Mathf.Abs(_targetRadius - originOrbitalRadius) < 1)
+        {
+            StarState = State.Rotate;
+        }
     }
 
     IEnumerator SmoothRotate(Vector3 targetPos)
     {
         currentRotationSpeed = rotationOriginSpeed;
+        float _distanceToTarget = Vector3.Distance(transform.position, targetPos);
+        Vector3 startPosition = transform.position;
+        float _movedDistance = 0f;
+        float _currentDistanceToTarget = _distanceToTarget;
 
-        while (true)
+        while (_movedDistance < _distanceToTarget * 1.1f || _currentDistanceToTarget > 2f)
         {
+            _currentDistanceToTarget = Vector3.Distance(transform.position, targetPos);
+            Debug.Log($"작동중 / 이동한 거리: {_movedDistance}, 이동할 거리: {_distanceToTarget}, 목표까지의 거리: {_currentDistanceToTarget}");
+            _movedDistance = Vector3.Distance(transform.position, startPosition);
+
             Vector3 targetDir = Quaternion.LookRotation(targetPos - transform.position).eulerAngles;
             Vector3 currentDir = transform.rotation.eulerAngles;
             float targetAngle = targetDir.y;
@@ -109,33 +165,31 @@ public class Star : MonoBehaviour
             if (angleDifference > 180f) angleDifference -= 360f;
             else if (angleDifference < -180f) angleDifference += 360f;
 
-            Debug.Log($"각도 차이: {angleDifference}");
-
             if(Mathf.Abs(angleDifference) < currentRotationSpeed)
             {
                 transform.rotation = Quaternion.Euler(targetDir);
                 Debug.Log("조준 완료");
-                break;
             }
             else if (angleDifference > 0)
             {
                 Quaternion newRotation = Quaternion.Euler(new Vector3(currentDir.x, currentAngle + currentRotationSpeed, currentDir.z));
                 transform.rotation = newRotation;
+                Debug.Log($"각도 차이: {angleDifference}");
             } 
             else if(angleDifference < 0)
             {
                 Quaternion newRotation = Quaternion.Euler(new Vector3(currentDir.x, currentAngle - currentRotationSpeed, currentDir.z));
                 transform.rotation = newRotation;
+                Debug.Log($"각도 차이: {angleDifference}");
             }
 
             currentRotationSpeed += rotationAddSpeed;
-
             //임시 코드
-            moveSpeed = Mathf.Min(10f, moveSpeed+0.1f);
-
-            Debug.Log($"현재 각도: {currentAngle} / 목표 각도: {targetAngle}");
+            currentMoveSpeed = Mathf.Min(10f, currentMoveSpeed+0.1f);
 
             yield return new WaitForSeconds(0.1f);
         }
+        Debug.Log("코루틴 종료");
+        StarState = State.Return;
     }
 }
