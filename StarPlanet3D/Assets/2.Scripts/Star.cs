@@ -6,18 +6,19 @@ public class Star : MonoBehaviour
 {
     public enum State { Rotate, Shoot, Return }
 
+
     //공전
     [SerializeField] float originOrbitalRadius; //원래의 공전 궤도 반지름
-    float currentRadius;
     [SerializeField] float radiusChangeSpeed; //프레임당 원래의 궤도에 가까워지는 비율 (mix:0 ~ max:1)
-    float currentAngle;
     [SerializeField] float angulerSpeed; //초당 회전각
+    private float currentAngle;
+    private float currentRadius;
 
     //사출
     [SerializeField] private float originMoveSpeed;
-    [SerializeField] private float currentMoveSpeed;
     [SerializeField] private float rotationOriginSpeed;
     [SerializeField] private float rotationAddSpeed;
+    private float currentMoveSpeed;
 
     //외부 컴포넌트
     //[SerializeField] Rigidbody rb;
@@ -25,7 +26,7 @@ public class Star : MonoBehaviour
 
     private Vector3 mousePos; // => Controller 스크립트에서 처리할 것
 
-    private Coroutine currentMove;
+    private Coroutine shootingMove;
     private float currentRotationSpeed;
 
     private State _starState;
@@ -42,11 +43,11 @@ public class Star : MonoBehaviour
 
                 case State.Shoot:
                     _starState = State.Shoot;
-                    if(currentMove != null)
+                    if(shootingMove != null)
                     {
-                        StopCoroutine(currentMove);
+                        StopCoroutine(shootingMove);
                     }
-                    currentMove = StartCoroutine(SmoothRotate(mousePos));
+                    shootingMove = StartCoroutine(SmoothRotate(mousePos));
                     break;
 
                 case State.Return:
@@ -109,6 +110,9 @@ public class Star : MonoBehaviour
 
         //방향 조정
         transform.LookAt(_nextPos);
+
+        //속도 기록
+        currentMoveSpeed = Vector3.Distance(transform.position, _nextPos) * 60f;
 
         //적용
         transform.position = _nextPos;
