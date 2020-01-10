@@ -69,14 +69,18 @@ public class Star : MonoBehaviour
     
     void Update()
     {
-        Move();
         mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             Debug.Log("발사");
             StarState = State.Shoot;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
     }
 
     void Move()
@@ -114,10 +118,11 @@ public class Star : MonoBehaviour
         transform.LookAt(_nextPos);
 
         //속도 기록
-        currentMoveSpeed = Vector3.Distance(transform.position, _nextPos) / Time.deltaTime;
+        //currentMoveSpeed = Vector3.Distance(transform.position, _nextPos) / Time.deltaTime;
 
         //적용
-        transform.position = _nextPos;
+        //transform.position = _nextPos;
+        rb.velocity = transform.forward * currentMoveSpeed;
     }
 
     void ShootMove()
@@ -129,7 +134,7 @@ public class Star : MonoBehaviour
     {
         Vector3 m_forward = rb.velocity;
         Vector3 m_direction = (targetPoint - transform.position).normalized * m_distanceInfluence.Evaluate(1 - (targetPoint - transform.position).magnitude / 10);
-        rb.velocity = rb.velocity * 0.9f + m_direction;//Vector3.ClampMagnitude(rb.velocity + m_direction * 5f, rb.velocity.magnitude);
+        rb.velocity = rb.velocity * 0.9f + m_direction;
         Debug.Log(rb.velocity);
 
         m_forward = rb.velocity.normalized;
