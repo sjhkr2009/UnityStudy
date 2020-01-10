@@ -21,8 +21,9 @@ public class Star : MonoBehaviour
     private float currentMoveSpeed;
 
     //외부 컴포넌트
-    //[SerializeField] Rigidbody rb;
+    [SerializeField] Rigidbody rb;
     [SerializeField] Transform planet;
+    public AnimationCurve m_distanceInfluence = AnimationCurve.Linear(0, 1, 1, 1);
 
     private Vector3 mousePos; // => Controller 스크립트에서 처리할 것
 
@@ -47,11 +48,12 @@ public class Star : MonoBehaviour
                     {
                         StopCoroutine(shootingMove);
                     }
-                    shootingMove = StartCoroutine(SmoothRotate(mousePos));
+                    shootingMove = StartCoroutine(SmoothRotate(mousePos, 1f));
                     break;
 
                 case State.Return:
                     _starState = State.Return;
+                    shootingMove = StartCoroutine(SmoothRotate(ReturnPoint(), 0.85f));
                     break;
             }
         }
@@ -112,7 +114,7 @@ public class Star : MonoBehaviour
         transform.LookAt(_nextPos);
 
         //속도 기록
-        currentMoveSpeed = Vector3.Distance(transform.position, _nextPos) * 60f;
+        currentMoveSpeed = Vector3.Distance(transform.position, _nextPos) / Time.deltaTime;
 
         //적용
         transform.position = _nextPos;
@@ -121,6 +123,17 @@ public class Star : MonoBehaviour
     void ShootMove()
     {
         transform.Translate(Time.deltaTime * Vector3.forward * currentMoveSpeed);
+    }
+
+    void TestGoToTarget(Vector3 targetPoint)
+    {
+        Vector3 m_forward = rb.velocity;
+        Vector3 m_direction = (targetPoint - transform.position).normalized * m_distanceInfluence.Evaluate(1 - (targetPoint - transform.position).magnitude / 10);
+        rb.velocity = rb.velocity * 0.9f + m_direction;//Vector3.ClampMagnitude(rb.velocity + m_direction * 5f, rb.velocity.magnitude);
+        Debug.Log(rb.velocity);
+
+        m_forward = rb.velocity.normalized;
+        transform.LookAt(rb.velocity);
     }
 
     void ReturnMove()
@@ -135,12 +148,13 @@ public class Star : MonoBehaviour
         float _nextPosY = _targetRadius * Mathf.Sin(_targetAngle);
         Vector3 _nextPos = new Vector3(_nextPosX, transform.position.y, _nextPosY);
 
+        
         transform.LookAt(_nextPos);
 
         currentMoveSpeed = Mathf.Lerp(currentMoveSpeed, originMoveSpeed, 0.05f);
         transform.Translate(Time.deltaTime * Vector3.forward * currentMoveSpeed);
 
-        if(Mathf.Abs(_targetRadius - originOrbitalRadius) < 1)
+        if (Mathf.Abs(_targetRadius - originOrbitalRadius) < 1)
         {
             StarState = State.Rotate;
         }
@@ -157,7 +171,7 @@ public class Star : MonoBehaviour
         return returnPoint;
     }
 
-    IEnumerator SmoothRotate(Vector3 targetPos)
+    IEnumerator SmoothRotate(Vector3 targetPos, float sensitivity)
     {
         currentRotationSpeed = rotationOriginSpeed;
         float _distanceToTarget = Vector3.Distance(transform.position, targetPos);
@@ -165,7 +179,7 @@ public class Star : MonoBehaviour
         float _movedDistance = 0f;
         float _currentDistanceToTarget = _distanceToTarget;
 
-        while (_movedDistance < _distanceToTarget * 1.1f || _currentDistanceToTarget > 2f)
+        while (_movedDistance < _distanceToTarget * sensitivity || _currentDistanceToTarget > 2f)
         {
             _currentDistanceToTarget = Vector3.Distance(transform.position, targetPos);
             Debug.Log($"작동중 / 이동한 거리: {_movedDistance}, 이동할 거리: {_distanceToTarget}, 목표까지의 거리: {_currentDistanceToTarget}");
@@ -200,7 +214,7 @@ public class Star : MonoBehaviour
 
             currentRotationSpeed += rotationAddSpeed;
             //임시 코드
-            currentMoveSpeed = Mathf.Min(10f, currentMoveSpeed+0.1f);
+            currentMoveSpeed = currentMoveSpeed * 0.75f + _currentDistanceToTarget * 0.3f;
 
             yield return new WaitForSeconds(0.1f);
         }

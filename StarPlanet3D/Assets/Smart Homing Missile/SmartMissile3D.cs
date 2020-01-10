@@ -37,7 +37,7 @@ public class SmartMissile3D : SmartMissile<Rigidbody, Vector3>
 
 	protected override void goToTarget()
 	{		
-		m_direction = (m_target.position + m_targetOffset - transform.position).normalized * m_distanceInfluence.Evaluate(1 - (m_target.position + m_targetOffset - transform.position).magnitude / m_searchRange);
+		m_direction = (m_target.position - transform.position).normalized * m_distanceInfluence.Evaluate(1 - (m_target.position - transform.position).magnitude / m_searchRange);
 		m_rigidbody.velocity = Vector3.ClampMagnitude(m_rigidbody.velocity + m_direction * m_guidanceIntensity, m_rigidbody.velocity.magnitude);
 		
 		if (m_rigidbody.velocity != Vector3.zero)
