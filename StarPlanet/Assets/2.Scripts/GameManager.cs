@@ -52,7 +52,8 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;
     [BoxGroup("Scripts")] [SerializeField] Star star;
     [BoxGroup("Scripts")] [SerializeField] SpawnManager spawnManager;
-    
+    ParticleManager particleManager;
+
     Vector3 mousePos;
     public event Action<Vector3> EventOnClick;
 
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
         gameState = GameState.Ready;
+        particleManager = GetComponent<ParticleManager>();
     }
 
     void Start()

@@ -28926,6 +28926,7 @@ GameObject:
   - component: {fileID: 1820830195}
   - component: {fileID: 1820830199}
   - component: {fileID: 1820830198}
+  - component: {fileID: 1820830200}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -28963,6 +28964,7 @@ MonoBehaviour:
   uiManager: {fileID: 1820830195}
   star: {fileID: 1934295236}
   spawnManager: {fileID: 1820830199}
+  particleManager: {fileID: 1820830200}
 --- !u!4 &1820830197
 Transform:
   m_ObjectHideFlags: 0
@@ -29009,6 +29011,18 @@ MonoBehaviour:
   poolManager: {fileID: 1820830198}
   minSpawnDelay: 1
   maxSpawnDelay: 3
+--- !u!114 &1820830200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820830194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8e87eaf47ef8847809ab4a4bc10a85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1896093933
 GameObject:
   m_ObjectHideFlags: 0
