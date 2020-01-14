@@ -52,16 +52,20 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;
     [BoxGroup("Scripts")] [SerializeField] Star star;
     [BoxGroup("Scripts")] [SerializeField] SpawnManager spawnManager;
-    ParticleManager particleManager;
+    [BoxGroup("Scripts")] public ParticleManager particleManager;
 
     Vector3 mousePos;
     public event Action<Vector3> EventOnClick;
+    public event Action<string, int> EventGetDamage;
+    public event Action<string, int> EventGetEnergy;
 
 
     private void Awake()
     {
         _instance = this;
         gameState = GameState.Ready;
+        uiManager = GetComponent<UIManager>();
+        spawnManager = GetComponent<SpawnManager>();
         particleManager = GetComponent<ParticleManager>();
     }
 
@@ -80,4 +84,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EnemyOnCollision(string targetTag, int level, bool isDamage)
+    {
+        if (isDamage) EventGetDamage(targetTag, level);
+        else EventGetEnergy(targetTag, level);
+    }
 }

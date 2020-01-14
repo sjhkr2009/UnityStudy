@@ -9824,9 +9824,10 @@ GameObject:
   - component: {fileID: 678788594}
   - component: {fileID: 678788598}
   - component: {fileID: 678788597}
+  - component: {fileID: 678788599}
   m_Layer: 0
   m_Name: Planet
-  m_TagString: Untagged
+  m_TagString: Planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14525,6 +14526,21 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &678788599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678788593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86849b85cb39be046bceb2e78234e8fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hp: 0
+  _maxHp: 10
+  rotateSpeed: 180
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -28964,7 +28980,7 @@ MonoBehaviour:
   uiManager: {fileID: 1820830195}
   star: {fileID: 1934295236}
   spawnManager: {fileID: 1820830199}
-  particleManager: {fileID: 1820830200}
+  particleManager: {fileID: 0}
 --- !u!4 &1820830197
 Transform:
   m_ObjectHideFlags: 0
@@ -29137,7 +29153,7 @@ GameObject:
   - component: {fileID: 1934295236}
   m_Layer: 0
   m_Name: Star
-  m_TagString: Untagged
+  m_TagString: Star
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33834,6 +33850,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29928b9070ebc94cb34c3bedfdafb74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hp: 0
+  _maxHp: 10
   originOrbitalRadius: 3
   radiusChangeSpeed: 0.05
   originAngulerSpeed: 270

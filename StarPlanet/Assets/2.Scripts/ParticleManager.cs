@@ -5,9 +5,18 @@ using Sirenix.OdinInspector;
 
 public class ParticleManager : MonoBehaviour
 {
-    //GameManager.Instance.particleManager를 각 파티클에서 불러옴
-    
-    public IEnumerator ParticlePlay(ParticleSystem particle)
+
+    public void DestroyParticle(ParticleSystem particle)
+    {
+        StartCoroutine(ParticlePlay(particle));
+    }
+
+    public void DestroyParticle(ParticleSystem particle, AudioSource audio)
+    {
+        StartCoroutine(ParticlePlay(particle, audio));
+    }
+
+    IEnumerator ParticlePlay(ParticleSystem particle)
     {
         particle.Play();
         yield return new WaitForSeconds(particle.main.duration);
@@ -15,7 +24,7 @@ public class ParticleManager : MonoBehaviour
         particle.gameObject.SetActive(false);
     }
 
-    public IEnumerator ParticlePlay(ParticleSystem particle, AudioSource audio)
+    IEnumerator ParticlePlay(ParticleSystem particle, AudioSource audio)
     {
         particle.Play();
         audio.Play();
@@ -24,7 +33,7 @@ public class ParticleManager : MonoBehaviour
         particle.gameObject.SetActive(false);
     }
 
-    public IEnumerator ParticlePlay(ParticleSystem particle, float duration)
+    IEnumerator ParticlePlay(ParticleSystem particle, float duration)
     {
         particle.Play();
         yield return new WaitForSeconds(duration);
@@ -32,7 +41,7 @@ public class ParticleManager : MonoBehaviour
         particle.gameObject.SetActive(false);
     }
 
-    public IEnumerator ParticlePlay(ParticleSystem particle, AudioSource audio, float duration)
+    IEnumerator ParticlePlay(ParticleSystem particle, AudioSource audio, float duration)
     {
         particle.Play();
         audio.Play();

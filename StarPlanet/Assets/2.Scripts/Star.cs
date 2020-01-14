@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class Star : MonoBehaviour
+public class Star : Player
 {
     [SerializeField] float originOrbitalRadius; //원래의 공전 궤도 반지름
     [SerializeField] float radiusChangeSpeed; //프레임당 목표 궤도에 가까워지는 비율 (mix:0 ~ max:1)
@@ -32,10 +32,14 @@ public class Star : MonoBehaviour
         EventRadiusChange += AngularSpeedChange;
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         GameManager.Instance.EventOnClick += TargetRadiusChange;
+        GameManager.Instance.EventGetDamage += GetDamage;
+        GameManager.Instance.EventGetEnergy += GetEnergy;
         EventRadiusChange(Vector3.Distance(transform.position, Vector3.zero));
+
     }
 
     private void FixedUpdate()
@@ -84,6 +88,29 @@ public class Star : MonoBehaviour
     void AngularSpeedChange(float radius)
     {
         angulerSpeed = originAngulerSpeed * minRadius / radius;
+    }
+
+    void GetDamage(string targetTag, int damage)
+    {
+        if (!gameObject.CompareTag(targetTag))
+        {
+            return;
+        }
+
+        Hp -= damage;
+        if (Hp <= 0)
+        {
+            GameManager.Instance.gameState = GameManager.GameState.GameOver;
+        }
+    }
+
+    void GetEnergy(string targetTag, int energy)
+    {
+        if (!gameObject.CompareTag(targetTag))
+        {
+            return;
+        }
+        Hp += energy;
     }
 
     private void OnDisable()
