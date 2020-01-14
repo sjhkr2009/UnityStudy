@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 
 public class ParticleManager : MonoBehaviour
 {
+    
 
     public void DestroyParticle(ParticleSystem particle)
     {

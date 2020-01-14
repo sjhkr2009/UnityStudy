@@ -5,17 +5,34 @@ using Sirenix.OdinInspector;
 
 public class PoolManager : MonoBehaviour
 {
+    public enum ObjectPool
+    {
+        EnemyTP1,
+        EnemyTS1,
+        ParticleTP1,
+        ParticleTS1
+    }
+    //public ObjectPool spawnObject;
+    
     [SerializeField] GameObject enemyToPlanet1;
     [SerializeField] GameObject enemyToStar1;
+    [SerializeField] GameObject particleTP1;
+    [SerializeField] GameObject particleTS1;
 
     private List<GameObject> enemyTP1List = new List<GameObject>();
     private List<GameObject> enemyTS1List = new List<GameObject>();
+    private List<GameObject> particleTP1List = new List<GameObject>();
+    private List<GameObject> particleTS1List = new List<GameObject>();
 
     [SerializeField] Transform enemyTP1Group;
     [SerializeField] Transform enemyTS1Group;
+    [SerializeField] Transform particleTP1Group;
+    [SerializeField] Transform particleTS1Group;
 
     private int enemyTP1Index = 0;
     private int enemyTS1Index = 0;
+    private int particleTP1Index = 0;
+    private int particleTS1Index = 0;
 
     [SerializeField] int poolNumber = 100;
 
@@ -23,6 +40,8 @@ public class PoolManager : MonoBehaviour
     {
         enemyTP1List = MakeObjectPool(enemyToPlanet1, enemyTP1Group);
         enemyTS1List = MakeObjectPool(enemyToStar1, enemyTS1Group);
+        particleTP1List = MakeObjectPool(particleTP1, particleTP1Group);
+        particleTS1List = MakeObjectPool(particleTS1, particleTS1Group);
     }
     /// <summary>
     /// 오브젝트를 비활성화 상태로 생성하고 리스트에 넣은 후, 해당 리스트를 반환합니다. 
@@ -45,7 +64,7 @@ public class PoolManager : MonoBehaviour
         return _objectList;
     }
 
-    GameObject Spawn(List<GameObject> objectList, int index)
+    GameObject SpawnObject(List<GameObject> objectList, int index)
     {
         GameObject _gameObject = objectList[index];
         _gameObject.SetActive(true);
@@ -53,21 +72,60 @@ public class PoolManager : MonoBehaviour
         return _gameObject;
     }
 
-    public void EnemyTP1Spawn(Vector3 position, Quaternion rotation)
+    public void Spawn(ObjectPool type, Vector3 position, Quaternion rotation)
     {
-        GameObject _gameObject = Spawn(enemyTP1List, enemyTP1Index);
-        _gameObject.transform.position = position;
-        _gameObject.transform.rotation = rotation;
-        enemyTP1Index++;
-        enemyTP1Index %= poolNumber;
+        GameObject _spawnedObject;
+        switch (type)
+        {
+            case ObjectPool.EnemyTP1:
+                _spawnedObject = SpawnObject(enemyTP1List, enemyTP1Index);
+                enemyTP1Index = (enemyTP1Index + 1) % poolNumber;
+                break;
+            case ObjectPool.EnemyTS1:
+                _spawnedObject = SpawnObject(enemyTS1List, enemyTS1Index);
+                enemyTS1Index = (enemyTS1Index + 1) % poolNumber;
+                break;
+            case ObjectPool.ParticleTP1:
+                _spawnedObject = SpawnObject(particleTP1List, particleTP1Index);
+                particleTP1Index = (particleTP1Index + 1) % poolNumber;
+                break;
+            case ObjectPool.ParticleTS1:
+                _spawnedObject = SpawnObject(particleTS1List, particleTS1Index);
+                particleTS1Index = (particleTS1Index + 1) % poolNumber;
+                break;
+            default:
+                return;
+        }
+
+        _spawnedObject.transform.position = position;
+        _spawnedObject.transform.rotation = rotation;
     }
 
-    public void EnemyTS1Spawn(Vector3 position, Quaternion rotation)
+    public void Spawn(ObjectPool type, Vector3 position)
     {
-        GameObject _gameObject = Spawn(enemyTS1List, enemyTS1Index);
-        _gameObject.transform.position = position;
-        _gameObject.transform.rotation = rotation;
-        enemyTS1Index++;
-        enemyTS1Index %= poolNumber;
+        GameObject _spawnedObject;
+        switch (type)
+        {
+            case ObjectPool.EnemyTP1:
+                _spawnedObject = SpawnObject(enemyTP1List, enemyTP1Index);
+                enemyTP1Index = (enemyTP1Index + 1) % poolNumber;
+                break;
+            case ObjectPool.EnemyTS1:
+                _spawnedObject = SpawnObject(enemyTS1List, enemyTS1Index);
+                enemyTS1Index = (enemyTS1Index + 1) % poolNumber;
+                break;
+            case ObjectPool.ParticleTP1:
+                _spawnedObject = SpawnObject(particleTP1List, particleTP1Index);
+                particleTP1Index = (particleTP1Index + 1) % poolNumber;
+                break;
+            case ObjectPool.ParticleTS1:
+                _spawnedObject = SpawnObject(particleTS1List, particleTS1Index);
+                particleTS1Index = (particleTS1Index + 1) % poolNumber;
+                break;
+            default:
+                return;
+        }
+
+        _spawnedObject.transform.position = position;
     }
 }

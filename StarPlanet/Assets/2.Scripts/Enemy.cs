@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 public class Enemy : MonoBehaviour
 {
+    public enum Type { ToPlanet1, ToStar1 }
+    [SerializeField] Type enemyType;
+
     [SerializeField] private string targetType;
     [SerializeField] private string avoidType;
     [SerializeField] private float moveSpeed;
@@ -23,6 +27,22 @@ public class Enemy : MonoBehaviour
             Debug.Log("Fail");
             GameManager.Instance.EnemyOnCollision(avoidType, damage, true);
             gameObject.SetActive(false);
+        }
+    }
+
+    void CallParticle(Type myType)
+    {
+        PoolManager poolManager = GameManager.Instance.poolManager;
+        
+        switch (myType)
+        {
+            case Type.ToPlanet1:
+                poolManager.Spawn(PoolManager.ObjectPool.ParticleTP1, transform.position);
+                break;
+            case Type.ToStar1:
+                poolManager.Spawn(PoolManager.ObjectPool.ParticleTS1, transform.position);
+                break;
+
         }
     }
 

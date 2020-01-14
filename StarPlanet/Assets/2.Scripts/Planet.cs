@@ -21,10 +21,6 @@ public class Planet : Player
         }
         
         Hp -= damage;
-        if (Hp <= 0)
-        {
-            GameManager.Instance.gameState = GameManager.GameState.GameOver;
-        }
     }
 
     void GetEnergy(string targetTag, int energy)

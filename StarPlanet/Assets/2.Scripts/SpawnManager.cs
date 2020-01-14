@@ -35,11 +35,11 @@ public class SpawnManager : MonoBehaviour
 
             if (Random.value < 0.5f)
             {
-                poolManager.EnemyTP1Spawn(position, Quaternion.LookRotation(Vector3.zero - position));
+                poolManager.Spawn(PoolManager.ObjectPool.EnemyTP1, position, Quaternion.LookRotation(Vector3.zero - position));
             }
             else
             {
-                poolManager.EnemyTS1Spawn(position, Quaternion.LookRotation(Vector3.zero - position));
+                poolManager.Spawn(PoolManager.ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
             }
 
             float spawnDelay = Random.Range(minSpawnDelay, maxSpawnDelay);

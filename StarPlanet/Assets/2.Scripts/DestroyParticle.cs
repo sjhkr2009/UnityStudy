@@ -10,22 +10,25 @@ public class DestroyParticle : MonoBehaviour
     [BoxGroup("Particle Setting")] [SerializeField] bool hasAudio;
     [BoxGroup("Particle Setting")] [ShowIf(nameof(hasAudio))] [SerializeField] AudioSource audioSource;
 
-    float durationTime;
+    float durationTime = 0f;
 
     void OnEnable()
     {
         durationTime = 0f;
-        if(GameManager.Instance.gameState == GameManager.GameState.Playing)
+        if (GameManager.Instance.gameState == GameManager.GameState.Playing)
         {
             particleManager = GameManager.Instance.particleManager;
             if (hasAudio) particleManager.DestroyParticle(particleSystem, audioSource);
-            else if (!hasAudio) particleManager.DestroyParticle(particleSystem);
+            else particleManager.DestroyParticle(particleSystem);
         }
     }
 
     private void Update()
     {
-        durationTime += Time.deltaTime;
+        if (gameObject.activeSelf)
+        {
+            durationTime += Time.deltaTime;
+        }
         if(durationTime > 10f)
         {
             gameObject.SetActive(false);

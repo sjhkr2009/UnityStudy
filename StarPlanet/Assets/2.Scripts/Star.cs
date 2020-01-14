@@ -10,6 +10,7 @@ public class Star : Player
     [SerializeField] float radiusChangeSpeed; //프레임당 목표 궤도에 가까워지는 비율 (mix:0 ~ max:1)
     [SerializeField] float originAngulerSpeed; //초당 최대 회전각
     [SerializeField] float minRadius;
+    [SerializeField] float speedReduction = 1f;
     private float currentAngle;
     private float currentRadius;
     private float _targetRadius;
@@ -87,7 +88,7 @@ public class Star : Player
 
     void AngularSpeedChange(float radius)
     {
-        angulerSpeed = originAngulerSpeed * minRadius / radius;
+        angulerSpeed = originAngulerSpeed * minRadius / (minRadius + (radius - minRadius) / speedReduction) ;
     }
 
     void GetDamage(string targetTag, int damage)
@@ -96,12 +97,7 @@ public class Star : Player
         {
             return;
         }
-
         Hp -= damage;
-        if (Hp <= 0)
-        {
-            GameManager.Instance.gameState = GameManager.GameState.GameOver;
-        }
     }
 
     void GetEnergy(string targetTag, int energy)

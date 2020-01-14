@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;
     [BoxGroup("Scripts")] [SerializeField] Star star;
     [BoxGroup("Scripts")] [SerializeField] SpawnManager spawnManager;
+    [BoxGroup("Scripts")] public PoolManager poolManager;
     [BoxGroup("Scripts")] public ParticleManager particleManager;
 
     Vector3 mousePos;
