@@ -9599,7 +9599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa417ba0492f19d4c85d1ab6a9ee95c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystem: {fileID: 3447504128414404467}
+  particleEffect: {fileID: 3447504128414404467}
   hasAudio: 1
   audioSource: {fileID: 6003405169072481270}
 --- !u!1 &8955365728162092355

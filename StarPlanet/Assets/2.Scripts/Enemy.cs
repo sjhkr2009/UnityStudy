@@ -20,12 +20,14 @@ public class Enemy : MonoBehaviour
         {
             Debug.Log("Success");
             GameManager.Instance.EnemyOnCollision(targetType, healing, false);
+            CallParticle(enemyType);
             gameObject.SetActive(false);
         }
         else if (other.CompareTag(avoidType))
         {
             Debug.Log("Fail");
             GameManager.Instance.EnemyOnCollision(avoidType, damage, true);
+            CallParticle(enemyType);
             gameObject.SetActive(false);
         }
     }
@@ -37,10 +39,10 @@ public class Enemy : MonoBehaviour
         switch (myType)
         {
             case Type.ToPlanet1:
-                poolManager.Spawn(PoolManager.ObjectPool.ParticleTP1, transform.position);
+                poolManager.Spawn(PoolManager.ObjectPool.ParticleTP1, transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
             case Type.ToStar1:
-                poolManager.Spawn(PoolManager.ObjectPool.ParticleTS1, transform.position);
+                poolManager.Spawn(PoolManager.ObjectPool.ParticleTS1, transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
 
         }

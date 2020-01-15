@@ -100,7 +100,7 @@ public class PoolManager : MonoBehaviour
         _spawnedObject.transform.position = position;
         _spawnedObject.transform.rotation = rotation;
     }
-
+    /*
     public void Spawn(ObjectPool type, Vector3 position)
     {
         GameObject _spawnedObject;
@@ -127,5 +127,5 @@ public class PoolManager : MonoBehaviour
         }
 
         _spawnedObject.transform.position = position;
-    }
+    }*/
 }
