@@ -9,8 +9,6 @@ public class Planet : Player
     protected override void Start()
     {
         base.Start();
-        GameManager.Instance.EventGetDamage += GetDamage;
-        GameManager.Instance.EventGetEnergy += GetEnergy;
     }
 
     void GetDamage(string targetTag, int damage)
@@ -32,12 +30,9 @@ public class Planet : Player
         Hp += energy;
     }
 
-    private void Update()
+    public override void Processing()
     {
-        if(GameManager.Instance.gameState == GameManager.GameState.Playing)
-        {
-            Rotate();
-        }
+        Rotate();
     }
 
     void Rotate()

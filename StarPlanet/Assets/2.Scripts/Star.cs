@@ -6,6 +6,8 @@ using Sirenix.OdinInspector;
 
 public class Star : Player
 {
+    public event Action<Star> EventPlayerDead;
+
     [SerializeField] float originOrbitalRadius; //원래의 공전 궤도 반지름
     [SerializeField] float radiusChangeSpeed; //프레임당 목표 궤도에 가까워지는 비율 (mix:0 ~ max:1)
     [SerializeField] float originAngulerSpeed; //초당 최대 회전각
@@ -33,22 +35,21 @@ public class Star : Player
         EventRadiusChange += AngularSpeedChange;
     }
 
+    private void OnDestroy()
+    {
+        EventRadiusChange -= AngularSpeedChange;
+    }
+
     protected override void Start()
     {
         base.Start();
-        GameManager.Instance.EventOnClick += TargetRadiusChange;
-        GameManager.Instance.EventGetDamage += GetDamage;
-        GameManager.Instance.EventGetEnergy += GetEnergy;
         EventRadiusChange(Vector3.Distance(transform.position, Vector3.zero));
 
     }
 
-    private void FixedUpdate()
+    public override void Processing()
     {
-        if(GameManager.Instance.gameState == GameManager.GameState.Playing)
-        {
-            RotateMove();
-        }
+        RotateMove();
     }
 
     void RotateMove()
@@ -66,7 +67,7 @@ public class Star : Player
             _targetRadius = targetRadius;
             EventRadiusChange(_targetRadius);
         }
-        else if(targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) >= 0.01f)
+        else if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) >= 0.01f)
         {
             _targetRadius = Mathf.Lerp(currentRadius, targetRadius, radiusChangeSpeed);
             EventRadiusChange(_targetRadius);
@@ -81,14 +82,14 @@ public class Star : Player
         transform.position = _nextPos;
     }
 
-    void TargetRadiusChange(Vector3 mousePos)
+    public void TargetRadiusChange(Vector3 mousePos)
     {
         targetRadius = Vector3.Distance(mousePos, Vector3.zero);
     }
 
     void AngularSpeedChange(float radius)
     {
-        angulerSpeed = originAngulerSpeed * minRadius / (minRadius + (radius - minRadius) / speedReduction) ;
+        angulerSpeed = originAngulerSpeed * minRadius / (minRadius + (radius - minRadius) / speedReduction);
     }
 
     void GetDamage(string targetTag, int damage)
@@ -111,6 +112,6 @@ public class Star : Player
 
     private void OnDisable()
     {
-        GameManager.Instance.gameState = GameManager.GameState.GameOver;
+        EventPlayerDead(this);
     }
 }

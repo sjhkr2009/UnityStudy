@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.UI;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UIManager : MonoBehaviour
 
     [BoxGroup("Object")] [SerializeField] Star star;
 
+    public event Action EventCountDownDone = () => { };
 
     private void Awake()
     {
@@ -36,6 +38,6 @@ public class UIManager : MonoBehaviour
         countdownText.text = "1";
         yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
-        GameManager.Instance.gameState = GameManager.GameState.Playing;
+        EventCountDownDone();
     }
 }

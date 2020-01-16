@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
 
+public enum GameState { Ready, Playing, Pause, GameOver }
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -19,7 +21,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public enum GameState { Ready, Playing, Pause, GameOver }
+    public event Action<GameState> EventGameStateChanged = e => { };
+
     private GameState _gameState;
     public GameState gameState
     {
@@ -33,7 +36,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameState.Playing:
                     _gameState = GameState.Playing;
-                    StartCoroutine(spawnManager.EnemySpawn());
+                    StartCoroutine(enemyManager.EnemySpawn());
                     Time.timeScale = 1f;
                     break;
                 case GameState.Pause:
@@ -46,33 +49,53 @@ public class GameManager : MonoBehaviour
                     Debug.Log("Game Over");
                     break;
             }
+            EventGameStateChanged(_gameState);
         }
     }
 
     [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;
     [BoxGroup("Scripts")] [SerializeField] Star star;
-    [BoxGroup("Scripts")] [SerializeField] SpawnManager spawnManager;
+    public Star Star => star;
+    [BoxGroup("Scripts")] [SerializeField] EnemyManager enemyManager;
+    [BoxGroup("Scripts")] [SerializeField] SoundManager soundManager;
+    public SoundManager SoundManager => soundManager;
     [BoxGroup("Scripts")] public PoolManager poolManager;
     [BoxGroup("Scripts")] public ParticleManager particleManager;
 
     Vector3 mousePos;
     public event Action<Vector3> EventOnClick;
-    public event Action<string, int> EventGetDamage;
-    public event Action<string, int> EventGetEnergy;
-
 
     private void Awake()
     {
         _instance = this;
         gameState = GameState.Ready;
         uiManager = GetComponent<UIManager>();
-        spawnManager = GetComponent<SpawnManager>();
+        enemyManager = GetComponent<EnemyManager>();
+        soundManager = GetComponent<SoundManager>();
         particleManager = GetComponent<ParticleManager>();
     }
 
     void Start()
     {
         if(_instance != null && _instance != this) { Destroy(gameObject);}
+
+        star.EventHpChanged += OnPlayerHpChanged;
+        star.EventPlayerDead += OnPlayerDead;
+
+        EventGameStateChanged += star.OnGameStateChanged;
+
+        uiManager.EventCountDownDone += OnCountDownDone;
+    }
+
+
+    private void OnDestroy()
+    {
+        star.EventHpChanged -= OnPlayerHpChanged;
+        star.EventPlayerDead -= OnPlayerDead;
+
+        EventGameStateChanged -= star.OnGameStateChanged;
+
+        uiManager.EventCountDownDone -= OnCountDownDone;
     }
 
     void Update()
@@ -81,13 +104,23 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            EventOnClick(mousePos);
+            star.TargetRadiusChange(mousePos);
         }
     }
 
-    public void EnemyOnCollision(string targetTag, int level, bool isDamage)
+
+    public void OnPlayerHpChanged(int hp)
     {
-        if (isDamage) EventGetDamage(targetTag, level);
-        else EventGetEnergy(targetTag, level);
+        if (hp == 0) gameState = GameState.GameOver;
+    }
+
+    private void OnPlayerDead(Star obj)
+    {
+        gameState = GameState.GameOver;
+    }
+
+    private void OnCountDownDone()
+    {
+        gameState = GameState.Playing;
     }
 }

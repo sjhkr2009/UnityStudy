@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using System;
 
 public class Player : MonoBehaviour
 {
+    public event Action<int> EventHpChanged;
+
     [BoxGroup("Basic")] [SerializeField] private int _hp;
     [BoxGroup("Basic")] [SerializeField] private int _maxHp;
+
+    bool isPlaying = false;
 
 
     public int Hp
@@ -15,7 +20,7 @@ public class Player : MonoBehaviour
         set
         {
             _hp = Mathf.Clamp(value, 0, MaxHp);
-            if (_hp == 0) GameManager.Instance.gameState = GameManager.GameState.GameOver;
+            EventHpChanged(_hp);
             //UI 조정
         }
     }
@@ -34,5 +39,23 @@ public class Player : MonoBehaviour
     {
         MaxHp = MaxHp;
         Hp = MaxHp;
+    }
+
+    public virtual void Processing()
+    {
+
+    }
+
+    private void FixedUpdate()
+    {
+        if(isPlaying)
+        {
+            Processing();   
+        }
+    }
+
+    public void OnGameStateChanged(GameState gameState)
+    {
+        isPlaying = gameState == GameState.Playing;
     }
 }

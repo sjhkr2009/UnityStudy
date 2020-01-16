@@ -18,16 +18,19 @@ public class PoolManager : MonoBehaviour
     [SerializeField] GameObject enemyToStar1;
     [SerializeField] GameObject particleTP1;
     [SerializeField] GameObject particleTS1;
+    [SerializeField] GameObject audioFX;
 
     private List<GameObject> enemyTP1List = new List<GameObject>();
     private List<GameObject> enemyTS1List = new List<GameObject>();
     private List<GameObject> particleTP1List = new List<GameObject>();
     private List<GameObject> particleTS1List = new List<GameObject>();
+    [HideInInspector] public List<GameObject> audioFXList = new List<GameObject>();
 
     [SerializeField] Transform enemyTP1Group;
     [SerializeField] Transform enemyTS1Group;
     [SerializeField] Transform particleTP1Group;
     [SerializeField] Transform particleTS1Group;
+    [SerializeField] Transform audioFXGroup;
 
     private int enemyTP1Index = 0;
     private int enemyTS1Index = 0;
@@ -42,6 +45,8 @@ public class PoolManager : MonoBehaviour
         enemyTS1List = MakeObjectPool(enemyToStar1, enemyTS1Group);
         particleTP1List = MakeObjectPool(particleTP1, particleTP1Group);
         particleTS1List = MakeObjectPool(particleTS1, particleTS1Group);
+        audioFXList = MakeObjectPool(audioFX, audioFXGroup, 20);
+        GameManager.Instance.SoundManager.MakeAudioList(audioFXList);
     }
     /// <summary>
     /// 오브젝트를 비활성화 상태로 생성하고 리스트에 넣은 후, 해당 리스트를 반환합니다. 
@@ -60,7 +65,6 @@ public class PoolManager : MonoBehaviour
             _objectList.Add(_instance);
             _instance.SetActive(false);
         }
-        Debug.Log("오브젝트풀 생성 완료");
         return _objectList;
     }
 
@@ -72,7 +76,7 @@ public class PoolManager : MonoBehaviour
         return _gameObject;
     }
 
-    public void Spawn(ObjectPool type, Vector3 position, Quaternion rotation)
+    public GameObject Spawn(ObjectPool type, Vector3 position, Quaternion rotation)
     {
         GameObject _spawnedObject;
         switch (type)
@@ -94,11 +98,12 @@ public class PoolManager : MonoBehaviour
                 particleTS1Index = (particleTS1Index + 1) % poolNumber;
                 break;
             default:
-                return;
+                return null;
         }
 
         _spawnedObject.transform.position = position;
         _spawnedObject.transform.rotation = rotation;
+        return _spawnedObject;
     }
     /*
     public void Spawn(ObjectPool type, Vector3 position)
