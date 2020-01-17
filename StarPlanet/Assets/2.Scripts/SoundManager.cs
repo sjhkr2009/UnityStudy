@@ -12,13 +12,13 @@ public class SoundManager : MonoBehaviour
     [BoxGroup("Enemy Destroy")] [SerializeField] AudioClip correctCollision;
     [BoxGroup("Enemy Destroy")] [SerializeField] AudioClip wrongCollision;
 
-    List<AudioSource> audioFXSources = new List<AudioSource>();
+    List<AudioSource> audioFXPlayers = new List<AudioSource>();
 
     public void MakeAudioList(List<GameObject> gameObjects)
     {
         for (int i = 0; i < gameObjects.Count; i++)
         {
-            audioFXSources.Add(gameObjects[i].GetComponent<AudioSource>());
+            audioFXPlayers.Add(gameObjects[i].GetComponent<AudioSource>());
         }
     }
 
@@ -44,16 +44,16 @@ public class SoundManager : MonoBehaviour
 
     AudioSource FindAudioFXPlayer()
     {
-        AudioSource container = audioFXSources[0];
-        for (int i = 0; i < audioFXSources.Count; i++)
+        AudioSource container = audioFXPlayers[0];
+        for (int i = 0; i < audioFXPlayers.Count; i++)
         {
-            if (!audioFXSources[i].isPlaying)
+            if (!audioFXPlayers[i].isPlaying)
             {
-                container = audioFXSources[i];
+                container = audioFXPlayers[i];
                 break;
             }
         }
-        container.gameObject.SetActive(true);
+        if(!container.gameObject.activeSelf) container.gameObject.SetActive(true);
         return container;
     }
 }
