@@ -14,12 +14,10 @@ public class SoundManager : MonoBehaviour
 
     List<AudioSource> audioFXPlayers = new List<AudioSource>();
 
-    public void MakeAudioList(List<GameObject> gameObjects)
+
+    private void Start()
     {
-        for (int i = 0; i < gameObjects.Count; i++)
-        {
-            audioFXPlayers.Add(gameObjects[i].GetComponent<AudioSource>());
-        }
+        audioFXPlayers = GameManager.Instance.poolManager.audioFXList;
     }
 
     public void PlayFXSound(SoundTypeFX soundType)

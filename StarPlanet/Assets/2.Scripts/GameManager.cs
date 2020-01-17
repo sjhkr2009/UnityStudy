@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;
     [BoxGroup("Scripts")] [SerializeField] Star star;
     public Star Star => star;
+    [BoxGroup("Scripts")] [SerializeField] Planet planet;
+    public Planet Planet => planet;
     [BoxGroup("Scripts")] [SerializeField] EnemyManager enemyManager;
     [BoxGroup("Scripts")] [SerializeField] SoundManager soundManager;
     public SoundManager SoundManager => soundManager;
@@ -80,6 +82,7 @@ public class GameManager : MonoBehaviour
         if(_instance != null && _instance != this) { Destroy(gameObject);}
 
         star.EventHpChanged += OnPlayerHpChanged;
+        star.EventMaxHpChanged += OnPlayerMaxHpChanged;
         star.EventPlayerDead += OnPlayerDead;
 
         EventGameStateChanged += star.OnGameStateChanged;
@@ -109,12 +112,16 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void OnPlayerHpChanged(int hp)
+    public void OnPlayerHpChanged(int hp) //T로 플레이어 타입도 받기
     {
-        if (hp == 0) gameState = GameState.GameOver;
+        if (hp == 0) gameState = GameState.GameOver; //플레이어 비활성화로 변경 -> GameOver처리는 OnPlayerDead에서 처리.
+    }
+    public void OnPlayerMaxHpChanged(int maxHp) //T로 플레이어 타입도 받기
+    {
+        
     }
 
-    private void OnPlayerDead(Star obj)
+    private void OnPlayerDead<T>(T player) where T : Player
     {
         gameState = GameState.GameOver;
     }

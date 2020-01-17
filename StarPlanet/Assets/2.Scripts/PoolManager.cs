@@ -23,7 +23,7 @@ public class PoolManager : MonoBehaviour
 
     private List<Enemy> enemyTP1List = new List<Enemy>();
     private List<Enemy> enemyTS1List = new List<Enemy>();
-    private List<GameObject> particleTP1List = new List<GameObject>();
+    private List<ParticleSystem> particleTP1List = new List<ParticleSystem>();
     private List<ParticleSystem> particleTS1List = new List<ParticleSystem>();
     [HideInInspector] public List<AudioSource> audioFXList = new List<AudioSource>();
 
@@ -44,7 +44,7 @@ public class PoolManager : MonoBehaviour
     {
         enemyTP1List = MakeObjectPool<Enemy>(enemyToPlanet1, enemyTP1Group);
         enemyTS1List = MakeObjectPool<Enemy>(enemyToStar1, enemyTS1Group);
-        particleTP1List = MakeObjectPool<GameObject>(particleTP1, particleTP1Group);
+        particleTP1List = MakeObjectPool<ParticleSystem>(particleTP1, particleTP1Group);
         particleTS1List = MakeObjectPool<ParticleSystem>(particleTS1, particleTS1Group);
         audioFXList = MakeObjectPool<AudioSource>(audioFX, audioFXGroup, 20);
     }
@@ -76,9 +76,9 @@ public class PoolManager : MonoBehaviour
         _gameObject.transform.rotation = rot;
     }
 
-    public MonoBehaviour Spawn<T>(ObjectPool type, Vector3 position, Quaternion rotation) where T : Component
+    public Component Spawn(ObjectPool type, Vector3 position, Quaternion rotation)
     {
-        MonoBehaviour _returnObject;
+        Component _returnObject = null;
 
         switch (type)
         {
@@ -99,6 +99,7 @@ public class PoolManager : MonoBehaviour
                 break;
             case ObjectPool.ParticleTS1:
                 SpawnObject(particleTS1List, particleTS1Index, position, rotation);
+                _returnObject = particleTS1List[particleTS1Index];
                 particleTS1Index = (particleTS1Index + 1) % poolNumber;
                 break;
             default:

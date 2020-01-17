@@ -34,15 +34,13 @@ public class EnemyManager : MonoBehaviour
 
             if (Random.value < 0.5f)
             {
-                GameObject spawnedObject = poolManager.Spawn(PoolManager.ObjectPool.EnemyTP1, position, Quaternion.LookRotation(Vector3.zero - position));
-                Enemy enemyTP1 = spawnedObject.GetComponent<Enemy>();
+                Enemy enemyTP1 = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, position, Quaternion.LookRotation(Vector3.zero - position));
                 enemyTP1.EventContactCorrect += OnContactCorrect;
                 enemyTP1.EventContactWrong += OnContactWrong;
             }
             else
             {
-                GameObject spawnedObject = poolManager.Spawn(PoolManager.ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
-                Enemy enemyTS1 = spawnedObject.GetComponent<Enemy>();
+                Enemy enemyTS1 = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
                 enemyTS1.EventContactCorrect += OnContactCorrect;
                 enemyTS1.EventContactWrong += OnContactWrong;
             }
@@ -75,16 +73,15 @@ public class EnemyManager : MonoBehaviour
 
     void CallParticle(Type myType, bool isCorrect, Transform _transform)
     {
-        PoolManager poolManager = GameManager.Instance.poolManager;
         SoundManager soundManager = GameManager.Instance.SoundManager;
 
         switch (myType)
         {
             case Type.ToPlanet1:
-                poolManager.Spawn(PoolManager.ObjectPool.ParticleTP1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
+                poolManager.Spawn(ObjectPool.ParticleTP1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
             case Type.ToStar1:
-                poolManager.Spawn(PoolManager.ObjectPool.ParticleTS1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
+                poolManager.Spawn(ObjectPool.ParticleTS1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
 
         }

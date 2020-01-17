@@ -92,24 +92,6 @@ public class Star : Player
         angulerSpeed = originAngulerSpeed * minRadius / (minRadius + (radius - minRadius) / speedReduction);
     }
 
-    void GetDamage(string targetTag, int damage)
-    {
-        if (!gameObject.CompareTag(targetTag))
-        {
-            return;
-        }
-        Hp -= damage;
-    }
-
-    void GetEnergy(string targetTag, int energy)
-    {
-        if (!gameObject.CompareTag(targetTag))
-        {
-            return;
-        }
-        Hp += energy;
-    }
-
     private void OnDisable()
     {
         EventPlayerDead(this);

@@ -6,7 +6,8 @@ using System;
 
 public class Player : MonoBehaviour
 {
-    public event Action<int> EventHpChanged;
+    public event Action<int> EventHpChanged = n => { };
+    public event Action<int> EventMaxHpChanged = n => { };
 
     [BoxGroup("Basic")] [SerializeField] private int _hp;
     [BoxGroup("Basic")] [SerializeField] private int _maxHp;
@@ -21,7 +22,6 @@ public class Player : MonoBehaviour
         {
             _hp = Mathf.Clamp(value, 0, MaxHp);
             EventHpChanged(_hp);
-            //UI 조정
         }
     }
     public int MaxHp
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
         set
         {
             _maxHp = value;
-            //UI조정
+            EventMaxHpChanged(_maxHp);
         }
     }
 
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
 
     public virtual void Processing()
     {
-
+        //상속받을 Star, Planet에서 각각 움직임을 추가
     }
 
     private void FixedUpdate()

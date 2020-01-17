@@ -11,25 +11,6 @@ public class Planet : Player
         base.Start();
     }
 
-    void GetDamage(string targetTag, int damage)
-    {
-        if (!gameObject.CompareTag(targetTag))
-        {
-            return;
-        }
-        
-        Hp -= damage;
-    }
-
-    void GetEnergy(string targetTag, int energy)
-    {
-        if (!gameObject.CompareTag(targetTag))
-        {
-            return;
-        }
-        Hp += energy;
-    }
-
     public override void Processing()
     {
         Rotate();
@@ -39,4 +20,6 @@ public class Planet : Player
     {
         transform.Rotate(0f, rotateSpeed * Time.deltaTime, 0f);
     }
+
+    //HP 프로퍼티 추가
 }
