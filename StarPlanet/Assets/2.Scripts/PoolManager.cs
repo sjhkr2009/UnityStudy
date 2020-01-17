@@ -23,7 +23,7 @@ public class PoolManager : MonoBehaviour
 
     private List<Enemy> enemyTP1List = new List<Enemy>();
     private List<Enemy> enemyTS1List = new List<Enemy>();
-    private List<ParticleSystem> particleTP1List = new List<ParticleSystem>();
+    private List<GameObject> particleTP1List = new List<GameObject>();
     private List<ParticleSystem> particleTS1List = new List<ParticleSystem>();
     [HideInInspector] public List<AudioSource> audioFXList = new List<AudioSource>();
 
@@ -44,7 +44,7 @@ public class PoolManager : MonoBehaviour
     {
         enemyTP1List = MakeObjectPool<Enemy>(enemyToPlanet1, enemyTP1Group);
         enemyTS1List = MakeObjectPool<Enemy>(enemyToStar1, enemyTS1Group);
-        particleTP1List = MakeObjectPool<ParticleSystem>(particleTP1, particleTP1Group);
+        particleTP1List = MakeObjectPool<GameObject>(particleTP1, particleTP1Group);
         particleTS1List = MakeObjectPool<ParticleSystem>(particleTS1, particleTS1Group);
         audioFXList = MakeObjectPool<AudioSource>(audioFX, audioFXGroup, 20);
     }
@@ -76,21 +76,25 @@ public class PoolManager : MonoBehaviour
         _gameObject.transform.rotation = rot;
     }
 
-    public T Spawn<T>(ObjectPool type, Vector3 position, Quaternion rotation) where T : Component
+    public MonoBehaviour Spawn<T>(ObjectPool type, Vector3 position, Quaternion rotation) where T : Component
     {
+        MonoBehaviour _returnObject;
 
         switch (type)
         {
             case ObjectPool.EnemyTP1:
                 SpawnObject(enemyTP1List, enemyTP1Index, position, rotation);
+                _returnObject = enemyTP1List[enemyTP1Index];
                 enemyTP1Index = (enemyTP1Index + 1) % poolNumber;
                 break;
             case ObjectPool.EnemyTS1:
                 SpawnObject(enemyTS1List, enemyTS1Index, position, rotation);
+                _returnObject = enemyTS1List[enemyTS1Index];
                 enemyTS1Index = (enemyTS1Index + 1) % poolNumber;
                 break;
             case ObjectPool.ParticleTP1:
                 SpawnObject(particleTP1List, particleTP1Index, position, rotation);
+                _returnObject = particleTP1List[particleTP1Index];
                 particleTP1Index = (particleTP1Index + 1) % poolNumber;
                 break;
             case ObjectPool.ParticleTS1:
@@ -100,6 +104,6 @@ public class PoolManager : MonoBehaviour
             default:
                 return null;
         }
-        return enemyTP1List[0]; //반환 테스트용. 나중에 타입에 맞는 컴포넌트로 반환하도록 변경할 예정.
+        return _returnObject;
     }
 }

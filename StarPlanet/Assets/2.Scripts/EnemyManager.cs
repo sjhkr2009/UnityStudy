@@ -73,7 +73,7 @@ public class EnemyManager : MonoBehaviour
         DespawnEnemy(owner);
     }
 
-    void CallParticle(Type myType, bool isCorrect, Transform transform)
+    void CallParticle(Type myType, bool isCorrect, Transform _transform)
     {
         PoolManager poolManager = GameManager.Instance.poolManager;
         SoundManager soundManager = GameManager.Instance.SoundManager;
@@ -81,10 +81,10 @@ public class EnemyManager : MonoBehaviour
         switch (myType)
         {
             case Type.ToPlanet1:
-                poolManager.Spawn(PoolManager.ObjectPool.ParticleTP1, transform.position, Quaternion.Euler(0f, 90f, 0f));
+                poolManager.Spawn(PoolManager.ObjectPool.ParticleTP1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
             case Type.ToStar1:
-                poolManager.Spawn(PoolManager.ObjectPool.ParticleTS1, transform.position, Quaternion.Euler(0f, 90f, 0f));
+                poolManager.Spawn(PoolManager.ObjectPool.ParticleTS1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
 
         }
