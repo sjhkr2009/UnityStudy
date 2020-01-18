@@ -4,16 +4,16 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using System;
 
+public enum PlayerType { Star, Planet }
 public class Player : MonoBehaviour
 {
-    public event Action<int> EventHpChanged = n => { };
-    public event Action<int> EventMaxHpChanged = n => { };
+    public event Action<Player> EventPlayerDead;
+    public event Action<int, Player> EventHpChanged;
+    public event Action<int, Player> EventMaxHpChanged;
 
-    [BoxGroup("Basic")] [SerializeField] private int _hp;
-    [BoxGroup("Basic")] [SerializeField] private int _maxHp;
-
-    bool isPlaying = false;
-
+    [BoxGroup("Basic")] public PlayerType playerType;
+    [BoxGroup("Basic")] [SerializeField] protected int _hp;
+    [BoxGroup("Basic")] [SerializeField] protected int _maxHp;
 
     public int Hp
     {
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
         set
         {
             _hp = Mathf.Clamp(value, 0, MaxHp);
-            EventHpChanged(_hp);
+            EventHpChanged(_hp, this);
         }
     }
     public int MaxHp
@@ -30,14 +30,15 @@ public class Player : MonoBehaviour
         set
         {
             _maxHp = value;
-            EventMaxHpChanged(_maxHp);
+            EventMaxHpChanged(_maxHp, this);
         }
     }
 
+    bool isPlaying = false;
 
     protected virtual void Start()
     {
-        MaxHp = MaxHp;
+        MaxHp = _maxHp;
         Hp = MaxHp;
     }
 
@@ -57,5 +58,9 @@ public class Player : MonoBehaviour
     public void OnGameStateChanged(GameState gameState)
     {
         isPlaying = gameState == GameState.Playing;
+    }
+    private void OnDisable()
+    {
+        EventPlayerDead(this);
     }
 }

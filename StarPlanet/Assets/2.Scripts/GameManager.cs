@@ -75,19 +75,23 @@ public class GameManager : MonoBehaviour
         enemyManager = GetComponent<EnemyManager>();
         soundManager = GetComponent<SoundManager>();
         particleManager = GetComponent<ParticleManager>();
+        star = FindObjectOfType<Star>();
+        planet = FindObjectOfType<Planet>();
+
+        star.EventHpChanged += OnPlayerHpChanged;
+        star.EventPlayerDead += OnPlayerDead;
+
+        planet.EventHpChanged += OnPlayerHpChanged;
+        planet.EventPlayerDead += OnPlayerDead;
+
+        EventGameStateChanged += star.OnGameStateChanged;
+
+        uiManager.EventCountDownDone += OnCountDownDone;
     }
 
     void Start()
     {
         if(_instance != null && _instance != this) { Destroy(gameObject);}
-
-        star.EventHpChanged += OnPlayerHpChanged;
-        star.EventMaxHpChanged += OnPlayerMaxHpChanged;
-        star.EventPlayerDead += OnPlayerDead;
-
-        EventGameStateChanged += star.OnGameStateChanged;
-
-        uiManager.EventCountDownDone += OnCountDownDone;
     }
 
 
@@ -95,6 +99,9 @@ public class GameManager : MonoBehaviour
     {
         star.EventHpChanged -= OnPlayerHpChanged;
         star.EventPlayerDead -= OnPlayerDead;
+
+        planet.EventHpChanged -= OnPlayerHpChanged;
+        planet.EventPlayerDead -= OnPlayerDead;
 
         EventGameStateChanged -= star.OnGameStateChanged;
 
@@ -111,14 +118,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    public void OnPlayerHpChanged(int hp) //T로 플레이어 타입도 받기
+    /// <summary>
+    /// 플레이어를 선택하여 체력을 변화시킵니다.
+    /// </summary>
+    /// <param name="isStar">star와 planet 중 체력을 변화시킬 대상을 선택하세요. true면 Star, false면 Planet이 선택됩니다.</param>
+    /// <param name="changeLevel">변화시킬 수치를 입력하세요. 양수 값이면 체력이 회복되고, 음수면 체력이 감소합니다.</param>
+    public void PlayerHPChange(bool isStar, int changeLevel)
     {
-        if (hp == 0) gameState = GameState.GameOver; //플레이어 비활성화로 변경 -> GameOver처리는 OnPlayerDead에서 처리.
+        if (isStar) star.Hp += changeLevel;
+        else planet.Hp += changeLevel;
     }
-    public void OnPlayerMaxHpChanged(int maxHp) //T로 플레이어 타입도 받기
+
+    public void OnPlayerHpChanged(int hp, Player player) 
     {
-        
+        if (hp <= 0) player.gameObject.SetActive(false);
     }
 
     private void OnPlayerDead<T>(T player) where T : Player

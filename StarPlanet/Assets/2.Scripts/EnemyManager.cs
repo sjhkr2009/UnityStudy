@@ -59,28 +59,30 @@ public class EnemyManager : MonoBehaviour
 
     public void OnContactCorrect(Enemy owner, int healing)
     {
-        GameManager.Instance.Star.Hp += healing;
+        if (owner.EnemyType == EnemyType.ToPlanet1) GameManager.Instance.PlayerHPChange(false, healing);
+        else if (owner.EnemyType == EnemyType.ToStar1) GameManager.Instance.PlayerHPChange(true, healing);
         CallParticle(owner.EnemyType, true, owner.transform);
         DespawnEnemy(owner);
     }
 
     public void OnContactWrong(Enemy owner, int damage)
     {
-        GameManager.Instance.Star.Hp -= damage;
+        if (owner.EnemyType == EnemyType.ToPlanet1) GameManager.Instance.PlayerHPChange(true, -damage);
+        else if (owner.EnemyType == EnemyType.ToStar1) GameManager.Instance.PlayerHPChange(false, -damage);
         CallParticle(owner.EnemyType, false, owner.transform);
         DespawnEnemy(owner);
     }
 
-    void CallParticle(Type myType, bool isCorrect, Transform _transform)
+    void CallParticle(EnemyType myType, bool isCorrect, Transform _transform)
     {
         SoundManager soundManager = GameManager.Instance.SoundManager;
 
         switch (myType)
         {
-            case Type.ToPlanet1:
+            case EnemyType.ToPlanet1:
                 poolManager.Spawn(ObjectPool.ParticleTP1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
-            case Type.ToStar1:
+            case EnemyType.ToStar1:
                 poolManager.Spawn(ObjectPool.ParticleTS1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
 

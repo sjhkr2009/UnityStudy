@@ -6,7 +6,6 @@ using Sirenix.OdinInspector;
 
 public class Star : Player
 {
-    public event Action<Star> EventPlayerDead;
 
     [SerializeField] float originOrbitalRadius; //원래의 공전 궤도 반지름
     [SerializeField] float radiusChangeSpeed; //프레임당 목표 궤도에 가까워지는 비율 (mix:0 ~ max:1)
@@ -17,6 +16,7 @@ public class Star : Player
     private float currentRadius;
     private float _targetRadius;
     private float angulerSpeed;
+
 
     private float targetRadius
     {
@@ -44,7 +44,6 @@ public class Star : Player
     {
         base.Start();
         EventRadiusChange(Vector3.Distance(transform.position, Vector3.zero));
-
     }
 
     public override void Processing()
@@ -90,10 +89,5 @@ public class Star : Player
     void AngularSpeedChange(float radius)
     {
         angulerSpeed = originAngulerSpeed * minRadius / (minRadius + (radius - minRadius) / speedReduction);
-    }
-
-    private void OnDisable()
-    {
-        EventPlayerDead(this);
     }
 }

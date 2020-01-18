@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-public enum Type { ToPlanet1, ToStar1 }
+public enum EnemyType { ToPlanet1, ToStar1 }
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] Type enemyType;
-    public Type EnemyType => enemyType;
+    [SerializeField] EnemyType enemyType;
+    public EnemyType EnemyType => enemyType;
 
     [SerializeField] private string targetType;
     [SerializeField] private string avoidType;

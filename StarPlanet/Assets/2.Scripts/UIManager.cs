@@ -9,19 +9,34 @@ public class UIManager : MonoBehaviour
 {
     [BoxGroup("Playing UI")] [SerializeField] Text countdownText;
     [BoxGroup("Playing UI")] [SerializeField] GameObject orbitalRadiusUI;
+    [BoxGroup("Playing UI")] [SerializeField] Slider starHpBar;
+    [BoxGroup("Playing UI")] [SerializeField] Slider planetHpBar;
 
     [BoxGroup("Object")] [SerializeField] Star star;
+    [BoxGroup("Object")] [SerializeField] Planet planet;
 
     public event Action EventCountDownDone = () => { };
 
     private void Awake()
     {
         StartCoroutine(CountdownToPlay());
+
+        star.EventRadiusChange += RadiusChange;
+        star.EventHpChanged += OnPlayerHpChanged;
+        star.EventMaxHpChanged += OnPlayerMaxHpChanged;
+
+        planet.EventHpChanged += OnPlayerHpChanged;
+        planet.EventMaxHpChanged += OnPlayerMaxHpChanged;
     }
 
-    private void Start()
+    private void OnDestroy()
     {
-        star.EventRadiusChange += RadiusChange;
+        star.EventRadiusChange -= RadiusChange;
+        star.EventHpChanged -= OnPlayerHpChanged;
+        star.EventMaxHpChanged -= OnPlayerMaxHpChanged;
+
+        planet.EventHpChanged -= OnPlayerHpChanged;
+        planet.EventMaxHpChanged -= OnPlayerMaxHpChanged;
     }
 
     void RadiusChange(float radius)
@@ -39,5 +54,17 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
         EventCountDownDone();
+    }
+
+    public void OnPlayerHpChanged(int value, Player player)
+    {
+        if (player.playerType == PlayerType.Star) starHpBar.value = value;
+        else if (player.playerType == PlayerType.Planet) planetHpBar.value = value;
+    }
+
+    public void OnPlayerMaxHpChanged(int value, Player player)
+    {
+        if (player.playerType == PlayerType.Star) starHpBar.maxValue = value;
+        else if (player.playerType == PlayerType.Planet) planetHpBar.maxValue = value;
     }
 }
