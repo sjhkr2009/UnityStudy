@@ -59,16 +59,16 @@ public class EnemyManager : MonoBehaviour
 
     public void OnContactCorrect(Enemy owner, int healing)
     {
-        if (owner.EnemyType == EnemyType.ToPlanet1) GameManager.Instance.PlayerHPChange(false, healing);
-        else if (owner.EnemyType == EnemyType.ToStar1) GameManager.Instance.PlayerHPChange(true, healing);
+        if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(false, healing);
+        else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(true, healing);
         CallParticle(owner.EnemyType, true, owner.transform);
         DespawnEnemy(owner);
     }
 
     public void OnContactWrong(Enemy owner, int damage)
     {
-        if (owner.EnemyType == EnemyType.ToPlanet1) GameManager.Instance.PlayerHPChange(true, -damage);
-        else if (owner.EnemyType == EnemyType.ToStar1) GameManager.Instance.PlayerHPChange(false, -damage);
+        if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(true, -damage);
+        else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(false, -damage);
         CallParticle(owner.EnemyType, false, owner.transform);
         DespawnEnemy(owner);
     }
@@ -82,7 +82,13 @@ public class EnemyManager : MonoBehaviour
             case EnemyType.ToPlanet1:
                 poolManager.Spawn(ObjectPool.ParticleTP1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
+            case EnemyType.ToPlanet2:
+                poolManager.Spawn(ObjectPool.ParticleTP1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
+                break;
             case EnemyType.ToStar1:
+                poolManager.Spawn(ObjectPool.ParticleTS1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
+                break;
+            case EnemyType.ToStar2:
                 poolManager.Spawn(ObjectPool.ParticleTS1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
                 break;
 
