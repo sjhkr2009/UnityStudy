@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 448336917085463885}
   m_Layer: 0
   m_Name: EnemyToPlanet2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64,8 +64,8 @@ MonoBehaviour:
   damage: 2
   healing: 1
   moveSpeed: 0
-  radiusReduceSpeed: 1
-  angulerSpeed: 60
+  radiusReduceSpeed: 2
+  angulerSpeed: 75
 --- !u!1001 &448336915468894616
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -130,6 +130,18 @@ PrefabInstance:
       value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 456614, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 436214, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 436214, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 436214, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.8
       objectReference: {fileID: 0}

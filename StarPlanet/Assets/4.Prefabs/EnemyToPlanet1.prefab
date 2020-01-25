@@ -9458,7 +9458,7 @@ GameObject:
   - component: {fileID: 55840863671564052}
   m_Layer: 0
   m_Name: EnemyToPlanet1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14201,6 +14201,8 @@ MonoBehaviour:
   enemyType: 0
   targetType: Planet
   avoidType: Star
-  moveSpeed: 1
   damage: 2
   healing: 1
+  moveSpeed: 1
+  radiusReduceSpeed: 0
+  angulerSpeed: 0

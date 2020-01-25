@@ -7,9 +7,9 @@ using System;
 public enum PlayerType { Star, Planet }
 public class Player : MonoBehaviour
 {
-    public event Action<Player> EventPlayerDead;
-    public event Action<int, Player> EventHpChanged;
-    public event Action<int, Player> EventMaxHpChanged;
+    public event Action<Player> EventPlayerDead = (P) => { };
+    public event Action<int, Player> EventHpChanged = (h,P) => { };
+    public event Action<int, Player> EventMaxHpChanged = (h,P) => { };
 
     [BoxGroup("Basic")] public PlayerType playerType;
     [BoxGroup("Basic")] [SerializeField] protected int _hp;

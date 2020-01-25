@@ -37,12 +37,14 @@ public class EnemyManager : MonoBehaviour
                 Enemy enemyTP1 = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, position, Quaternion.LookRotation(Vector3.zero - position));
                 enemyTP1.EventContactCorrect += OnContactCorrect;
                 enemyTP1.EventContactWrong += OnContactWrong;
+                enemyTP1.EventOnExplosion += OnExplosion;
             }
             else
             {
                 Enemy enemyTS1 = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
                 enemyTS1.EventContactCorrect += OnContactCorrect;
                 enemyTS1.EventContactWrong += OnContactWrong;
+                enemyTS1.EventOnExplosion += OnExplosion;
             }
 
             float spawnDelay = Random.Range(minSpawnDelay, maxSpawnDelay);
@@ -72,6 +74,13 @@ public class EnemyManager : MonoBehaviour
         CallParticle(owner.EnemyType, false, owner.transform);
         DespawnEnemy(owner);
     }
+
+    public void OnExplosion(Enemy owner)
+    {
+        CallParticle(owner.EnemyType, true, owner.transform);
+        DespawnEnemy(owner);
+    }
+    
 
     void CallParticle(EnemyType myType, bool isCorrect, Transform _transform)
     {

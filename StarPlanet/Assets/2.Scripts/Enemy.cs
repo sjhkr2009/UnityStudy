@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
 
     public event Action<Enemy, int> EventContactCorrect;
     public event Action<Enemy, int> EventContactWrong;
+    public event Action<Enemy> EventOnExplosion;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -33,7 +34,17 @@ public class Enemy : MonoBehaviour
         {
             EventContactWrong(this, damage);
         }
+        else if (other.CompareTag("HexagonExplosion") && Vector2.Distance(transform.position, Vector2.zero) > other.transform.localScale.x * 0.75f)
+        {
+            EventOnExplosion(this);
+        } 
+        else if (other.CompareTag("Explosion"))
+        {
+            EventOnExplosion(this);
+        }
     }
+
+
 
     private void OnEnable()
     {
@@ -55,12 +66,14 @@ public class Enemy : MonoBehaviour
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
     }
 
-    void RotateMove()
+    void RotateMove(bool isClockwise)
     {
         float currentRadius = Vector3.Distance(transform.position, Vector3.zero);
         float currentAngle = Mathf.Atan2(transform.position.z, transform.position.x);
 
-        float _targetAngle = currentAngle - angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+        float _targetAngle;
+        if (isClockwise) _targetAngle = currentAngle - angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+        else _targetAngle = currentAngle + angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
 
         float targetRadius = currentRadius - radiusReduceSpeed * Time.deltaTime;
 
@@ -83,10 +96,10 @@ public class Enemy : MonoBehaviour
                 Move();
                 break;
             case EnemyType.ToPlanet2:
-                RotateMove();
+                RotateMove(true);
                 break;
             case EnemyType.ToStar2:
-                RotateMove();
+                RotateMove(false);
                 break;
         }
     }
