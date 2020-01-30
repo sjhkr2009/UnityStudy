@@ -34,10 +34,10 @@ public class Enemy : MonoBehaviour
         {
             EventContactWrong(this, damage);
         }
-        else if (other.CompareTag("HexagonExplosion") && Vector2.Distance(transform.position, Vector2.zero) > other.transform.localScale.x * 0.75f)
+        else if (other.CompareTag("HexagonExplosion") && Vector2.Distance(transform.position, other.bounds.center) > Vector3.Distance(other.bounds.extents, other.bounds.center) * 0.8f)
         {
             EventOnExplosion(this);
-        } 
+        }
         else if (other.CompareTag("Explosion"))
         {
             EventOnExplosion(this);
@@ -81,6 +81,7 @@ public class Enemy : MonoBehaviour
         float _nextPosY = targetRadius * Mathf.Sin(_targetAngle);
         Vector3 _nextPos = new Vector3(_nextPosX, transform.position.y, _nextPosY);
 
+        transform.rotation = Quaternion.LookRotation(_nextPos);
         transform.position = _nextPos;
     }
 
