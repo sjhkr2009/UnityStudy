@@ -9623,6 +9623,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -2, y: -2}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &450326990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 450326991}
+  m_Layer: 0
+  m_Name: EnemyTS2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &450326991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450326990}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1725615180}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &454137161
 GameObject:
   m_ObjectHideFlags: 0
@@ -14877,6 +14907,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 923023440}
   m_CullTransparentMesh: 0
+--- !u!1 &960554000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 960554001}
+  m_Layer: 0
+  m_Name: EnemyTP2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &960554001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960554000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1725615180}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -25010,6 +25070,8 @@ Transform:
   - {fileID: 13762275}
   - {fileID: 506022046}
   - {fileID: 1245893225}
+  - {fileID: 960554001}
+  - {fileID: 450326991}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -29727,6 +29789,7 @@ GameObject:
   - component: {fileID: 1820830198}
   - component: {fileID: 1820830200}
   - component: {fileID: 1820830201}
+  - component: {fileID: 1820830202}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -29797,9 +29860,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc0b8feb5d76ef4fb4e3d02ba685dae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyToPlanet1: {fileID: 448336917085463884, guid: ac6c977aaebab6d4fa40770bbb9218b9,
+  enemyToPlanet1: {fileID: 55840863671564053, guid: c1566c22a7b0a11429162bef08260333,
     type: 3}
   enemyToStar1: {fileID: 4636705412566394210, guid: e11036849440f854db081370ed5dd833,
+    type: 3}
+  enemyToPlanet2: {fileID: 448336917085463884, guid: ac6c977aaebab6d4fa40770bbb9218b9,
+    type: 3}
+  enemyToStar2: {fileID: 2365287343932799306, guid: 3ce2e63ad1e4bf840b9d028b02ea2289,
     type: 3}
   particleTP1: {fileID: 7585895747022911170, guid: f652799615f03f64e8543b45a000b6be,
     type: 3}
@@ -29809,6 +29876,8 @@ MonoBehaviour:
   audioFXList: []
   enemyTP1Group: {fileID: 1910557626}
   enemyTS1Group: {fileID: 13762275}
+  enemyTP2Group: {fileID: 960554001}
+  enemyTS2Group: {fileID: 450326991}
   particleTP1Group: {fileID: 506022046}
   particleTS1Group: {fileID: 1245893225}
   audioFXGroup: {fileID: 1294974128}
@@ -29826,8 +29895,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolManager: {fileID: 1820830198}
+  scoreManager: {fileID: 1820830202}
   minSpawnDelay: 1
   maxSpawnDelay: 3
+  screenHorizontal: 9
+  screenVertical: 16
+  tier2Probability: 0.2
+  tier3Probability: 0
+  tier4Probability: 0
 --- !u!114 &1820830200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29854,6 +29929,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   correctCollision: {fileID: 8300000, guid: a688b479dadac0141ab9356f765067ce, type: 3}
   wrongCollision: {fileID: 8300000, guid: 89ee837fbc264d942a29bf8929008497, type: 3}
+--- !u!114 &1820830202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820830194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 513919932db9cb04080b988bf0ea6544, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _score: 0
+  bestScore: 0
+  scoreTier1: 5
+  scoreTier2: 10
+  scoreTier3: 30
+  scoreTier4: 100
 --- !u!1 &1896093933
 GameObject:
   m_ObjectHideFlags: 0
