@@ -12,10 +12,11 @@ public class Star : Player
     [SerializeField] float originAngulerSpeed; //초당 최대 회전각
     [SerializeField] float minRadius;
     [SerializeField] float speedReduction = 1f;
+    [SerializeField, ReadOnly] float orbitalSpeedFactor = 1f; //각속도 계수. 평상시엔 1이며, 가속 모드일 경우에만 올라간다.
     private float currentAngle;
     private float currentRadius;
     private float _targetRadius;
-    private float angulerSpeed;
+    private float angulerSpeed; //현대 초당 회전각
 
 
     private float targetRadius
@@ -57,16 +58,16 @@ public class Star : Player
         currentAngle = Mathf.Atan2(transform.position.z, transform.position.x);
 
         //회전속도에 따라 변화할 각도를, 원래의 반지름으로 돌아가는 속도에 따라 변화할 반지름 길이를 연산
-        float _targetAngle = currentAngle + angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+        float _targetAngle = currentAngle + (angulerSpeed * orbitalSpeedFactor) * Mathf.Deg2Rad * Time.deltaTime;
 
         //목표 반지름이 다를 경우 반지름 변화 및 이벤트 발동
         float _targetRadius = currentRadius;
-        if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) < 0.01f)
+        if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) < 0.01f) //목표 반지름과 거의 같으면 동일하게 만든다
         {
             _targetRadius = targetRadius;
             EventRadiusChange(_targetRadius);
         }
-        else if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) >= 0.01f)
+        else if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) >= 0.01f) //목표 반지름과의 차이가 크면 거리에 따라 이동시킨다
         {
             _targetRadius = Mathf.Lerp(currentRadius, targetRadius, radiusChangeSpeed);
             EventRadiusChange(_targetRadius);
@@ -90,4 +91,8 @@ public class Star : Player
     {
         angulerSpeed = originAngulerSpeed * minRadius / (minRadius + (radius - minRadius) / speedReduction);
     }
+
+    public void Accelerate(float factor) { orbitalSpeedFactor *= factor; }
+    public void CancelAccelerate() { orbitalSpeedFactor = 1f; }
+
 }
