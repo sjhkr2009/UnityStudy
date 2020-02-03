@@ -27,14 +27,10 @@ public class SoundManager : MonoBehaviour
         switch (soundType)
         {
             case SoundTypeFX.CorrectCol:
-                audio.clip = correctCollision;
-                audio.volume = 0.7f;
-                audio.Play();
+                audio.PlayOneShot(correctCollision, 0.7f);
                 break;
             case SoundTypeFX.WrongCol:
-                audio.clip = wrongCollision;
-                audio.volume = 0.4f;
-                audio.Play();
+                audio.PlayOneShot(wrongCollision, 0.4f);
                 break;
             
         }

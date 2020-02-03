@@ -5,6 +5,8 @@ using Sirenix.OdinInspector;
 using System;
 
 public enum PlayerType { Star, Planet }
+
+[RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
     public event Action<Player> EventPlayerDead = (P) => { };

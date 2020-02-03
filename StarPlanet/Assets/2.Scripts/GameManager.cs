@@ -54,13 +54,11 @@ public class GameManager : MonoBehaviour
     }
 
     [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;
-    [BoxGroup("Scripts")] [SerializeField] Star star;
-    public Star Star => star;
-    [BoxGroup("Scripts")] [SerializeField] Planet planet;
-    public Planet Planet => planet;
+    [BoxGroup("Scripts")] [SerializeField] Star star;                   public Star Star => star;
+    [BoxGroup("Scripts")] [SerializeField] Planet planet;               public Planet Planet => planet;
     [BoxGroup("Scripts")] [SerializeField] EnemyManager enemyManager;
-    [BoxGroup("Scripts")] [SerializeField] SoundManager soundManager;
-    public SoundManager SoundManager => soundManager;
+    [BoxGroup("Scripts")] [SerializeField] SoundManager soundManager;   public SoundManager SoundManager => soundManager;
+    [BoxGroup("Scripts")] [SerializeField] ScoreManager scoreManager;
     [BoxGroup("Scripts")] public PoolManager poolManager;
     [BoxGroup("Scripts")] public ParticleManager particleManager;
 
