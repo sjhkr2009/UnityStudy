@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     [BoxGroup("Playing UI")] [SerializeField] GameObject orbitalRadiusUI;
     [BoxGroup("Playing UI")] [SerializeField] Slider starHpBar;
     [BoxGroup("Playing UI")] [SerializeField] Slider planetHpBar;
+    [BoxGroup("Playing UI")] [SerializeField] Text scoreText;
 
     [BoxGroup("Object")] [SerializeField] Star star;
     [BoxGroup("Object")] [SerializeField] Planet planet;
@@ -28,6 +29,11 @@ public class UIManager : MonoBehaviour
 
         planet.EventHpChanged += OnPlayerHpChanged;
         planet.EventMaxHpChanged += OnPlayerMaxHpChanged;
+    }
+
+    private void Start()
+    {
+        scoreText.text = "점수: 0";
     }
 
     private void OnDestroy()
@@ -67,5 +73,10 @@ public class UIManager : MonoBehaviour
     {
         if (player.playerType == PlayerType.Star) starHpBar.maxValue = value;
         else if (player.playerType == PlayerType.Planet) planetHpBar.maxValue = value;
+    }
+
+    public void ScoreTextChange(int value)
+    {
+        scoreText.text = $"점수: {value.ToString()}";
     }
 }

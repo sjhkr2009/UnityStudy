@@ -18812,7 +18812,7 @@ MonoBehaviour:
   enemyType: 1
   targetType: Star
   avoidType: Planet
-  damage: 2
+  damage: 7
   healing: 1
   moveSpeed: 1
   radiusReduceSpeed: 0

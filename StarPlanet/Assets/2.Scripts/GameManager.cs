@@ -85,6 +85,8 @@ public class GameManager : MonoBehaviour
         EventGameStateChanged += star.OnGameStateChanged;
 
         uiManager.EventCountDownDone += OnCountDownDone;
+
+        scoreManager.EventOnScoreChanged += uiManager.ScoreTextChange;
     }
 
     void Start()

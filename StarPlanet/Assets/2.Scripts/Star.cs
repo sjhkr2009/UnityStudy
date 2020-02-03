@@ -7,12 +7,17 @@ using Sirenix.OdinInspector;
 public class Star : Player
 {
 
-    [SerializeField] float originOrbitalRadius; //원래의 공전 궤도 반지름
-    [SerializeField] float radiusChangeSpeed; //프레임당 목표 궤도에 가까워지는 비율 (mix:0 ~ max:1)
-    [SerializeField] float originAngulerSpeed; //초당 최대 회전각
-    [SerializeField] float minRadius;
-    [SerializeField] float speedReduction = 1f;
+    [TabGroup("Status"), SerializeField] float originOrbitalRadius; //원래의 공전 궤도 반지름
+    [TabGroup("Status"), SerializeField] float radiusChangeSpeed; //프레임당 목표 궤도에 가까워지는 비율 (mix:0 ~ max:1)
+    [TabGroup("Status"), SerializeField] float originAngulerSpeed; //초당 최대 회전각
+    [TabGroup("Status"), SerializeField] float minRadius;
+    [TabGroup("Status"), SerializeField] float speedReduction = 1f; //각속도 감소 계수. 높을수록 거리에 따른 이동속도 감소폭이 높다.
+
+    [TabGroup("Child Component"), SerializeField] GameObject trailParticle;
+    [TabGroup("Child Component"), SerializeField] GameObject boosterTrailParticle;
+
     [SerializeField, ReadOnly] float orbitalSpeedFactor = 1f; //각속도 계수. 평상시엔 1이며, 가속 모드일 경우에만 올라간다.
+
     private float currentAngle;
     private float currentRadius;
     private float _targetRadius;
@@ -33,6 +38,8 @@ public class Star : Player
     private void Awake()
     {
         targetRadius = originOrbitalRadius;
+        if(!trailParticle.activeSelf) trailParticle.SetActive(true);
+        if(boosterTrailParticle.activeSelf) boosterTrailParticle.SetActive(false);
         EventRadiusChange += AngularSpeedChange;
     }
 
@@ -89,10 +96,20 @@ public class Star : Player
 
     void AngularSpeedChange(float radius)
     {
-        angulerSpeed = originAngulerSpeed * minRadius / (minRadius + (radius - minRadius) / speedReduction);
+        angulerSpeed = ( originAngulerSpeed * minRadius ) / (minRadius + (radius - minRadius) / speedReduction);
     }
 
-    public void Accelerate(float factor) { orbitalSpeedFactor *= factor; }
-    public void CancelAccelerate() { orbitalSpeedFactor = 1f; }
+    public void Accelerate(float factor)
+    {
+        orbitalSpeedFactor *= factor;
+        boosterTrailParticle.SetActive(true);
+        trailParticle.SetActive(false);
+    }
+    public void CancelAccelerate()
+    {
+        orbitalSpeedFactor = 1f;
+        boosterTrailParticle.SetActive(false);
+        trailParticle.SetActive(true);
+    }
 
 }

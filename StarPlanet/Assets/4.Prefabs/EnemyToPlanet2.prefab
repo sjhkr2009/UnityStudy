@@ -61,8 +61,8 @@ MonoBehaviour:
   enemyType: 2
   targetType: Planet
   avoidType: Star
-  damage: 2
-  healing: 1
+  damage: 15
+  healing: 2
   moveSpeed: 0
   radiusReduceSpeed: 2
   angulerSpeed: 75
@@ -73,10 +73,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 448336917085463883}
     m_Modifications:
-    - target: {fileID: 162468, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
-      propertyPath: m_Name
-      value: FlamethrowerBlue
-      objectReference: {fileID: 0}
     - target: {fileID: 456614, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -132,6 +128,10 @@ PrefabInstance:
     - target: {fileID: 456614, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 162468, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
+      propertyPath: m_Name
+      value: FlamethrowerBlue
       objectReference: {fileID: 0}
     - target: {fileID: 436214, guid: 9cafd32fee5626744b3f0bcbccb8498c, type: 3}
       propertyPath: m_LocalScale.x

@@ -26,6 +26,8 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"거리: {Vector3.Distance(transform.position, Vector3.zero)} / 무효 범위: {other.transform.localScale.x * 0.7f}");
+        
         if (other.CompareTag(targetType))
         {
             EventContactCorrect(this, healing);
@@ -34,7 +36,7 @@ public class Enemy : MonoBehaviour
         {
             EventContactWrong(this, damage);
         }
-        else if (other.CompareTag("HexagonExplosion") && Vector2.Distance(transform.position, other.bounds.center) > Vector3.Distance(other.bounds.extents, other.bounds.center) * 0.8f)
+        else if (other.CompareTag("HexagonExplosion") && Vector3.Distance(transform.position, Vector3.zero) > other.transform.localScale.x * 0.7f)
         {
             EventOnExplosion(this);
         }
