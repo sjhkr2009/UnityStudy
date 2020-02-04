@@ -7,6 +7,8 @@ public class Test : MonoBehaviour
 {
     [BoxGroup("Testing...")] public bool isTesting;
 
+    ParticleSystem ps;
+
     enum TestEnum { A, B, C, D }
 
     public int number;
@@ -29,6 +31,7 @@ public class Test : MonoBehaviour
     private void Start()
     {
         explosion.SetActive(false);
+        ps = GetComponent<ParticleSystem>();
     }
 
     private void Update()
