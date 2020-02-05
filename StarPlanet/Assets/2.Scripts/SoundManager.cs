@@ -29,16 +29,16 @@ public class SoundManager : MonoBehaviour
         switch (soundType)
         {
             case SoundTypeFX.CorrectCol:
-                audio.PlayOneShot(correctCollision, 0.7f);
+                audio.PlayOneShot(correctCollision, 0.85f);
                 break;
             case SoundTypeFX.WrongCol:
-                audio.PlayOneShot(wrongCollision, 0.4f);
+                audio.PlayOneShot(wrongCollision, 0.3f);
                 break;
             case SoundTypeFX.NormalBomb:
-                audio.PlayOneShot(normalBombExplosion, 0.4f);
+                audio.PlayOneShot(normalBombExplosion, 0.5f);
                 break;
             case SoundTypeFX.HexagonBomb:
-                audio.PlayOneShot(hexagonBombExplosion, 0.5f);
+                audio.PlayOneShot(hexagonBombExplosion, 0.35f);
                 break;
         }
     }

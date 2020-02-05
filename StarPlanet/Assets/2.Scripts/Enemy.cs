@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
         {
             EventContactWrong(this, damage);
         }
-        else if (other.CompareTag("HexagonExplosion") && Vector3.Distance(transform.position, Vector3.zero) > other.transform.localScale.x * 0.7f)
+        else if (other.CompareTag("HexagonExplosion") && Vector3.Distance(transform.position, Vector3.zero) > other.transform.localScale.x * 0.66f)
         {
             EventOnExplosion(this);
         }

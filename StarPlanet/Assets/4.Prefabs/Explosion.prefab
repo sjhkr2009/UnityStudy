@@ -6064,7 +6064,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0, g: 1, b: 0.91210127, a: 1}
+        key0: {r: 0, g: 1, b: 0.91210127, a: 0.88235295}
         key1: {r: 0.24313726, g: 0, b: 1, a: 0}
         key2: {r: 0, g: 0, b: 1, a: 1}
         key3: {r: 0, g: 0, b: 0, a: 0}
@@ -9577,8 +9577,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionCollider: {fileID: 4612141450374400111}
-  attackDuration: 0.3
+  attackDuration: 0.2
   particleDuration: 1
+  isHexagon: 0
 --- !u!199 &2215045306410215694
 ParticleSystemRenderer:
   serializedVersion: 6

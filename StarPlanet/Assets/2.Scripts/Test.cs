@@ -30,7 +30,7 @@ public class Test : MonoBehaviour
 
     private void Start()
     {
-        explosion.SetActive(false);
+        //explosion.SetActive(false);
         ps = GetComponent<ParticleSystem>();
     }
 

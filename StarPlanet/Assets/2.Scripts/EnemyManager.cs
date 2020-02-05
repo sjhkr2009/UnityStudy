@@ -7,9 +7,11 @@ public class EnemyManager : MonoBehaviour
 {
     [BoxGroup("Components"), SerializeField] PoolManager poolManager;
     [BoxGroup("Components"), SerializeField] ScoreManager scoreManager;
+    [BoxGroup("Components"), SerializeField] SoundManager soundManager;
+    [BoxGroup("Components"), SerializeField] ParticleManager particleManager;
+
     [BoxGroup("Spawn Control"), SerializeField] float minSpawnDelay;
     [BoxGroup("Spawn Control"), SerializeField] float maxSpawnDelay;
-    [BoxGroup("Screen"), SerializeField] float screenHorizontal = 9f, screenVertical = 16f;
 
     //높은 티어의 적이 스폰될 확률을 0과 1 사이의 숫자로 입력합니다. 높은 티어부터 적용되어야 하며, 하위 티어 유닛의 소환 확률은 상위 티어 유닛의 확률을 뺀 부분이 됩니다.
     //예) tier4Probability = 0f, tier3Probability = 0.05f, tier2Probability = 0.2f 인 경우, 티어3 유닛이 5% 확률, 티어2 유닛이 15% 확률, 나머지 80% 확률로 티어1 유닛이 소환됩니다.
@@ -17,10 +19,16 @@ public class EnemyManager : MonoBehaviour
     [BoxGroup("Spawn Control"), SerializeField] float tier3Probability;
     [BoxGroup("Spawn Control"), SerializeField] float tier4Probability;
 
+    float screenView;
+
     void Start()
     {
-        if (poolManager == null) poolManager = GetComponent<PoolManager>();
-        if (scoreManager == null) scoreManager = GetComponent<ScoreManager>();
+        if (poolManager == null) poolManager = GameManager.Instance.PoolManager;
+        if (scoreManager == null) scoreManager = GameManager.Instance.ScoreManager;
+        if (soundManager == null) soundManager = GameManager.Instance.SoundManager;
+        if (particleManager == null) particleManager = GameManager.Instance.ParticleManager;
+
+        screenView = GameManager.Instance.screenHorizontal / GameManager.Instance.screenVertical;
     }
 
     public IEnumerator EnemySpawn()
@@ -29,8 +37,8 @@ public class EnemyManager : MonoBehaviour
         {
             float cameraSize = Camera.main.orthographicSize;
 
-            float minX = -cameraSize * screenHorizontal / screenVertical - 1f;
-            float maxX = cameraSize * screenHorizontal / screenVertical + 1f;
+            float minX = -cameraSize * screenView - 1f;
+            float maxX = cameraSize * screenView + 1f;
 
             float posX = Random.Range(minX, maxX);
             float posY = cameraSize + 1f;
@@ -92,9 +100,11 @@ public class EnemyManager : MonoBehaviour
     void AddEventToEnemy(Enemy enemy)
     {
         enemy.EventContactCorrect += OnContactCorrect;
-        enemy.EventContactWrong += OnContactWrong;
-        enemy.EventOnExplosion += OnExplosion;
         enemy.EventContactCorrect += scoreManager.GetScore;
+
+        enemy.EventContactWrong += OnContactWrong;
+
+        enemy.EventOnExplosion += OnExplosion;
         enemy.EventOnExplosion += scoreManager.GetScore;
     }
 
@@ -109,7 +119,7 @@ public class EnemyManager : MonoBehaviour
     {
         if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(false, healing);
         else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(true, healing);
-        CallParticle(owner.EnemyType, true, owner.transform);
+        CallFX(owner.EnemyType, true, owner.transform);
         DespawnEnemy(owner);
     }
 
@@ -117,34 +127,32 @@ public class EnemyManager : MonoBehaviour
     {
         if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(true, -damage);
         else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(false, -damage);
-        CallParticle(owner.EnemyType, false, owner.transform);
+        CallFX(owner.EnemyType, false, owner.transform);
         DespawnEnemy(owner);
     }
 
     public void OnExplosion(Enemy owner)
     {
-        CallParticle(owner.EnemyType, true, owner.transform);
+        CallFX(owner.EnemyType, true, owner.transform);
         DespawnEnemy(owner);
     }
     
 
-    void CallParticle(EnemyType myType, bool isCorrect, Transform _transform)
+    void CallFX(EnemyType myType, bool isCorrect, Transform _transform)
     {
-        SoundManager soundManager = GameManager.Instance.SoundManager;
-
         switch (myType)
         {
             case EnemyType.ToPlanet1:
-                poolManager.Spawn(ObjectPool.ParticleTP1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
+                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
                 break;
             case EnemyType.ToPlanet2:
-                poolManager.Spawn(ObjectPool.ParticleTP1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
+                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
                 break;
             case EnemyType.ToStar1:
-                poolManager.Spawn(ObjectPool.ParticleTS1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
+                particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
                 break;
             case EnemyType.ToStar2:
-                poolManager.Spawn(ObjectPool.ParticleTS1, _transform.position, Quaternion.Euler(0f, 90f, 0f));
+                particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
                 break;
 
         }

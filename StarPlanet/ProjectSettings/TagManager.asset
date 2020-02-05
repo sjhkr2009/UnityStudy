@@ -10,6 +10,7 @@ TagManager:
   - HexagonExplosion
   - Explosion
   - Item
+  - Fever
   layers:
   - Default
   - TransparentFX
