@@ -53,14 +53,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;
     [BoxGroup("Scripts")] [SerializeField] Star star;                   public Star Star => star;
     [BoxGroup("Scripts")] [SerializeField] Planet planet;               public Planet Planet => planet;
+    [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;
     [BoxGroup("Scripts")] [SerializeField] EnemyManager enemyManager;
     [BoxGroup("Scripts")] [SerializeField] SoundManager soundManager;   public SoundManager SoundManager => soundManager;
     [BoxGroup("Scripts")] [SerializeField] ScoreManager scoreManager;
-    [BoxGroup("Scripts")] public PoolManager poolManager;
-    [BoxGroup("Scripts")] public ParticleManager particleManager;
+    [BoxGroup("Scripts")] [SerializeField] PoolManager poolManager;     public PoolManager PoolManager => poolManager;
+    [BoxGroup("Scripts")] [SerializeField] ParticleManager particleManager; public ParticleManager ParticleManager => particleManager;
+    [BoxGroup("Scripts")] [SerializeField] ItemManager itemManager;     public ItemManager ItemManager => itemManager;
 
     Vector3 mousePos;
     public event Action<Vector3> EventOnClick;
@@ -69,12 +70,14 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
         gameState = GameState.Ready;
-        uiManager = GetComponent<UIManager>();
-        enemyManager = GetComponent<EnemyManager>();
-        soundManager = GetComponent<SoundManager>();
-        particleManager = GetComponent<ParticleManager>();
-        star = FindObjectOfType<Star>();
-        planet = FindObjectOfType<Planet>();
+        if(uiManager == null) uiManager = GetComponent<UIManager>();
+        if (enemyManager == null) enemyManager = GetComponent<EnemyManager>();
+        if (soundManager == null) soundManager = GetComponent<SoundManager>();
+        if (scoreManager == null) scoreManager = GetComponent<ScoreManager>();
+        if (poolManager == null) poolManager = GetComponent<PoolManager>();
+        if (particleManager == null) particleManager = GetComponent<ParticleManager>();
+        if (star == null) star = FindObjectOfType<Star>();
+        if (planet == null) planet = FindObjectOfType<Planet>();
 
         star.EventHpChanged += OnPlayerHpChanged;
         star.EventPlayerDead += OnPlayerDead;

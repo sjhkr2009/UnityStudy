@@ -26,7 +26,11 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"거리: {Vector3.Distance(transform.position, Vector3.zero)} / 무효 범위: {other.transform.localScale.x * 0.7f}");
+        if (other.CompareTag("Fever"))
+        {
+            EventContactCorrect(this, healing);
+            return;
+        }
         
         if (other.CompareTag(targetType))
         {

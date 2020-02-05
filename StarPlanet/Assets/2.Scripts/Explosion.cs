@@ -8,22 +8,30 @@ public class Explosion : MonoBehaviour
     [SerializeField] SphereCollider explosionCollider;
     [SerializeField] private float attackDuration;
     [SerializeField] private float particleDuration;
+    [SerializeField] bool isHexagon;
 
 
     private void OnEnable()
     {
-        explosionCollider.enabled = true;
+        if(GameManager.Instance.gameState != GameState.Playing)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (isHexagon) Invoke(nameof(AttackTimeStart), Time.deltaTime);
+        else AttackTimeStart();
+
         Invoke(nameof(AttackTimeOver), attackDuration);
         Invoke(nameof(DurationOut), particleDuration);
     }
 
-    void AttackTimeOver()
-    {
-        explosionCollider.enabled = false;
-    }
+    void AttackTimeStart() { explosionCollider.enabled = true; }
+    void AttackTimeOver() { explosionCollider.enabled = false; }
+    void DurationOut() { gameObject.SetActive(false); }
 
-    void DurationOut()
+    private void Update()
     {
-        gameObject.SetActive(false);
+        if (isHexagon) transform.Rotate(Vector3.up, 30f * Time.deltaTime);
     }
 }

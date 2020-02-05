@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public enum SoundTypeFX { CorrectCol, WrongCol }
+public enum SoundTypeFX { CorrectCol, WrongCol, NormalBomb, HexagonBomb }
 
 public class SoundManager : MonoBehaviour
 {
     //[BoxGroup("BGM")] [SerializeField] AudioSource audioSource;
 
-    [BoxGroup("Enemy Destroy")] [SerializeField] AudioClip correctCollision;
-    [BoxGroup("Enemy Destroy")] [SerializeField] AudioClip wrongCollision;
+    [BoxGroup("FX")] [SerializeField] AudioClip correctCollision;
+    [BoxGroup("FX")] [SerializeField] AudioClip wrongCollision;
+    [BoxGroup("FX")] [SerializeField] AudioClip normalBombExplosion;
+    [BoxGroup("FX")] [SerializeField] AudioClip hexagonBombExplosion;
 
     List<AudioSource> audioFXPlayers = new List<AudioSource>();
 
 
     private void Start()
     {
-        audioFXPlayers = GameManager.Instance.poolManager.audioFXList;
+        audioFXPlayers = GameManager.Instance.PoolManager.audioFXList;
     }
 
     public void PlayFXSound(SoundTypeFX soundType)
@@ -32,7 +34,12 @@ public class SoundManager : MonoBehaviour
             case SoundTypeFX.WrongCol:
                 audio.PlayOneShot(wrongCollision, 0.4f);
                 break;
-            
+            case SoundTypeFX.NormalBomb:
+                audio.PlayOneShot(normalBombExplosion, 0.4f);
+                break;
+            case SoundTypeFX.HexagonBomb:
+                audio.PlayOneShot(hexagonBombExplosion, 0.5f);
+                break;
         }
     }
 
