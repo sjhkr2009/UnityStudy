@@ -9651,7 +9651,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1725615180}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &349245463
 GameObject:
@@ -14775,6 +14775,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &754952951
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 754952952}
+  m_Layer: 0
+  m_Name: ItemHeal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &754952952
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754952951}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1725615180}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &759440594
 GameObject:
   m_ObjectHideFlags: 0
@@ -15258,6 +15288,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &1029650440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1029650441}
+  m_Layer: 0
+  m_Name: ParticleHealing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1029650441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029650440}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1725615180}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1209431846
 GameObject:
   m_ObjectHideFlags: 0
@@ -30141,8 +30201,10 @@ Transform:
   - {fileID: 450326991}
   - {fileID: 860365597}
   - {fileID: 1505062854}
+  - {fileID: 1029650441}
   - {fileID: 2107501405}
   - {fileID: 263039181}
+  - {fileID: 754952952}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -35026,6 +35088,8 @@ MonoBehaviour:
     type: 3}
   itemFixedBomb: {fileID: 6164865087453595385, guid: 3225764b6a78a6f428ece07a0423c40e,
     type: 3}
+  itemHeal: {fileID: 1214694079144045986, guid: f41c3046c9148c743a5dd19afbd52a0a,
+    type: 3}
   particleTP1: {fileID: 7585895747022911170, guid: f652799615f03f64e8543b45a000b6be,
     type: 3}
   particleTS1: {fileID: 5654866782993638891, guid: dfef2ec647b87c44f8709c39bbb7662b,
@@ -35033,6 +35097,8 @@ MonoBehaviour:
   particleExplosion: {fileID: 2215045306410215692, guid: b58baf74605987f4ea54389495891f21,
     type: 3}
   particleHexagonExp: {fileID: 250986309262521860, guid: 4360047f3e6c48a46902ccdb76a9b65e,
+    type: 3}
+  particleHealing: {fileID: 4180580671199784908, guid: 91de77472980a0540bb4529786542a7a,
     type: 3}
   audioFX: {fileID: 6667681757803919408, guid: 08e60bab54fbd7a409fae26435dc6122, type: 3}
   audioFXList: []
@@ -35042,12 +35108,13 @@ MonoBehaviour:
   enemyTS2Group: {fileID: 450326991}
   itemHexagonBombGroup: {fileID: 263039181}
   itemFixedBombGroup: {fileID: 2107501405}
+  itemHealGroup: {fileID: 754952952}
   particleTP1Group: {fileID: 506022046}
   particleTS1Group: {fileID: 1245893225}
   particleExplosionGroup: {fileID: 860365597}
   particleHexagonExpGroup: {fileID: 1505062854}
+  particleHealingGroup: {fileID: 1029650441}
   audioFXGroup: {fileID: 1294974128}
-  poolNumber: 100
 --- !u!114 &1820830199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35099,6 +35166,7 @@ MonoBehaviour:
   normalBombExplosion: {fileID: 8300000, guid: 64fb9477894fa2e4a997518fbb1c2f15, type: 3}
   hexagonBombExplosion: {fileID: 8300000, guid: 92d3259b6a9732e4ba3fb95331b2c95d,
     type: 3}
+  healing: {fileID: 8300000, guid: 3a0e3471cca4f314685eaa9f91440f43, type: 3}
 --- !u!114 &1820830202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35137,6 +35205,8 @@ MonoBehaviour:
   minDelayOfHexagonBomb: 5
   maxDelayOfHexagonBomb: 10
   planet: {fileID: 678788596}
+  minDelayOfHealkit: 10
+  maxDelayOfHealkit: 15
 --- !u!1 &1896093933
 GameObject:
   m_ObjectHideFlags: 0
@@ -44757,7 +44827,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1725615180}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2109172374
 GameObject:

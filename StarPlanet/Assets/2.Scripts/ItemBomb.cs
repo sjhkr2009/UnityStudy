@@ -28,4 +28,9 @@ public class ItemBomb : ItemBase
             EventOnExplosion(this);
         }
     }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
 }

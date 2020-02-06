@@ -33,7 +33,7 @@ public class ParticleManager : MonoBehaviour
                 returnObject = poolManager.Spawn(ObjectPool.ParticleHexagonExp, _transform.position, Quaternion.identity);
                 break;
             case ParticleType.Healing:
-                returnObject = poolManager.Spawn(ObjectPool.ParticleHealing, _transform.position, Quaternion.identity);
+                returnObject = poolManager.Spawn(ObjectPool.ParticleHealing, _transform.position, Quaternion.Euler(-90f, 0f, 0f));
                 break;
         }
 
@@ -56,7 +56,7 @@ public class ParticleManager : MonoBehaviour
                 poolManager.Spawn(ObjectPool.ParticleHexagonExp, _transform.position, Quaternion.identity);
                 break;
             case ParticleType.Healing:
-                poolManager.Spawn(ObjectPool.ParticleHealing, _transform.position, Quaternion.identity);
+                poolManager.Spawn(ObjectPool.ParticleHealing, _transform.position, Quaternion.Euler(-90f, 0f, _transform.rotation.eulerAngles.y + 180f));
                 break;
         }
     }

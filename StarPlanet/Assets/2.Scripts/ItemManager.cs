@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class ItemManager : MonoBehaviour
 {
+    public event Action<int> EventOnScoreChange = n => { };
+    
     [SerializeField] PoolManager poolManager;
     [SerializeField] SoundManager soundManager;
     [SerializeField] ParticleManager particleManager;
@@ -29,6 +32,7 @@ public class ItemManager : MonoBehaviour
 
         StartCoroutine(nameof(HexagonBombSpawn));
         StartCoroutine(nameof(FixedBombSpawn));
+        StartCoroutine(nameof(HealkitSpawn));
     }
 
     void HealingToStar(ItemHeal item, int healValue)
@@ -36,6 +40,8 @@ public class ItemManager : MonoBehaviour
         GameManager.Instance.PlayerHPChange(true, healValue);
         particleManager.SpawnParticle(ParticleType.Healing, item.transform);
         soundManager.PlayFXSound(SoundTypeFX.Healing);
+
+        DisableHealkit(item);
     }
 
     void HealingToPlanet(ItemHeal item, int healValue)
@@ -43,6 +49,15 @@ public class ItemManager : MonoBehaviour
         GameManager.Instance.PlayerHPChange(false, healValue);
         particleManager.SpawnParticle(ParticleType.Healing, item.transform);
         soundManager.PlayFXSound(SoundTypeFX.Healing);
+
+        DisableHealkit(item);
+    }
+
+    void DisableHealkit(ItemHeal item)
+    {
+        item.EventOnHealingPlanet -= HealingToPlanet;
+        item.EventOnHealingStar -= HealingToStar;
+        item.gameObject.SetActive(false);
     }
 
     void CreateExplosion(ItemBomb item)
@@ -74,18 +89,18 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
-            float delay = Random.Range(minDelayOfHexagonBomb, maxDelayOfHexagonBomb);
+            float delay = UnityEngine.Random.Range(minDelayOfHexagonBomb, maxDelayOfHexagonBomb);
             yield return new WaitForSeconds(delay);
 
             float cameraSizeX = Camera.main.orthographicSize * screenView;
             float cameraSizeY = Camera.main.orthographicSize;
 
-            Vector3 spawnPosUp = new Vector3(Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY + 1f);
-            Vector3 spawnPosRight = new Vector3(cameraSizeX + 1f, 0f, Random.Range(-cameraSizeY, cameraSizeY));
-            Vector3 spawnPosDown = new Vector3(Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY - 1f);
-            Vector3 spawnPosLeft = new Vector3(-cameraSizeX - 1f, 0f, Random.Range(-cameraSizeY, cameraSizeY));
+            Vector3 spawnPosUp = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY + 1f);
+            Vector3 spawnPosRight = new Vector3(cameraSizeX + 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
+            Vector3 spawnPosDown = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY - 1f);
+            Vector3 spawnPosLeft = new Vector3(-cameraSizeX - 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
 
-            float getPositionRandom = Random.value;
+            float getPositionRandom = UnityEngine.Random.value;
 
             ItemBomb newObject = null;
 
@@ -113,7 +128,7 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
-            float delay = Random.Range(minDelayOfFixedBomb, maxDelayOfFixedBomb);
+            float delay = UnityEngine.Random.Range(minDelayOfFixedBomb, maxDelayOfFixedBomb);
             yield return new WaitForSeconds(delay);
 
             float cameraSizeX = Camera.main.orthographicSize * screenView;
@@ -123,7 +138,7 @@ public class ItemManager : MonoBehaviour
 
             while (Vector3.Distance(spawnPos, Vector3.zero) < 2.5f)
             {
-                spawnPos = new Vector3(Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, Random.Range(-cameraSizeY * 0.95f, cameraSizeY * 0.95f));
+                spawnPos = new Vector3(UnityEngine.Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, UnityEngine.Random.Range(-cameraSizeY * 0.95f, cameraSizeY * 0.95f));
             }
             ItemBomb newObject = (ItemBomb)poolManager.Spawn(ObjectPool.ItemFixedBomb, spawnPos, Quaternion.identity);
             newObject.EventOnExplosion += OnBombExplosion;
@@ -134,18 +149,18 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
-            float delay = Random.Range(minDelayOfHealkit, maxDelayOfHealkit);
+            float delay = UnityEngine.Random.Range(minDelayOfHealkit, maxDelayOfHealkit);
             yield return new WaitForSeconds(delay);
 
             float cameraSizeX = Camera.main.orthographicSize * screenView;
             float cameraSizeY = Camera.main.orthographicSize;
 
-            Vector3 spawnPosUp = new Vector3(Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY + 1f);
-            Vector3 spawnPosRight = new Vector3(cameraSizeX + 1f, 0f, Random.Range(-cameraSizeY, cameraSizeY));
-            Vector3 spawnPosDown = new Vector3(Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY - 1f);
-            Vector3 spawnPosLeft = new Vector3(-cameraSizeX - 1f, 0f, Random.Range(-cameraSizeY, cameraSizeY));
+            Vector3 spawnPosUp = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY + 1f);
+            Vector3 spawnPosRight = new Vector3(cameraSizeX + 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
+            Vector3 spawnPosDown = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY - 1f);
+            Vector3 spawnPosLeft = new Vector3(-cameraSizeX - 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
 
-            float getPositionRandom = Random.value;
+            float getPositionRandom = UnityEngine.Random.value;
 
             ItemHeal newObject = null;
 

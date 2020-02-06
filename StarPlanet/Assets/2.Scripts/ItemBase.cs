@@ -28,10 +28,9 @@ public class ItemBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (isMoving) Move();
-        if (Mathf.Abs(transform.position.y) > Camera.main.orthographicSize + 10f || Mathf.Abs(transform.position.x) > Camera.main.orthographicSize * 9 / 16f + 5f) TimeOver();
+        if (isMoving) Move();   
     }
-    protected void TimeOver() { StartCoroutine(nameof(FadeOutDisable)); }
+    protected void TimeOver() { if (gameObject.activeSelf) StartCoroutine(nameof(FadeOutDisable)); }
 
     IEnumerator FadeOutDisable()
     {
@@ -51,7 +50,7 @@ public class ItemBase : MonoBehaviour
 
     protected virtual void OnDisable()
     {
-        StopCoroutine(nameof(RangeCheck));
+        StopAllCoroutines();
         CancelInvoke();
     }
 }
