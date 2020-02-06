@@ -9577,7 +9577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionCollider: {fileID: 4612141450374400111}
-  attackDuration: 0.2
+  attackDuration: 0.1
   particleDuration: 1
   isHexagon: 0
 --- !u!199 &2215045306410215694

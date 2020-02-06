@@ -14190,10 +14190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9550c68bbed2b924fbda674792bc7e7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMoving: 1
+  moveSpeed: 2
   explosionType: 0
   durationTime: 0
-  isHeaxgon: 1
-  moveSpeed: 2
 --- !u!1 &8266072259760046336
 GameObject:
   m_ObjectHideFlags: 0

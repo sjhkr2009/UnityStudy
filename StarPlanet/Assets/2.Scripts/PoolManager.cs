@@ -11,10 +11,12 @@ public enum ObjectPool
     EnemyTS2,
     ItemHexagonBomb,
     ItemFixedBomb,
+    ItemHeal,
     ParticleTP1,
     ParticleTS1,
     ParticleExplosion,
     ParticleHexagonExp,
+    ParticleHealing,
     AudioFX
 }
 
@@ -27,10 +29,12 @@ public class PoolManager : MonoBehaviour
     [SerializeField] GameObject enemyToStar2;
     [SerializeField] GameObject itemHexagonBomb;
     [SerializeField] GameObject itemFixedBomb;
+    [SerializeField] GameObject itemHeal;
     [SerializeField] GameObject particleTP1;
     [SerializeField] GameObject particleTS1;
     [SerializeField] GameObject particleExplosion;
     [SerializeField] GameObject particleHexagonExp;
+    [SerializeField] GameObject particleHealing;
     [SerializeField] GameObject audioFX;
 
     private List<Enemy> enemyTP1List = new List<Enemy>();
@@ -39,10 +43,12 @@ public class PoolManager : MonoBehaviour
     private List<Enemy> enemyTS2List = new List<Enemy>();
     private List<ItemBomb> itemHexagonBombList = new List<ItemBomb>();
     private List<ItemBomb> itemFixedBombList = new List<ItemBomb>();
+    private List<ItemHeal> itemHealList = new List<ItemHeal>();
     private List<ParticleSystem> particleTP1List = new List<ParticleSystem>();
     private List<ParticleSystem> particleTS1List = new List<ParticleSystem>();
     private List<Explosion> particleExplosionList = new List<Explosion>();
     private List<Explosion> particleHexagonExpList = new List<Explosion>();
+    private List<ParticleSystem> particleHealingList = new List<ParticleSystem>();
     [HideInInspector] public List<AudioSource> audioFXList = new List<AudioSource>();
 
     [SerializeField] Transform enemyTP1Group;
@@ -51,10 +57,12 @@ public class PoolManager : MonoBehaviour
     [SerializeField] Transform enemyTS2Group;
     [SerializeField] Transform itemHexagonBombGroup;
     [SerializeField] Transform itemFixedBombGroup;
+    [SerializeField] Transform itemHealGroup;
     [SerializeField] Transform particleTP1Group;
     [SerializeField] Transform particleTS1Group;
     [SerializeField] Transform particleExplosionGroup;
     [SerializeField] Transform particleHexagonExpGroup;
+    [SerializeField] Transform particleHealingGroup;
     [SerializeField] Transform audioFXGroup;
 
     private int enemyTP1Index = 0;
@@ -63,12 +71,12 @@ public class PoolManager : MonoBehaviour
     private int enemyTS2Index = 0;
     private int itemHexagonBombIndex = 0;
     private int itemFixedBombIndex = 0;
+    private int itemHealIndex = 0;
     private int particleTP1Index = 0;
     private int particleTS1Index = 0;
     private int particleExplosionIndex = 0;
     private int particleHexagonExpIndex = 0;
-
-    [SerializeField] int poolNumber = 100;
+    private int particleHealingIndex = 0;
 
     void Awake()
     {
@@ -78,10 +86,12 @@ public class PoolManager : MonoBehaviour
         enemyTS2List = MakeObjectPool<Enemy>(enemyToStar2, enemyTS2Group, 30);
         itemFixedBombList = MakeObjectPool<ItemBomb>(itemFixedBomb, itemFixedBombGroup, 50);
         itemHexagonBombList = MakeObjectPool<ItemBomb>(itemHexagonBomb, itemHexagonBombGroup, 30);
+        itemHealList = MakeObjectPool<ItemHeal>(itemHeal, itemHealGroup, 30);
         particleTP1List = MakeObjectPool<ParticleSystem>(particleTP1, particleTP1Group);
         particleTS1List = MakeObjectPool<ParticleSystem>(particleTS1, particleTS1Group);
         particleExplosionList = MakeObjectPool<Explosion>(particleExplosion, particleExplosionGroup, 50);
         particleHexagonExpList = MakeObjectPool<Explosion>(particleHexagonExp, particleHexagonExpGroup, 20);
+        particleHealingList = MakeObjectPool<ParticleSystem>(particleHealing, particleHealingGroup, 30);
         audioFXList = MakeObjectPool<AudioSource>(audioFX, audioFXGroup, 20);
     }
     /// <summary>
@@ -89,9 +99,9 @@ public class PoolManager : MonoBehaviour
     /// </summary>
     /// <param name="gameObject">대상 오브젝트</param>
     /// <param name="group">생성할 그룹</param>
-    /// <param name="poolNumber">오브젝트 생성 개수(기본값 = 100)</param>
+    /// <param name="poolNumber">오브젝트 생성 개수(기본값 = 50)</param>
     /// <returns></returns>
-    List<T> MakeObjectPool<T> (GameObject gameObject, Transform group, int poolNumber = 100)
+    List<T> MakeObjectPool<T> (GameObject gameObject, Transform group, int poolNumber = 50)
     {
         List<T> _objectList = new List<T>();
 
@@ -213,6 +223,20 @@ public class PoolManager : MonoBehaviour
                 itemFixedBombIndex = (itemFixedBombIndex + 1) % itemFixedBombList.Count;
                 break;
 
+            //Heal
+            case ObjectPool.ItemHeal:
+                if (itemHealList[itemHealIndex].gameObject.activeSelf)
+                {
+                    var newItem = Instantiate(itemHeal, position, rotation).GetComponent<ItemHeal>();
+                    _returnObject = newItem;
+                    itemHealList.Add(newItem);
+                    break;
+                }
+                SpawnObject(itemHealList, itemHealIndex, position, rotation);
+                _returnObject = itemHealList[itemHealIndex];
+                itemHealIndex = (itemHealIndex + 1) % itemHealList.Count;
+                break;
+
         //Particle
             //Destroy Particle - EnemyTP1
             case ObjectPool.ParticleTP1:
@@ -225,7 +249,7 @@ public class PoolManager : MonoBehaviour
                 }
                 SpawnObject(particleTP1List, particleTP1Index, position, rotation);
                 _returnObject = particleTP1List[particleTP1Index];
-                particleTP1Index = (particleTP1Index + 1) % poolNumber;
+                particleTP1Index = (particleTP1Index + 1) % particleTP1List.Count;
                 break;
 
             //Destroy Particle - EnemyTS1
@@ -239,7 +263,7 @@ public class PoolManager : MonoBehaviour
                 }
                 SpawnObject(particleTS1List, particleTS1Index, position, rotation);
                 _returnObject = particleTS1List[particleTS1Index];
-                particleTS1Index = (particleTS1Index + 1) % poolNumber;
+                particleTS1Index = (particleTS1Index + 1) % particleTS1List.Count;
                 break;
 
             //Explosion Particle - Normal
@@ -253,7 +277,7 @@ public class PoolManager : MonoBehaviour
                 }
                 SpawnObject(particleExplosionList, particleExplosionIndex, position, rotation);
                 _returnObject = particleExplosionList[particleExplosionIndex];
-                particleExplosionIndex = (particleExplosionIndex + 1) % 50;
+                particleExplosionIndex = (particleExplosionIndex + 1) % particleExplosionList.Count;
                 break;
 
             //Explosion Particle - Hexagon
@@ -267,7 +291,21 @@ public class PoolManager : MonoBehaviour
                 }
                 SpawnObject(particleHexagonExpList, particleHexagonExpIndex, position, rotation);
                 _returnObject = particleHexagonExpList[particleHexagonExpIndex];
-                particleHexagonExpIndex = (particleHexagonExpIndex + 1) % 20;
+                particleHexagonExpIndex = (particleHexagonExpIndex + 1) % particleHexagonExpList.Count;
+                break;
+
+            //Healing Particle
+            case ObjectPool.ParticleHealing:
+                if (particleHealingList[particleHealingIndex].gameObject.activeSelf)
+                {
+                    var newItem = Instantiate(particleHealing, position, rotation).GetComponent<ParticleSystem>();
+                    _returnObject = newItem;
+                    particleHealingList.Add(newItem);
+                    break;
+                }
+                SpawnObject(particleHealingList, particleHealingIndex, position, rotation);
+                _returnObject = particleHealingList[particleHealingIndex];
+                particleHealingIndex = (particleHealingIndex + 1) % particleHealingList.Count;
                 break;
 
             default:

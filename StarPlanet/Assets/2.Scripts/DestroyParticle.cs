@@ -6,9 +6,6 @@ using Sirenix.OdinInspector;
 public class DestroyParticle : MonoBehaviour
 {
     [BoxGroup("Particle Setting"), SerializeField] private float particleDuration = 1f;
-    [BoxGroup("Particle Setting"), SerializeField] ParticleSystem particleEffect;
-
-    float durationTime = 0f;
 
     void OnEnable()
     {
