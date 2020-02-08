@@ -7,6 +7,22 @@ public enum SoundTypeFX { CorrectCol, WrongCol, NormalBomb, HexagonBomb, Healing
 
 public class SoundManager : MonoBehaviour
 {
+    public float MasterVolume
+    {
+        get => PlayerPrefs.GetFloat(nameof(MasterVolume), 1.0f);
+        set => PlayerPrefs.SetFloat(nameof(MasterVolume), value);
+    }
+    public float FXVolume
+    {
+        get => PlayerPrefs.GetFloat(nameof(FXVolume), 1.0f);
+        set => PlayerPrefs.SetFloat(nameof(FXVolume), value);
+    }
+    public float BGMVolume
+    {
+        get => PlayerPrefs.GetFloat(nameof(BGMVolume), 1.0f);
+        set => PlayerPrefs.SetFloat(nameof(BGMVolume), value);
+    }
+
     //[BoxGroup("BGM")] [SerializeField] AudioSource audioSource;
 
     [BoxGroup("FX")] [SerializeField] AudioClip correctCollision;
@@ -30,19 +46,19 @@ public class SoundManager : MonoBehaviour
         switch (soundType)
         {
             case SoundTypeFX.CorrectCol:
-                audio.PlayOneShot(correctCollision, 0.85f);
+                audio.PlayOneShot(correctCollision, 0.95f * MasterVolume * FXVolume);
                 break;
             case SoundTypeFX.WrongCol:
-                audio.PlayOneShot(wrongCollision, 0.3f);
+                audio.PlayOneShot(wrongCollision, 0.4f * MasterVolume * FXVolume);
                 break;
             case SoundTypeFX.NormalBomb:
-                audio.PlayOneShot(normalBombExplosion, 0.5f);
+                audio.PlayOneShot(normalBombExplosion, 0.7f * MasterVolume * FXVolume);
                 break;
             case SoundTypeFX.HexagonBomb:
-                audio.PlayOneShot(hexagonBombExplosion, 0.35f);
+                audio.PlayOneShot(hexagonBombExplosion, 0.5f * MasterVolume * FXVolume);
                 break;
             case SoundTypeFX.Healing:
-                audio.PlayOneShot(healing, 0.5f);
+                audio.PlayOneShot(healing, 0.65f * MasterVolume * FXVolume);
                 break;
         }
     }
@@ -55,7 +71,6 @@ public class SoundManager : MonoBehaviour
             if (!audioFXPlayers[i].isPlaying)
             {
                 container = audioFXPlayers[i];
-                Debug.Log($"{i}번째 오디오 활성화");
                 break;
             }
         }

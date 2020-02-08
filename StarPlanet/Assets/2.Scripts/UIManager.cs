@@ -14,6 +14,13 @@ public class UIManager : MonoBehaviour
     [BoxGroup("Playing UI")] [SerializeField] Slider planetHpBar;
     [BoxGroup("Playing UI")] [SerializeField] Text scoreText;
 
+    [Title("Accelerate")]
+    [BoxGroup("Button")] [SerializeField] Image accelBackground;
+    [BoxGroup("Button")] [SerializeField] Color accelColorIdle;
+    [BoxGroup("Button")] [SerializeField] Color accelColorActive;
+    [BoxGroup("Button")] [SerializeField] GameObject accelIconIdle;
+    [BoxGroup("Button")] [SerializeField] GameObject accelIconActive;
+
     [BoxGroup("Object")] [SerializeField] Star star;
     [BoxGroup("Object")] [SerializeField] Planet planet;
 
@@ -29,6 +36,8 @@ public class UIManager : MonoBehaviour
 
         planet.EventHpChanged += OnPlayerHpChanged;
         planet.EventMaxHpChanged += OnPlayerMaxHpChanged;
+
+        accelIconActive.SetActive(false);
     }
 
     private void Start()
@@ -78,5 +87,18 @@ public class UIManager : MonoBehaviour
     public void ScoreTextChange(int value)
     {
         scoreText.text = $"점수: {value.ToString()}";
+    }
+
+    public void OnAccelerateClick()
+    {
+        accelBackground.color = accelColorActive;
+        accelIconIdle.SetActive(false);
+        accelIconActive.SetActive(true);
+    }
+    public void ExitAccelerateClick()
+    {
+        accelBackground.color = accelColorIdle;
+        accelIconActive.SetActive(false);
+        accelIconIdle.SetActive(true);
     }
 }

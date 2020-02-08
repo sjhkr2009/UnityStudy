@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 
 public class Test : MonoBehaviour
 {
-    [BoxGroup("Testing...")] public bool isTesting;
+    [BoxGroup("Testing")] public bool isTesting;
 
     ParticleSystem ps;
 
@@ -32,6 +32,7 @@ public class Test : MonoBehaviour
     {
         //explosion.SetActive(false);
         ps = GetComponent<ParticleSystem>();
+        if (!isTesting) gameObject.SetActive(false);
     }
 
     private void Update()
