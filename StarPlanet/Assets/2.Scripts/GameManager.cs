@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
+using UnityEngine.SceneManagement;
 
 public enum GameState { Ready, Playing, Pause, GameOver }
 
@@ -36,17 +37,15 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameState.Playing:
                     _gameState = GameState.Playing;
-                    StartCoroutine(enemyManager.EnemySpawn());
+                    StartCoroutine(enemyManager.EnemySpawn()); //EventGameStateChanged 를 통해 EnemyManager에서 처리
                     Time.timeScale = 1f;
                     break;
                 case GameState.Pause:
                     _gameState = GameState.Pause;
-                    StopAllCoroutines();
                     Time.timeScale = 0f;
                     break;
                 case GameState.GameOver:
                     _gameState = GameState.GameOver;
-                    Debug.Log("Game Over");
                     break;
             }
             EventGameStateChanged(_gameState);
@@ -88,6 +87,7 @@ public class GameManager : MonoBehaviour
         planet.EventPlayerDead += OnPlayerDead;
 
         EventGameStateChanged += star.OnGameStateChanged;
+        EventGameStateChanged += uiManager.OnGameStateChanged;
 
         uiManager.EventCountDownDone += OnCountDownDone;
 
@@ -111,15 +111,30 @@ public class GameManager : MonoBehaviour
         EventGameStateChanged -= star.OnGameStateChanged;
 
         uiManager.EventCountDownDone -= OnCountDownDone;
+
+        scoreManager.EventOnScoreChanged -= uiManager.ScoreTextChange;
     }
 
     void Update()
     {
         mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0)) star.TargetRadiusChange(mousePos);
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            star.TargetRadiusChange(mousePos);
+            switch (gameState)
+            {
+                case GameState.Ready:
+                    break;
+                case GameState.Playing:
+                    gameState = GameState.Pause;
+                    break;
+                case GameState.Pause:
+                    gameState = GameState.Playing;
+                    break;
+                case GameState.GameOver:
+                    break;
+            }
         }
     }
 
@@ -147,5 +162,11 @@ public class GameManager : MonoBehaviour
     private void OnCountDownDone()
     {
         gameState = GameState.Playing;
+    }
+
+    public void ReStartScene()
+    {
+        enemyManager.AllEnemyEventReset();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

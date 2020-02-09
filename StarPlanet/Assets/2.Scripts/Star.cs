@@ -17,6 +17,7 @@ public class Star : Player
     [TabGroup("Child Component"), SerializeField] GameObject boosterTrailParticle;
 
     [SerializeField, ReadOnly] float orbitalSpeedFactor = 1f; //각속도 계수. 평상시엔 1이며, 가속 모드일 경우에만 올라간다.
+    [SerializeField] float boosterFactor = 1.8f;
 
     private float currentAngle;
     private float currentRadius;
@@ -41,6 +42,8 @@ public class Star : Player
         if(!trailParticle.activeSelf) trailParticle.SetActive(true);
         if(boosterTrailParticle.activeSelf) boosterTrailParticle.SetActive(false);
         EventRadiusChange += AngularSpeedChange;
+
+        orbitalSpeedFactor = 1f;
     }
 
     private void OnDestroy()
@@ -99,9 +102,9 @@ public class Star : Player
         angulerSpeed = ( originAngulerSpeed * minRadius ) / (minRadius + (radius - minRadius) / speedReduction);
     }
 
-    public void Accelerate(float factor)
+    public void Accelerate()
     {
-        orbitalSpeedFactor *= factor;
+        orbitalSpeedFactor = boosterFactor;
         boosterTrailParticle.SetActive(true);
         trailParticle.SetActive(false);
     }

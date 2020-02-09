@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public enum SoundTypeFX { CorrectCol, WrongCol, NormalBomb, HexagonBomb, Healing }
+public enum SoundTypeFX { CorrectCol, WrongCol, NormalBomb, HexagonBomb, Healing, Booster }
 
 public class SoundManager : MonoBehaviour
 {
@@ -30,6 +30,7 @@ public class SoundManager : MonoBehaviour
     [BoxGroup("FX")] [SerializeField] AudioClip normalBombExplosion;
     [BoxGroup("FX")] [SerializeField] AudioClip hexagonBombExplosion;
     [BoxGroup("FX")] [SerializeField] AudioClip healing;
+    [BoxGroup("FX")] [SerializeField] AudioClip booster;
 
     List<AudioSource> audioFXPlayers = new List<AudioSource>();
 
@@ -59,6 +60,9 @@ public class SoundManager : MonoBehaviour
                 break;
             case SoundTypeFX.Healing:
                 audio.PlayOneShot(healing, 0.65f * MasterVolume * FXVolume);
+                break;
+            case SoundTypeFX.Booster:
+                audio.PlayOneShot(booster, 0.3f * MasterVolume * FXVolume);
                 break;
         }
     }
