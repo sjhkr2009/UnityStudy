@@ -94,6 +94,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.gameState != GameState.Playing) return;
+
         switch (enemyType)
         {
             case EnemyType.ToPlanet1:

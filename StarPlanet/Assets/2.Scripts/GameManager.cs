@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
                     Time.timeScale = 0f;
                     break;
                 case GameState.GameOver:
+                    Debug.Log("Game Over");
                     _gameState = GameState.GameOver;
                     break;
             }

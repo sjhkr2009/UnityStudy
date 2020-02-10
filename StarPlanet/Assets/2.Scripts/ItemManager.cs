@@ -89,6 +89,7 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
+
             float delay = UnityEngine.Random.Range(minDelayOfHexagonBomb, maxDelayOfHexagonBomb);
             yield return new WaitForSeconds(delay);
 
@@ -128,6 +129,7 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
+            
             float delay = UnityEngine.Random.Range(minDelayOfFixedBomb, maxDelayOfFixedBomb);
             yield return new WaitForSeconds(delay);
 
@@ -149,6 +151,7 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
+            
             float delay = UnityEngine.Random.Range(minDelayOfHealkit, maxDelayOfHealkit);
             yield return new WaitForSeconds(delay);
 

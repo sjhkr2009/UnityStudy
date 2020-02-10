@@ -35,6 +35,7 @@ public class EnemyManager : MonoBehaviour
     {
         while (true)
         {
+            
             float cameraSize = Camera.main.orthographicSize;
 
             float minX = -cameraSize * screenView - 1f;

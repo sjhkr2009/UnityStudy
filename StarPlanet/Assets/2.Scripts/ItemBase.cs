@@ -28,6 +28,7 @@ public class ItemBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (GameManager.Instance.gameState != GameState.Playing) return;
         if (isMoving) Move();   
     }
     protected void TimeOver() { if (gameObject.activeSelf) StartCoroutine(nameof(FadeOutDisable)); }
