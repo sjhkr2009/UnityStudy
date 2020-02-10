@@ -131,7 +131,6 @@ public class GameManager : MonoBehaviour
                     gameState = GameState.Pause;
                     break;
                 case GameState.Pause:
-                    gameState = GameState.Playing;
                     break;
                 case GameState.GameOver:
                     break;

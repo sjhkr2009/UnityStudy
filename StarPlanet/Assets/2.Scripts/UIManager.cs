@@ -26,10 +26,12 @@ public class UIManager : MonoBehaviour
 
     //팝업창 관련 - 공통
     [BoxGroup("Pop-Up Window")] [SerializeField] GameObject allPopUpWindow;
-    [BoxGroup("Pop-Up Window")] [SerializeField] Text titleText;
-    [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform popUpBackground;
-    [Title("Game Over")] //팝업창 - 게임오버
-    [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform GameoverUI;
+    [BoxGroup("Pop-Up Window")] [SerializeField] GameObject popUpBackground;
+    [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform backgroundTransform;
+    [BoxGroup("Pop-Up Window")] [SerializeField] GameObject gameoverUI;
+    [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform gameoverTransform;
+    [BoxGroup("Pop-Up Window")] [SerializeField] GameObject pauseUI;
+    [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform pauseTransform;
 
     [BoxGroup("Object")] [SerializeField] Star star;
     [BoxGroup("Object")] [SerializeField] Planet planet;
@@ -128,6 +130,7 @@ public class UIManager : MonoBehaviour
         switch (mode)
         {
             case CloseMode.Resume:
+                GameManager.Instance.gameState = GameState.Playing;
                 break;
             case CloseMode.Restart:
                 GameManager.Instance.ReStartScene();
@@ -144,66 +147,52 @@ public class UIManager : MonoBehaviour
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
                 break;
             case GameState.Playing:
-                if (allPopUpWindow.activeSelf) ButtonPauseToResume();
+                if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
                 break;
             case GameState.Pause:
-                PopUpWindow(GameoverUI);
-                titleText.text = "OPTION";
+                allPopUpWindow.SetActive(true);
+                pauseUI.SetActive(true);
                 break;
             case GameState.GameOver:
-                PopUpWindow(GameoverUI);
-                titleText.text = "GAME OVER";
+                allPopUpWindow.SetActive(true);
+                gameoverUI.SetActive(true);
                 break;
         }
     }
     public void ButtonGameoverToTitle()
     {
         if (isPopUpClosing) return;
-        OffWindowAnimation(GameoverUI);
+        OffWindowAnimation(gameoverTransform);
         Invoke(nameof(OffAllWindow), 0.2f);
         StartCoroutine(SceneLoadButton(CloseMode.GoTitle)); //타이틀로 이동
     }
     public void ButtonGameoverToRestart()
     {
         if (isPopUpClosing) return;
-        OffWindowAnimation(GameoverUI);
+        OffWindowAnimation(gameoverTransform);
         Invoke(nameof(OffAllWindow), 0.2f);
         StartCoroutine(SceneLoadButton(CloseMode.Restart)); //씬 재시작
     }
     public void ButtonPauseToResume()
     {
         if (isPopUpClosing) return;
-        OffWindowAnimation(GameoverUI); //옵션창으로 변경할 것
+        OffWindowAnimation(pauseTransform);
         Invoke(nameof(OffAllWindow), 0.2f);
         StartCoroutine(SceneLoadButton(CloseMode.Resume));
     }
     public void ButtonPauseToTitle()
     {
         if (isPopUpClosing) return;
-        OffWindowAnimation(GameoverUI); //옵션창으로 변경할 것
+        OffWindowAnimation(pauseTransform);
         Invoke(nameof(OffAllWindow), 0.2f);
         StartCoroutine(SceneLoadButton(CloseMode.GoTitle)); //타이틀로 이동
     }
 
-    void PopUpWindow(RectTransform windowScale) // 팝업 열때 애니메이션
-    {
-        //DOTween.timeScale = 1f;
-        
-        allPopUpWindow.SetActive(true);
-        if (!popUpBackground.gameObject.activeSelf) popUpBackground.gameObject.SetActive(true);
-
-        windowScale.gameObject.SetActive(true);
-        windowScale.localScale = Vector3.one * 0.5f;
-        popUpBackground.localScale = Vector3.one * 0.5f;
-
-        popUpBackground.DOScale(1f, 0.2f).SetEase(Ease.OutBack).timeScale = 1f;
-        windowScale.DOScale(1f, 0.2f).SetEase(Ease.OutBack).timeScale = 1f;
-    }
     void OffWindowAnimation(RectTransform windowScale) //팝업 닫을 때 애니메이션. 비활성화 기능은 별도.
     {
         isPopUpClosing = true;
         windowScale.DOScale(0f, 0.15f).SetEase(Ease.InBack);
-        popUpBackground.DOScale(0f, 0.15f).SetEase(Ease.InBack);
+        backgroundTransform.DOScale(0f, 0.15f).SetEase(Ease.InBack);
     }
     void OffAllWindow() //팝업창 비활성화. 창 닫기 애니메이션 이후 실행.
     {
