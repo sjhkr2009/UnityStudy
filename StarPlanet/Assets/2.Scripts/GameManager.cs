@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameState.Playing:
                     _gameState = GameState.Playing;
-                    StartCoroutine(enemyManager.EnemySpawn()); //EventGameStateChanged 를 통해 EnemyManager에서 처리
                     Time.timeScale = 1f;
                     break;
                 case GameState.Pause:
@@ -45,7 +44,7 @@ public class GameManager : MonoBehaviour
                     Time.timeScale = 0f;
                     break;
                 case GameState.GameOver:
-                    Debug.Log("Game Over");
+                    Time.timeScale = 0f;
                     _gameState = GameState.GameOver;
                     break;
             }
@@ -169,7 +168,7 @@ public class GameManager : MonoBehaviour
 
     public void ReStartScene()
     {
-        
+        itemManager.AllItemEventReset();
         enemyManager.AllEnemyEventReset();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

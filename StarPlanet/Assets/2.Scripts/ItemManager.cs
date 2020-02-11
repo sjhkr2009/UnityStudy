@@ -61,12 +61,12 @@ public class ItemManager : MonoBehaviour
         item.gameObject.SetActive(false);
     }
 
-    void CreateExplosion(ItemBomb item)
+    void CreateExplosion(ItemBomb owner)
     {
-        switch (item.explosionType)
+        switch (owner.explosionType)
         {
             case ExplosionType.Hexagon:
-                float size = Vector3.Distance(item.transform.position, Vector3.zero);
+                float size = Vector3.Distance(owner.transform.position, Vector3.zero);
                 Explosion explosion = (Explosion)particleManager.SpawnAndGetParticle(ParticleType.HexagonExplosion, planet);
                 explosion.transform.localScale = Vector3.one * size;
                 soundManager.PlayFXSound(SoundTypeFX.HexagonBomb);
@@ -74,17 +74,17 @@ public class ItemManager : MonoBehaviour
                 break;
 
             case ExplosionType.Fixed:
-                particleManager.SpawnParticle(ParticleType.NormalExplosion, item.transform);
+                particleManager.SpawnParticle(ParticleType.NormalExplosion, owner.transform);
                 soundManager.PlayFXSound(SoundTypeFX.NormalBomb);
                 break;
         }
+        DisableExplosion(owner);
     }
 
-    void OnBombExplosion(ItemBomb owner)
+    void DisableExplosion(ItemBomb item)
     {
-        CreateExplosion(owner);
-        owner.EventOnExplosion -= CreateExplosion;
-        owner.gameObject.SetActive(false);
+        item.EventOnExplosion -= CreateExplosion;
+        item.gameObject.SetActive(false);
     }
 
     IEnumerator HexagonBombSpawn()
@@ -123,7 +123,7 @@ public class ItemManager : MonoBehaviour
             {
                 newObject = (ItemBomb)poolManager.Spawn(ObjectPool.ItemHexagonBomb, spawnPosLeft, Quaternion.LookRotation(spawnPosRight));
             }
-            newObject.EventOnExplosion += OnBombExplosion;
+            newObject.EventOnExplosion += CreateExplosion;
         }
     }
 
@@ -145,7 +145,7 @@ public class ItemManager : MonoBehaviour
                 spawnPos = new Vector3(UnityEngine.Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, UnityEngine.Random.Range(-cameraSizeY * 0.95f, cameraSizeY * 0.95f));
             }
             ItemBomb newObject = (ItemBomb)poolManager.Spawn(ObjectPool.ItemFixedBomb, spawnPos, Quaternion.identity);
-            newObject.EventOnExplosion += OnBombExplosion;
+            newObject.EventOnExplosion += CreateExplosion;
         }
     }
 
@@ -190,9 +190,12 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public void AllEnemyEventReset()
+    public void AllItemEventReset()
     {
-        Enemy[] enemies = FindObjectsOfType<Enemy>();
-        foreach (var enemy in enemies) if (enemy.gameObject.activeSelf) DeleteEventToEnemy(enemy);
+        ItemBomb[] itemBombs = FindObjectsOfType<ItemBomb>();
+        ItemHeal[] itemHeals = FindObjectsOfType<ItemHeal>();
+        foreach (var item in itemBombs) if (item.gameObject.activeSelf) DisableExplosion(item);
+        foreach (var item in itemHeals) if (item.gameObject.activeSelf) DisableHealkit(item);
+        StopAllCoroutines();
     }
 }

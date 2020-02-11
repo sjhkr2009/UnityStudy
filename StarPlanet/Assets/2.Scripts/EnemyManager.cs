@@ -29,13 +29,16 @@ public class EnemyManager : MonoBehaviour
         if (particleManager == null) particleManager = GameManager.Instance.ParticleManager;
 
         screenView = GameManager.Instance.screenHorizontal / GameManager.Instance.screenVertical;
+        StartCoroutine(EnemySpawn());
     }
 
     public IEnumerator EnemySpawn()
     {
         while (true)
         {
-            
+            yield return null;
+            if (GameManager.Instance.gameState != GameState.Playing) continue;
+
             float cameraSize = Camera.main.orthographicSize;
 
             float minX = -cameraSize * screenView - 1f;
@@ -176,5 +179,6 @@ public class EnemyManager : MonoBehaviour
     {
         Enemy[] enemies = FindObjectsOfType<Enemy>();
         foreach (var enemy in enemies) if (enemy.gameObject.activeSelf) DeleteEventToEnemy(enemy);
+        StopAllCoroutines();
     }
 }
