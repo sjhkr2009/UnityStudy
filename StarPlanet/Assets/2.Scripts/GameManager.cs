@@ -110,6 +110,7 @@ public class GameManager : MonoBehaviour
         planet.EventPlayerDead -= OnPlayerDead;
 
         EventGameStateChanged -= star.OnGameStateChanged;
+        EventGameStateChanged -= uiManager.OnGameStateChanged;
 
         uiManager.EventCountDownDone -= OnCountDownDone;
 
@@ -131,8 +132,10 @@ public class GameManager : MonoBehaviour
                     gameState = GameState.Pause;
                     break;
                 case GameState.Pause:
+                    uiManager.Escape();
                     break;
                 case GameState.GameOver:
+                    uiManager.Escape();
                     break;
             }
         }
@@ -166,6 +169,7 @@ public class GameManager : MonoBehaviour
 
     public void ReStartScene()
     {
+        
         enemyManager.AllEnemyEventReset();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

@@ -254,7 +254,6 @@ GameObject:
   - component: {fileID: 51022419}
   - component: {fileID: 51022421}
   - component: {fileID: 51022420}
-  - component: {fileID: 51022422}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -319,21 +318,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51022418}
   m_CullTransparentMesh: 0
---- !u!114 &51022422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 51022418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f5a10036924ec499e5a5ad9a31fd38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  windowType: 0
-  background: {fileID: 51022418}
-  titleText: {fileID: 1528170299}
 --- !u!1 &106418731
 GameObject:
   m_ObjectHideFlags: 0
@@ -9695,7 +9679,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &174319726
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9992,7 +9976,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1932973172}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1820830195}
+        m_MethodName: ButtonPauseToResume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &316113537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16009,7 +16004,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1368747165}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1820830195}
+        m_MethodName: ButtonPauseToTitle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &796727777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16174,7 +16180,6 @@ GameObject:
   m_Component:
   - component: {fileID: 915226677}
   - component: {fileID: 915226678}
-  - component: {fileID: 915226679}
   m_Layer: 5
   m_Name: GameoverMenu
   m_TagString: Untagged
@@ -16212,21 +16217,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 915226676}
   m_CullTransparentMesh: 0
---- !u!114 &915226679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915226676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f5a10036924ec499e5a5ad9a31fd38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  windowType: 1
-  background: {fileID: 51022418}
-  titleText: {fileID: 1528170299}
 --- !u!1 &923023440
 GameObject:
   m_ObjectHideFlags: 0
@@ -16314,7 +16304,7 @@ GameObject:
   - component: {fileID: 946200590}
   - component: {fileID: 946200589}
   m_Layer: 5
-  m_Name: OptionButton
+  m_Name: SoundButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27013,7 +27003,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1499579670
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27413,7 +27403,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1574231126}
   - component: {fileID: 1574231127}
-  - component: {fileID: 1574231128}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -27451,21 +27440,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1574231125}
   m_CullTransparentMesh: 0
---- !u!114 &1574231128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1574231125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f5a10036924ec499e5a5ad9a31fd38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  windowType: 2
-  background: {fileID: 51022418}
-  titleText: {fileID: 1528170299}
 --- !u!1 &1601369131
 GameObject:
   m_ObjectHideFlags: 0
@@ -37283,12 +37257,12 @@ MonoBehaviour:
   accelIconIdle: {fileID: 390178176}
   accelIconActive: {fileID: 1333859594}
   allPopUpWindow: {fileID: 174319725}
-  popUpBackground: {fileID: 51022418}
-  backgroundTransform: {fileID: 51022419}
-  gameoverUI: {fileID: 1185413624}
-  gameoverTransform: {fileID: 915226677}
-  pauseUI: {fileID: 1499579669}
-  pauseTransform: {fileID: 1574231126}
+  titleText: {fileID: 1528170299}
+  popUpBackgroundColor: {fileID: 0}
+  popUpBasicTransform: {fileID: 0}
+  gameoverTransform: {fileID: 1185413625}
+  pauseTransform: {fileID: 1499579670}
+  soundTransform: {fileID: 0}
   star: {fileID: 1934295236}
   planet: {fileID: 678788599}
 --- !u!114 &1820830196

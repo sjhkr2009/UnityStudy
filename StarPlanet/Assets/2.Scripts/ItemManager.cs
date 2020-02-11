@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using DG.Tweening;
 
 public class ItemManager : MonoBehaviour
 {
@@ -69,6 +70,7 @@ public class ItemManager : MonoBehaviour
                 Explosion explosion = (Explosion)particleManager.SpawnAndGetParticle(ParticleType.HexagonExplosion, planet);
                 explosion.transform.localScale = Vector3.one * size;
                 soundManager.PlayFXSound(SoundTypeFX.HexagonBomb);
+                Camera.main.transform.DOShakePosition(0.5f);
                 break;
 
             case ExplosionType.Fixed:
@@ -186,5 +188,11 @@ public class ItemManager : MonoBehaviour
             newObject.EventOnHealingPlanet += HealingToPlanet;
             newObject.EventOnHealingStar += HealingToStar;
         }
+    }
+
+    public void AllEnemyEventReset()
+    {
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
+        foreach (var enemy in enemies) if (enemy.gameObject.activeSelf) DeleteEventToEnemy(enemy);
     }
 }

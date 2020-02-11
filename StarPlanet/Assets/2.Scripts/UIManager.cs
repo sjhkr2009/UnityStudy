@@ -5,8 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine.UI;
 using System;
 using DG.Tweening;
-
-enum CloseMode { Resume, Restart, GoTitle }
+public enum NowActive { None, Pause, Sound, Gameover }
 
 public class UIManager : MonoBehaviour
 {
@@ -26,12 +25,12 @@ public class UIManager : MonoBehaviour
 
     //팝업창 관련 - 공통
     [BoxGroup("Pop-Up Window")] [SerializeField] GameObject allPopUpWindow;
-    [BoxGroup("Pop-Up Window")] [SerializeField] GameObject popUpBackground;
-    [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform backgroundTransform;
-    [BoxGroup("Pop-Up Window")] [SerializeField] GameObject gameoverUI;
+    [BoxGroup("Pop-Up Window")] [SerializeField] Text titleText;
+    [BoxGroup("Pop-Up Window")] [SerializeField] Image popUpBackgroundColor;
+    [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform popUpBasicTransform;
     [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform gameoverTransform;
-    [BoxGroup("Pop-Up Window")] [SerializeField] GameObject pauseUI;
     [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform pauseTransform;
+    [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform soundTransform;
 
     [BoxGroup("Object")] [SerializeField] Star star;
     [BoxGroup("Object")] [SerializeField] Planet planet;
@@ -39,6 +38,47 @@ public class UIManager : MonoBehaviour
     public event Action EventCountDownDone = () => { };
 
     bool isPopUpClosing = false;
+    private NowActive _nowActive;
+    public NowActive nowActive
+    {
+        get => _nowActive;
+        set
+        {
+            switch (value)
+            {
+                case NowActive.None:
+                    _nowActive = NowActive.None;
+                    break;
+
+                case NowActive.Pause:
+                    _nowActive = NowActive.Pause;
+                    if (gameoverTransform.gameObject.activeSelf) gameoverTransform.gameObject.SetActive(false);
+                    if (soundTransform.gameObject.activeSelf) soundTransform.gameObject.SetActive(false);
+
+                    titleText.text = "OPTION";
+                    pauseTransform.gameObject.SetActive(true);
+                    break;
+
+                case NowActive.Sound:
+                    _nowActive = NowActive.Sound;
+                    if (gameoverTransform.gameObject.activeSelf) gameoverTransform.gameObject.SetActive(false);
+                    if (pauseTransform.gameObject.activeSelf) pauseTransform.gameObject.SetActive(false);
+
+                    titleText.text = "SOUND";
+                    soundTransform.gameObject.SetActive(true);
+                    break;
+
+                case NowActive.Gameover:
+                    _nowActive = NowActive.Gameover;
+                    if (pauseTransform.gameObject.activeSelf) pauseTransform.gameObject.SetActive(false);
+                    if (soundTransform.gameObject.activeSelf) soundTransform.gameObject.SetActive(false);
+
+                    titleText.text = "GAME OVER";
+                    gameoverTransform.gameObject.SetActive(true);
+                    break;
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -78,11 +118,11 @@ public class UIManager : MonoBehaviour
     IEnumerator CountdownToPlay()
     {
         countdownText.text = "3";
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
         countdownText.text = "2";
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
         countdownText.text = "1";
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
         countdownText.gameObject.SetActive(false);
         EventCountDownDone();
     }
@@ -123,22 +163,6 @@ public class UIManager : MonoBehaviour
     }
 
     //팝업창 관련 설정
-    IEnumerator SceneLoadButton(CloseMode mode) //버튼에 따른 동작 설정
-    {
-        yield return new WaitForSeconds(0.25f);
-
-        switch (mode)
-        {
-            case CloseMode.Resume:
-                GameManager.Instance.gameState = GameState.Playing;
-                break;
-            case CloseMode.Restart:
-                GameManager.Instance.ReStartScene();
-                break;
-            case CloseMode.GoTitle:
-                break;
-        }
-    }
     public void OnGameStateChanged(GameState gameState) //게임 상태 변화에 따른 동작 설정
     {
         switch (gameState)
@@ -147,56 +171,96 @@ public class UIManager : MonoBehaviour
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
                 break;
             case GameState.Playing:
-                if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
                 break;
             case GameState.Pause:
                 allPopUpWindow.SetActive(true);
-                pauseUI.SetActive(true);
+                nowActive = NowActive.Pause;
+                OnPopUpWindowAnimation(pauseTransform);
                 break;
             case GameState.GameOver:
                 allPopUpWindow.SetActive(true);
-                gameoverUI.SetActive(true);
+                nowActive = NowActive.Gameover;
+                OnPopUpWindowAnimation(gameoverTransform);
                 break;
         }
     }
+
+    public void Escape()
+    {
+        switch (nowActive)
+        {
+            case NowActive.None:
+                break;
+            case NowActive.Pause:
+                ButtonPauseToResume();
+                break;
+            case NowActive.Sound:
+                ButtonSoundToPause();
+                break;
+            case NowActive.Gameover:
+                //경고창 띄우기 후 타이틀로
+                break;
+        }
+    }
+
     public void ButtonGameoverToTitle()
     {
         if (isPopUpClosing) return;
         OffWindowAnimation(gameoverTransform);
-        Invoke(nameof(OffAllWindow), 0.2f);
-        StartCoroutine(SceneLoadButton(CloseMode.GoTitle)); //타이틀로 이동
+        //타이틀로
     }
     public void ButtonGameoverToRestart()
     {
         if (isPopUpClosing) return;
         OffWindowAnimation(gameoverTransform);
-        Invoke(nameof(OffAllWindow), 0.2f);
-        StartCoroutine(SceneLoadButton(CloseMode.Restart)); //씬 재시작
+        DOVirtual.DelayedCall(0.2f, GameManager.Instance.ReStartScene, true);
     }
     public void ButtonPauseToResume()
     {
         if (isPopUpClosing) return;
         OffWindowAnimation(pauseTransform);
-        Invoke(nameof(OffAllWindow), 0.2f);
-        StartCoroutine(SceneLoadButton(CloseMode.Resume));
+        DOVirtual.DelayedCall(0.2f, () => { GameManager.Instance.gameState = GameState.Playing; }, true);
     }
     public void ButtonPauseToTitle()
     {
         if (isPopUpClosing) return;
         OffWindowAnimation(pauseTransform);
-        Invoke(nameof(OffAllWindow), 0.2f);
-        StartCoroutine(SceneLoadButton(CloseMode.GoTitle)); //타이틀로 이동
+        //경고창 띄우기 후 타이틀로
     }
 
-    void OffWindowAnimation(RectTransform windowScale) //팝업 닫을 때 애니메이션. 비활성화 기능은 별도.
+    public void ButtonPauseToSound()
+    {
+        if (isPopUpClosing) return;
+        nowActive = NowActive.Sound;
+    }
+    public void ButtonSoundToPause()
+    {
+        if (isPopUpClosing) return;
+        nowActive = NowActive.Pause;
+    }
+
+    void OnPopUpWindowAnimation(RectTransform windowScale)
+    {
+        popUpBackgroundColor.color = Color.clear;
+        popUpBackgroundColor.DOColor(new Color(0, 0, 0, 0.5f), 0.5f).SetUpdate(true);
+
+        popUpBasicTransform.localScale = Vector3.one * 0.5f;
+        windowScale.localScale = Vector3.one * 0.5f;
+
+        popUpBasicTransform.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+        windowScale.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+    }
+
+    void OffWindowAnimation(RectTransform windowScale)
     {
         isPopUpClosing = true;
-        windowScale.DOScale(0f, 0.15f).SetEase(Ease.InBack);
-        backgroundTransform.DOScale(0f, 0.15f).SetEase(Ease.InBack);
+        windowScale.DOScale(0f, 0.15f).SetEase(Ease.InBack).SetUpdate(true).OnComplete(() => { windowScale.gameObject.SetActive(false); });
+        popUpBasicTransform.DOScale(0f, 0.15f).SetEase(Ease.InBack).SetUpdate(true).OnComplete(OffAllWindow);
     }
-    void OffAllWindow() //팝업창 비활성화. 창 닫기 애니메이션 이후 실행.
+    void OffAllWindow()
     {
         allPopUpWindow.SetActive(false);
         isPopUpClosing = false;
+        nowActive = NowActive.None;
     }
 }
