@@ -10014,7 +10014,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &174319726
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11500,7 +11500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.88235295}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -11749,7 +11749,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &611250047
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17935,7 +17935,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1007751411
 Transform:
   m_ObjectHideFlags: 0
@@ -23281,6 +23281,7 @@ GameObject:
   - component: {fileID: 1270490247}
   - component: {fileID: 1270490246}
   - component: {fileID: 1270490245}
+  - component: {fileID: 1270490248}
   m_Layer: 5
   m_Name: warningText
   m_TagString: Untagged
@@ -23362,6 +23363,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1270490243}
   m_CullTransparentMesh: 0
+--- !u!114 &1270490248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270490243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09526fcfeb1140745934a945321fde42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  warningText: {fileID: 1270490246}
 --- !u!1 &1282798914
 GameObject:
   m_ObjectHideFlags: 0
@@ -39469,7 +39483,7 @@ MonoBehaviour:
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
+    m_FadeDuration: 0.2
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -39485,7 +39499,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1790287487}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1820830195}
+        m_MethodName: ButtonWarningToTitle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1790287487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39570,6 +39595,7 @@ MonoBehaviour:
   accelIconIdle: {fileID: 390178176}
   accelIconActive: {fileID: 1333859594}
   allPopUpWindow: {fileID: 174319725}
+  popUpWindow: {fileID: 0}
   titleText: {fileID: 1528170299}
   popUpBackgroundColor: {fileID: 174319727}
   popUpBasicTransform: {fileID: 51022419}
@@ -39577,6 +39603,7 @@ MonoBehaviour:
   pauseTransform: {fileID: 1499579670}
   soundTransform: {fileID: 503852499}
   warningWindow: {fileID: 611250046}
+  warningText: {fileID: 1270490248}
   star: {fileID: 1934295236}
   planet: {fileID: 678788599}
 --- !u!114 &1820830196
@@ -39591,6 +39618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d62ad1abcd99efb4aa3fe1fbf01ae58a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameState: 0
   screenHorizontal: 9
   screenVertical: 16
   star: {fileID: 1934295236}
@@ -45010,7 +45038,7 @@ MonoBehaviour:
   _hp: 0
   _maxHp: 100
   originOrbitalRadius: 3
-  radiusChangeSpeed: 0.037
+  radiusChangeSpeed: 0.035
   originAngulerSpeed: 270
   minRadius: 2
   speedReduction: 3
@@ -45121,7 +45149,7 @@ GameObject:
   - component: {fileID: 1957347278}
   - component: {fileID: 1957347277}
   m_Layer: 5
-  m_Name: ButtonToClose
+  m_Name: ButtonClose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45173,7 +45201,7 @@ MonoBehaviour:
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
+    m_FadeDuration: 0.2
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -45189,7 +45217,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1957347278}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1820830195}
+        m_MethodName: ButtonWarningClose
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1957347278
 MonoBehaviour:
   m_ObjectHideFlags: 0

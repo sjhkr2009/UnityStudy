@@ -79,7 +79,7 @@ public class Star : Player
         }
         else if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) >= 0.01f) //목표 반지름과의 차이가 크면 거리에 따라 이동시킨다
         {
-            _targetRadius = Mathf.Lerp(currentRadius, targetRadius, radiusChangeSpeed * orbitalSpeedFactor);
+            _targetRadius = Mathf.Lerp(currentRadius, targetRadius, radiusChangeSpeed);
             EventRadiusChange(_targetRadius);
         }
 

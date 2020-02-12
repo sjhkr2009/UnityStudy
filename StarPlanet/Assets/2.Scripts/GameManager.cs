@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     public event Action<GameState> EventGameStateChanged = e => { };
 
-    private GameState _gameState;
+    [SerializeField, ReadOnly] private GameState _gameState;
     public GameState gameState
     {
         get => _gameState;
@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
             {
                 case GameState.Ready:
                     _gameState = GameState.Ready;
+                    Time.timeScale = 1f;
                     break;
                 case GameState.Playing:
                     _gameState = GameState.Playing;
@@ -158,7 +159,7 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerDead<T>(T player) where T : Player
     {
-        gameState = GameState.GameOver;
+        if(gameState == GameState.Playing) gameState = GameState.GameOver;
     }
 
     private void OnCountDownDone()
@@ -166,17 +167,23 @@ public class GameManager : MonoBehaviour
         gameState = GameState.Playing;
     }
 
-    public void ReStartScene()
+    void SceneReset()
     {
         itemManager.AllItemEventReset();
         enemyManager.AllEnemyEventReset();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        uiManager.OffAllWindow();
+        Time.timeScale = 1f;
+    }
+
+    public void ReStartScene()
+    {
+        SceneReset();
+        SceneManager.LoadScene("Play");
     }
 
     public void LoadTitleScene()
     {
-        itemManager.AllItemEventReset();
-        enemyManager.AllEnemyEventReset();
+        SceneReset();
         SceneManager.LoadScene("Title");
     }
 }
