@@ -172,4 +172,11 @@ public class GameManager : MonoBehaviour
         enemyManager.AllEnemyEventReset();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void LoadTitleScene()
+    {
+        itemManager.AllItemEventReset();
+        enemyManager.AllEnemyEventReset();
+        SceneManager.LoadScene("Title");
+    }
 }

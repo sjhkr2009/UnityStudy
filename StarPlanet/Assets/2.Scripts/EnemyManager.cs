@@ -158,21 +158,26 @@ public class EnemyManager : MonoBehaviour
         {
             case EnemyType.ToPlanet1:
                 particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
+                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
             case EnemyType.ToPlanet2:
                 particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
+                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
             case EnemyType.ToStar1:
                 particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
+                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
             case EnemyType.ToStar2:
                 particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
+                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
 
         }
-
-        if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
-        else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
     }
 
     public void AllEnemyEventReset()

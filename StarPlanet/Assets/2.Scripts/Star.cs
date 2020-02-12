@@ -72,14 +72,14 @@ public class Star : Player
 
         //목표 반지름이 다를 경우 반지름 변화 및 이벤트 발동
         float _targetRadius = currentRadius;
-        if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) < 0.01f) //목표 반지름과 거의 같으면 동일하게 만든다
+        if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) < 0.01f) //목표 반지름과 거의 같으면 동일하게 만들어 더 이상 if문을 발동시키지 않는다 (불필요한 연산 방지)
         {
             _targetRadius = targetRadius;
             EventRadiusChange(_targetRadius);
         }
         else if (targetRadius != currentRadius && Mathf.Abs(targetRadius - currentRadius) >= 0.01f) //목표 반지름과의 차이가 크면 거리에 따라 이동시킨다
         {
-            _targetRadius = Mathf.Lerp(currentRadius, targetRadius, radiusChangeSpeed);
+            _targetRadius = Mathf.Lerp(currentRadius, targetRadius, radiusChangeSpeed * orbitalSpeedFactor);
             EventRadiusChange(_targetRadius);
         }
 
