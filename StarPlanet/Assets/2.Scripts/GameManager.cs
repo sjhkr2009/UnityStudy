@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public enum GameState { Ready, Playing, Pause, GameOver }
 
@@ -67,12 +68,11 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Scripts")] [SerializeField] FeverManager feverManager;   public FeverManager FeverManager => feverManager;
 
     Vector3 mousePos;
-    public event Action<Vector3> EventOnClick;
+    //public event Action<Vector3> EventOnClick;
 
     private void Awake()
     {
         _instance = this;
-        gameState = GameState.Ready;
 
         if (uiManager == null) uiManager = GetComponent<UIManager>();
         if (enemyManager == null) enemyManager = GetComponent<EnemyManager>();
@@ -93,12 +93,21 @@ public class GameManager : MonoBehaviour
         EventGameStateChanged += star.OnGameStateChanged;
         EventGameStateChanged += uiManager.OnGameStateChanged;
 
-        uiManager.EventCountDownDone += OnCountDownDone;
-
         scoreManager.EventOnScoreChanged += uiManager.ScoreTextChange;
+        scoreManager.EventOnGameOver += uiManager.OnGameOverScorePrint;
 
         feverManager.EventOnFeverTime += star.OnFeverTime;
         feverManager.EventExitFeverTime += star.ExitFeverTime;
+
+        gameState = GameState.Ready;
+        DOVirtual.DelayedCall(4f, () =>
+        {
+            if (gameState == GameState.Ready)
+            {
+                gameState = GameState.Playing;
+                Debug.Log("강제 시작");
+            }
+        });
     }
 
     void Start()
@@ -118,9 +127,8 @@ public class GameManager : MonoBehaviour
         EventGameStateChanged -= star.OnGameStateChanged;
         EventGameStateChanged -= uiManager.OnGameStateChanged;
 
-        uiManager.EventCountDownDone -= OnCountDownDone;
-
         scoreManager.EventOnScoreChanged -= uiManager.ScoreTextChange;
+        scoreManager.EventOnGameOver -= uiManager.OnGameOverScorePrint;
 
         feverManager.EventOnFeverTime -= star.OnFeverTime;
         feverManager.EventExitFeverTime -= star.ExitFeverTime;
@@ -169,11 +177,6 @@ public class GameManager : MonoBehaviour
     private void OnPlayerDead<T>(T player) where T : Player
     {
         if(gameState == GameState.Playing) gameState = GameState.GameOver;
-    }
-
-    private void OnCountDownDone()
-    {
-        gameState = GameState.Playing;
     }
 
     void SceneReset()

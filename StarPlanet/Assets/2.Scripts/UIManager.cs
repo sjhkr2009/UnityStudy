@@ -34,15 +34,14 @@ public class UIManager : MonoBehaviour
     [BoxGroup("Pop-Up Window")] [SerializeField] RectTransform soundTransform;
     [BoxGroup("Pop-Up Window")] [SerializeField] GameObject warningWindow;
     [BoxGroup("Pop-Up Window")] [SerializeField] WarningText warningText;
+    [BoxGroup("Pop-Up Window")] [SerializeField] Text totalScoreText;
+    [BoxGroup("Pop-Up Window")] [SerializeField] Text bestScoreText;
 
     [BoxGroup("Object")] [SerializeField] Star star;
     [BoxGroup("Object")] [SerializeField] Planet planet;
 
-    public event Action EventCountDownDone = () => { };
-
     bool isPopUpClosing = false;
     bool isWarningActive = false;
-    int countdownNumber = 3;
 
     private NowActive _nowActive;
     public NowActive nowActive
@@ -88,9 +87,6 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        countdownNumber = 3;
-        StartCoroutine(CountdownToPlay());
-
         if(popUpWindow == null) popUpWindow = allPopUpWindow.GetComponent<PopUpWindow>();
         if (warningText == null) warningText = FindObjectOfType<WarningText>();
 
@@ -131,28 +127,21 @@ public class UIManager : MonoBehaviour
         orbitalRadiusUI.transform.localScale = Vector3.one * radius * 2;
     }
 
-    IEnumerator CountdownToPlay()
-    {
-        countdownText.text = "3";
-        yield return new WaitForSeconds(1f);
-        countdownText.text = "2";
-        yield return new WaitForSeconds(1f);
-        countdownText.text = "1";
-        yield return new WaitForSeconds(1f);
-        countdownText.gameObject.SetActive(false);
-        EventCountDownDone();
-    }
     void CountdownTextChange(int count)
     {
         if(count == 0)
         {
             countdownText.text = "Start!";
+            countdownText.DOFade(1f, 0f).SetUpdate(true);
             countdownText.transform.localScale = Vector3.one * 1.5f;
-            //약 0.5초 후 gameState 변경
+            DOVirtual.DelayedCall(0.5f, () => { countdownText.gameObject.SetActive(false); GameManager.Instance.gameState = GameState.Playing; });
+
+            return;
         }
         
         countdownText.text = count.ToString();
         countdownText.transform.localScale = Vector3.one * 3f;
+        countdownText.DOFade(1f, 0f).SetUpdate(true);
         countdownText.transform.DOScale(1f, 1f).SetEase(Ease.OutCirc).SetUpdate(true);
         countdownText.DOFade(0f, 1f).SetEase(Ease.InCirc).SetUpdate(true)
             .OnComplete(() =>
@@ -196,6 +185,18 @@ public class UIManager : MonoBehaviour
         star.CancelAccelerate();
     }
 
+    public void OnGameOverScorePrint(int score, bool isBestScore)
+    {
+        totalScoreText.text = score.ToString();
+
+        if (isBestScore)
+        {
+            bestScoreText.text = score.ToString();
+            //기록 갱신 표시
+        }
+    }
+
+
     //팝업창 관련 설정
     public void OnGameStateChanged(GameState gameState) //게임 상태 변화에 따른 동작 설정
     {
@@ -203,8 +204,10 @@ public class UIManager : MonoBehaviour
         {
             case GameState.Ready:
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
+                CountdownTextChange(3);
                 break;
             case GameState.Playing:
+                if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
                 break;
             case GameState.Pause:
                 allPopUpWindow.SetActive(true);

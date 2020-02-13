@@ -7,9 +7,9 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     public event Action<int> EventOnScoreChanged = n => { };
+    public event Action<int, bool> EventOnGameOver = (n,b) => { }; //최고 점수를 갱신했다면 true
 
     [SerializeField, ReadOnly] private int _score;
-    [SerializeField, ReadOnly] private int bestScore;
 
     [SerializeField] private int scoreTier1;
     [SerializeField] private int scoreTier2;
@@ -19,6 +19,12 @@ public class ScoreManager : MonoBehaviour
     private void Awake()
     {
         score = 0;
+    }
+
+    public int bestScore
+    {
+        get => PlayerPrefs.GetInt(nameof(bestScore), 0);
+        set => PlayerPrefs.SetInt(nameof(bestScore), value);
     }
 
     public int score
@@ -59,4 +65,34 @@ public class ScoreManager : MonoBehaviour
 
     public void GetScore(Enemy enemy, int _none) { AddScore(ScoreCalculator(enemy)); }
     public void GetScore(Enemy enemy) { AddScore(ScoreCalculator(enemy)); }
+
+    public void OnGameStateChanged(GameState gameState) //게임 상태 변화에 따른 동작 설정
+    {
+        switch (gameState)
+        {
+            case GameState.Ready:
+                break;
+            case GameState.Playing:
+                break;
+            case GameState.Pause:
+                break;
+            case GameState.GameOver:
+                BestScoreCheck();
+                break;
+        }
+    }
+
+    private void BestScoreCheck()
+    {
+        if (score > bestScore)
+        {
+            bestScore = score;
+            EventOnGameOver(score, true);
+        }
+        else
+        {
+            EventOnGameOver(score, false);
+        }
+
+    }
 }

@@ -25,7 +25,7 @@ public class ItemHeal : ItemBase
         }
         else if (other.CompareTag("Planet"))
         {
-            EventOnHealingPlanet(this, healValue);
+            EventOnHealingPlanet(this, healValue * 2);
         }
     }
 
