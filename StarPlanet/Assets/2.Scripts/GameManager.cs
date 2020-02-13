@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
             {
                 case GameState.Ready:
                     _gameState = GameState.Ready;
-                    Time.timeScale = 1f;
+                    Time.timeScale = 0f;
                     break;
                 case GameState.Playing:
                     _gameState = GameState.Playing;
@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Scripts")] [SerializeField] PoolManager poolManager;     public PoolManager PoolManager => poolManager;
     [BoxGroup("Scripts")] [SerializeField] ParticleManager particleManager; public ParticleManager ParticleManager => particleManager;
     [BoxGroup("Scripts")] [SerializeField] ItemManager itemManager;     public ItemManager ItemManager => itemManager;
+    [BoxGroup("Scripts")] [SerializeField] FeverManager feverManager;   public FeverManager FeverManager => feverManager;
 
     Vector3 mousePos;
     public event Action<Vector3> EventOnClick;
@@ -72,12 +73,14 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
         gameState = GameState.Ready;
-        if(uiManager == null) uiManager = GetComponent<UIManager>();
+
+        if (uiManager == null) uiManager = GetComponent<UIManager>();
         if (enemyManager == null) enemyManager = GetComponent<EnemyManager>();
         if (soundManager == null) soundManager = GetComponent<SoundManager>();
         if (scoreManager == null) scoreManager = GetComponent<ScoreManager>();
         if (poolManager == null) poolManager = GetComponent<PoolManager>();
         if (particleManager == null) particleManager = GetComponent<ParticleManager>();
+        if (feverManager == null) feverManager = GetComponent<FeverManager>();
         if (star == null) star = FindObjectOfType<Star>();
         if (planet == null) planet = FindObjectOfType<Planet>();
 
@@ -93,6 +96,9 @@ public class GameManager : MonoBehaviour
         uiManager.EventCountDownDone += OnCountDownDone;
 
         scoreManager.EventOnScoreChanged += uiManager.ScoreTextChange;
+
+        feverManager.EventOnFeverTime += star.OnFeverTime;
+        feverManager.EventExitFeverTime += star.ExitFeverTime;
     }
 
     void Start()
@@ -115,6 +121,9 @@ public class GameManager : MonoBehaviour
         uiManager.EventCountDownDone -= OnCountDownDone;
 
         scoreManager.EventOnScoreChanged -= uiManager.ScoreTextChange;
+
+        feverManager.EventOnFeverTime -= star.OnFeverTime;
+        feverManager.EventExitFeverTime -= star.ExitFeverTime;
     }
 
     void Update()

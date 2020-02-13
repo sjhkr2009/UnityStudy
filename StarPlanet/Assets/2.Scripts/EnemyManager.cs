@@ -10,16 +10,23 @@ public class EnemyManager : MonoBehaviour
     [BoxGroup("Components"), SerializeField] SoundManager soundManager;
     [BoxGroup("Components"), SerializeField] ParticleManager particleManager;
 
-    [BoxGroup("Spawn Control"), SerializeField] float minSpawnDelay;
-    [BoxGroup("Spawn Control"), SerializeField] float maxSpawnDelay;
+    [BoxGroup("Spawn Control"), SerializeField] float spawnDelay;
 
     //높은 티어의 적이 스폰될 확률을 0과 1 사이의 숫자로 입력합니다. 높은 티어부터 적용되어야 하며, 하위 티어 유닛의 소환 확률은 상위 티어 유닛의 확률을 뺀 부분이 됩니다.
     //예) tier4Probability = 0f, tier3Probability = 0.05f, tier2Probability = 0.2f 인 경우, 티어3 유닛이 5% 확률, 티어2 유닛이 15% 확률, 나머지 80% 확률로 티어1 유닛이 소환됩니다.
+    //단, 높은 티어의 유닛이 소환되면 쿨타임이 적용되어, 쿨타임 동안 해당 티어의 적은 생성되지 않습니다.
     [BoxGroup("Spawn Control"), SerializeField] float tier2Probability;
+    private bool isTier2cooltime = false;
     [BoxGroup("Spawn Control"), SerializeField] float tier3Probability;
+    private bool isTier3cooltime = false;
     [BoxGroup("Spawn Control"), SerializeField] float tier4Probability;
+    private bool isTier4cooltime = false;
+    [BoxGroup("Spawn Control"), SerializeField] float tier2cooltime;
+    [BoxGroup("Spawn Control"), SerializeField] float tier3cooltime;
+    [BoxGroup("Spawn Control"), SerializeField] float tier4cooltime;
 
     float screenView;
+    FeverManager feverManager;
 
     void Start()
     {
@@ -29,6 +36,7 @@ public class EnemyManager : MonoBehaviour
         if (particleManager == null) particleManager = GameManager.Instance.ParticleManager;
 
         screenView = GameManager.Instance.screenHorizontal / GameManager.Instance.screenVertical;
+        feverManager = GameManager.Instance.FeverManager;
         StartCoroutine(EnemySpawn());
     }
 
@@ -39,6 +47,7 @@ public class EnemyManager : MonoBehaviour
             yield return null;
             if (GameManager.Instance.gameState != GameState.Playing) continue;
 
+            float spawnDelay = Random.Range(this.spawnDelay * 0.8f, this.spawnDelay * 1.2f);
             float cameraSize = Camera.main.orthographicSize;
 
             float minX = -cameraSize * screenView - 1f;
@@ -57,17 +66,18 @@ public class EnemyManager : MonoBehaviour
 
             if (Random.value < 0.5f) //To Planet형 유닛 생성
             {
-                if(Random.value < tier4Probability)
+                if(Random.value < tier4Probability && !isTier4cooltime)
                 {
-
+                    StartCoroutine(SpawnCooldown(4));
                 }
-                else if(Random.value < tier3Probability)
+                else if(Random.value < tier3Probability && !isTier3cooltime)
                 {
-
+                    StartCoroutine(SpawnCooldown(3));
                 }
-                else if(Random.value < tier2Probability)
+                else if(Random.value < tier2Probability && !isTier2cooltime)
                 {
                     enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP2, position, Quaternion.LookRotation(Vector3.zero - position));
+                    StartCoroutine(SpawnCooldown(2));
                 }
                 else
                 {
@@ -76,17 +86,31 @@ public class EnemyManager : MonoBehaviour
             }
            else //To Star형 유닛 생성
             {
-                if (Random.value < tier4Probability)
+                if (Random.value < tier4Probability && !isTier4cooltime)
                 {
-
+                    StartCoroutine(SpawnCooldown(4));
                 }
-                else if (Random.value < tier3Probability)
+                else if (Random.value < tier3Probability && !isTier3cooltime)
                 {
+                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
+                    AddEventToEnemy(enemy);
+                    yield return new WaitForSeconds(0.25f);
 
+                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
+                    AddEventToEnemy(enemy);
+                    yield return new WaitForSeconds(0.25f);
+
+                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
+                    AddEventToEnemy(enemy);
+                    yield return new WaitForSeconds(0.25f);
+
+                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
+                    StartCoroutine(SpawnCooldown(3));
                 }
-                else if (Random.value < tier2Probability)
+                else if (Random.value < tier2Probability && !isTier2cooltime)
                 {
                     enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS2, position, Quaternion.LookRotation(Vector3.zero - position));
+                    StartCoroutine(SpawnCooldown(2));
                 }
                 else
                 {
@@ -96,8 +120,31 @@ public class EnemyManager : MonoBehaviour
 
             AddEventToEnemy(enemy);
 
-            float spawnDelay = Random.Range(minSpawnDelay, maxSpawnDelay);
             yield return new WaitForSeconds(spawnDelay);
+        }
+    }
+
+    IEnumerator SpawnCooldown(int tier)
+    {
+        switch (tier)
+        {
+            case 2:
+                isTier2cooltime = true;
+                yield return new WaitForSeconds(tier2cooltime);
+                isTier2cooltime = false;
+                break;
+            case 3:
+                isTier3cooltime = true;
+                yield return new WaitForSeconds(tier3cooltime);
+                isTier3cooltime = false;
+                break;
+            case 4:
+                isTier4cooltime = true;
+                yield return new WaitForSeconds(tier4cooltime);
+                isTier4cooltime = false;
+                break;
+            default:
+                yield break;
         }
     }
 
@@ -177,6 +224,18 @@ public class EnemyManager : MonoBehaviour
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
 
+        }
+    }
+
+    void AddFeverGauge(EnemyType type)
+    {
+        if(type == EnemyType.ToPlanet1 || type == EnemyType.ToStar1)
+        {
+            feverManager.GetFeverCount(2);
+        }
+        else if (type == EnemyType.ToPlanet2 || type == EnemyType.ToStar2)
+        {
+            feverManager.GetFeverCount(5);
         }
     }
 

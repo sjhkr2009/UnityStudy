@@ -15,10 +15,10 @@ public class Enemy : MonoBehaviour
     [BoxGroup("Basic"), SerializeField] private int damage;
     [BoxGroup("Basic"), SerializeField] private int healing;
 
-    [TabGroup("Type 1"), SerializeField] private float moveSpeed;
+    [TabGroup("Direct Move"), SerializeField] private float moveSpeed;
 
-    [TabGroup("Type 2"), SerializeField] private float radiusReduceSpeed;
-    [TabGroup("Type 2"), SerializeField] private float angulerSpeed;
+    [TabGroup("Rotate Move"), SerializeField] private float radiusReduceSpeed;
+    [TabGroup("Rotate Move"), SerializeField] private float angulerSpeed;
 
     public event Action<Enemy, int> EventContactCorrect;
     public event Action<Enemy, int> EventContactWrong;
@@ -49,7 +49,6 @@ public class Enemy : MonoBehaviour
             EventOnExplosion(this);
         }
     }
-
 
 
     private void OnEnable()

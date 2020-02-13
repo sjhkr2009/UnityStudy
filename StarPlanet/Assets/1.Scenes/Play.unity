@@ -39565,6 +39565,7 @@ GameObject:
   - component: {fileID: 1820830201}
   - component: {fileID: 1820830202}
   - component: {fileID: 1820830203}
+  - component: {fileID: 1820830204}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -39630,6 +39631,7 @@ MonoBehaviour:
   poolManager: {fileID: 1820830198}
   particleManager: {fileID: 1820830200}
   itemManager: {fileID: 1820830203}
+  feverManager: {fileID: 1820830204}
 --- !u!4 &1820830197
 Transform:
   m_ObjectHideFlags: 0
@@ -39711,11 +39713,13 @@ MonoBehaviour:
   scoreManager: {fileID: 1820830202}
   soundManager: {fileID: 1820830201}
   particleManager: {fileID: 1820830200}
-  minSpawnDelay: 1
-  maxSpawnDelay: 3
+  spawnDelay: 0
   tier2Probability: 0.2
   tier3Probability: 0
   tier4Probability: 0
+  tier2cooltime: 0
+  tier3cooltime: 0
+  tier4cooltime: 0
 --- !u!114 &1820830200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39788,6 +39792,22 @@ MonoBehaviour:
   planet: {fileID: 678788596}
   minDelayOfHealkit: 10
   maxDelayOfHealkit: 15
+--- !u!114 &1820830204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820830194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c7f5f6aae385244ac0ce0f1188e49a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  feverDuration: 8
+  currentFeverCount: 0
+  maxFeverCount: 100
+  isFeverTime: 0
 --- !u!1 &1836246080
 GameObject:
   m_ObjectHideFlags: 0
@@ -45039,7 +45059,7 @@ MonoBehaviour:
   _maxHp: 100
   originOrbitalRadius: 3
   radiusChangeSpeed: 0.035
-  originAngulerSpeed: 270
+  maxAngulerSpeed: 0
   minRadius: 2
   speedReduction: 3
   trailParticle: {fileID: 1732517088}

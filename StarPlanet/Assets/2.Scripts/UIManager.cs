@@ -42,6 +42,7 @@ public class UIManager : MonoBehaviour
 
     bool isPopUpClosing = false;
     bool isWarningActive = false;
+    int countdownNumber = 3;
 
     private NowActive _nowActive;
     public NowActive nowActive
@@ -87,6 +88,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        countdownNumber = 3;
         StartCoroutine(CountdownToPlay());
 
         if(popUpWindow == null) popUpWindow = allPopUpWindow.GetComponent<PopUpWindow>();
@@ -132,13 +134,31 @@ public class UIManager : MonoBehaviour
     IEnumerator CountdownToPlay()
     {
         countdownText.text = "3";
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1f);
         countdownText.text = "2";
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1f);
         countdownText.text = "1";
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
         EventCountDownDone();
+    }
+    void CountdownTextChange(int count)
+    {
+        if(count == 0)
+        {
+            countdownText.text = "Start!";
+            countdownText.transform.localScale = Vector3.one * 1.5f;
+            //약 0.5초 후 gameState 변경
+        }
+        
+        countdownText.text = count.ToString();
+        countdownText.transform.localScale = Vector3.one * 3f;
+        countdownText.transform.DOScale(1f, 1f).SetEase(Ease.OutCirc).SetUpdate(true);
+        countdownText.DOFade(0f, 1f).SetEase(Ease.InCirc).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                CountdownTextChange(count - 1);
+            });
     }
 
     public void OnPlayerHpChanged(int value, Player player)
