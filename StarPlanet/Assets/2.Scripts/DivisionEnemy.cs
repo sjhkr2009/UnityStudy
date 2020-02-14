@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
-public class DivisionEnemy : MonoBehaviour
+public class DivisionEnemy : Enemy
 {
-    // Start is called before the first frame update
+    //[ReadOnly] float 
+
     void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 }

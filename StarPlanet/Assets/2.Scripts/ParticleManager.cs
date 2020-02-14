@@ -60,4 +60,25 @@ public class ParticleManager : MonoBehaviour
                 break;
         }
     }
+    public void SpawnParticle(ParticleType particleType, Vector3 _transform)
+    {
+        switch (particleType)
+        {
+            case ParticleType.DestroyTPsmall:
+                poolManager.Spawn(ObjectPool.ParticleTP1, _transform, Quaternion.Euler(0f, 90f, 0f));
+                break;
+            case ParticleType.DestroyTSsmall:
+                poolManager.Spawn(ObjectPool.ParticleTS1, _transform, Quaternion.Euler(0f, 90f, 0f));
+                break;
+            case ParticleType.NormalExplosion:
+                poolManager.Spawn(ObjectPool.ParticleExplosion, _transform, Quaternion.Euler(90f, 0f, 0f));
+                break;
+            case ParticleType.HexagonExplosion:
+                poolManager.Spawn(ObjectPool.ParticleHexagonExp, _transform, Quaternion.identity);
+                break;
+            case ParticleType.Healing:
+                poolManager.Spawn(ObjectPool.ParticleHealing, _transform, Quaternion.Euler(-90f, 0f, 0f));
+                break;
+        }
+    }
 }

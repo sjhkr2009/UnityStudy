@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-public enum EnemyType { ToPlanet1, ToStar1, ToPlanet2, ToStar2 }
+using DG.Tweening;
+
+public enum EnemyType { ToPlanet1, ToStar1, ToPlanet2, ToStar2, ToPlanet3, ToStar3, ToPlanet4, ToStar4 }
 
 public class Enemy : MonoBehaviour
 {
@@ -15,14 +17,18 @@ public class Enemy : MonoBehaviour
     [BoxGroup("Basic"), SerializeField] private int damage;
     [BoxGroup("Basic"), SerializeField] private int healing;
 
-    [TabGroup("Direct Move"), SerializeField] private float moveSpeed;
+    [TabGroup("Direct Move")] public float moveSpeed;
 
     [TabGroup("Rotate Move"), SerializeField] private float radiusReduceSpeed;
     [TabGroup("Rotate Move"), SerializeField] private float angulerSpeed;
 
+    [TabGroup("Divide"), SerializeField] private float divideMinDistance;
+    private float divideDistance;
+
     public event Action<Enemy, int> EventContactCorrect;
     public event Action<Enemy, int> EventContactWrong;
     public event Action<Enemy> EventOnExplosion;
+    public event Action<Vector3> EventOnDivide;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -55,13 +61,19 @@ public class Enemy : MonoBehaviour
     {
         if(targetType != "Star" && targetType != "Planet")
         {
-            if (enemyType == EnemyType.ToPlanet1 || enemyType == EnemyType.ToPlanet2) targetType = "Planet";
-            else if (enemyType == EnemyType.ToStar1 || enemyType == EnemyType.ToStar2) targetType = "Star";
+            if (enemyType == EnemyType.ToPlanet1 || enemyType == EnemyType.ToPlanet2 || enemyType == EnemyType.ToPlanet3 || enemyType == EnemyType.ToPlanet4) targetType = "Planet";
+            else if (enemyType == EnemyType.ToStar1 || enemyType == EnemyType.ToStar2 || enemyType == EnemyType.ToStar3 || enemyType == EnemyType.ToStar4) targetType = "Star";
         }
         if (avoidType != "Star" && avoidType != "Planet")
         {
-            if (enemyType == EnemyType.ToPlanet1 || enemyType == EnemyType.ToPlanet2) avoidType = "Star";
-            else if (enemyType == EnemyType.ToStar1 || enemyType == EnemyType.ToStar2) avoidType = "Planet";
+            if (enemyType == EnemyType.ToPlanet1 || enemyType == EnemyType.ToPlanet2 || enemyType == EnemyType.ToPlanet3 || enemyType == EnemyType.ToPlanet4) avoidType = "Star";
+            else if (enemyType == EnemyType.ToStar1 || enemyType == EnemyType.ToStar2 || enemyType == EnemyType.ToStar3 || enemyType == EnemyType.ToStar4) avoidType = "Planet";
+        }
+
+        if (enemyType == EnemyType.ToPlanet4)
+        {
+            divideDistance = UnityEngine.Random.Range(divideMinDistance, divideMinDistance * 1.5f);
+            transform.localScale = Vector3.one;
         }
     }
 
@@ -91,7 +103,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    private void Update()
+    protected virtual void Update()
     {
         if (GameManager.Instance.gameState != GameState.Playing) return;
 
@@ -109,6 +121,30 @@ public class Enemy : MonoBehaviour
             case EnemyType.ToStar2:
                 RotateMove(false);
                 break;
+            case EnemyType.ToPlanet3:
+                Move();
+                break;
+            case EnemyType.ToStar3:
+                RotateMove(false);
+                break;
+            case EnemyType.ToPlanet4:
+                if (Vector3.Distance(transform.position, Vector3.zero) > divideDistance) Move();
+                else Divide();
+                break;
+            case EnemyType.ToStar4:
+                Move();
+                break;
         }
+    }
+
+    private void Divide()
+    {
+        transform.DORotate(new Vector3(0f, 1080f, 0f), 2f).SetEase(Ease.InQuad);
+        transform.DOScale(0.1f, 2f).SetEase(Ease.InCirc).OnComplete(OnDivideSpawn);
+    }
+    void OnDivideSpawn()
+    {
+        EventOnDivide(transform.position);
+        gameObject.SetActive(false);
     }
 }

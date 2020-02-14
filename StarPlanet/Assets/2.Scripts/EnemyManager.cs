@@ -24,6 +24,7 @@ public class EnemyManager : MonoBehaviour
     [BoxGroup("Spawn Control"), SerializeField] float tier2cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier3cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier4cooltime;
+    [BoxGroup("Spawn Control"), SerializeField] int tier3TSSpawnCount = 5;
 
     float screenView;
     FeverManager feverManager;
@@ -64,14 +65,16 @@ public class EnemyManager : MonoBehaviour
             Vector3 position = new Vector3(posX, 0f, posY);
             Enemy enemy = null;
 
-            if (Random.value < 0.5f) //To Planet형 유닛 생성
+            if (Random.value < 0.4f) //To Planet형 유닛 생성
             {
                 if(Random.value < tier4Probability && !isTier4cooltime)
                 {
+                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP4, position, Quaternion.LookRotation(Vector3.zero - position));
                     StartCoroutine(SpawnCooldown(4));
                 }
                 else if(Random.value < tier3Probability && !isTier3cooltime)
                 {
+                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP3, position, Quaternion.LookRotation(Vector3.zero - position));
                     StartCoroutine(SpawnCooldown(3));
                 }
                 else if(Random.value < tier2Probability && !isTier2cooltime)
@@ -88,23 +91,20 @@ public class EnemyManager : MonoBehaviour
             {
                 if (Random.value < tier4Probability && !isTier4cooltime)
                 {
+                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS4, position, Quaternion.LookRotation(Vector3.zero - position));
                     StartCoroutine(SpawnCooldown(4));
                 }
                 else if (Random.value < tier3Probability && !isTier3cooltime)
                 {
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
-                    AddEventToEnemy(enemy);
-                    yield return new WaitForSeconds(0.25f);
+                    for (int i = 0; i < tier3TSSpawnCount - 1; i++)
+                    {
+                        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS3, position, Quaternion.LookRotation(Vector3.zero - position));
+                        AddEventToEnemy(enemy);
+                        yield return new WaitForSeconds(0.2f);
+                    }
 
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
-                    AddEventToEnemy(enemy);
-                    yield return new WaitForSeconds(0.25f);
-
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
-                    AddEventToEnemy(enemy);
-                    yield return new WaitForSeconds(0.25f);
-
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS3, position, Quaternion.LookRotation(Vector3.zero - position));
+                    spawnDelay = Mathf.Max(spawnDelay - (0.2f * tier3TSSpawnCount), 0.1f);
                     StartCoroutine(SpawnCooldown(3));
                 }
                 else if (Random.value < tier2Probability && !isTier2cooltime)
@@ -148,6 +148,35 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    void OnDivideSpawn(Vector3 spawnPos)
+    {
+        particleManager.SpawnParticle(ParticleType.DestroyTPsmall, spawnPos);
+
+        Enemy enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + Vector3.forward));
+        AddEventToEnemy(enemy);
+
+        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + Vector3.back));
+        AddEventToEnemy(enemy);
+
+        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + Vector3.right));
+        AddEventToEnemy(enemy);
+
+        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + Vector3.left));
+        AddEventToEnemy(enemy);
+
+        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + new Vector3(1, 0, 1)));
+        AddEventToEnemy(enemy);
+
+        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + new Vector3(-1, 0, 1)));
+        AddEventToEnemy(enemy);
+
+        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + new Vector3(1, 0, -1)));
+        AddEventToEnemy(enemy);
+
+        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + new Vector3(-1, 0, -1)));
+        AddEventToEnemy(enemy);
+    }
+
     void AddEventToEnemy(Enemy enemy)
     {
         enemy.EventContactCorrect += OnContactCorrect;
@@ -157,6 +186,8 @@ public class EnemyManager : MonoBehaviour
 
         enemy.EventOnExplosion += OnExplosion;
         enemy.EventOnExplosion += scoreManager.GetScore;
+
+        if (enemy.EnemyType == EnemyType.ToPlanet4) enemy.EventOnDivide += OnDivideSpawn;
     }
 
     void DeleteEventToEnemy(Enemy enemy)
@@ -168,6 +199,8 @@ public class EnemyManager : MonoBehaviour
 
         enemy.EventOnExplosion -= OnExplosion;
         enemy.EventOnExplosion -= scoreManager.GetScore;
+
+        if (enemy.EnemyType == EnemyType.ToPlanet4) enemy.EventOnDivide -= OnDivideSpawn;
     }
 
     public void DespawnEnemy(Enemy targetEnemy)
@@ -180,7 +213,8 @@ public class EnemyManager : MonoBehaviour
     {
         if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(false, healing);
         else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(true, healing);
-        CallFX(owner.EnemyType, true, owner.transform);
+        CallFXOnDestory(owner.EnemyType, true, owner.transform);
+        AddFeverGauge(owner.EnemyType);
         DespawnEnemy(owner);
     }
 
@@ -188,18 +222,19 @@ public class EnemyManager : MonoBehaviour
     {
         if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(true, -damage);
         else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(false, -damage);
-        CallFX(owner.EnemyType, false, owner.transform);
+        CallFXOnDestory(owner.EnemyType, false, owner.transform);
         DespawnEnemy(owner);
     }
 
     public void OnExplosion(Enemy owner)
     {
-        CallFX(owner.EnemyType, true, owner.transform);
+        CallFXOnDestory(owner.EnemyType, true, owner.transform);
+        AddFeverGauge(owner.EnemyType);
         DespawnEnemy(owner);
     }
     
 
-    void CallFX(EnemyType myType, bool isCorrect, Transform _transform)
+    void CallFXOnDestory(EnemyType myType, bool isCorrect, Transform _transform)
     {
         switch (myType)
         {

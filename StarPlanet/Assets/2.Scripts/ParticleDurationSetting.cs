@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class DestroyParticle : MonoBehaviour
+public class ParticleDurationSetting : MonoBehaviour
 {
-    [BoxGroup("Particle Setting"), SerializeField] private float particleDuration = 1f;
+    [BoxGroup("Particle Duration"), SerializeField] private float particleDuration = 1f;
 
     void OnEnable()
     {
