@@ -103,6 +103,25 @@ public class Enemy : MonoBehaviour
         transform.position = _nextPos;
     }
 
+    Vector3 RandomMoveTarget() //Enemy TP4의 목표 위치를 설정한다. 중심까지의 거리를 좁히며 랜덤한 지점으로 이동하되 Planet을 지나지 않도록 각도를 제어한다.
+    {
+        float currentRadius = Vector3.Distance(transform.position, Vector3.zero);
+        float currentAngle = Mathf.Atan2(transform.position.z, transform.position.x);
+
+        float _targetAngle = currentAngle - angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+
+        float targetRadius = currentRadius - radiusReduceSpeed * Time.deltaTime;
+
+        float _nextPosX = targetRadius * Mathf.Cos(_targetAngle);
+        float _nextPosY = targetRadius * Mathf.Sin(_targetAngle);
+        Vector3 _nextPos = new Vector3(_nextPosX, transform.position.y, _nextPosY);
+
+        transform.rotation = Quaternion.LookRotation(_nextPos);
+        transform.position = _nextPos;
+
+        return Vector3.zero;
+    }
+
 
     protected virtual void Update()
     {
