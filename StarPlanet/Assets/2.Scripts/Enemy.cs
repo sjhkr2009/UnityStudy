@@ -75,6 +75,7 @@ public class Enemy : MonoBehaviour
             divideDistance = UnityEngine.Random.Range(divideMinDistance, divideMinDistance * 1.5f);
             transform.localScale = Vector3.one;
         }
+        //else if (enemyType == EnemyType.ToStar4) moveSpeed = 1f;
     }
 
 
@@ -132,6 +133,7 @@ public class Enemy : MonoBehaviour
                 else Divide();
                 break;
             case EnemyType.ToStar4:
+                moveSpeed = Mathf.Clamp(18f / Vector3.Distance(transform.position, Vector3.zero), 1.5f, 6f);
                 Move();
                 break;
         }

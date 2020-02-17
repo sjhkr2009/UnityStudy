@@ -16867,7 +16867,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerType: 1
   _hp: 0
-  _maxHp: 100
+  _maxHp: 75
   rotateSpeed: 180
 --- !u!1 &698589204
 GameObject:
@@ -39702,10 +39702,14 @@ MonoBehaviour:
     type: 3}
   enemyToStar2: {fileID: 2365287343932799306, guid: 3ce2e63ad1e4bf840b9d028b02ea2289,
     type: 3}
-  enemyToPlanet3: {fileID: 0}
-  enemyToStar3: {fileID: 0}
-  enemyToPlanet4: {fileID: 0}
-  enemyToStar4: {fileID: 0}
+  enemyToPlanet3: {fileID: 5584719490834679125, guid: 5f829956776cc414090db01441c33edf,
+    type: 3}
+  enemyToStar3: {fileID: 5283590923181087799, guid: 2254cfbf72ada0b40963cb0d65be6e98,
+    type: 3}
+  enemyToPlanet4: {fileID: 5584719490834679125, guid: 5f829956776cc414090db01441c33edf,
+    type: 3}
+  enemyToStar4: {fileID: 5639063045393188464, guid: a9cf881e557d786489c3bcef57bf4f26,
+    type: 3}
   itemHexagonBomb: {fileID: 8266072259651185375, guid: bfaab80cbff52004ca7ae9692e2b8f7a,
     type: 3}
   itemFixedBomb: {fileID: 6164865087453595385, guid: 3225764b6a78a6f428ece07a0423c40e,
@@ -39758,12 +39762,12 @@ MonoBehaviour:
   soundManager: {fileID: 1820830201}
   particleManager: {fileID: 1820830200}
   spawnDelay: 3
-  tier2Probability: 0.2
-  tier3Probability: 0
-  tier4Probability: 0
+  tier2Probability: 0.4
+  tier3Probability: 0.2
+  tier4Probability: 0.1
   tier2cooltime: 10
-  tier3cooltime: 0
-  tier4cooltime: 0
+  tier3cooltime: 15
+  tier4cooltime: 15
   tier3TSSpawnCount: 5
 --- !u!114 &1820830200
 MonoBehaviour:

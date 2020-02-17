@@ -100,7 +100,7 @@ public class EnemyManager : MonoBehaviour
                     {
                         enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS3, position, Quaternion.LookRotation(Vector3.zero - position));
                         AddEventToEnemy(enemy);
-                        yield return new WaitForSeconds(0.2f);
+                        yield return new WaitForSeconds(0.5f);
                     }
 
                     enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS3, position, Quaternion.LookRotation(Vector3.zero - position));
@@ -248,6 +248,17 @@ public class EnemyManager : MonoBehaviour
                 if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
+            case EnemyType.ToPlanet3:
+                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
+                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
+                break;
+            case EnemyType.ToPlanet4:
+                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
+                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
+                break;
+
             case EnemyType.ToStar1:
                 particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
                 if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
@@ -258,7 +269,16 @@ public class EnemyManager : MonoBehaviour
                 if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
-
+            case EnemyType.ToStar3:
+                particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
+                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
+                break;
+            case EnemyType.ToStar4:
+                particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
+                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
+                break;
         }
     }
 
@@ -271,6 +291,18 @@ public class EnemyManager : MonoBehaviour
         else if (type == EnemyType.ToPlanet2 || type == EnemyType.ToStar2)
         {
             feverManager.GetFeverCount(5);
+        }
+        else if (type == EnemyType.ToPlanet3)
+        {
+            feverManager.GetFeverCount(10);
+        }
+        else if (type == EnemyType.ToStar3)
+        {
+            feverManager.GetFeverCount(2);
+        }
+        else if (type == EnemyType.ToPlanet4 || type == EnemyType.ToStar4)
+        {
+            feverManager.GetFeverCount(10);
         }
     }
 
