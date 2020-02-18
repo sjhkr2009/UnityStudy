@@ -31,6 +31,8 @@ public class FeverManager : MonoBehaviour
         if (currentFeverCount >= maxFeverCount) FeverTime();
     }
 
+    public void GetFeverCountPerSecond() { GetFeverCount(1); }
+
     void FeverTime()
     {
         isFeverTime = true;

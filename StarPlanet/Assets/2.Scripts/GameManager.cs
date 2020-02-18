@@ -66,9 +66,10 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Scripts")] [SerializeField] ParticleManager particleManager; public ParticleManager ParticleManager => particleManager;
     [BoxGroup("Scripts")] [SerializeField] ItemManager itemManager;     public ItemManager ItemManager => itemManager;
     [BoxGroup("Scripts")] [SerializeField] FeverManager feverManager;   public FeverManager FeverManager => feverManager;
+    [BoxGroup("Scripts")] [SerializeField] TimeManager timeManager;     public TimeManager TimeManager => timeManager;
 
     Vector3 mousePos;
-    //public event Action<Vector3> EventOnClick;
+    public event Action<Vector3> EventOnTouchScreen = n => { };
 
     private void Awake()
     {
@@ -81,6 +82,7 @@ public class GameManager : MonoBehaviour
         if (poolManager == null) poolManager = GetComponent<PoolManager>();
         if (particleManager == null) particleManager = GetComponent<ParticleManager>();
         if (feverManager == null) feverManager = GetComponent<FeverManager>();
+        if (timeManager == null) timeManager = GetComponent<TimeManager>();
         if (star == null) star = FindObjectOfType<Star>();
         if (planet == null) planet = FindObjectOfType<Planet>();
 
@@ -90,6 +92,8 @@ public class GameManager : MonoBehaviour
         planet.EventHpChanged += OnPlayerHpChanged;
         planet.EventPlayerDead += OnPlayerDead;
 
+        EventOnTouchScreen += star.TargetRadiusChange;
+
         EventGameStateChanged += star.OnGameStateChanged;
         EventGameStateChanged += uiManager.OnGameStateChanged;
 
@@ -98,6 +102,9 @@ public class GameManager : MonoBehaviour
 
         feverManager.EventOnFeverTime += star.OnFeverTime;
         feverManager.EventExitFeverTime += star.ExitFeverTime;
+
+        timeManager.EventPerOneSecond += feverManager.GetFeverCountPerSecond;
+
 
         gameState = GameState.Ready;
         DOVirtual.DelayedCall(4f, () =>
@@ -124,6 +131,8 @@ public class GameManager : MonoBehaviour
         planet.EventHpChanged -= OnPlayerHpChanged;
         planet.EventPlayerDead -= OnPlayerDead;
 
+        EventOnTouchScreen -= star.TargetRadiusChange;
+
         EventGameStateChanged -= star.OnGameStateChanged;
         EventGameStateChanged -= uiManager.OnGameStateChanged;
 
@@ -132,13 +141,14 @@ public class GameManager : MonoBehaviour
 
         feverManager.EventOnFeverTime -= star.OnFeverTime;
         feverManager.EventExitFeverTime -= star.ExitFeverTime;
+
+        timeManager.EventPerOneSecond -= feverManager.GetFeverCountPerSecond;
     }
 
     void Update()
     {
         mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
-
-        if (Input.GetMouseButton(0)) star.TargetRadiusChange(mousePos);
+        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             switch (gameState)
@@ -156,6 +166,11 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void OnClickScreen()
+    {
+        if (gameState == GameState.Playing) EventOnTouchScreen(mousePos);
     }
 
     /// <summary>
@@ -179,6 +194,9 @@ public class GameManager : MonoBehaviour
         if(gameState == GameState.Playing) gameState = GameState.GameOver;
     }
 
+    /// <summary>
+    /// Scene을 닫기 전에 호출하는 함수입니다. 오브젝트 풀링으로 생성된 모든 오브젝트의 이벤트를 초기화하고, 팝업창을 닫으며 TimeScale을 기본값으로 되돌립니다. 
+    /// </summary>
     void SceneReset()
     {
         itemManager.AllItemEventReset();

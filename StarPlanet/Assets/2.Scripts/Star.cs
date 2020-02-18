@@ -16,6 +16,7 @@ public class Star : Player
 
     [TabGroup("Child Component"), SerializeField] GameObject trailParticle;
     [TabGroup("Child Component"), SerializeField] GameObject boosterTrailParticle;
+    [TabGroup("Child Component"), SerializeField] GameObject feverParticle;
 
     [SerializeField, ReadOnly] float orbitalSpeedFactor = 1f; //각속도 계수. 평상시엔 1이며, 가속 모드일 경우에만 올라간다.
     [SerializeField] float boosterFactor = 1.8f;
@@ -43,7 +44,8 @@ public class Star : Player
         targetRadius = originOrbitalRadius;
         if(!trailParticle.activeSelf) trailParticle.SetActive(true);
         if(boosterTrailParticle.activeSelf) boosterTrailParticle.SetActive(false);
-        //피버 파티클 끄기
+        if (feverParticle.activeSelf) feverParticle.SetActive(false);
+        
         EventRadiusChange += AngularSpeedChange;
 
         originOrbitalSpeedFactor = 1f;
@@ -125,7 +127,8 @@ public class Star : Player
         originOrbitalSpeedFactor = 1.5f;
         orbitalSpeedFactor = 1.5f;
         Accelerate();
-        //파티클 변화
+        feverParticle.SetActive(true);
+        feverParticle.transform.localScale = Vector3.one;
     }
     public void ExitFeverTime()
     {
@@ -136,6 +139,7 @@ public class Star : Player
                 CancelAccelerate();
                 gameObject.tag = "Star";
             });
-        //파티클 변화
+        feverParticle.transform.DOScale(0f, 0.5f)
+            .OnComplete(() => feverParticle.SetActive(false));
     }
 }

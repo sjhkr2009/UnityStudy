@@ -222,6 +222,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 팝업창이 띄워진 상태에서 Esc 또는 스마트폰의 뒤로가기 버튼을 누를 때의 동작입니다. 현재 가장 위에 띄워져 있는 팝업창에 따라 동작을 수행합니다.
+    /// 일시정지 상태: 창을 닫고 플레이 모드로 돌아갑니다.
+    /// </summary>
     public void Escape()
     {
         if (isWarningActive)
