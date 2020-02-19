@@ -101,8 +101,11 @@ public class GameManager : MonoBehaviour
         scoreManager.EventOnScoreChanged += uiManager.ScoreTextChange;
         scoreManager.EventOnGameOver += uiManager.OnGameOverScorePrint;
 
+        feverManager.EventOnGetFeverGauge += uiManager.FeverGaugeFill;
+        feverManager.EventOnFeverTime += uiManager.OnFeverTime;
         feverManager.EventOnFeverTime += star.OnFeverTime;
         feverManager.EventExitFeverTime += star.ExitFeverTime;
+        feverManager.EventExitFeverTime += uiManager.FeverGaugeReset;
 
         timeManager.EventPerOneSecond += feverManager.GetFeverCountPerSecond;
 
@@ -141,8 +144,11 @@ public class GameManager : MonoBehaviour
         scoreManager.EventOnScoreChanged -= uiManager.ScoreTextChange;
         scoreManager.EventOnGameOver -= uiManager.OnGameOverScorePrint;
 
+        feverManager.EventOnGetFeverGauge -= uiManager.FeverGaugeFill;
+        feverManager.EventOnFeverTime -= uiManager.OnFeverTime;
         feverManager.EventOnFeverTime -= star.OnFeverTime;
         feverManager.EventExitFeverTime -= star.ExitFeverTime;
+        feverManager.EventExitFeverTime -= uiManager.FeverGaugeReset;
 
         timeManager.EventPerOneSecond -= feverManager.GetFeverCountPerSecond;
     }

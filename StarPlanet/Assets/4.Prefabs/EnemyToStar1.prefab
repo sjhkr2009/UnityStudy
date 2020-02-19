@@ -18812,11 +18812,12 @@ MonoBehaviour:
   enemyType: 1
   targetType: Star
   avoidType: Planet
-  damage: 7
+  damage: 10
   healing: 1
   moveSpeed: 1
   radiusReduceSpeed: 0
   angulerSpeed: 0
+  divideMinDistance: 0
 --- !u!1 &7146971381395180651
 GameObject:
   m_ObjectHideFlags: 0

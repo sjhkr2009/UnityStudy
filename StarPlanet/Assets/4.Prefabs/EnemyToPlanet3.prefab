@@ -44,7 +44,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.5
+  m_Radius: 1.8
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5584719490834679124
 MonoBehaviour:
@@ -63,7 +63,7 @@ MonoBehaviour:
   avoidType: Star
   damage: 34
   healing: 9
-  moveSpeed: 0.5
+  moveSpeed: 0.75
   radiusReduceSpeed: 0
   angulerSpeed: 0
   divideMinDistance: 0
@@ -9456,7 +9456,7 @@ Transform:
   m_GameObject: {fileID: 5584719491377519397}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children:
   - {fileID: 5584719491377693445}
   - {fileID: 5584719491377727095}

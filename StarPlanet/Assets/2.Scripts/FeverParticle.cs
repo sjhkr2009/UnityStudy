@@ -6,12 +6,11 @@ using Sirenix.OdinInspector;
 
 public class FeverParticle : MonoBehaviour
 {
-    [SerializeField] Transform targetPositionOnScreen;
     [SerializeField, ReadOnly] Vector3 targetPos;
 
     private void Awake()
     {
-        targetPos = Camera.main.ScreenToWorldPoint(targetPositionOnScreen.position);
+        targetPos = Camera.main.ViewportToWorldPoint(new Vector3(0.8f, 0.1125f, 0f));
     }
 
     private void OnEnable()
@@ -21,7 +20,7 @@ public class FeverParticle : MonoBehaviour
             gameObject.SetActive(false);
             return;
         }
-        if(targetPos == null || targetPos == Vector3.zero) targetPos = Camera.main.ScreenToWorldPoint(targetPositionOnScreen.position);
+        if(targetPos == null || targetPos == Vector3.zero) targetPos = Camera.main.ViewportToWorldPoint(new Vector3(0.8f, 0.1125f, 0f));
 
         float duration = Random.Range(0.8f, 1.5f);
         transform.localScale = Vector3.one;

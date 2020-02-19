@@ -7,10 +7,11 @@ using DG.Tweening;
 
 public class FeverManager : MonoBehaviour
 {
+    public event Action<float> EventOnGetFeverGauge = f => { };
     public event Action EventOnFeverTime = () => { };
     public event Action EventExitFeverTime = () => { };
 
-    [SerializeField] float feverDuration = 8f;
+    public float feverDuration = 8f;
     [ReadOnly] public int currentFeverCount = 0;
     [HideInInspector] public int maxFeverCount = 100;
     PoolManager poolManager;
@@ -35,6 +36,8 @@ public class FeverManager : MonoBehaviour
     {
         if (isFeverTime) return;
         currentFeverCount += value;
+        EventOnGetFeverGauge((float)currentFeverCount / (float)maxFeverCount);
+
         if (currentFeverCount >= maxFeverCount) FeverTime();
     }
 
@@ -59,7 +62,7 @@ public class FeverManager : MonoBehaviour
     {
         isFeverTime = true;
         EventOnFeverTime();
-        Tween tween = DOVirtual.DelayedCall(feverDuration, ExitFeverTime, false);
+        tween = DOVirtual.DelayedCall(feverDuration, ExitFeverTime, false);
     }
     void ExitFeverTime()
     {

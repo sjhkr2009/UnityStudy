@@ -23,6 +23,11 @@ public class UIManager : MonoBehaviour
     [BoxGroup("Button")] [SerializeField] GameObject accelIconIdle;
     [BoxGroup("Button")] [SerializeField] GameObject accelIconActive;
 
+    //피버 게이지 관련
+    [BoxGroup("Fever")] [SerializeField] ParticleSystem feverEffect;
+    [BoxGroup("Fever")] [SerializeField] Image feverFillArea;
+    [BoxGroup("Fever")] [SerializeField] Image feverEdge;
+
     //팝업창 관련 - 공통
     [BoxGroup("Pop-Up Window")] [SerializeField] GameObject allPopUpWindow;
     [BoxGroup("Pop-Up Window")] [SerializeField] PopUpWindow popUpWindow;
@@ -102,11 +107,7 @@ public class UIManager : MonoBehaviour
 
         accelIconActive.SetActive(false);
         allPopUpWindow.SetActive(false);
-    }
-
-    private void Start()
-    {
-        scoreText.text = "점수: 0";
+        FeverGaugeReset();
     }
 
     private void OnDestroy()
@@ -120,6 +121,11 @@ public class UIManager : MonoBehaviour
 
         popUpWindow.EventOnPopUpOpen -= OnPopUp;
         warningText.EventOnTextEnable -= WarningTextSetting;
+    }
+
+    private void Start()
+    {
+        scoreText.text = "점수: 0";
     }
 
     void RadiusChange(float radius)
@@ -148,6 +154,31 @@ public class UIManager : MonoBehaviour
             {
                 CountdownTextChange(count - 1);
             });
+    }
+
+    // 피버타임 관련 효과
+    public void FeverGaugeFill(float value)
+    {
+        feverFillArea.fillAmount = value;
+        feverEdge.color = new Color(1f, 1f, 1f, value * 0.66f);
+    }
+    public void OnFeverTime()
+    {
+        feverEffect.Play();
+        float duration = GameManager.Instance.FeverManager.feverDuration;
+
+        feverFillArea.DOFillAmount(0f, duration * 0.8f).SetEase(Ease.Linear);
+        DOVirtual.DelayedCall(duration * 0.7f, () =>
+        {
+            feverEdge.DOFade(0f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+        });
+    }
+    public void FeverGaugeReset()
+    {
+        feverEdge.DOKill();
+        feverFillArea.fillAmount = 0f;
+        feverEdge.color = new Color(1f, 1f, 1f, 0f);
+        feverEffect.Pause();
     }
 
     public void OnPlayerHpChanged(int value, Player player)
