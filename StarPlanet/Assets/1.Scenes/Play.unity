@@ -10985,7 +10985,22 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1820830196}
-          m_MethodName: OnClickScreen
+          m_MethodName: OnTouchDownScreen
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 5
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1820830196}
+          m_MethodName: OnTouchDownScreen
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -44669,6 +44684,7 @@ MonoBehaviour:
     type: 3}
   particleHealing: {fileID: 4180580671199784908, guid: 91de77472980a0540bb4529786542a7a,
     type: 3}
+  particleFever: {fileID: 0}
   audioFX: {fileID: 6667681757803919408, guid: 08e60bab54fbd7a409fae26435dc6122, type: 3}
   audioFXList: []
   enemyTP1Group: {fileID: 1910557626}
@@ -44687,6 +44703,7 @@ MonoBehaviour:
   particleExplosionGroup: {fileID: 860365597}
   particleHexagonExpGroup: {fileID: 1505062854}
   particleHealingGroup: {fileID: 1029650441}
+  particleFeverGroup: {fileID: 0}
   audioFXGroup: {fileID: 1294974128}
 --- !u!114 &1820830199
 MonoBehaviour:

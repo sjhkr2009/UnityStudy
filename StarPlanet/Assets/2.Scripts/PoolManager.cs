@@ -21,6 +21,7 @@ public enum ObjectPool
     ParticleExplosion,
     ParticleHexagonExp,
     ParticleHealing,
+    ParticleFever,
     AudioFX
 }
 
@@ -43,6 +44,7 @@ public class PoolManager : MonoBehaviour
     [SerializeField] GameObject particleExplosion;
     [SerializeField] GameObject particleHexagonExp;
     [SerializeField] GameObject particleHealing;
+    [SerializeField] GameObject particleFever;
     [SerializeField] GameObject audioFX;
 
     private List<Enemy> enemyTP1List = new List<Enemy>();
@@ -61,6 +63,7 @@ public class PoolManager : MonoBehaviour
     private List<Explosion> particleExplosionList = new List<Explosion>();
     private List<Explosion> particleHexagonExpList = new List<Explosion>();
     private List<ParticleSystem> particleHealingList = new List<ParticleSystem>();
+    private List<ParticleSystem> particleFeverList = new List<ParticleSystem>();
     [HideInInspector] public List<AudioSource> audioFXList = new List<AudioSource>();
 
     [SerializeField] Transform enemyTP1Group;
@@ -79,6 +82,7 @@ public class PoolManager : MonoBehaviour
     [SerializeField] Transform particleExplosionGroup;
     [SerializeField] Transform particleHexagonExpGroup;
     [SerializeField] Transform particleHealingGroup;
+    [SerializeField] Transform particleFeverGroup;
     [SerializeField] Transform audioFXGroup;
 
     private int enemyTP1Index = 0;
@@ -97,6 +101,7 @@ public class PoolManager : MonoBehaviour
     private int particleExplosionIndex = 0;
     private int particleHexagonExpIndex = 0;
     private int particleHealingIndex = 0;
+    private int particleFeverIndex = 0;
 
     void Awake()
     {
@@ -116,6 +121,7 @@ public class PoolManager : MonoBehaviour
         particleExplosionList = MakeObjectPool<Explosion>(particleExplosion, particleExplosionGroup);
         particleHexagonExpList = MakeObjectPool<Explosion>(particleHexagonExp, particleHexagonExpGroup, 20);
         particleHealingList = MakeObjectPool<ParticleSystem>(particleHealing, particleHealingGroup, 30);
+        particleFeverList = MakeObjectPool<ParticleSystem>(particleFever, particleFeverGroup, 100);
         audioFXList = MakeObjectPool<AudioSource>(audioFX, audioFXGroup, 20);
     }
     /// <summary>
@@ -386,6 +392,20 @@ public class PoolManager : MonoBehaviour
                 SpawnObject(particleHealingList, particleHealingIndex, position, rotation);
                 _returnObject = particleHealingList[particleHealingIndex];
                 particleHealingIndex = (particleHealingIndex + 1) % particleHealingList.Count;
+                break;
+
+            //Fever Particle
+            case ObjectPool.ParticleFever:
+                if (particleFeverList[particleFeverIndex].gameObject.activeSelf)
+                {
+                    var newItem = Instantiate(particleFever, position, rotation).GetComponent<ParticleSystem>();
+                    _returnObject = newItem;
+                    particleFeverList.Add(newItem);
+                    break;
+                }
+                SpawnObject(particleFeverList, particleFeverIndex, position, rotation);
+                _returnObject = particleFeverList[particleFeverIndex];
+                particleFeverIndex = (particleFeverIndex + 1) % particleFeverList.Count;
                 break;
 
             default:

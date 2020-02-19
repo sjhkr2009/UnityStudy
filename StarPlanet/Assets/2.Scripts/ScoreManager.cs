@@ -7,7 +7,7 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     public event Action<int> EventOnScoreChanged = n => { };
-    public event Action<int, bool> EventOnGameOver = (n,b) => { }; //최고 점수를 갱신했다면 true
+    public event Action<int, bool> EventOnGameOver = (n,b) => { }; //최고 점수를 갱신했다면 true, uiManager에서 게임오버 화면에 점수를 출력하는 용도.
 
     [SerializeField, ReadOnly] private int _score;
 
@@ -58,6 +58,18 @@ public class ScoreManager : MonoBehaviour
                 break;
             case EnemyType.ToStar2:
                 score = scoreTier2;
+                break;
+            case EnemyType.ToPlanet3:
+                score = scoreTier3;
+                break;
+            case EnemyType.ToStar3:
+                score = (int)(scoreTier3 / 4f);
+                break;
+            case EnemyType.ToPlanet4:
+                score = scoreTier4;
+                break;
+            case EnemyType.ToStar4:
+                score = scoreTier4 * 2;
                 break;
         }
         return score;

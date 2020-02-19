@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
 
         EventGameStateChanged += star.OnGameStateChanged;
         EventGameStateChanged += uiManager.OnGameStateChanged;
+        EventGameStateChanged += timeManager.OnGameStateChanged;
 
         scoreManager.EventOnScoreChanged += uiManager.ScoreTextChange;
         scoreManager.EventOnGameOver += uiManager.OnGameOverScorePrint;
@@ -135,6 +136,7 @@ public class GameManager : MonoBehaviour
 
         EventGameStateChanged -= star.OnGameStateChanged;
         EventGameStateChanged -= uiManager.OnGameStateChanged;
+        EventGameStateChanged -= timeManager.OnGameStateChanged;
 
         scoreManager.EventOnScoreChanged -= uiManager.ScoreTextChange;
         scoreManager.EventOnGameOver -= uiManager.OnGameOverScorePrint;
@@ -147,8 +149,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
-        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             switch (gameState)
@@ -168,8 +168,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnClickScreen()
+    /// <summary>
+    /// 스크린의 빈 공간을 터치하고 있는 동안 수행할 동작을 입력합니다.
+    /// </summary>
+    public void OnTouchDownScreen()
     {
+        mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
         if (gameState == GameState.Playing) EventOnTouchScreen(mousePos);
     }
 

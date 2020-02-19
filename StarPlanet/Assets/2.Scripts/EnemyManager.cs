@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using DG.Tweening;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -11,10 +12,6 @@ public class EnemyManager : MonoBehaviour
     [BoxGroup("Components"), SerializeField] ParticleManager particleManager;
 
     [BoxGroup("Spawn Control"), SerializeField] float spawnDelay;
-
-    //높은 티어의 적이 스폰될 확률을 0과 1 사이의 숫자로 입력합니다. 높은 티어부터 적용되어야 하며, 하위 티어 유닛의 소환 확률은 상위 티어 유닛의 확률을 뺀 부분이 됩니다.
-    //예) tier4Probability = 0f, tier3Probability = 0.05f, tier2Probability = 0.2f 인 경우, 티어3 유닛이 5% 확률, 티어2 유닛이 15% 확률, 나머지 80% 확률로 티어1 유닛이 소환됩니다.
-    //단, 높은 티어의 유닛이 소환되면 쿨타임이 적용되어, 쿨타임 동안 해당 티어의 적은 생성되지 않습니다.
     [BoxGroup("Spawn Control"), SerializeField] float tier2Probability;
     private bool isTier2cooltime = false;
     [BoxGroup("Spawn Control"), SerializeField] float tier3Probability;
@@ -41,6 +38,22 @@ public class EnemyManager : MonoBehaviour
         StartCoroutine(EnemySpawn());
     }
 
+    /// <summary>
+    /// 일정 주기로 적을 생성합니다.
+    /// [생성 주기: spawnDelay]
+    /// 설정된 딜레이의 80%~120% 범위에서 임의로 결정됩니다.
+    /// 여러 개체를 일정 간격으로 생성하는 Enemy To Star3 타입에도 딜레이는 변화하지 않으나, 해당 개체의 소환 동작이 끝나기 전까지는 새로운 적이 생성되지 않습니다.
+    /// 
+    /// [생성 지점: position]
+    /// 카메라의 범위를 기준으로 화면 밖 상/하단 중 하나, 화면의 폭보다 약간 넓은 범위 중 임의의 지점.
+    /// 카메라 범위에 대응하며 변경되지만, 종횡비가 변할 경우 GameManager의 screenHorizontal, screenVertical을 조정해주세요. 단, 화면의 폭이 높이보다 좁아야 합니다.
+    /// 
+    /// [생성자 타입: Probability]
+    /// 높은 티어의 적이 스폰될 확률을 0과 1 사이의 숫자로 입력합니다. 높은 티어부터 적용되어야 하며, 하위 티어 유닛의 소환 확률은 상위 티어 유닛의 확률을 뺀 부분이 됩니다.
+    /// 예) tier4Probability = 0f, tier3Probability = 0.05f, tier2Probability = 0.2f 인 경우, 티어3 유닛이 5% 확률, 티어2 유닛이 15% 확률, 나머지 80% 확률로 티어1 유닛이 소환됩니다.
+    /// 단, 높은 티어의 유닛이 소환되면 쿨타임이 적용되어, 쿨타임 동안 해당 티어의 적은 생성되지 않으며 하위 티어의 적이 대신 생성됩니다.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator EnemySpawn()
     {
         while (true)
@@ -51,8 +64,8 @@ public class EnemyManager : MonoBehaviour
             float spawnDelay = Random.Range(this.spawnDelay * 0.8f, this.spawnDelay * 1.2f);
             float cameraSize = Camera.main.orthographicSize;
 
-            float minX = -cameraSize * screenView - 1f;
-            float maxX = cameraSize * screenView + 1f;
+            float minX = -cameraSize * screenView - 2f;
+            float maxX = cameraSize * screenView + 2f;
 
             float posX = Random.Range(minX, maxX);
             float posY = cameraSize + 1f;
@@ -124,6 +137,11 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 높은 티어의 유닛이 생성될 때 발동되어 쿨타임을 적용시킵니다.
+    /// </summary>
+    /// <param name="tier">해당 적의 티어</param>
+    /// <returns></returns>
     IEnumerator SpawnCooldown(int tier)
     {
         switch (tier)
@@ -148,6 +166,10 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 적 개체 중 일정 거리만큼 접근한 후 분열하는 적에 적용됩니다. 티어1의 To Planet형 적을 8방향으로 소환합니다.
+    /// </summary>
+    /// <param name="spawnPos"></param>
     void OnDivideSpawn(Vector3 spawnPos)
     {
         particleManager.SpawnParticle(ParticleType.DestroyTPsmall, spawnPos);
@@ -214,7 +236,7 @@ public class EnemyManager : MonoBehaviour
         if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(false, healing);
         else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(true, healing);
         CallFXOnDestory(owner.EnemyType, true, owner.transform);
-        AddFeverGauge(owner.EnemyType);
+        AddFeverGauge(owner);
         DespawnEnemy(owner);
     }
 
@@ -229,7 +251,7 @@ public class EnemyManager : MonoBehaviour
     public void OnExplosion(Enemy owner)
     {
         CallFXOnDestory(owner.EnemyType, true, owner.transform);
-        AddFeverGauge(owner.EnemyType);
+        AddFeverGauge(owner);
         DespawnEnemy(owner);
     }
     
@@ -282,27 +304,35 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    void AddFeverGauge(EnemyType type)
+    /// <summary>
+    /// 적이 파괴된 위치에 피버 파티클을 생성합니다. 생성된 파티클은 자동으로 게이지 바로 날아가며, 피버 게이지를 1 채웁니다.
+    /// </summary>
+    /// <param name="owner"></param>
+    void AddFeverGauge(Enemy owner)
     {
-        if(type == EnemyType.ToPlanet1 || type == EnemyType.ToStar1)
+        if(owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToStar1)
         {
-            feverManager.GetFeverCount(2);
+            feverManager.CallParticle(owner.transform, 3);
         }
-        else if (type == EnemyType.ToPlanet2 || type == EnemyType.ToStar2)
+        else if (owner.EnemyType == EnemyType.ToPlanet2 || owner.EnemyType == EnemyType.ToStar2)
         {
-            feverManager.GetFeverCount(5);
+            feverManager.CallParticle(owner.transform, 5);
         }
-        else if (type == EnemyType.ToPlanet3)
+        else if (owner.EnemyType == EnemyType.ToPlanet3)
         {
-            feverManager.GetFeverCount(10);
+            feverManager.CallParticle(owner.transform, 10);
         }
-        else if (type == EnemyType.ToStar3)
+        else if (owner.EnemyType == EnemyType.ToStar3)
         {
-            feverManager.GetFeverCount(2);
+            feverManager.CallParticle(owner.transform, 2);
         }
-        else if (type == EnemyType.ToPlanet4 || type == EnemyType.ToStar4)
+        else if (owner.EnemyType == EnemyType.ToPlanet4)
         {
-            feverManager.GetFeverCount(10);
+            feverManager.CallParticle(owner.transform, 24);
+        }
+        else if (owner.EnemyType == EnemyType.ToStar4)
+        {
+            feverManager.CallParticle(owner.transform, 10);
         }
     }
 
