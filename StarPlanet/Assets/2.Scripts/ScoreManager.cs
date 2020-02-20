@@ -11,6 +11,8 @@ public class ScoreManager : MonoBehaviour
 
     [SerializeField, ReadOnly] private int _score;
 
+    [SerializeField] private float addScorePerSecond;
+    [SerializeField, ReadOnly] float timeScoreCount;
     [SerializeField] private int scoreTier1;
     [SerializeField] private int scoreTier2;
     [SerializeField] private int scoreTier3;
@@ -19,6 +21,7 @@ public class ScoreManager : MonoBehaviour
     private void Awake()
     {
         score = 0;
+        timeScoreCount = 0f;
     }
 
     public int bestScore
@@ -40,6 +43,16 @@ public class ScoreManager : MonoBehaviour
     void AddScore(int score)
     {
         this.score += score;
+    }
+
+    public void AddScorePerSecond()
+    {
+        timeScoreCount += addScorePerSecond;
+        if(timeScoreCount >= 1.0f)
+        {
+            AddScore(Mathf.FloorToInt(timeScoreCount));
+            timeScoreCount %= 1f;
+        }
     }
 
     int ScoreCalculator(Enemy enemy)

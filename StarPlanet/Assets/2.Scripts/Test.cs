@@ -11,9 +11,9 @@ public class Test : MonoBehaviour
 
     enum TestEnum { A, B, C, D }
 
-    public int number;
+    [ShowIf(nameof(isTesting))] public int number;
 
-    [Button]
+    [ShowIf(nameof(isTesting)), Button]
     public void TestFunction()
     {
         Debug.Log(TestEnum.A);
@@ -26,13 +26,16 @@ public class Test : MonoBehaviour
         Debug.Log(n + 10);
     }
 
-    [SerializeField] GameObject explosion;
+    [ShowIf(nameof(isTesting)), SerializeField] GameObject explosion;
 
     private void Start()
     {
-        //explosion.SetActive(false);
+        if (!isTesting)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
         ps = GetComponent<ParticleSystem>();
-        if (!isTesting) gameObject.SetActive(false);
     }
 
     private void Update()
@@ -71,4 +74,7 @@ public class Test : MonoBehaviour
                 break;
         }
     }
+
+    [Button("저장된 내용 리셋")]
+    void ResetPlayerPrefs() { PlayerPrefs.DeleteAll(); }
 }

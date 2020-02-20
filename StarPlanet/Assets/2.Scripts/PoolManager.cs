@@ -16,8 +16,9 @@ public enum ObjectPool
     ItemHexagonBomb,
     ItemFixedBomb,
     ItemHeal,
-    ParticleTP1,
-    ParticleTS1,
+    ParticleTPSmall,
+    ParticleTSSmall,
+    ParticleTSMiddle,
     ParticleExplosion,
     ParticleHexagonExp,
     ParticleHealing,
@@ -27,25 +28,29 @@ public enum ObjectPool
 
 public class PoolManager : MonoBehaviour
 {
-    
-    [SerializeField] GameObject enemyToPlanet1;
-    [SerializeField] GameObject enemyToStar1;
-    [SerializeField] GameObject enemyToPlanet2;
-    [SerializeField] GameObject enemyToStar2;
-    [SerializeField] GameObject enemyToPlanet3;
-    [SerializeField] GameObject enemyToStar3;
-    [SerializeField] GameObject enemyToPlanet4;
-    [SerializeField] GameObject enemyToStar4;
-    [SerializeField] GameObject itemHexagonBomb;
-    [SerializeField] GameObject itemFixedBomb;
-    [SerializeField] GameObject itemHeal;
-    [SerializeField] GameObject particleTP1;
-    [SerializeField] GameObject particleTS1;
-    [SerializeField] GameObject particleExplosion;
-    [SerializeField] GameObject particleHexagonExp;
-    [SerializeField] GameObject particleHealing;
-    [SerializeField] GameObject particleFever;
-    [SerializeField] GameObject audioFX;
+    [Header("Enemies")]
+    [TabGroup("Objects")][SerializeField] GameObject enemyToPlanet1;
+    [TabGroup("Objects")] [SerializeField] GameObject enemyToStar1;
+    [TabGroup("Objects")] [SerializeField] GameObject enemyToPlanet2;
+    [TabGroup("Objects")] [SerializeField] GameObject enemyToStar2;
+    [TabGroup("Objects")] [SerializeField] GameObject enemyToPlanet3;
+    [TabGroup("Objects")] [SerializeField] GameObject enemyToStar3;
+    [TabGroup("Objects")] [SerializeField] GameObject enemyToPlanet4;
+    [TabGroup("Objects")] [SerializeField] GameObject enemyToStar4;
+    [Header("Items")]
+    [TabGroup("Objects")] [SerializeField] GameObject itemHexagonBomb;
+    [TabGroup("Objects")] [SerializeField] GameObject itemFixedBomb;
+    [TabGroup("Objects")] [SerializeField] GameObject itemHeal;
+    [Header("Particles")]
+    [TabGroup("Objects")] [SerializeField] GameObject particleTPSmall;
+    [TabGroup("Objects")] [SerializeField] GameObject particleTSSmall;
+    [TabGroup("Objects")] [SerializeField] GameObject particleTSMiddle;
+    [TabGroup("Objects")] [SerializeField] GameObject particleExplosion;
+    [TabGroup("Objects")] [SerializeField] GameObject particleHexagonExp;
+    [TabGroup("Objects")] [SerializeField] GameObject particleHealing;
+    [TabGroup("Objects")] [SerializeField] GameObject particleFever;
+    [Header("Others")]
+    [TabGroup("Objects")] [SerializeField] GameObject audioFX;
 
     private List<Enemy> enemyTP1List = new List<Enemy>();
     private List<Enemy> enemyTS1List = new List<Enemy>();
@@ -58,32 +63,38 @@ public class PoolManager : MonoBehaviour
     private List<ItemBomb> itemHexagonBombList = new List<ItemBomb>();
     private List<ItemBomb> itemFixedBombList = new List<ItemBomb>();
     private List<ItemHeal> itemHealList = new List<ItemHeal>();
-    private List<ParticleSystem> particleTP1List = new List<ParticleSystem>();
-    private List<ParticleSystem> particleTS1List = new List<ParticleSystem>();
+    private List<ParticleSystem> particleTPSmallList = new List<ParticleSystem>();
+    private List<ParticleSystem> particleTSSmallList = new List<ParticleSystem>();
+    private List<ParticleSystem> particleTSMiddleList = new List<ParticleSystem>();
     private List<Explosion> particleExplosionList = new List<Explosion>();
     private List<Explosion> particleHexagonExpList = new List<Explosion>();
     private List<ParticleSystem> particleHealingList = new List<ParticleSystem>();
     private List<ParticleSystem> particleFeverList = new List<ParticleSystem>();
     [HideInInspector] public List<AudioSource> audioFXList = new List<AudioSource>();
 
-    [SerializeField] Transform enemyTP1Group;
-    [SerializeField] Transform enemyTS1Group;
-    [SerializeField] Transform enemyTP2Group;
-    [SerializeField] Transform enemyTS2Group;
-    [SerializeField] Transform enemyTP3Group;
-    [SerializeField] Transform enemyTS3Group;
-    [SerializeField] Transform enemyTP4Group;
-    [SerializeField] Transform enemyTS4Group;
-    [SerializeField] Transform itemHexagonBombGroup;
-    [SerializeField] Transform itemFixedBombGroup;
-    [SerializeField] Transform itemHealGroup;
-    [SerializeField] Transform particleTP1Group;
-    [SerializeField] Transform particleTS1Group;
-    [SerializeField] Transform particleExplosionGroup;
-    [SerializeField] Transform particleHexagonExpGroup;
-    [SerializeField] Transform particleHealingGroup;
-    [SerializeField] Transform particleFeverGroup;
-    [SerializeField] Transform audioFXGroup;
+    [Header("Enemies")]
+    [TabGroup("Groups")] [SerializeField] Transform enemyTP1Group;
+    [TabGroup("Groups")] [SerializeField] Transform enemyTS1Group;
+    [TabGroup("Groups")] [SerializeField] Transform enemyTP2Group;
+    [TabGroup("Groups")] [SerializeField] Transform enemyTS2Group;
+    [TabGroup("Groups")] [SerializeField] Transform enemyTP3Group;
+    [TabGroup("Groups")] [SerializeField] Transform enemyTS3Group;
+    [TabGroup("Groups")] [SerializeField] Transform enemyTP4Group;
+    [TabGroup("Groups")] [SerializeField] Transform enemyTS4Group;
+    [Header("Items")]
+    [TabGroup("Groups")] [SerializeField] Transform itemHexagonBombGroup;
+    [TabGroup("Groups")] [SerializeField] Transform itemFixedBombGroup;
+    [TabGroup("Groups")] [SerializeField] Transform itemHealGroup;
+    [Header("Particles")]
+    [TabGroup("Groups")] [SerializeField] Transform particleTPSmallGroup;
+    [TabGroup("Groups")] [SerializeField] Transform particleTSSmallGroup;
+    [TabGroup("Groups")] [SerializeField] Transform particleTSMiddleGroup;
+    [TabGroup("Groups")] [SerializeField] Transform particleExplosionGroup;
+    [TabGroup("Groups")] [SerializeField] Transform particleHexagonExpGroup;
+    [TabGroup("Groups")] [SerializeField] Transform particleHealingGroup;
+    [TabGroup("Groups")] [SerializeField] Transform particleFeverGroup;
+    [Header("Others")]
+    [TabGroup("Groups")] [SerializeField] Transform audioFXGroup;
 
     private int enemyTP1Index = 0;
     private int enemyTS1Index = 0;
@@ -96,8 +107,9 @@ public class PoolManager : MonoBehaviour
     private int itemHexagonBombIndex = 0;
     private int itemFixedBombIndex = 0;
     private int itemHealIndex = 0;
-    private int particleTP1Index = 0;
-    private int particleTS1Index = 0;
+    private int particleTPSmallIndex = 0;
+    private int particleTSSmallIndex = 0;
+    private int particleTSMiddleIndex = 0;
     private int particleExplosionIndex = 0;
     private int particleHexagonExpIndex = 0;
     private int particleHealingIndex = 0;
@@ -113,15 +125,19 @@ public class PoolManager : MonoBehaviour
         enemyTS3List = MakeObjectPool<Enemy>(enemyToStar3, enemyTS3Group);
         enemyTP4List = MakeObjectPool<Enemy>(enemyToPlanet4, enemyTP4Group, 20);
         enemyTS4List = MakeObjectPool<Enemy>(enemyToStar4, enemyTS4Group, 30);
+
         itemFixedBombList = MakeObjectPool<ItemBomb>(itemFixedBomb, itemFixedBombGroup);
         itemHexagonBombList = MakeObjectPool<ItemBomb>(itemHexagonBomb, itemHexagonBombGroup, 30);
         itemHealList = MakeObjectPool<ItemHeal>(itemHeal, itemHealGroup, 30);
-        particleTP1List = MakeObjectPool<ParticleSystem>(particleTP1, particleTP1Group);
-        particleTS1List = MakeObjectPool<ParticleSystem>(particleTS1, particleTS1Group);
+
+        particleTPSmallList = MakeObjectPool<ParticleSystem>(particleTPSmall, particleTPSmallGroup);
+        particleTSSmallList = MakeObjectPool<ParticleSystem>(particleTSSmall, particleTSSmallGroup);
+        particleTSMiddleList = MakeObjectPool<ParticleSystem>(particleTSMiddle, particleTSMiddleGroup, 30);
         particleExplosionList = MakeObjectPool<Explosion>(particleExplosion, particleExplosionGroup);
         particleHexagonExpList = MakeObjectPool<Explosion>(particleHexagonExp, particleHexagonExpGroup, 20);
         particleHealingList = MakeObjectPool<ParticleSystem>(particleHealing, particleHealingGroup, 30);
         particleFeverList = MakeObjectPool<ParticleSystem>(particleFever, particleFeverGroup, 100);
+
         audioFXList = MakeObjectPool<AudioSource>(audioFX, audioFXGroup, 20);
     }
     /// <summary>
@@ -324,32 +340,46 @@ public class PoolManager : MonoBehaviour
                 break;
 
         //Particle
-            //Destroy Particle - EnemyTP1
-            case ObjectPool.ParticleTP1:
-                if (particleTP1List[particleTP1Index].gameObject.activeSelf)
+            //Destroy Particle - EnemyTP Small
+            case ObjectPool.ParticleTPSmall:
+                if (particleTPSmallList[particleTPSmallIndex].gameObject.activeSelf)
                 {
-                    var newItem = Instantiate(particleTP1, position, rotation).GetComponent<ParticleSystem>();
+                    var newItem = Instantiate(particleTPSmall, position, rotation).GetComponent<ParticleSystem>();
                     _returnObject = newItem;
-                    particleTP1List.Add(newItem);
+                    particleTPSmallList.Add(newItem);
                     break;
                 }
-                SpawnObject(particleTP1List, particleTP1Index, position, rotation);
-                _returnObject = particleTP1List[particleTP1Index];
-                particleTP1Index = (particleTP1Index + 1) % particleTP1List.Count;
+                SpawnObject(particleTPSmallList, particleTPSmallIndex, position, rotation);
+                _returnObject = particleTPSmallList[particleTPSmallIndex];
+                particleTPSmallIndex = (particleTPSmallIndex + 1) % particleTPSmallList.Count;
                 break;
 
-            //Destroy Particle - EnemyTS1
-            case ObjectPool.ParticleTS1:
-                if (particleTS1List[particleTS1Index].gameObject.activeSelf)
+            //Destroy Particle - EnemyTS Small
+            case ObjectPool.ParticleTSSmall:
+                if (particleTSSmallList[particleTSSmallIndex].gameObject.activeSelf)
                 {
-                    var newItem = Instantiate(particleTS1, position, rotation).GetComponent<ParticleSystem>();
+                    var newItem = Instantiate(particleTSSmall, position, rotation).GetComponent<ParticleSystem>();
                     _returnObject = newItem;
-                    particleTS1List.Add(newItem);
+                    particleTSSmallList.Add(newItem);
                     break;
                 }
-                SpawnObject(particleTS1List, particleTS1Index, position, rotation);
-                _returnObject = particleTS1List[particleTS1Index];
-                particleTS1Index = (particleTS1Index + 1) % particleTS1List.Count;
+                SpawnObject(particleTSSmallList, particleTSSmallIndex, position, rotation);
+                _returnObject = particleTSSmallList[particleTSSmallIndex];
+                particleTSSmallIndex = (particleTSSmallIndex + 1) % particleTSSmallList.Count;
+                break;
+
+            //Destroy Particle - EnemyTS Middle
+            case ObjectPool.ParticleTSMiddle:
+                if (particleTSMiddleList[particleTSMiddleIndex].gameObject.activeSelf)
+                {
+                    var newItem = Instantiate(particleTSMiddle, position, rotation).GetComponent<ParticleSystem>();
+                    _returnObject = newItem;
+                    particleTSMiddleList.Add(newItem);
+                    break;
+                }
+                SpawnObject(particleTSMiddleList, particleTSMiddleIndex, position, rotation);
+                _returnObject = particleTSMiddleList[particleTSMiddleIndex];
+                particleTSMiddleIndex = (particleTSMiddleIndex + 1) % particleTSMiddleList.Count;
                 break;
 
             //Explosion Particle - Normal

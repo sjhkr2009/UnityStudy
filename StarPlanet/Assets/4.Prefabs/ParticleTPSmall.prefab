@@ -4752,7 +4752,7 @@ GameObject:
   - component: {fileID: 3447504128414404467}
   - component: {fileID: 3602039076616568047}
   m_Layer: 0
-  m_Name: ParticleTP1
+  m_Name: ParticleTPSmall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

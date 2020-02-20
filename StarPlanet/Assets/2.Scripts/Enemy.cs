@@ -6,11 +6,14 @@ using Sirenix.OdinInspector;
 using DG.Tweening;
 
 public enum EnemyType { ToPlanet1, ToStar1, ToPlanet2, ToStar2, ToPlanet3, ToStar3, ToPlanet4, ToStar4 }
+public enum EnemyTarget { ToPlanet, ToStar }
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] EnemyType enemyType;
+    [SerializeField] EnemyTarget enemyTarget;
     public EnemyType EnemyType => enemyType;
+    public EnemyTarget EnemyTarget => enemyTarget;
 
     [BoxGroup("Basic"), SerializeField] private string targetType;
     [BoxGroup("Basic"), SerializeField] private string avoidType;
@@ -28,7 +31,7 @@ public class Enemy : MonoBehaviour
     public event Action<Enemy, int> EventContactCorrect;
     public event Action<Enemy, int> EventContactWrong;
     public event Action<Enemy> EventOnExplosion;
-    public event Action<Vector3> EventOnDivide;
+    public event Action<Transform, ObjectPool> EventOnDivide;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -61,13 +64,13 @@ public class Enemy : MonoBehaviour
     {
         if(targetType != "Star" && targetType != "Planet")
         {
-            if (enemyType == EnemyType.ToPlanet1 || enemyType == EnemyType.ToPlanet2 || enemyType == EnemyType.ToPlanet3 || enemyType == EnemyType.ToPlanet4) targetType = "Planet";
-            else if (enemyType == EnemyType.ToStar1 || enemyType == EnemyType.ToStar2 || enemyType == EnemyType.ToStar3 || enemyType == EnemyType.ToStar4) targetType = "Star";
+            if (EnemyTarget == EnemyTarget.ToPlanet) targetType = "Planet";
+            else if (EnemyTarget == EnemyTarget.ToStar) targetType = "Star";
         }
         if (avoidType != "Star" && avoidType != "Planet")
         {
-            if (enemyType == EnemyType.ToPlanet1 || enemyType == EnemyType.ToPlanet2 || enemyType == EnemyType.ToPlanet3 || enemyType == EnemyType.ToPlanet4) avoidType = "Star";
-            else if (enemyType == EnemyType.ToStar1 || enemyType == EnemyType.ToStar2 || enemyType == EnemyType.ToStar3 || enemyType == EnemyType.ToStar4) avoidType = "Planet";
+            if (EnemyTarget == EnemyTarget.ToPlanet) avoidType = "Star";
+            else if (EnemyTarget == EnemyTarget.ToStar) avoidType = "Planet";
         }
 
         if (enemyType == EnemyType.ToPlanet4)
@@ -165,7 +168,7 @@ public class Enemy : MonoBehaviour
     }
     void OnDivideSpawn()
     {
-        EventOnDivide(transform.position);
+        EventOnDivide(transform, ObjectPool.EnemyTP1);
         gameObject.SetActive(false);
     }
 }

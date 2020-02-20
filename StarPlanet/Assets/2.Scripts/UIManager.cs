@@ -125,7 +125,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        scoreText.text = "점수: 0";
+        scoreText.text = $"점수: 0    최고점수: {GameManager.Instance.ScoreManager.bestScore}";
     }
 
     void RadiusChange(float radius)
@@ -195,7 +195,7 @@ public class UIManager : MonoBehaviour
 
     public void ScoreTextChange(int value)
     {
-        scoreText.text = $"점수: {value.ToString()}";
+        scoreText.text = $"점수: {value.ToString()}    최고점수: {GameManager.Instance.ScoreManager.bestScore}";
     }
 
     public void OnAccelerateClick()

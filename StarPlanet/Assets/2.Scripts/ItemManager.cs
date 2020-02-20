@@ -13,15 +13,16 @@ public class ItemManager : MonoBehaviour
     [SerializeField] SoundManager soundManager;
     [SerializeField] ParticleManager particleManager;
 
-    [TabGroup("Fixed Bomb"), SerializeField] private float minDelayOfFixedBomb;
-    [TabGroup("Fixed Bomb"), SerializeField] private float maxDelayOfFixedBomb;
-    [TabGroup("Hexagon Bomb"), SerializeField] private float minDelayOfHexagonBomb;
-    [TabGroup("Hexagon Bomb"), SerializeField] private float maxDelayOfHexagonBomb;
+    [TabGroup("Fixed Bomb"), SerializeField] private float delayOfFixedBomb;
+    [TabGroup("Hexagon Bomb"), SerializeField] private float delayOfHexagonBomb;
     [TabGroup("Hexagon Bomb"), SerializeField] Transform planet;
-    [TabGroup("Healkit"), SerializeField] private float minDelayOfHealkit;
-    [TabGroup("Healkit"), SerializeField] private float maxDelayOfHealkit;
+    [TabGroup("Healkit"), SerializeField] private float delayOfHealkit;
 
     float screenView;
+    float cameraSizeX;
+    float cameraSizeY;
+    List<ItemBomb> spawnedBombs = new List<ItemBomb>();
+    List<ItemHeal> spawnedHealkits = new List<ItemHeal>();
 
     private void Start()
     {
@@ -30,6 +31,8 @@ public class ItemManager : MonoBehaviour
         if (particleManager == null) particleManager = GameManager.Instance.ParticleManager;
 
         screenView = GameManager.Instance.screenHorizontal / GameManager.Instance.screenVertical;
+        cameraSizeX = Camera.main.orthographicSize * screenView;
+        cameraSizeY = Camera.main.orthographicSize;
 
         StartCoroutine(nameof(HexagonBombSpawn));
         StartCoroutine(nameof(FixedBombSpawn));
@@ -56,6 +59,7 @@ public class ItemManager : MonoBehaviour
 
     void DisableHealkit(ItemHeal item)
     {
+        spawnedHealkits.Remove(item);
         item.EventOnHealingPlanet -= HealingToPlanet;
         item.EventOnHealingStar -= HealingToStar;
         item.gameObject.SetActive(false);
@@ -83,47 +87,48 @@ public class ItemManager : MonoBehaviour
 
     void DisableExplosion(ItemBomb item)
     {
+        spawnedBombs.Remove(item);
         item.EventOnExplosion -= CreateExplosion;
         item.gameObject.SetActive(false);
+    }
+
+    Component SpawnItemOnMap(ObjectPool objectType)
+    {
+        Vector3 spawnPos = Vector3.zero;
+        while (Vector3.Distance(spawnPos, Vector3.zero) < 2.5f)
+        {
+            spawnPos = new Vector3(UnityEngine.Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, UnityEngine.Random.Range(-cameraSizeY * 0.95f, cameraSizeY * 0.95f));
+        }
+        Component newObject = poolManager.Spawn(objectType, spawnPos, Quaternion.identity);
+        return newObject;
+    }
+    Component SpawnItemOverMap(ObjectPool objectType)
+    {
+        Vector3 spawnPosUp = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY + 1f);
+        Vector3 spawnPosRight = new Vector3(cameraSizeX + 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
+        Vector3 spawnPosDown = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY - 1f);
+        Vector3 spawnPosLeft = new Vector3(-cameraSizeX - 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
+
+        float getPositionRandom = UnityEngine.Random.value;
+        Component newObject = null;
+
+        if (getPositionRandom < 0.25f) newObject = poolManager.Spawn(objectType, spawnPosUp, Quaternion.LookRotation(spawnPosDown));
+        else if (getPositionRandom < 0.5f) newObject = poolManager.Spawn(objectType, spawnPosRight, Quaternion.LookRotation(spawnPosLeft));
+        else if (getPositionRandom < 0.75f) newObject = poolManager.Spawn(objectType, spawnPosDown, Quaternion.LookRotation(spawnPosUp));
+        else newObject = poolManager.Spawn(objectType, spawnPosLeft, Quaternion.LookRotation(spawnPosRight));
+        return newObject;
     }
 
     IEnumerator HexagonBombSpawn()
     {
         while (true)
         {
-
-            float delay = UnityEngine.Random.Range(minDelayOfHexagonBomb, maxDelayOfHexagonBomb);
+            float delay = UnityEngine.Random.Range(delayOfHexagonBomb * 0.7f, delayOfHexagonBomb * 1.3f);
             yield return new WaitForSeconds(delay);
 
-            float cameraSizeX = Camera.main.orthographicSize * screenView;
-            float cameraSizeY = Camera.main.orthographicSize;
-
-            Vector3 spawnPosUp = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY + 1f);
-            Vector3 spawnPosRight = new Vector3(cameraSizeX + 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
-            Vector3 spawnPosDown = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY - 1f);
-            Vector3 spawnPosLeft = new Vector3(-cameraSizeX - 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
-
-            float getPositionRandom = UnityEngine.Random.value;
-
-            ItemBomb newObject = null;
-
-            if (getPositionRandom < 0.25f)
-            {
-                newObject = (ItemBomb)poolManager.Spawn(ObjectPool.ItemHexagonBomb, spawnPosUp, Quaternion.LookRotation(spawnPosDown));
-            }
-            else if (getPositionRandom < 0.5f)
-            {
-                newObject = (ItemBomb)poolManager.Spawn(ObjectPool.ItemHexagonBomb, spawnPosRight, Quaternion.LookRotation(spawnPosLeft));
-            }
-            else if (getPositionRandom < 0.75f)
-            {
-                newObject = (ItemBomb)poolManager.Spawn(ObjectPool.ItemHexagonBomb, spawnPosDown, Quaternion.LookRotation(spawnPosUp));
-            }
-            else
-            {
-                newObject = (ItemBomb)poolManager.Spawn(ObjectPool.ItemHexagonBomb, spawnPosLeft, Quaternion.LookRotation(spawnPosRight));
-            }
+            ItemBomb newObject = (ItemBomb)SpawnItemOverMap(ObjectPool.ItemHexagonBomb);
             newObject.EventOnExplosion += CreateExplosion;
+            if (!spawnedBombs.Contains(newObject)) spawnedBombs.Add(newObject);
         }
     }
 
@@ -131,21 +136,12 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
-            
-            float delay = UnityEngine.Random.Range(minDelayOfFixedBomb, maxDelayOfFixedBomb);
+            float delay = UnityEngine.Random.Range(delayOfFixedBomb * 0.5f, delayOfFixedBomb * 1.5f);
             yield return new WaitForSeconds(delay);
 
-            float cameraSizeX = Camera.main.orthographicSize * screenView;
-            float cameraSizeY = Camera.main.orthographicSize;
-
-            Vector3 spawnPos = Vector3.zero;
-
-            while (Vector3.Distance(spawnPos, Vector3.zero) < 2.5f)
-            {
-                spawnPos = new Vector3(UnityEngine.Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, UnityEngine.Random.Range(-cameraSizeY * 0.95f, cameraSizeY * 0.95f));
-            }
-            ItemBomb newObject = (ItemBomb)poolManager.Spawn(ObjectPool.ItemFixedBomb, spawnPos, Quaternion.identity);
+            ItemBomb newObject = (ItemBomb)SpawnItemOnMap(ObjectPool.ItemFixedBomb);
             newObject.EventOnExplosion += CreateExplosion;
+            if(!spawnedBombs.Contains(newObject)) spawnedBombs.Add(newObject);
         }
     }
 
@@ -153,49 +149,22 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
-            
-            float delay = UnityEngine.Random.Range(minDelayOfHealkit, maxDelayOfHealkit);
+            float delay = UnityEngine.Random.Range(delayOfHealkit * 0.7f, delayOfHealkit * 1.3f);
             yield return new WaitForSeconds(delay);
 
-            float cameraSizeX = Camera.main.orthographicSize * screenView;
-            float cameraSizeY = Camera.main.orthographicSize;
-
-            Vector3 spawnPosUp = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY + 1f);
-            Vector3 spawnPosRight = new Vector3(cameraSizeX + 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
-            Vector3 spawnPosDown = new Vector3(UnityEngine.Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY - 1f);
-            Vector3 spawnPosLeft = new Vector3(-cameraSizeX - 1f, 0f, UnityEngine.Random.Range(-cameraSizeY, cameraSizeY));
-
-            float getPositionRandom = UnityEngine.Random.value;
-
-            ItemHeal newObject = null;
-
-            if (getPositionRandom < 0.25f)
-            {
-                newObject = (ItemHeal)poolManager.Spawn(ObjectPool.ItemHeal, spawnPosUp, Quaternion.LookRotation(spawnPosDown));
-            }
-            else if (getPositionRandom < 0.5f)
-            {
-                newObject = (ItemHeal)poolManager.Spawn(ObjectPool.ItemHeal, spawnPosRight, Quaternion.LookRotation(spawnPosLeft));
-            }
-            else if (getPositionRandom < 0.75f)
-            {
-                newObject = (ItemHeal)poolManager.Spawn(ObjectPool.ItemHeal, spawnPosDown, Quaternion.LookRotation(spawnPosUp));
-            }
-            else
-            {
-                newObject = (ItemHeal)poolManager.Spawn(ObjectPool.ItemHeal, spawnPosLeft, Quaternion.LookRotation(spawnPosRight));
-            }
+            ItemHeal newObject = (ItemHeal)SpawnItemOverMap(ObjectPool.ItemHeal);
             newObject.EventOnHealingPlanet += HealingToPlanet;
             newObject.EventOnHealingStar += HealingToStar;
+            if (!spawnedHealkits.Contains(newObject)) spawnedHealkits.Add(newObject);
         }
     }
 
     public void AllItemEventReset()
     {
-        ItemBomb[] itemBombs = FindObjectsOfType<ItemBomb>();
-        ItemHeal[] itemHeals = FindObjectsOfType<ItemHeal>();
-        foreach (var item in itemBombs) if (item.gameObject.activeSelf) DisableExplosion(item);
-        foreach (var item in itemHeals) if (item.gameObject.activeSelf) DisableHealkit(item);
+        foreach (var item in spawnedBombs) if (item.gameObject.activeSelf) DisableExplosion(item);
+        foreach (var item in spawnedHealkits) if (item.gameObject.activeSelf) DisableHealkit(item);
         StopAllCoroutines();
+        spawnedBombs.Clear();
+        spawnedHealkits.Clear();
     }
 }

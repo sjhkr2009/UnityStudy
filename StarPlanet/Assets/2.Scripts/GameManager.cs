@@ -108,25 +108,11 @@ public class GameManager : MonoBehaviour
         feverManager.EventExitFeverTime += uiManager.FeverGaugeReset;
 
         timeManager.EventPerOneSecond += feverManager.GetFeverCountPerSecond;
+        timeManager.EventPerOneSecond += scoreManager.AddScorePerSecond;
 
 
         gameState = GameState.Ready;
-        DOVirtual.DelayedCall(4f, () =>
-        {
-            if (gameState == GameState.Ready)
-            {
-                gameState = GameState.Playing;
-                Debug.Log("강제 시작");
-            }
-        });
     }
-
-    void Start()
-    {
-        if(_instance != null && _instance != this) { Destroy(gameObject);}
-    }
-
-
     private void OnDestroy()
     {
         star.EventHpChanged -= OnPlayerHpChanged;
@@ -151,8 +137,20 @@ public class GameManager : MonoBehaviour
         feverManager.EventExitFeverTime -= uiManager.FeverGaugeReset;
 
         timeManager.EventPerOneSecond -= feverManager.GetFeverCountPerSecond;
+        timeManager.EventPerOneSecond -= scoreManager.AddScorePerSecond;
     }
-
+    void Start()
+    {
+        if (_instance != null && _instance != this) { Destroy(gameObject); }
+        DOVirtual.DelayedCall(4f, () =>
+        {
+            if (gameState == GameState.Ready)
+            {
+                gameState = GameState.Playing;
+                Debug.Log("강제 시작");
+            }
+        });
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -193,12 +191,21 @@ public class GameManager : MonoBehaviour
         if (isStar) star.Hp += changeLevel;
         else planet.Hp += changeLevel;
     }
-
+    /// <summary>
+    /// 플레이어 체력이 변화할 때 호출됩니다. 체력이 0 이하가 되면 플레이어를 비활성화합니다.
+    /// 이 때 플레이어 사망 시 이벤트가 호출되며 자동으로 게임오버가 됩니다.
+    /// </summary>
+    /// <param name="hp"></param>
+    /// <param name="player"></param>
     public void OnPlayerHpChanged(int hp, Player player) 
     {
         if (hp <= 0) player.gameObject.SetActive(false);
     }
-
+    /// <summary>
+    /// Star와 Planet 중 하나가 체력이 0이 되어 파괴될 경우 호출됩니다. 게임오버 상태로 변경합니다.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="player"></param>
     private void OnPlayerDead<T>(T player) where T : Player
     {
         if(gameState == GameState.Playing) gameState = GameState.GameOver;
@@ -212,7 +219,6 @@ public class GameManager : MonoBehaviour
         itemManager.AllItemEventReset();
         enemyManager.AllEnemyEventReset();
         uiManager.OffAllWindow();
-        Time.timeScale = 1f;
     }
 
     public void ReStartScene()

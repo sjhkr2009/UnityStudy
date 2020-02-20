@@ -25,6 +25,7 @@ public class EnemyManager : MonoBehaviour
 
     float screenView;
     FeverManager feverManager;
+    List<Enemy> spawnedEnemies = new List<Enemy>();
 
     void Start()
     {
@@ -132,6 +133,7 @@ public class EnemyManager : MonoBehaviour
             }
 
             AddEventToEnemy(enemy);
+            if (!spawnedEnemies.Contains(enemy)) spawnedEnemies.Add(enemy);
 
             yield return new WaitForSeconds(spawnDelay);
         }
@@ -167,38 +169,41 @@ public class EnemyManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 적 개체 중 일정 거리만큼 접근한 후 분열하는 적에 적용됩니다. 티어1의 To Planet형 적을 8방향으로 소환합니다.
+    /// 적 개체 중 분열하는 형태의 적에게 적용됩니다. 입력한 타입의 적을 8방향으로 소환합니다. 기본값은 Enemy To Planet 1 입니다.
     /// </summary>
-    /// <param name="spawnPos"></param>
-    void OnDivideSpawn(Vector3 spawnPos)
+    /// <param name="spawnTransform"></param>
+    void OnDivideSpawn(Transform spawnTransform, ObjectPool type = ObjectPool.EnemyTP1)
     {
-        particleManager.SpawnParticle(ParticleType.DestroyTPsmall, spawnPos);
+        particleManager.SpawnParticle(ParticleType.DestroyTPsmall, spawnTransform); //분열 이펙트로 변경할 것
 
-        Enemy enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + Vector3.forward));
+        Enemy enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + Vector3.forward));
         AddEventToEnemy(enemy);
 
-        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + Vector3.back));
+        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + Vector3.back));
         AddEventToEnemy(enemy);
 
-        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + Vector3.right));
+        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + Vector3.right));
         AddEventToEnemy(enemy);
 
-        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + Vector3.left));
+        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + Vector3.left));
         AddEventToEnemy(enemy);
 
-        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + new Vector3(1, 0, 1)));
+        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + new Vector3(1, 0, 1)));
         AddEventToEnemy(enemy);
 
-        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + new Vector3(-1, 0, 1)));
+        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + new Vector3(-1, 0, 1)));
         AddEventToEnemy(enemy);
 
-        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + new Vector3(1, 0, -1)));
+        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + new Vector3(1, 0, -1)));
         AddEventToEnemy(enemy);
 
-        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, spawnPos, Quaternion.LookRotation(spawnPos + new Vector3(-1, 0, -1)));
+        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + new Vector3(-1, 0, -1)));
         AddEventToEnemy(enemy);
     }
-
+    /// <summary>
+    /// 적에게 이벤트를 추가합니다. 추가된 이벤트는 DeleteEventToEnemy 함수에서 제거해야 합니다.
+    /// </summary>
+    /// <param name="enemy"></param>
     void AddEventToEnemy(Enemy enemy)
     {
         enemy.EventContactCorrect += OnContactCorrect;
@@ -211,7 +216,10 @@ public class EnemyManager : MonoBehaviour
 
         if (enemy.EnemyType == EnemyType.ToPlanet4) enemy.EventOnDivide += OnDivideSpawn;
     }
-
+    /// <summary>
+    /// 적의 이벤트를 제거합니다. Despawn 함수에 의해 발동됩니다.
+    /// </summary>
+    /// <param name="enemy"></param>
     void DeleteEventToEnemy(Enemy enemy)
     {
         enemy.EventContactCorrect -= OnContactCorrect;
@@ -224,122 +232,151 @@ public class EnemyManager : MonoBehaviour
 
         if (enemy.EnemyType == EnemyType.ToPlanet4) enemy.EventOnDivide -= OnDivideSpawn;
     }
-
+    /// <summary>
+    /// 적의 이벤트를 초기화하고 비활성화하며, 소환된 적 목록에서 제거합니다.
+    /// </summary>
+    /// <param name="targetEnemy"></param>
     public void DespawnEnemy(Enemy targetEnemy)
     {
         DeleteEventToEnemy(targetEnemy);
+        spawnedEnemies.Remove(targetEnemy);
         targetEnemy.gameObject.SetActive(false);
     }
-
+    /// <summary>
+    /// 대상 적을 파괴하고 효과를 재생하며, 플레이어의 체력을 회복시킵니다. 적이 올바른 대상에 접촉하여 제거되었을 때 호출됩니다.
+    /// </summary>
+    /// <param name="owner"></param>
+    /// <param name="healing"></param>
     public void OnContactCorrect(Enemy owner, int healing)
     {
-        if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(false, healing);
-        else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(true, healing);
+        if (owner.EnemyTarget == EnemyTarget.ToPlanet) GameManager.Instance.PlayerHPChange(false, healing);
+        else if (owner.EnemyTarget == EnemyTarget.ToStar) GameManager.Instance.PlayerHPChange(true, healing);
         CallFXOnDestory(owner.EnemyType, true, owner.transform);
-        AddFeverGauge(owner);
         DespawnEnemy(owner);
     }
-
+    /// <summary>
+    /// 대상 적을 파괴하고 효과를 재생하며, 플레이어에게 피해를 줍니다. 적이 플레이어에게 피해를 주며 자폭했을 때 호출됩니다.
+    /// </summary>
+    /// <param name="owner"></param>
+    /// <param name="damage"></param>
     public void OnContactWrong(Enemy owner, int damage)
     {
-        if (owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToPlanet2) GameManager.Instance.PlayerHPChange(true, -damage);
-        else if (owner.EnemyType == EnemyType.ToStar1 || owner.EnemyType == EnemyType.ToStar2) GameManager.Instance.PlayerHPChange(false, -damage);
+        if (owner.EnemyTarget == EnemyTarget.ToPlanet) GameManager.Instance.PlayerHPChange(true, -damage);
+        else if (owner.EnemyTarget == EnemyTarget.ToStar) GameManager.Instance.PlayerHPChange(false, -damage);
         CallFXOnDestory(owner.EnemyType, false, owner.transform);
         DespawnEnemy(owner);
     }
-
+    /// <summary>
+    /// 대상 적을 파괴하고 효과를 재생합니다. 적이 폭발형 아이템에 의해 제거되었을 때 호출됩니다.
+    /// </summary>
+    /// <param name="owner"></param>
     public void OnExplosion(Enemy owner)
     {
         CallFXOnDestory(owner.EnemyType, true, owner.transform);
-        AddFeverGauge(owner);
         DespawnEnemy(owner);
     }
     
-
+    /// <summary>
+    /// 파괴 시 파티클과 사운드 효과를 재생합니다. 피버 게이지를 채우는 효과는 올바른 대상에 의해 파괴되었을때만 발동됩니다.
+    /// </summary>
+    /// <param name="myType">파괴된 적의 종류</param>
+    /// <param name="isCorrect">올바르게 파괴되었으면 true, 플레이어에게 피해를 주고 자폭했다면 false</param>
+    /// <param name="_transform">파괴된 적의 위치</param>
     void CallFXOnDestory(EnemyType myType, bool isCorrect, Transform _transform)
     {
         switch (myType)
         {
             case EnemyType.ToPlanet1:
                 particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
-                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
-                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
-                break;
-            case EnemyType.ToPlanet2:
-                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
-                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
-                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
-                break;
-            case EnemyType.ToPlanet3:
-                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
-                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
-                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
-                break;
-            case EnemyType.ToPlanet4:
-                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
-                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 3);
+                }
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
 
+            case EnemyType.ToPlanet2:
+                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 5);
+                }
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
+                break;
+
+            case EnemyType.ToPlanet3:
+                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 17);
+                }
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
+                break;
+
+            case EnemyType.ToPlanet4:
+                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 24);
+                }
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
+                break;
+
+
             case EnemyType.ToStar1:
                 particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
-                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 3);
+                }
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
+
             case EnemyType.ToStar2:
                 particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
-                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 5);
+                }
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
+
             case EnemyType.ToStar3:
                 particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
-                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 2);
+                }
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
+
             case EnemyType.ToStar4:
                 particleManager.SpawnParticle(ParticleType.DestroyTSsmall, _transform);
-                if (isCorrect) soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 10);
+                }
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;
         }
     }
 
     /// <summary>
-    /// 적이 파괴된 위치에 피버 파티클을 생성합니다. 생성된 파티클은 자동으로 게이지 바로 날아가며, 피버 게이지를 1 채웁니다.
+    /// 소환되어 있는 모든 적의 이벤트를 해제하고 비활성하며, 소환 코루틴을 중지합니다.
+    /// 씬을 종료할 때 GameManager에 의해 호출됩니다.
     /// </summary>
-    /// <param name="owner"></param>
-    void AddFeverGauge(Enemy owner)
-    {
-        if(owner.EnemyType == EnemyType.ToPlanet1 || owner.EnemyType == EnemyType.ToStar1)
-        {
-            feverManager.CallParticle(owner.transform, 3);
-        }
-        else if (owner.EnemyType == EnemyType.ToPlanet2 || owner.EnemyType == EnemyType.ToStar2)
-        {
-            feverManager.CallParticle(owner.transform, 5);
-        }
-        else if (owner.EnemyType == EnemyType.ToPlanet3)
-        {
-            feverManager.CallParticle(owner.transform, 10);
-        }
-        else if (owner.EnemyType == EnemyType.ToStar3)
-        {
-            feverManager.CallParticle(owner.transform, 2);
-        }
-        else if (owner.EnemyType == EnemyType.ToPlanet4)
-        {
-            feverManager.CallParticle(owner.transform, 24);
-        }
-        else if (owner.EnemyType == EnemyType.ToStar4)
-        {
-            feverManager.CallParticle(owner.transform, 10);
-        }
-    }
-
     public void AllEnemyEventReset()
     {
-        Enemy[] enemies = FindObjectsOfType<Enemy>();
-        foreach (var enemy in enemies) if (enemy.gameObject.activeSelf) DeleteEventToEnemy(enemy);
+        foreach (var enemy in spawnedEnemies) if (enemy.gameObject.activeSelf) DespawnEnemy(enemy);
         StopAllCoroutines();
+        spawnedEnemies.Clear();
     }
 }
