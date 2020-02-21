@@ -225,6 +225,10 @@ public class UIManager : MonoBehaviour
             bestScoreText.text = score.ToString();
             //기록 갱신 표시
         }
+        else
+        {
+            bestScoreText.text = GameManager.Instance.ScoreManager.bestScore.ToString();
+        }
     }
 
 
@@ -247,7 +251,6 @@ public class UIManager : MonoBehaviour
                 PopUpWindowOnAnimation(pauseTransform);
                 break;
             case GameState.GameOver:
-                if (Application.isPlaying) return;
                 allPopUpWindow.SetActive(true);
                 nowActive = NowActiveWindow.Gameover;
                 PopUpWindowOnAnimation(gameoverTransform);

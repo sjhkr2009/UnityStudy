@@ -10,6 +10,7 @@ public class ScoreManager : MonoBehaviour
     public event Action<int, bool> EventOnGameOver = (n,b) => { }; //최고 점수를 갱신했다면 true, uiManager에서 게임오버 화면에 점수를 출력하는 용도.
 
     [SerializeField, ReadOnly] private int _score;
+    [SerializeField, ReadOnly] private int _bestScore;
 
     [SerializeField] private float addScorePerSecond;
     [SerializeField, ReadOnly] float timeScoreCount;
@@ -22,6 +23,7 @@ public class ScoreManager : MonoBehaviour
     {
         score = 0;
         timeScoreCount = 0f;
+        _bestScore = bestScore;
     }
 
     public int bestScore
@@ -109,6 +111,8 @@ public class ScoreManager : MonoBehaviour
 
     private void BestScoreCheck()
     {
+        _bestScore = bestScore;
+
         if (score > bestScore)
         {
             bestScore = score;

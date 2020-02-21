@@ -121,13 +121,14 @@ public class Enemy : MonoBehaviour
     {
         float currentRadius = Vector3.Distance(transform.position, Vector3.zero);
         float currentAngle = Mathf.Atan2(transform.position.z, transform.position.x);
+        Debug.Log($"currentAngle Deg2Rad: {currentAngle * Mathf.Deg2Rad} / Normal: {currentAngle}");
 
         if(currentRadius < moveRadius) return Vector3.zero;
 
         float targetAngle = 0f;
-        while (Mathf.Abs(targetAngle) < 30f)
+        while (Mathf.Abs(targetAngle - currentAngle) < 30f * Mathf.Deg2Rad)
         {
-            targetAngle = UnityEngine.Random.Range(currentAngle - maxAngulerSpeed, currentAngle + maxAngulerSpeed);
+            targetAngle = UnityEngine.Random.Range(currentAngle - maxAngulerSpeed * Mathf.Deg2Rad, currentAngle + maxAngulerSpeed * Mathf.Deg2Rad);
             if(Mathf.Abs(maxAngulerSpeed) < 50f)
             {
                 targetAngle = 0f;
@@ -136,22 +137,22 @@ public class Enemy : MonoBehaviour
         }
         float targetRadius = currentRadius - UnityEngine.Random.Range(radiusReductionOnMove * 0.85f, radiusReductionOnMove * 1.15f);
 
-        float targetPosX = targetRadius * Mathf.Cos(targetAngle * Mathf.Deg2Rad);
-        float targetPosY = targetRadius * Mathf.Sin(targetAngle * Mathf.Deg2Rad);
+        float targetPosX = targetRadius * Mathf.Cos(targetAngle);
+        float targetPosY = targetRadius * Mathf.Sin(targetAngle);
         Vector3 targetPos = new Vector3(targetPosX, transform.position.y, targetPosY);
 
         return targetPos;
-    }
+    }   
 
     void RandomMove()
     {
         if (!gameObject.activeSelf) return;
         if(isLinearMove) isLinearMove = false;
 
-        transform.DOMove(RandomMoveTarget(), 0.5f)
+        transform.DOMove(RandomMoveTarget(), 0.75f)
             .OnComplete(() =>
             {
-                if (gameObject.activeSelf) DOVirtual.DelayedCall(1f, RandomMove, false);
+                if (gameObject.activeSelf) DOVirtual.DelayedCall(1.25f, RandomMove, false);
             });
     }
 
@@ -193,10 +194,6 @@ public class Enemy : MonoBehaviour
                 //moveSpeed = Mathf.Clamp(18f / Vector3.Distance(transform.position, Vector3.zero), 1.5f, 6f);
                 break;
         }
-    }
-    private void OnDisable()
-    {
-        DOTween.Clear();
     }
 
     private void Divide()

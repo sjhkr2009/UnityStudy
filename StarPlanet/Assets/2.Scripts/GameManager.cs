@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
             {
                 case GameState.Ready:
                     _gameState = GameState.Ready;
-                    Time.timeScale = 1f;
+                    Time.timeScale = 0f;
                     break;
                 case GameState.Playing:
                     _gameState = GameState.Playing;
@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
         EventGameStateChanged += star.OnGameStateChanged;
         EventGameStateChanged += uiManager.OnGameStateChanged;
         EventGameStateChanged += timeManager.OnGameStateChanged;
+        EventGameStateChanged += scoreManager.OnGameStateChanged;
 
         scoreManager.EventOnScoreChanged += uiManager.ScoreTextChange;
         scoreManager.EventOnGameOver += uiManager.OnGameOverScorePrint;
@@ -126,6 +127,7 @@ public class GameManager : MonoBehaviour
         EventGameStateChanged -= star.OnGameStateChanged;
         EventGameStateChanged -= uiManager.OnGameStateChanged;
         EventGameStateChanged -= timeManager.OnGameStateChanged;
+        EventGameStateChanged -= scoreManager.OnGameStateChanged;
 
         scoreManager.EventOnScoreChanged -= uiManager.ScoreTextChange;
         scoreManager.EventOnGameOver -= uiManager.OnGameOverScorePrint;
