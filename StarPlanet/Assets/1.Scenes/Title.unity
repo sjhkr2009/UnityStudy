@@ -499,6 +499,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1663130903}
   - component: {fileID: 1663130902}
+  - component: {fileID: 1663130904}
   m_Layer: 0
   m_Name: MenuController
   m_TagString: Untagged
@@ -518,6 +519,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b45a133db6c1d24a835254306ac9abd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allPopUpWindow: {fileID: 0}
+  popUpBasicTransform: {fileID: 0}
+  titleText: {fileID: 0}
+  soundWindowTransform: {fileID: 0}
 --- !u!4 &1663130903
 Transform:
   m_ObjectHideFlags: 0
@@ -532,6 +537,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1663130904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663130901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436139e59861f4b4a95f0d3b888bf225, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmPlayer: {fileID: 0}
+  fxPlayer: {fileID: 0}
+  testFXSound: {fileID: 0}
+  masterVolume: 0
+  bgmVolume: 0
+  fxVolume: 0
 --- !u!1 &1735785301
 GameObject:
   m_ObjectHideFlags: 0

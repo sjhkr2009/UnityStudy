@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
             {
                 case GameState.Ready:
                     _gameState = GameState.Ready;
-                    Time.timeScale = 0f;
+                    Time.timeScale = 1f;
                     break;
                 case GameState.Playing:
                     _gameState = GameState.Playing;

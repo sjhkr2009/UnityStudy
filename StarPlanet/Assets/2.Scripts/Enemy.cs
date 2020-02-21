@@ -26,7 +26,14 @@ public class Enemy : MonoBehaviour
     [TabGroup("Rotate Move"), SerializeField] private float angulerSpeed;
 
     [TabGroup("Divide"), SerializeField] private float divideMinDistance;
+
+    [TabGroup("Random Move"), SerializeField] private float maxAngulerSpeed;
+    [TabGroup("Random Move"), SerializeField] private float minMoveRadius;
+    [TabGroup("Random Move"), SerializeField] private float radiusReductionOnMove;
+
     private float divideDistance;
+    private float moveRadius;
+    private bool isLinearMove;
 
     public event Action<Enemy, int> EventContactCorrect;
     public event Action<Enemy, int> EventContactWrong;
@@ -62,7 +69,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
-        if(targetType != "Star" && targetType != "Planet")
+        if (targetType != "Star" && targetType != "Planet")
         {
             if (EnemyTarget == EnemyTarget.ToPlanet) targetType = "Planet";
             else if (EnemyTarget == EnemyTarget.ToStar) targetType = "Star";
@@ -78,7 +85,11 @@ public class Enemy : MonoBehaviour
             divideDistance = UnityEngine.Random.Range(divideMinDistance, divideMinDistance * 1.5f);
             transform.localScale = Vector3.one;
         }
-        //else if (enemyType == EnemyType.ToStar4) moveSpeed = 1f;
+        else if (enemyType == EnemyType.ToStar4)
+        {
+            moveRadius = UnityEngine.Random.Range(minMoveRadius * 0.8f, minMoveRadius * 1.2f);
+            isLinearMove = true;
+        }
     }
 
 
@@ -106,23 +117,42 @@ public class Enemy : MonoBehaviour
         transform.position = _nextPos;
     }
 
-    Vector3 RandomMoveTarget() //Enemy TP4의 목표 위치를 설정한다. 중심까지의 거리를 좁히며 랜덤한 지점으로 이동하되 Planet을 지나지 않도록 각도를 제어한다.
+    Vector3 RandomMoveTarget() //Enemy TP4의 목표 위치를 설정한다. 중심까지의 거리를 좁히며 랜덤한 지점으로 이동하되 Planet로 돌진하지 않도록 각도를 제어한다.
     {
         float currentRadius = Vector3.Distance(transform.position, Vector3.zero);
         float currentAngle = Mathf.Atan2(transform.position.z, transform.position.x);
 
-        float _targetAngle = currentAngle - angulerSpeed * Mathf.Deg2Rad * Time.deltaTime;
+        if(currentRadius < moveRadius) return Vector3.zero;
 
-        float targetRadius = currentRadius - radiusReduceSpeed * Time.deltaTime;
+        float targetAngle = 0f;
+        while (Mathf.Abs(targetAngle) < 30f)
+        {
+            targetAngle = UnityEngine.Random.Range(currentAngle - maxAngulerSpeed, currentAngle + maxAngulerSpeed);
+            if(Mathf.Abs(maxAngulerSpeed) < 50f)
+            {
+                targetAngle = 0f;
+                break;
+            }
+        }
+        float targetRadius = currentRadius - UnityEngine.Random.Range(radiusReductionOnMove * 0.85f, radiusReductionOnMove * 1.15f);
 
-        float _nextPosX = targetRadius * Mathf.Cos(_targetAngle);
-        float _nextPosY = targetRadius * Mathf.Sin(_targetAngle);
-        Vector3 _nextPos = new Vector3(_nextPosX, transform.position.y, _nextPosY);
+        float targetPosX = targetRadius * Mathf.Cos(targetAngle * Mathf.Deg2Rad);
+        float targetPosY = targetRadius * Mathf.Sin(targetAngle * Mathf.Deg2Rad);
+        Vector3 targetPos = new Vector3(targetPosX, transform.position.y, targetPosY);
 
-        transform.rotation = Quaternion.LookRotation(_nextPos);
-        transform.position = _nextPos;
+        return targetPos;
+    }
 
-        return Vector3.zero;
+    void RandomMove()
+    {
+        if (!gameObject.activeSelf) return;
+        if(isLinearMove) isLinearMove = false;
+
+        transform.DOMove(RandomMoveTarget(), 0.5f)
+            .OnComplete(() =>
+            {
+                if (gameObject.activeSelf) DOVirtual.DelayedCall(1f, RandomMove, false);
+            });
     }
 
 
@@ -155,10 +185,18 @@ public class Enemy : MonoBehaviour
                 else Divide();
                 break;
             case EnemyType.ToStar4:
-                moveSpeed = Mathf.Clamp(18f / Vector3.Distance(transform.position, Vector3.zero), 1.5f, 6f);
-                Move();
+                if (isLinearMove)
+                {
+                    if (Vector3.Distance(transform.position, Vector3.zero) > Camera.main.orthographicSize * 0.8f) Move();
+                    else RandomMove();
+                }
+                //moveSpeed = Mathf.Clamp(18f / Vector3.Distance(transform.position, Vector3.zero), 1.5f, 6f);
                 break;
         }
+    }
+    private void OnDisable()
+    {
+        DOTween.Clear();
     }
 
     private void Divide()

@@ -15,17 +15,20 @@ public class SoundManager : MonoBehaviour
     }
     public float FXVolume
     {
-        get => PlayerPrefs.GetFloat(nameof(FXVolume), 1.0f);
+        get => PlayerPrefs.GetFloat(nameof(FXVolume), 0.5f);
         set => PlayerPrefs.SetFloat(nameof(FXVolume), value);
     }
     public float BGMVolume
     {
-        get => PlayerPrefs.GetFloat(nameof(BGMVolume), 1.0f);
+        get => PlayerPrefs.GetFloat(nameof(BGMVolume), 0.5f);
         set => PlayerPrefs.SetFloat(nameof(BGMVolume), value);
     }
 
-    //[BoxGroup("BGM")] [SerializeField] AudioSource audioSource;
+    [BoxGroup("BGM")] [SerializeField] AudioSource BGMPlayer;
 
+    [BoxGroup("FX")] [SerializeField] AudioSource testFXPlayer;
+    [BoxGroup("FX")] [SerializeField] AudioClip testFXSound;
+    [Header("Sound Sources")]
     [BoxGroup("FX")] [SerializeField] AudioClip correctCollision;
     [BoxGroup("FX")] [SerializeField] AudioClip wrongCollision;
     [BoxGroup("FX")] [SerializeField] AudioClip normalBombExplosion;
@@ -33,11 +36,22 @@ public class SoundManager : MonoBehaviour
     [BoxGroup("FX")] [SerializeField] AudioClip healing;
     [BoxGroup("FX")] [SerializeField] AudioClip booster;
 
+    [BoxGroup("Info"), SerializeField, ReadOnly] float masterVolume;
+    [BoxGroup("Info"), SerializeField, ReadOnly] float fxVolume;
+    [BoxGroup("Info"), SerializeField, ReadOnly] float bgmVolume;
+
     List<AudioSource> audioFXPlayers = new List<AudioSource>();
 
     private void Start()
     {
         audioFXPlayers = GameManager.Instance.PoolManager.audioFXList;
+        PlayBGM();
+    }
+
+    void PlayBGM()
+    {
+        BGMPlayer.volume = MasterVolume * BGMVolume;
+        BGMPlayer.Play();
     }
 
     public void PlayFXSound(SoundTypeFX soundType)
@@ -59,10 +73,10 @@ public class SoundManager : MonoBehaviour
                 audio.PlayOneShot(hexagonBombExplosion, 0.5f * MasterVolume * FXVolume);
                 break;
             case SoundTypeFX.Healing:
-                audio.PlayOneShot(healing, 0.65f * MasterVolume * FXVolume);
+                audio.PlayOneShot(healing, 0.7f * MasterVolume * FXVolume);
                 break;
             case SoundTypeFX.Booster:
-                audio.PlayOneShot(booster, 0.3f * MasterVolume * FXVolume);
+                audio.PlayOneShot(booster, 0.4f * MasterVolume * FXVolume);
                 break;
         }
     }
@@ -81,7 +95,23 @@ public class SoundManager : MonoBehaviour
         if(!container.gameObject.activeSelf) container.gameObject.SetActive(true);
         return container;
     }
-    public void MasterVolumeChange(Slider volumeSlider) { MasterVolume = volumeSlider.value; } //배경음 재생기의 볼륨 조정 추가하기
-    public void BGMVolumeChange(Slider volumeSlider) { BGMVolume = volumeSlider.value; } //배경음 재생기의 볼륨 조정 추가하기
-    public void FXVolumeChange(Slider volumeSlider) { FXVolume = volumeSlider.value; }
+    public void MasterVolumeChange(Slider volumeSlider)
+    {
+        MasterVolume = volumeSlider.value;
+        masterVolume = PlayerPrefs.GetFloat(nameof(MasterVolume)); //모니터링용
+        BGMPlayer.volume = MasterVolume * BGMVolume;
+    } 
+    public void BGMVolumeChange(Slider volumeSlider)
+    {
+        BGMVolume = volumeSlider.value;
+        bgmVolume = PlayerPrefs.GetFloat(nameof(BGMVolume)); //모니터링용
+        BGMPlayer.volume = MasterVolume * BGMVolume;
+    }
+    public void FXVolumeChange(Slider volumeSlider)
+    {
+        FXVolume = volumeSlider.value;
+        fxVolume = PlayerPrefs.GetFloat(nameof(FXVolume));
+    }
+    public void TestFXPlay() { testFXPlayer.PlayOneShot(testFXSound, MasterVolume * FXVolume); } //핸들 아이콘의 드래그가 끝났을때만 적용
+
 }

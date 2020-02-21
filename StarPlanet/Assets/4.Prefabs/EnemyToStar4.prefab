@@ -23493,14 +23493,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 7
+  enemyTarget: 0
   targetType: Star
   avoidType: Planet
   damage: 25
   healing: 2
-  moveSpeed: 1
+  moveSpeed: 5.5
   radiusReduceSpeed: 1.5
   angulerSpeed: 60
   divideMinDistance: 0
+  maxAngulerSpeed: 160
+  minMoveRadius: 3
+  radiusReductionOnMove: 1
 --- !u!1 &7162318439847454224
 GameObject:
   m_ObjectHideFlags: 0

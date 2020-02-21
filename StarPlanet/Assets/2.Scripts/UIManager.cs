@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine.UI;
 using System;
 using DG.Tweening;
-public enum NowActive { None, Pause, Sound, Gameover }
+public enum NowActiveWindow { None, Pause, Sound, Gameover }
 
 public class UIManager : MonoBehaviour
 {
@@ -48,20 +48,20 @@ public class UIManager : MonoBehaviour
     bool isPopUpClosing = false;
     bool isWarningActive = false;
 
-    private NowActive _nowActive;
-    public NowActive nowActive
+    private NowActiveWindow _nowActive;
+    public NowActiveWindow nowActive
     {
         get => _nowActive;
         set
         {
             switch (value)
             {
-                case NowActive.None:
-                    _nowActive = NowActive.None;
+                case NowActiveWindow.None:
+                    _nowActive = NowActiveWindow.None;
                     break;
 
-                case NowActive.Pause:
-                    _nowActive = NowActive.Pause;
+                case NowActiveWindow.Pause:
+                    _nowActive = NowActiveWindow.Pause;
                     if (gameoverTransform.gameObject.activeSelf) gameoverTransform.gameObject.SetActive(false);
                     if (soundTransform.gameObject.activeSelf) soundTransform.gameObject.SetActive(false);
 
@@ -69,8 +69,8 @@ public class UIManager : MonoBehaviour
                     pauseTransform.gameObject.SetActive(true);
                     break;
 
-                case NowActive.Sound:
-                    _nowActive = NowActive.Sound;
+                case NowActiveWindow.Sound:
+                    _nowActive = NowActiveWindow.Sound;
                     if (gameoverTransform.gameObject.activeSelf) gameoverTransform.gameObject.SetActive(false);
                     if (pauseTransform.gameObject.activeSelf) pauseTransform.gameObject.SetActive(false);
 
@@ -78,8 +78,8 @@ public class UIManager : MonoBehaviour
                     soundTransform.gameObject.SetActive(true);
                     break;
 
-                case NowActive.Gameover:
-                    _nowActive = NowActive.Gameover;
+                case NowActiveWindow.Gameover:
+                    _nowActive = NowActiveWindow.Gameover;
                     if (pauseTransform.gameObject.activeSelf) pauseTransform.gameObject.SetActive(false);
                     if (soundTransform.gameObject.activeSelf) soundTransform.gameObject.SetActive(false);
 
@@ -92,7 +92,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        if(popUpWindow == null) popUpWindow = allPopUpWindow.GetComponent<PopUpWindow>();
+        if (popUpWindow == null) popUpWindow = allPopUpWindow.GetComponent<PopUpWindow>();
         if (warningText == null) warningText = FindObjectOfType<WarningText>();
 
         star.EventRadiusChange += RadiusChange;
@@ -144,15 +144,16 @@ public class UIManager : MonoBehaviour
 
             return;
         }
-        
+        if (!countdownText.gameObject.activeSelf) countdownText.gameObject.SetActive(true);
+
         countdownText.text = count.ToString();
         countdownText.transform.localScale = Vector3.one * 3f;
-        countdownText.DOFade(1f, 0f).SetUpdate(true);
         countdownText.transform.DOScale(1f, 1f).SetEase(Ease.OutCirc).SetUpdate(true);
+        countdownText.DOFade(1f, 0f).SetUpdate(true);
         countdownText.DOFade(0f, 1f).SetEase(Ease.InCirc).SetUpdate(true)
             .OnComplete(() =>
             {
-                CountdownTextChange(count - 1);
+                if(count > 0) CountdownTextChange(count - 1);
             });
     }
 
@@ -175,7 +176,6 @@ public class UIManager : MonoBehaviour
     }
     public void FeverGaugeReset()
     {
-        feverEdge.DOKill();
         feverFillArea.fillAmount = 0f;
         feverEdge.color = new Color(1f, 1f, 1f, 0f);
         feverEffect.Pause();
@@ -239,15 +239,17 @@ public class UIManager : MonoBehaviour
                 break;
             case GameState.Playing:
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
+                if (countdownText.gameObject.activeSelf) countdownText.gameObject.SetActive(false);
                 break;
             case GameState.Pause:
                 allPopUpWindow.SetActive(true);
-                nowActive = NowActive.Pause;
+                nowActive = NowActiveWindow.Pause;
                 PopUpWindowOnAnimation(pauseTransform);
                 break;
             case GameState.GameOver:
+                if (Application.isPlaying) return;
                 allPopUpWindow.SetActive(true);
-                nowActive = NowActive.Gameover;
+                nowActive = NowActiveWindow.Gameover;
                 PopUpWindowOnAnimation(gameoverTransform);
                 break;
         }
@@ -268,15 +270,15 @@ public class UIManager : MonoBehaviour
 
         switch (nowActive)
         {
-            case NowActive.None:
+            case NowActiveWindow.None:
                 break;
-            case NowActive.Pause:
+            case NowActiveWindow.Pause:
                 ButtonPauseToResume();
                 break;
-            case NowActive.Sound:
+            case NowActiveWindow.Sound:
                 ButtonSoundToPause();
                 break;
-            case NowActive.Gameover:
+            case NowActiveWindow.Gameover:
                 OpenWarningWindow();
                 break;
         }
@@ -309,12 +311,12 @@ public class UIManager : MonoBehaviour
     public void ButtonPauseToSound()
     {
         if (isPopUpClosing) return;
-        nowActive = NowActive.Sound;
+        nowActive = NowActiveWindow.Sound;
     }
     public void ButtonSoundToPause()
     {
         if (isPopUpClosing) return;
-        nowActive = NowActive.Pause;
+        nowActive = NowActiveWindow.Pause;
     }
     public void ButtonWarningClose()
     {
@@ -378,6 +380,6 @@ public class UIManager : MonoBehaviour
     {
         allPopUpWindow.SetActive(false);
         isPopUpClosing = false;
-        nowActive = NowActive.None;
+        nowActive = NowActiveWindow.None;
     }
 }
