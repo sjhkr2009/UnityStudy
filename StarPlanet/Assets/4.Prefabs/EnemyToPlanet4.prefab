@@ -64,7 +64,7 @@ MonoBehaviour:
   avoidType: Star
   damage: 34
   healing: 9
-  moveSpeed: 1.1
+  moveSpeed: 1
   radiusReduceSpeed: 0
   angulerSpeed: 0
   divideMinDistance: 0

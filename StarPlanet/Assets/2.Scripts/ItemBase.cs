@@ -52,6 +52,10 @@ public class ItemBase : MonoBehaviour
     protected virtual void OnDisable()
     {
         StopAllCoroutines();
-        CancelInvoke();
+    }
+
+    protected virtual void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 }

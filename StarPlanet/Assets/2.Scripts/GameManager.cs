@@ -56,17 +56,18 @@ public class GameManager : MonoBehaviour
 
     [BoxGroup("Screen")] public float screenHorizontal = 9f, screenVertical = 16f;
 
-    [BoxGroup("Scripts")] [SerializeField] Star star;                   public Star Star => star;
-    [BoxGroup("Scripts")] [SerializeField] Planet planet;               public Planet Planet => planet;
-    [BoxGroup("Scripts")] [SerializeField] UIManager uiManager;         public UIManager UiManager => uiManager;
-    [BoxGroup("Scripts")] [SerializeField] EnemyManager enemyManager;   public EnemyManager EnemyManager => enemyManager;
-    [BoxGroup("Scripts")] [SerializeField] SoundManager soundManager;   public SoundManager SoundManager => soundManager;
-    [BoxGroup("Scripts")] [SerializeField] ScoreManager scoreManager;   public ScoreManager ScoreManager => scoreManager;
-    [BoxGroup("Scripts")] [SerializeField] PoolManager poolManager;     public PoolManager PoolManager => poolManager;
-    [BoxGroup("Scripts")] [SerializeField] ParticleManager particleManager; public ParticleManager ParticleManager => particleManager;
-    [BoxGroup("Scripts")] [SerializeField] ItemManager itemManager;     public ItemManager ItemManager => itemManager;
-    [BoxGroup("Scripts")] [SerializeField] FeverManager feverManager;   public FeverManager FeverManager => feverManager;
-    [BoxGroup("Scripts")] [SerializeField] TimeManager timeManager;     public TimeManager TimeManager => timeManager;
+    [BoxGroup("Scripts"), SerializeField] Star star;                        public Star Star => star;
+    [BoxGroup("Scripts"), SerializeField] Planet planet;                    public Planet Planet => planet;
+    [BoxGroup("Scripts"), SerializeField] UIManager uiManager;              public UIManager UiManager => uiManager;
+    [BoxGroup("Scripts"), SerializeField] EnemyManager enemyManager;        public EnemyManager EnemyManager => enemyManager;
+    [BoxGroup("Scripts"), SerializeField] SoundManager soundManager;        public SoundManager SoundManager => soundManager;
+    [BoxGroup("Scripts"), SerializeField] ScoreManager scoreManager;        public ScoreManager ScoreManager => scoreManager;
+    [BoxGroup("Scripts"), SerializeField] PoolManager poolManager;          public PoolManager PoolManager => poolManager;
+    [BoxGroup("Scripts"), SerializeField] ParticleManager particleManager;  public ParticleManager ParticleManager => particleManager;
+    [BoxGroup("Scripts"), SerializeField] ItemManager itemManager;          public ItemManager ItemManager => itemManager;
+    [BoxGroup("Scripts"), SerializeField] FeverManager feverManager;        public FeverManager FeverManager => feverManager;
+    [BoxGroup("Scripts"), SerializeField] TimeManager timeManager;          public TimeManager TimeManager => timeManager;
+    [BoxGroup("Scripts"), SerializeField] SpawnManager spawnManager;        public SpawnManager SpawnManager => spawnManager;
 
     Vector3 mousePos;
     public event Action<Vector3> EventOnTouchScreen = n => { };
@@ -83,6 +84,7 @@ public class GameManager : MonoBehaviour
         if (particleManager == null) particleManager = GetComponent<ParticleManager>();
         if (feverManager == null) feverManager = GetComponent<FeverManager>();
         if (timeManager == null) timeManager = GetComponent<TimeManager>();
+        if (spawnManager == null) spawnManager = GetComponent<SpawnManager>();
         if (star == null) star = FindObjectOfType<Star>();
         if (planet == null) planet = FindObjectOfType<Planet>();
 
@@ -144,7 +146,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         if (_instance != null && _instance != this) { Destroy(gameObject); }
-        DOVirtual.DelayedCall(4f, () =>
+        DOVirtual.DelayedCall(4.5f, () =>
         {
             if (gameState == GameState.Ready)
             {

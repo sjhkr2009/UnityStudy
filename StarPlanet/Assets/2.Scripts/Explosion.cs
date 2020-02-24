@@ -34,4 +34,14 @@ public class Explosion : MonoBehaviour
     {
         if (isHexagon) transform.Rotate(Vector3.up, 30f * Time.deltaTime);
     }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
+    }
+
+    private void OnDestroy()
+    {
+        CancelInvoke();
+    }
 }

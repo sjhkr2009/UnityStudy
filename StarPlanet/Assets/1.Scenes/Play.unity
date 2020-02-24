@@ -45226,6 +45226,7 @@ GameObject:
   - component: {fileID: 1820830203}
   - component: {fileID: 1820830204}
   - component: {fileID: 1820830205}
+  - component: {fileID: 1820830206}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -45298,6 +45299,7 @@ MonoBehaviour:
   itemManager: {fileID: 1820830203}
   feverManager: {fileID: 1820830204}
   timeManager: {fileID: 1820830205}
+  spawnManager: {fileID: 1820830206}
 --- !u!4 &1820830197
 Transform:
   m_ObjectHideFlags: 0
@@ -45393,14 +45395,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2ba6a716fcc7e478a15ff28aad8282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolManager: {fileID: 1820830198}
-  scoreManager: {fileID: 1820830202}
-  soundManager: {fileID: 1820830201}
-  particleManager: {fileID: 1820830200}
   spawnDelay: 3
   tier2Probability: 0.4
+  isTier2cooltime: 0
   tier3Probability: 0.2
+  isTier3cooltime: 0
   tier4Probability: 0.1
+  isTier4cooltime: 0
   tier2cooltime: 10
   tier3cooltime: 10
   tier4cooltime: 20
@@ -45456,6 +45457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _score: 0
+  _bestScore: 0
   addScorePerSecond: 0.3
   timeScoreCount: 0
   scoreTier1: 5
@@ -45474,9 +45476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a3476c39ab052e4e8a662f0c969cb7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolManager: {fileID: 1820830198}
-  soundManager: {fileID: 1820830201}
-  particleManager: {fileID: 1820830200}
   delayOfFixedBomb: 10
   delayOfHexagonBomb: 10
   planet: {fileID: 678788596}
@@ -45512,6 +45511,18 @@ MonoBehaviour:
   isPlaying: 0
   timeCount: 0
   secondCount: 0
+--- !u!114 &1820830206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820830194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb5f63f9f7fd0d44b2356609ce84795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1824307677
 GameObject:
   m_ObjectHideFlags: 0
@@ -50796,14 +50807,14 @@ MonoBehaviour:
   _maxHp: 50
   originOrbitalRadius: 3
   radiusChangeSpeed: 0.035
-  maxAngulerSpeed: 270
+  maxAngulerSpeed: 240
   minRadius: 2
   speedReduction: 3
   trailParticle: {fileID: 1732517088}
   boosterTrailParticle: {fileID: 1303850824}
   feverParticle: {fileID: 974931426}
   orbitalSpeedFactor: 1
-  boosterFactor: 1.5
+  boosterFactor: 1.6
 --- !u!54 &1934295237
 Rigidbody:
   m_ObjectHideFlags: 0

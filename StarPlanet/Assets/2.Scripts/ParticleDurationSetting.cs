@@ -17,4 +17,14 @@ public class ParticleDurationSetting : MonoBehaviour
         Invoke(nameof(DurationOut), particleDuration);
     }
     void DurationOut() { gameObject.SetActive(false); }
+
+    private void OnDestroy()
+    {
+        CancelInvoke();
+    }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
+    }
 }

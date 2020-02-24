@@ -121,7 +121,6 @@ public class Enemy : MonoBehaviour
     {
         float currentRadius = Vector3.Distance(transform.position, Vector3.zero);
         float currentAngle = Mathf.Atan2(transform.position.z, transform.position.x);
-        Debug.Log($"currentAngle Deg2Rad: {currentAngle * Mathf.Deg2Rad} / Normal: {currentAngle}");
 
         if(currentRadius < moveRadius) return Vector3.zero;
 
@@ -135,6 +134,7 @@ public class Enemy : MonoBehaviour
                 break;
             }
         }
+        Debug.Log($"Enemy TS4 회전각: {targetAngle * Mathf.Rad2Deg}");
         float targetRadius = currentRadius - UnityEngine.Random.Range(radiusReductionOnMove * 0.85f, radiusReductionOnMove * 1.15f);
 
         float targetPosX = targetRadius * Mathf.Cos(targetAngle);
@@ -149,10 +149,10 @@ public class Enemy : MonoBehaviour
         if (!gameObject.activeSelf) return;
         if(isLinearMove) isLinearMove = false;
 
-        transform.DOMove(RandomMoveTarget(), 0.75f)
+        transform.DOMove(RandomMoveTarget(), 0.65f)
             .OnComplete(() =>
             {
-                if (gameObject.activeSelf) DOVirtual.DelayedCall(1.25f, RandomMove, false);
+                if (gameObject.activeSelf) DOVirtual.DelayedCall(1.05f, RandomMove, false);
             });
     }
 
@@ -191,7 +191,7 @@ public class Enemy : MonoBehaviour
                     if (Vector3.Distance(transform.position, Vector3.zero) > Camera.main.orthographicSize * 0.8f) Move();
                     else RandomMove();
                 }
-                //moveSpeed = Mathf.Clamp(18f / Vector3.Distance(transform.position, Vector3.zero), 1.5f, 6f);
+                //moveSpeed = Mathf.Clamp(18f / Vector3.Distance(transform.position, Vector3.zero), 1.5f, 6f); //가까울수록 빠르게 이동
                 break;
         }
     }
@@ -199,11 +199,18 @@ public class Enemy : MonoBehaviour
     private void Divide()
     {
         transform.DORotate(new Vector3(0f, 1080f, 0f), 2f).SetEase(Ease.InQuad);
-        transform.DOScale(0.1f, 2f).SetEase(Ease.InCirc).OnComplete(OnDivideSpawn);
+        transform.DOScale(0.1f, 2f).SetEase(Ease.InCirc).OnComplete(() =>
+        {
+            EventOnDivide(transform, ObjectPool.EnemyTP1);
+            gameObject.SetActive(false);
+        });
     }
-    void OnDivideSpawn()
+    private void OnDisable()
     {
-        EventOnDivide(transform, ObjectPool.EnemyTP1);
-        gameObject.SetActive(false);
+        DOTween.Kill(gameObject);
+    }
+    private void OnDestroy()
+    {
+        DOTween.Kill(gameObject);
     }
 }

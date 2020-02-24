@@ -6,37 +6,41 @@ using DG.Tweening;
 
 public class EnemyManager : MonoBehaviour
 {
-    [BoxGroup("Components"), SerializeField] PoolManager poolManager;
-    [BoxGroup("Components"), SerializeField] ScoreManager scoreManager;
-    [BoxGroup("Components"), SerializeField] SoundManager soundManager;
-    [BoxGroup("Components"), SerializeField] ParticleManager particleManager;
+    PoolManager poolManager;
+    SpawnManager spawnManager;
+    ScoreManager scoreManager;
+    SoundManager soundManager;
+    ParticleManager particleManager;
+    FeverManager feverManager;
 
     [BoxGroup("Spawn Control"), SerializeField] float spawnDelay;
     [BoxGroup("Spawn Control"), SerializeField] float tier2Probability;
-    private bool isTier2cooltime = false;
+    [SerializeField, ReadOnly] private bool isTier2cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier3Probability;
-    private bool isTier3cooltime = false;
+    [SerializeField, ReadOnly] private bool isTier3cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier4Probability;
-    private bool isTier4cooltime = false;
+    [SerializeField, ReadOnly] private bool isTier4cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier2cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier3cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier4cooltime;
     [BoxGroup("Spawn Control"), SerializeField] int tier3TSSpawnCount = 5;
 
-    float screenView;
-    FeverManager feverManager;
     List<Enemy> spawnedEnemies = new List<Enemy>();
 
     void Start()
     {
-        if (poolManager == null) poolManager = GameManager.Instance.PoolManager;
-        if (scoreManager == null) scoreManager = GameManager.Instance.ScoreManager;
-        if (soundManager == null) soundManager = GameManager.Instance.SoundManager;
-        if (particleManager == null) particleManager = GameManager.Instance.ParticleManager;
-
-        screenView = GameManager.Instance.screenHorizontal / GameManager.Instance.screenVertical;
+        poolManager = GameManager.Instance.PoolManager;
+        spawnManager = GameManager.Instance.SpawnManager;
+        scoreManager = GameManager.Instance.ScoreManager;
+        soundManager = GameManager.Instance.SoundManager;
+        particleManager = GameManager.Instance.ParticleManager;
         feverManager = GameManager.Instance.FeverManager;
-        StartCoroutine(EnemySpawn());
+
+        isTier2cooltime = false;
+        isTier3cooltime = false;
+        isTier4cooltime = false;
+
+        StartCoroutine(nameof(EnemySpawn));
     }
 
     /// <summary>
@@ -63,72 +67,59 @@ public class EnemyManager : MonoBehaviour
             if (GameManager.Instance.gameState != GameState.Playing) continue;
 
             float spawnDelay = Random.Range(this.spawnDelay * 0.8f, this.spawnDelay * 1.2f);
-            float cameraSize = Camera.main.orthographicSize;
 
-            float minX = -cameraSize * screenView - 2f;
-            float maxX = cameraSize * screenView + 2f;
-
-            float posX = Random.Range(minX, maxX);
-            float posY = cameraSize + 1f;
-
-            if (Random.value < 0.5f)
-            {
-                posY = -cameraSize - 1f;
-            }
-
-            Vector3 position = new Vector3(posX, 0f, posY);
             Enemy enemy = null;
 
             if (Random.value < 0.4f) //To Planet형 유닛 생성
             {
                 if(Random.value < tier4Probability && !isTier4cooltime)
                 {
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP4, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTP4);
                     StartCoroutine(SpawnCooldown(4));
                 }
                 else if(Random.value < tier3Probability && !isTier3cooltime)
                 {
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP3, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTP3);
                     StartCoroutine(SpawnCooldown(3));
                 }
                 else if(Random.value < tier2Probability && !isTier2cooltime)
                 {
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP2, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTP3);
                     StartCoroutine(SpawnCooldown(2));
                 }
                 else
                 {
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTP1, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTP1);
                 }
             }
            else //To Star형 유닛 생성
             {
                 if (Random.value < tier4Probability && !isTier4cooltime)
                 {
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS4, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS4);
                     StartCoroutine(SpawnCooldown(4));
                 }
                 else if (Random.value < tier3Probability && !isTier3cooltime)
                 {
                     for (int i = 0; i < tier3TSSpawnCount - 1; i++)
                     {
-                        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS3, position, Quaternion.LookRotation(Vector3.zero - position));
+                        enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS3);
                         AddEventToEnemy(enemy);
                         yield return new WaitForSeconds(0.5f);
                     }
 
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS3, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS3);
                     spawnDelay = Mathf.Max(spawnDelay - (0.2f * tier3TSSpawnCount), 0.1f);
                     StartCoroutine(SpawnCooldown(3));
                 }
                 else if (Random.value < tier2Probability && !isTier2cooltime)
                 {
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS2, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS2);
                     StartCoroutine(SpawnCooldown(2));
                 }
                 else
                 {
-                    enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS1, position, Quaternion.LookRotation(Vector3.zero - position));
+                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS1);
                 }
             }
 
@@ -176,29 +167,12 @@ public class EnemyManager : MonoBehaviour
     {
         particleManager.SpawnParticle(ParticleType.DestroyTPsmall, spawnTransform); //분열 이펙트로 변경할 것
 
-        Enemy enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + Vector3.forward));
-        AddEventToEnemy(enemy);
-
-        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + Vector3.back));
-        AddEventToEnemy(enemy);
-
-        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + Vector3.right));
-        AddEventToEnemy(enemy);
-
-        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + Vector3.left));
-        AddEventToEnemy(enemy);
-
-        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + new Vector3(1, 0, 1)));
-        AddEventToEnemy(enemy);
-
-        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + new Vector3(-1, 0, 1)));
-        AddEventToEnemy(enemy);
-
-        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + new Vector3(1, 0, -1)));
-        AddEventToEnemy(enemy);
-
-        enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + new Vector3(-1, 0, -1)));
-        AddEventToEnemy(enemy);
+        Vector3[] dividePos = { Vector3.forward, new Vector3(1, 0, 1), Vector3.right, new Vector3(1, 0, -1), Vector3.back, new Vector3(-1, 0, -1), Vector3.left, new Vector3(-1, 0, 1) };
+        for (int i = 0; i < dividePos.Length; i++)
+        {
+            Enemy enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + dividePos[i]));
+            AddEventToEnemy(enemy);
+        }
     }
     /// <summary>
     /// 적에게 이벤트를 추가합니다. 추가된 이벤트는 DeleteEventToEnemy 함수에서 제거해야 합니다.
@@ -375,7 +349,7 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     public void AllEnemyEventReset()
     {
-        foreach (var enemy in spawnedEnemies) if (enemy.gameObject.activeSelf) DespawnEnemy(enemy);
+        foreach (var enemy in spawnedEnemies) if (enemy.gameObject.activeSelf) enemy.gameObject.SetActive(false);
         StopAllCoroutines();
         spawnedEnemies.Clear();
     }

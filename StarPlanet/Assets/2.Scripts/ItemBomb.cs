@@ -32,5 +32,11 @@ public class ItemBomb : ItemBase
     protected override void OnDisable()
     {
         base.OnDisable();
+        CancelInvoke();
+    }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        CancelInvoke();
     }
 }

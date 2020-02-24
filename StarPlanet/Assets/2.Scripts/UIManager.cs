@@ -140,7 +140,7 @@ public class UIManager : MonoBehaviour
             countdownText.text = "Start!";
             countdownText.DOFade(1f, 0f).SetUpdate(true);
             countdownText.transform.localScale = Vector3.one * 1.5f;
-            DOVirtual.DelayedCall(0.5f, () => { countdownText.gameObject.SetActive(false); GameManager.Instance.gameState = GameState.Playing; });
+            DOVirtual.DelayedCall(0.75f, () => { countdownText.gameObject.SetActive(false); GameManager.Instance.gameState = GameState.Playing; });
 
             return;
         }
@@ -239,7 +239,7 @@ public class UIManager : MonoBehaviour
         {
             case GameState.Ready:
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
-                CountdownTextChange(3);
+                DOVirtual.DelayedCall(0.5f, () => { CountdownTextChange(3); }, true);
                 break;
             case GameState.Playing:
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
