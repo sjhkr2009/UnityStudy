@@ -5,7 +5,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using DG.Tweening;
 
-public enum EnemyType { ToPlanet1, ToStar1, ToPlanet2, ToStar2, ToPlanet3, ToStar3, ToPlanet4, ToStar4 }
+public enum EnemyType { ToPlanet1, ToStar1, ToPlanet2, ToStar2, ToPlanet3, ToStar3, ToPlanet4, ToStar4, TP3mini }
 public enum EnemyTarget { ToPlanet, ToStar }
 
 public class Enemy : MonoBehaviour
@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
     [TabGroup("Rotate Move"), SerializeField] private float angulerSpeed;
 
     [TabGroup("Divide"), SerializeField] private float divideMinDistance;
+    [TabGroup("Divide"), SerializeField] private float divideMaxDistance;
 
     [TabGroup("Random Move"), SerializeField] private float maxAngulerSpeed;
     [TabGroup("Random Move"), SerializeField] private float minMoveRadius;
@@ -33,12 +34,14 @@ public class Enemy : MonoBehaviour
 
     private float divideDistance;
     private float moveRadius;
+    private bool isDivided;
     private bool isLinearMove;
 
     public event Action<Enemy, int> EventContactCorrect;
     public event Action<Enemy, int> EventContactWrong;
     public event Action<Enemy> EventOnExplosion;
     public event Action<Transform, ObjectPool> EventOnDivide;
+    public event Action<Enemy> EventOnDistanceOver;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -80,15 +83,21 @@ public class Enemy : MonoBehaviour
             else if (EnemyTarget == EnemyTarget.ToStar) avoidType = "Planet";
         }
 
-        if (enemyType == EnemyType.ToPlanet4)
+        if (enemyType == EnemyType.ToPlanet3)
         {
-            divideDistance = UnityEngine.Random.Range(divideMinDistance, divideMinDistance * 1.5f);
+            divideDistance = UnityEngine.Random.Range(divideMinDistance, divideMaxDistance);
             transform.localScale = Vector3.one;
+            isDivided = false;
         }
         else if (enemyType == EnemyType.ToStar4)
         {
             moveRadius = UnityEngine.Random.Range(minMoveRadius * 0.8f, minMoveRadius * 1.2f);
             isLinearMove = true;
+        }
+        else if(enemyType == EnemyType.TP3mini)
+        {
+            moveSpeed = 1.5f;
+            StartCoroutine(nameof(DistanceOverCheck));
         }
     }
 
@@ -149,15 +158,15 @@ public class Enemy : MonoBehaviour
         if (!gameObject.activeSelf) return;
         if(isLinearMove) isLinearMove = false;
 
-        transform.DOMove(RandomMoveTarget(), 0.65f)
+        transform.DOMove(RandomMoveTarget(), 0.55f)
             .OnComplete(() =>
             {
-                if (gameObject.activeSelf) DOVirtual.DelayedCall(1.05f, RandomMove, false);
+                if (gameObject.activeSelf) DOVirtual.DelayedCall(0.85f, RandomMove, false);
             });
     }
 
 
-    protected virtual void Update()
+    void Update()
     {
         if (GameManager.Instance.gameState != GameState.Playing) return;
 
@@ -176,14 +185,18 @@ public class Enemy : MonoBehaviour
                 RotateMove(false);
                 break;
             case EnemyType.ToPlanet3:
-                Move();
+                if (Vector3.Distance(transform.position, Vector3.zero) > divideDistance) Move();
+                else if (!isDivided)
+                {
+                    isDivided = true;
+                    Divide();
+                }
                 break;
             case EnemyType.ToStar3:
                 RotateMove(false);
                 break;
             case EnemyType.ToPlanet4:
-                if (Vector3.Distance(transform.position, Vector3.zero) > divideDistance) Move();
-                else Divide();
+                Move();
                 break;
             case EnemyType.ToStar4:
                 if (isLinearMove)
@@ -191,26 +204,41 @@ public class Enemy : MonoBehaviour
                     if (Vector3.Distance(transform.position, Vector3.zero) > Camera.main.orthographicSize * 0.8f) Move();
                     else RandomMove();
                 }
-                //moveSpeed = Mathf.Clamp(18f / Vector3.Distance(transform.position, Vector3.zero), 1.5f, 6f); //가까울수록 빠르게 이동
+                break;
+            case EnemyType.TP3mini:
+                moveSpeed = Mathf.Clamp(moveSpeed + 1f * Time.deltaTime, 1.5f, 5f);
+                Move();
                 break;
         }
     }
 
     private void Divide()
     {
-        transform.DORotate(new Vector3(0f, 1080f, 0f), 2f).SetEase(Ease.InQuad);
+        transform.DORotate(new Vector3(0f, 1440f, 0f), 2f).SetEase(Ease.InQuad);
         transform.DOScale(0.1f, 2f).SetEase(Ease.InCirc).OnComplete(() =>
         {
-            EventOnDivide(transform, ObjectPool.EnemyTP1);
+            EventOnDivide(transform, ObjectPool.EnemyTP3mini);
             gameObject.SetActive(false);
         });
     }
+
+    IEnumerator DistanceOverCheck()
+    {
+        while (gameObject.activeSelf)
+        {
+            yield return new WaitForSeconds(1f);
+            if (Vector3.Distance(transform.position, Vector3.zero) > Camera.main.orthographicSize * 1.5f) EventOnDistanceOver(this);
+        }
+    }
+
     private void OnDisable()
     {
         DOTween.Kill(gameObject);
+        StopCoroutine(nameof(DistanceOverCheck));
     }
     private void OnDestroy()
     {
         DOTween.Kill(gameObject);
+        StopCoroutine(nameof(DistanceOverCheck));
     }
 }

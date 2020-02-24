@@ -75,16 +75,19 @@ public class ScoreManager : MonoBehaviour
                 score = scoreTier2;
                 break;
             case EnemyType.ToPlanet3:
+                score = scoreTier3 * 2;
+                break;
+            case EnemyType.TP3mini:
                 score = scoreTier3;
                 break;
             case EnemyType.ToStar3:
-                score = (int)(scoreTier3 / 4f);
+                score = scoreTier3;
                 break;
             case EnemyType.ToPlanet4:
                 score = scoreTier4;
                 break;
             case EnemyType.ToStar4:
-                score = scoreTier4 * 2;
+                score = scoreTier4;
                 break;
         }
         return score;

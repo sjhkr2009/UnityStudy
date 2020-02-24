@@ -165,6 +165,7 @@ public class UIManager : MonoBehaviour
     }
     public void OnFeverTime()
     {
+        feverEffect.gameObject.SetActive(true);
         feverEffect.Play();
         float duration = GameManager.Instance.FeverManager.feverDuration;
 
@@ -177,8 +178,9 @@ public class UIManager : MonoBehaviour
     public void FeverGaugeReset()
     {
         feverFillArea.fillAmount = 0f;
+        feverEdge.DOKill();
         feverEdge.color = new Color(1f, 1f, 1f, 0f);
-        feverEffect.Pause();
+        feverEffect.gameObject.SetActive(false);
     }
 
     public void OnPlayerHpChanged(int value, Player player)

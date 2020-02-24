@@ -24,6 +24,7 @@ public class EnemyManager : MonoBehaviour
     [BoxGroup("Spawn Control"), SerializeField] float tier3cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier4cooltime;
     [BoxGroup("Spawn Control"), SerializeField] int tier3TSSpawnCount = 5;
+    [BoxGroup("Spawn Control"), SerializeField] int tier3TPSpawnCount = 5;
 
     List<Enemy> spawnedEnemies = new List<Enemy>();
 
@@ -160,17 +161,16 @@ public class EnemyManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 적 개체 중 분열하는 형태의 적에게 적용됩니다. 입력한 타입의 적을 8방향으로 소환합니다. 기본값은 Enemy To Planet 1 입니다.
+    /// 적 개체 중 분열하는 형태의 적에게 적용됩니다. 입력한 타입의 적을 8방향으로 소환합니다.
     /// </summary>
     /// <param name="spawnTransform"></param>
-    void OnDivideSpawn(Transform spawnTransform, ObjectPool type = ObjectPool.EnemyTP1)
+    void OnDivideSpawn(Transform spawnTransform, ObjectPool type)
     {
         particleManager.SpawnParticle(ParticleType.DestroyTPsmall, spawnTransform); //분열 이펙트로 변경할 것
 
-        Vector3[] dividePos = { Vector3.forward, new Vector3(1, 0, 1), Vector3.right, new Vector3(1, 0, -1), Vector3.back, new Vector3(-1, 0, -1), Vector3.left, new Vector3(-1, 0, 1) };
-        for (int i = 0; i < dividePos.Length; i++)
+        for (int i = 0; i < tier3TPSpawnCount; i++)
         {
-            Enemy enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.LookRotation(spawnTransform.position + dividePos[i]));
+            Enemy enemy = (Enemy)poolManager.Spawn(type, spawnTransform.position, Quaternion.Euler(new Vector3(0f, (360f/(float)tier3TPSpawnCount) * (float)i, 0f)));
             AddEventToEnemy(enemy);
         }
     }
@@ -188,7 +188,8 @@ public class EnemyManager : MonoBehaviour
         enemy.EventOnExplosion += OnExplosion;
         enemy.EventOnExplosion += scoreManager.GetScore;
 
-        if (enemy.EnemyType == EnemyType.ToPlanet4) enemy.EventOnDivide += OnDivideSpawn;
+        if (enemy.EnemyType == EnemyType.ToPlanet3) enemy.EventOnDivide += OnDivideSpawn;
+        if (enemy.EnemyType == EnemyType.TP3mini) enemy.EventOnDistanceOver += DespawnEnemy;
     }
     /// <summary>
     /// 적의 이벤트를 제거합니다. Despawn 함수에 의해 발동됩니다.
@@ -204,7 +205,8 @@ public class EnemyManager : MonoBehaviour
         enemy.EventOnExplosion -= OnExplosion;
         enemy.EventOnExplosion -= scoreManager.GetScore;
 
-        if (enemy.EnemyType == EnemyType.ToPlanet4) enemy.EventOnDivide -= OnDivideSpawn;
+        if (enemy.EnemyType == EnemyType.ToPlanet3) enemy.EventOnDivide -= OnDivideSpawn;
+        if (enemy.EnemyType == EnemyType.TP3mini) enemy.EventOnDistanceOver -= DespawnEnemy;
     }
     /// <summary>
     /// 적의 이벤트를 초기화하고 비활성화하며, 소환된 적 목록에서 제거합니다.
@@ -337,6 +339,16 @@ public class EnemyManager : MonoBehaviour
                 {
                     soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
                     feverManager.CallParticle(_transform, 10);
+                }
+                else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
+                break;
+
+            case EnemyType.TP3mini:
+                particleManager.SpawnParticle(ParticleType.DestroyTPsmall, _transform);
+                if (isCorrect)
+                {
+                    soundManager.PlayFXSound(SoundTypeFX.CorrectCol);
+                    feverManager.CallParticle(_transform, 5);
                 }
                 else soundManager.PlayFXSound(SoundTypeFX.WrongCol);
                 break;

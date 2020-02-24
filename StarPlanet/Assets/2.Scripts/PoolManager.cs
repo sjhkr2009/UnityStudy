@@ -13,6 +13,7 @@ public enum ObjectPool
     EnemyTS2,
     EnemyTS3,
     EnemyTS4,
+    EnemyTP3mini,
     ItemHexagonBomb,
     ItemFixedBomb,
     ItemHeal,
@@ -37,6 +38,7 @@ public class PoolManager : MonoBehaviour
     [TabGroup("Objects")] [SerializeField] GameObject enemyToStar3;
     [TabGroup("Objects")] [SerializeField] GameObject enemyToPlanet4;
     [TabGroup("Objects")] [SerializeField] GameObject enemyToStar4;
+    [TabGroup("Objects")] [SerializeField] GameObject enemyToPlanet3mini;
     [Header("Items")]
     [TabGroup("Objects")] [SerializeField] GameObject itemHexagonBomb;
     [TabGroup("Objects")] [SerializeField] GameObject itemFixedBomb;
@@ -60,6 +62,7 @@ public class PoolManager : MonoBehaviour
     private List<Enemy> enemyTS3List = new List<Enemy>();
     private List<Enemy> enemyTP4List = new List<Enemy>();
     private List<Enemy> enemyTS4List = new List<Enemy>();
+    private List<Enemy> enemyTP3miniList = new List<Enemy>();
     private List<ItemBomb> itemHexagonBombList = new List<ItemBomb>();
     private List<ItemBomb> itemFixedBombList = new List<ItemBomb>();
     private List<ItemHeal> itemHealList = new List<ItemHeal>();
@@ -81,6 +84,7 @@ public class PoolManager : MonoBehaviour
     [TabGroup("Groups")] [SerializeField] Transform enemyTS3Group;
     [TabGroup("Groups")] [SerializeField] Transform enemyTP4Group;
     [TabGroup("Groups")] [SerializeField] Transform enemyTS4Group;
+    [TabGroup("Groups")] [SerializeField] Transform enemyTP3miniGroup;
     [Header("Items")]
     [TabGroup("Groups")] [SerializeField] Transform itemHexagonBombGroup;
     [TabGroup("Groups")] [SerializeField] Transform itemFixedBombGroup;
@@ -104,6 +108,7 @@ public class PoolManager : MonoBehaviour
     private int enemyTS3Index = 0;
     private int enemyTP4Index = 0;
     private int enemyTS4Index = 0;
+    private int enemyTP3miniIndex = 0;
     private int itemHexagonBombIndex = 0;
     private int itemFixedBombIndex = 0;
     private int itemHealIndex = 0;
@@ -125,6 +130,7 @@ public class PoolManager : MonoBehaviour
         enemyTS3List = MakeObjectPool<Enemy>(enemyToStar3, enemyTS3Group);
         enemyTP4List = MakeObjectPool<Enemy>(enemyToPlanet4, enemyTP4Group, 20);
         enemyTS4List = MakeObjectPool<Enemy>(enemyToStar4, enemyTS4Group, 30);
+        enemyTP3miniList = MakeObjectPool<Enemy>(enemyToPlanet3mini, enemyTP3miniGroup, 100);
 
         itemFixedBombList = MakeObjectPool<ItemBomb>(itemFixedBomb, itemFixedBombGroup);
         itemHexagonBombList = MakeObjectPool<ItemBomb>(itemHexagonBomb, itemHexagonBombGroup, 30);
@@ -293,6 +299,20 @@ public class PoolManager : MonoBehaviour
                 SpawnObject(enemyTS4List, enemyTS4Index, position, rotation);
                 _returnObject = enemyTS4List[enemyTS4Index];
                 enemyTS4Index = (enemyTS4Index + 1) % enemyTS4List.Count;
+                break;
+
+            //Enemy To Planet - Tier 3 mini
+            case ObjectPool.EnemyTP3mini:
+                if (enemyTP3miniList[enemyTP3miniIndex].gameObject.activeSelf)
+                {
+                    var newItem = Instantiate(enemyToPlanet3mini, position, rotation).GetComponent<Enemy>();
+                    _returnObject = newItem;
+                    enemyTP3miniList.Add(newItem);
+                    break;
+                }
+                SpawnObject(enemyTP3miniList, enemyTP3miniIndex, position, rotation);
+                _returnObject = enemyTP3miniList[enemyTP3miniIndex];
+                enemyTP3miniIndex = (enemyTP3miniIndex + 1) % enemyTP3miniList.Count;
                 break;
 
 
