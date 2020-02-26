@@ -23,10 +23,11 @@ public class EnemyManager : MonoBehaviour
     [BoxGroup("Spawn Control"), SerializeField] float tier2cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier3cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier4cooltime;
-    [BoxGroup("Spawn Control"), SerializeField] int tier3TSSpawnCount = 5;
-    [BoxGroup("Spawn Control"), SerializeField] int tier3TPSpawnCount = 5;
+    [BoxGroup("Spawn Control"), SerializeField] int tier3TSSpawnCount;
+    [BoxGroup("Spawn Control"), SerializeField] int tier3TPSpawnCount;
 
     List<Enemy> spawnedEnemies = new List<Enemy>();
+    int feverTimeCount;
 
     void Start()
     {
@@ -40,6 +41,9 @@ public class EnemyManager : MonoBehaviour
         isTier2cooltime = false;
         isTier3cooltime = false;
         isTier4cooltime = false;
+
+        feverTimeCount = 0;
+        tier3TSSpawnCount = 4;
 
         StartCoroutine(nameof(EnemySpawn));
     }
@@ -104,7 +108,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     for (int i = 0; i < tier3TSSpawnCount - 1; i++)
                     {
-                        enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS3);
+                        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS3, spawnManager.RandomSpawnPositionOverMap(), Quaternion.identity);
                         AddEventToEnemy(enemy);
                         yield return new WaitForSeconds(0.5f);
                     }
@@ -364,5 +368,32 @@ public class EnemyManager : MonoBehaviour
         foreach (var enemy in spawnedEnemies) if (enemy.gameObject.activeSelf) enemy.gameObject.SetActive(false);
         StopAllCoroutines();
         spawnedEnemies.Clear();
+    }
+    public void OnExitFeverTime()
+    {
+        feverTimeCount++;
+        if(feverTimeCount >= 3)
+        {
+            feverTimeCount = 0;
+            tier3TSSpawnCount++;
+        }
+        spawnDelay = Mathf.Max(spawnDelay - 0.2f, 1.5f);
+    }
+    public void OnSpawnControlByTime(int second)
+    {
+        float currentTime = (float)second;
+
+        if (currentTime > 30f) tier2Probability = Mathf.Min(Mathf.Sqrt(currentTime - 30f) * 0.033f, 0.85f);
+        if (currentTime > 50f) tier3Probability = Mathf.Min(Mathf.Sqrt(currentTime - 50f) * 0.02f, 0.7f);
+        if (currentTime > 100f) tier4Probability = Mathf.Min(Mathf.Sqrt(currentTime - 100f) * 0.01f, 0.5f);
+    }
+
+    public void OnSpawnControlByScore(int score)
+    {
+        float currentScore = (float)score;
+
+        tier2cooltime = Mathf.Max(15f - Mathf.Sqrt(currentScore) * 0.5f, 4f);
+        if (currentScore > 100f) tier3cooltime = Mathf.Max(20f - Mathf.Sqrt(currentScore - 100f) * 0.5f, 7f);
+        if (currentScore > 200f) tier4cooltime = Mathf.Max(30f - Mathf.Sqrt(currentScore - 200f) * 0.5f, 10f);
     }
 }

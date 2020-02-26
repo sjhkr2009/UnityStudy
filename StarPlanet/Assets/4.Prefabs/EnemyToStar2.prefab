@@ -62,12 +62,13 @@ MonoBehaviour:
   enemyTarget: 1
   targetType: Star
   avoidType: Planet
-  damage: 20
-  healing: 2
+  damage: 15
+  healing: 1
   moveSpeed: 0
   radiusReduceSpeed: 1.2
   angulerSpeed: 45
   divideMinDistance: 0
+  divideMaxDistance: 0
   maxAngulerSpeed: 0
   minMoveRadius: 0
   radiusReductionOnMove: 0

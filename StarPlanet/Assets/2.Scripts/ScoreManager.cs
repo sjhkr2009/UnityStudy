@@ -56,6 +56,10 @@ public class ScoreManager : MonoBehaviour
             timeScoreCount %= 1f;
         }
     }
+    public void ScorePerSecondUpgrade()
+    {
+        addScorePerSecond = Mathf.Min(addScorePerSecond + 0.1f, 2.5f);
+    }
 
     int ScoreCalculator(Enemy enemy)
     {
@@ -75,10 +79,10 @@ public class ScoreManager : MonoBehaviour
                 score = scoreTier2;
                 break;
             case EnemyType.ToPlanet3:
-                score = scoreTier3 * 2;
+                score = scoreTier3 * 6;
                 break;
             case EnemyType.TP3mini:
-                score = scoreTier3;
+                score = scoreTier3 * 2;
                 break;
             case EnemyType.ToStar3:
                 score = scoreTier3;

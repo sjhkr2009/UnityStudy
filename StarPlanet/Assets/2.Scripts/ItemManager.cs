@@ -94,7 +94,7 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
-            float delay = UnityEngine.Random.Range(delayOfHexagonBomb * 0.7f, delayOfHexagonBomb * 1.3f);
+            float delay = UnityEngine.Random.Range(delayOfHexagonBomb * 0.6f, delayOfHexagonBomb * 1.4f);
             yield return new WaitForSeconds(delay);
 
             ItemBomb newObject = (ItemBomb)spawnManager.SpawnOverMapToRandom(ObjectPool.ItemHexagonBomb);
@@ -107,7 +107,7 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
-            float delay = UnityEngine.Random.Range(delayOfFixedBomb * 0.5f, delayOfFixedBomb * 1.5f);
+            float delay = UnityEngine.Random.Range(delayOfFixedBomb * 0.8f, delayOfFixedBomb * 1.2f);
             yield return new WaitForSeconds(delay);
 
             ItemBomb newObject = (ItemBomb)spawnManager.SpawnOnMap(ObjectPool.ItemFixedBomb);
@@ -120,7 +120,7 @@ public class ItemManager : MonoBehaviour
     {
         while (true)
         {
-            float delay = UnityEngine.Random.Range(delayOfHealkit * 0.7f, delayOfHealkit * 1.3f);
+            float delay = UnityEngine.Random.Range(delayOfHealkit * 0.8f, delayOfHealkit * 1.2f);
             yield return new WaitForSeconds(delay);
 
             ItemHeal newObject = (ItemHeal)spawnManager.SpawnOverMapToRandom(ObjectPool.ItemHeal);
@@ -128,6 +128,26 @@ public class ItemManager : MonoBehaviour
             newObject.EventOnHealingStar += HealingToStar;
             if (!spawnedHealkits.Contains(newObject)) spawnedHealkits.Add(newObject);
         }
+    }
+
+    public void BonusHealkitSpawnChance()
+    {
+        float starHp = GameManager.Instance.StarHpRate();
+        float planetHp = GameManager.Instance.PlanetHpRate();
+        float hpRate = Mathf.Min(starHp, planetHp);
+
+        if(UnityEngine.Random.value < (1.5f - hpRate))
+        {
+            for (int i = 0; i < 10; i++) BonusHealkitSpawn();
+        }
+    }
+
+    public void BonusHealkitSpawn()
+    {
+        ItemHeal newObject = (ItemHeal)spawnManager.SpawnOverMapToRandom(ObjectPool.ItemHeal);
+        newObject.EventOnHealingPlanet += HealingToPlanet;
+        newObject.EventOnHealingStar += HealingToStar;
+        if (!spawnedHealkits.Contains(newObject)) spawnedHealkits.Add(newObject);
     }
 
     public void AllItemEventReset()
@@ -141,5 +161,14 @@ public class ItemManager : MonoBehaviour
         StopAllCoroutines();
         spawnedBombs.Clear();
         spawnedHealkits.Clear();
+    }
+
+    public void OnSpawnControlByScore(int score)
+    {
+        float currentScore = (float)score;
+
+        delayOfFixedBomb = Mathf.Max(40f - (Mathf.Sqrt(currentScore) * 1f), 10f);
+        delayOfHexagonBomb = Mathf.Max(90f - (Mathf.Sqrt(currentScore) * 2f), 20f);
+        delayOfHealkit = Mathf.Max(35f - (Mathf.Sqrt(currentScore) * 0.5f), 15f);
     }
 }

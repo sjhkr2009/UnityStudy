@@ -8,6 +8,7 @@ public class TimeManager : MonoBehaviour
 {
     public event Action<float> EventOnTimeChanged = f => { };
     public event Action EventPerOneSecond = () => { };
+    public event Action<int> EventPerSecond = n => { };
 
     [SerializeField, ReadOnly] bool isPlaying;
     [SerializeField, ReadOnly] float timeCount;
@@ -62,7 +63,11 @@ public class TimeManager : MonoBehaviour
         secondCount = Mathf.FloorToInt(timeCount);
 
         EventOnTimeChanged(timeCount);
-        if(secondCount != prevSecond) EventPerOneSecond();
+        if (secondCount != prevSecond)
+        {
+            EventPerOneSecond();
+            EventPerSecond(secondCount);
+        }
 
         prevSecond = secondCount;
     }

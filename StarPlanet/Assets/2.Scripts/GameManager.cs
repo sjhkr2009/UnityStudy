@@ -102,16 +102,23 @@ public class GameManager : MonoBehaviour
         EventGameStateChanged += scoreManager.OnGameStateChanged;
 
         scoreManager.EventOnScoreChanged += uiManager.ScoreTextChange;
+        scoreManager.EventOnScoreChanged += enemyManager.OnSpawnControlByScore;
+        scoreManager.EventOnScoreChanged += itemManager.OnSpawnControlByScore;
         scoreManager.EventOnGameOver += uiManager.OnGameOverScorePrint;
 
         feverManager.EventOnGetFeverGauge += uiManager.FeverGaugeFill;
         feverManager.EventOnFeverTime += uiManager.OnFeverTime;
         feverManager.EventOnFeverTime += star.OnFeverTime;
+        feverManager.EventOnFeverTime += itemManager.BonusHealkitSpawnChance;
         feverManager.EventExitFeverTime += star.ExitFeverTime;
         feverManager.EventExitFeverTime += uiManager.FeverGaugeReset;
+        feverManager.EventExitFeverTime += scoreManager.ScorePerSecondUpgrade;
+        feverManager.EventExitFeverTime += enemyManager.OnExitFeverTime;
 
+        timeManager.EventOnTimeChanged += uiManager.TimeTextChange;
         timeManager.EventPerOneSecond += feverManager.GetFeverCountPerSecond;
         timeManager.EventPerOneSecond += scoreManager.AddScorePerSecond;
+        timeManager.EventPerSecond += enemyManager.OnSpawnControlByTime;
 
 
         gameState = GameState.Ready;
@@ -132,16 +139,23 @@ public class GameManager : MonoBehaviour
         EventGameStateChanged -= scoreManager.OnGameStateChanged;
 
         scoreManager.EventOnScoreChanged -= uiManager.ScoreTextChange;
+        scoreManager.EventOnScoreChanged -= enemyManager.OnSpawnControlByScore;
+        scoreManager.EventOnScoreChanged -= itemManager.OnSpawnControlByScore;
         scoreManager.EventOnGameOver -= uiManager.OnGameOverScorePrint;
 
         feverManager.EventOnGetFeverGauge -= uiManager.FeverGaugeFill;
         feverManager.EventOnFeverTime -= uiManager.OnFeverTime;
         feverManager.EventOnFeverTime -= star.OnFeverTime;
+        feverManager.EventOnFeverTime -= itemManager.BonusHealkitSpawnChance;
         feverManager.EventExitFeverTime -= star.ExitFeverTime;
         feverManager.EventExitFeverTime -= uiManager.FeverGaugeReset;
+        feverManager.EventExitFeverTime -= scoreManager.ScorePerSecondUpgrade;
+        feverManager.EventExitFeverTime -= enemyManager.OnExitFeverTime;
 
+        timeManager.EventOnTimeChanged -= uiManager.TimeTextChange;
         timeManager.EventPerOneSecond -= feverManager.GetFeverCountPerSecond;
         timeManager.EventPerOneSecond -= scoreManager.AddScorePerSecond;
+        timeManager.EventPerSecond -= enemyManager.OnSpawnControlByTime;
     }
     void Start()
     {
@@ -213,6 +227,17 @@ public class GameManager : MonoBehaviour
     private void OnPlayerDead<T>(T player) where T : Player
     {
         if(gameState == GameState.Playing) gameState = GameState.GameOver;
+    }
+
+    public float StarHpRate()
+    {
+        float hpRate = (float)star.Hp / (float)star.MaxHp;
+        return hpRate;
+    }
+    public float PlanetHpRate()
+    {
+        float hpRate = (float)planet.Hp / (float)planet.MaxHp;
+        return hpRate;
     }
 
     /// <summary>

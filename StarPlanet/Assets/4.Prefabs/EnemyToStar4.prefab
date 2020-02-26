@@ -23497,14 +23497,15 @@ MonoBehaviour:
   targetType: Star
   avoidType: Planet
   damage: 25
-  healing: 2
+  healing: 3
   moveSpeed: 5.5
   radiusReduceSpeed: 1.5
   angulerSpeed: 60
   divideMinDistance: 0
+  divideMaxDistance: 0
   maxAngulerSpeed: 160
   minMoveRadius: 2.5
-  radiusReductionOnMove: 1
+  radiusReductionOnMove: 1.25
 --- !u!1 &7162318439847454224
 GameObject:
   m_ObjectHideFlags: 0

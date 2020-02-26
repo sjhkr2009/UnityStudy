@@ -199,6 +199,10 @@ public class UIManager : MonoBehaviour
     {
         scoreText.text = $"점수: {value.ToString()}    최고점수: {GameManager.Instance.ScoreManager.bestScore}";
     }
+    public void TimeTextChange(float time)
+    {
+        Debug.Log(time.ToString("ss.ff"));
+    }
 
     public void OnAccelerateClick()
     {

@@ -45430,17 +45430,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2ba6a716fcc7e478a15ff28aad8282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnDelay: 3
-  tier2Probability: 0.4
+  spawnDelay: 5
+  tier2Probability: 0
   isTier2cooltime: 0
-  tier3Probability: 0.2
+  tier3Probability: 0
   isTier3cooltime: 0
-  tier4Probability: 0.1
+  tier4Probability: 0
   isTier4cooltime: 0
-  tier2cooltime: 10
-  tier3cooltime: 10
-  tier4cooltime: 20
-  tier3TSSpawnCount: 6
+  tier2cooltime: 15
+  tier3cooltime: 20
+  tier4cooltime: 30
+  tier3TSSpawnCount: 4
   tier3TPSpawnCount: 8
 --- !u!114 &1820830200
 MonoBehaviour:
@@ -45496,10 +45496,10 @@ MonoBehaviour:
   _bestScore: 0
   addScorePerSecond: 0.3
   timeScoreCount: 0
-  scoreTier1: 5
-  scoreTier2: 11
-  scoreTier3: 17
-  scoreTier4: 30
+  scoreTier1: 3
+  scoreTier2: 7
+  scoreTier3: 6
+  scoreTier4: 25
 --- !u!114 &1820830203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45512,10 +45512,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a3476c39ab052e4e8a662f0c969cb7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayOfFixedBomb: 10
-  delayOfHexagonBomb: 10
+  delayOfFixedBomb: 40
+  delayOfHexagonBomb: 90
   planet: {fileID: 678788596}
-  delayOfHealkit: 10
+  delayOfHealkit: 30
 --- !u!114 &1820830204
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -70,6 +70,7 @@ public class FeverManager : MonoBehaviour
         EventExitFeverTime();
         isFeverTime = false;
         currentFeverCount = 0;
+        maxFeverCount += 10;
     }
 
     private void OnDestroy()

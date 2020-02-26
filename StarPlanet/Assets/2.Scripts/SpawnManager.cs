@@ -18,7 +18,7 @@ public class SpawnManager : MonoBehaviour
         cameraSizeY = Camera.main.orthographicSize;
     }
 
-    public Component SpawnOverMapToCenter(ObjectPool objectType)
+    public Vector3 RandomSpawnPositionOverMap()
     {
         float minX = -cameraSizeX * 1.5f;
         float maxX = cameraSizeX * 1.5f;
@@ -29,8 +29,13 @@ public class SpawnManager : MonoBehaviour
 
         Vector3 spawnPos = new Vector3(posX, 0f, posY);
 
+        return spawnPos;
+    }
+
+    public Component SpawnOverMapToCenter(ObjectPool objectType)
+    {
         Component newObject = null;
-        newObject = poolManager.Spawn(objectType, spawnPos, Quaternion.LookRotation(Vector3.zero - spawnPos));
+        newObject = poolManager.Spawn(objectType, RandomSpawnPositionOverMap(), Quaternion.LookRotation(Vector3.zero - RandomSpawnPositionOverMap()));
         return newObject;
     }
 
@@ -39,7 +44,7 @@ public class SpawnManager : MonoBehaviour
         Vector3 spawnPos = Vector3.zero;
         while (Vector3.Distance(spawnPos, Vector3.zero) < 2.5f)
         {
-            spawnPos = new Vector3(UnityEngine.Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, UnityEngine.Random.Range(-cameraSizeY * 0.95f, cameraSizeY * 0.95f));
+            spawnPos = new Vector3(Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, Random.Range(-cameraSizeY * 0.95f, cameraSizeY * 0.95f));
         }
         Component newObject = poolManager.Spawn(objectType, spawnPos, Quaternion.identity);
         return newObject;
