@@ -20,8 +20,12 @@ public class SpawnManager : MonoBehaviour
 
     public Vector3 RandomSpawnPositionOverMap()
     {
-        float minX = -cameraSizeX * 1.5f;
-        float maxX = cameraSizeX * 1.5f;
+        screenView = GameManager.Instance.screenHorizontal / GameManager.Instance.screenVertical;
+        cameraSizeX = Camera.main.orthographicSize * screenView;
+        cameraSizeY = Camera.main.orthographicSize;
+
+        float minX = -cameraSizeX * 1.33f;
+        float maxX = cameraSizeX * 1.33f;
         float posX = Random.Range(minX, maxX);
 
         float posY = cameraSizeY + 1f;
@@ -35,7 +39,8 @@ public class SpawnManager : MonoBehaviour
     public Component SpawnOverMapToCenter(ObjectPool objectType)
     {
         Component newObject = null;
-        newObject = poolManager.Spawn(objectType, RandomSpawnPositionOverMap(), Quaternion.LookRotation(Vector3.zero - RandomSpawnPositionOverMap()));
+        Vector3 spawnPos = RandomSpawnPositionOverMap();
+        newObject = poolManager.Spawn(objectType, spawnPos, Quaternion.LookRotation(Vector3.zero - spawnPos));
         return newObject;
     }
 

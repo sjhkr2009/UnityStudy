@@ -201,7 +201,7 @@ public class UIManager : MonoBehaviour
     }
     public void TimeTextChange(float time)
     {
-        Debug.Log(time.ToString("ss.ff"));
+        Debug.Log(time.ToString());
     }
 
     public void OnAccelerateClick()

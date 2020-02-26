@@ -45358,7 +45358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc0b8feb5d76ef4fb4e3d02ba685dae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyToPlanet1: {fileID: 3540925511124437123, guid: feee38e0015008d48991bcdca009529e,
+  enemyToPlanet1: {fileID: 55840863671564053, guid: c1566c22a7b0a11429162bef08260333,
     type: 3}
   enemyToStar1: {fileID: 4636705412566394210, guid: e11036849440f854db081370ed5dd833,
     type: 3}

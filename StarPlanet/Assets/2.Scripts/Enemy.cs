@@ -217,8 +217,11 @@ public class Enemy : MonoBehaviour
         transform.DORotate(new Vector3(0f, 1440f, 0f), 2f).SetEase(Ease.InQuad);
         transform.DOScale(0.1f, 2f).SetEase(Ease.InCirc).OnComplete(() =>
         {
-            EventOnDivide(transform, ObjectPool.EnemyTP3mini);
-            gameObject.SetActive(false);
+            if (gameObject.activeSelf)
+            {
+                EventOnDivide(transform, ObjectPool.EnemyTP3mini);
+                gameObject.SetActive(false);
+            }
         });
     }
 
