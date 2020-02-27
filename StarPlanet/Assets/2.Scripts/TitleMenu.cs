@@ -10,13 +10,16 @@ public class TitleMenu : MonoBehaviour
 {
     [Header("Basic")]
     [SerializeField] GameObject allPopUpWindow;
+    [SerializeField] PopUpWindow popUpWindow;
     [SerializeField] RectTransform popUpBasicTransform;
+    [SerializeField] Image popUpBackgroundColor;
     [SerializeField] Text titleText;
     [Header("Window")]
     [SerializeField] RectTransform soundWindowTransform;
+    [SerializeField] GameObject warningWindow;
 
     bool isPopUpClosing = false;
-
+    bool isWarningActive = false;
 
     private NowActiveWindow _nowActive;
     public NowActiveWindow nowActive
@@ -51,8 +54,42 @@ public class TitleMenu : MonoBehaviour
     private void Start()
     {
         if (allPopUpWindow.activeSelf) OffAllWindow();
+
+        popUpWindow.EventOnPopUpOpen += OnPopUp;
+    }
+    private void OnDestroy()
+    {
+        popUpWindow.EventOnPopUpOpen -= OnPopUp;
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) Escape();
     }
 
+    public void Escape()
+    {
+        switch (nowActive)
+        {
+            case NowActiveWindow.None:
+                break;
+            case NowActiveWindow.Sound:
+                ButtonToOffAllWindow();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void OnPopUp() //팝업창을 처음 열 때 공통적으로 처리할 부분. UI를 제외한 게임화면을 50% 검게 처리하고 경고창이 활성화되어 있다면 경고창을 꺼 준다. 
+    {
+        warningWindow.SetActive(false);
+        isWarningActive = false;
+
+        popUpBackgroundColor.color = Color.clear;
+        popUpBackgroundColor.DOColor(new Color(0, 0, 0, 0.5f), 0.3f).SetUpdate(true);
+
+        if (!popUpBasicTransform.gameObject.activeSelf) popUpBasicTransform.gameObject.SetActive(true);
+    }
 
     public void ButtonToPlay()
     {
@@ -81,6 +118,7 @@ public class TitleMenu : MonoBehaviour
                 break;
             default:
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
+                nowActive = NowActiveWindow.None;
                 break;
         }
     }
@@ -104,6 +142,7 @@ public class TitleMenu : MonoBehaviour
     void OffAllWindow()
     {
         allPopUpWindow.SetActive(false);
+        nowActive = NowActiveWindow.None;
         isPopUpClosing = false;
     }
 }

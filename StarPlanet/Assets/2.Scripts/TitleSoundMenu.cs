@@ -7,8 +7,6 @@ using Sirenix.OdinInspector;
 public class TitleSoundMenu : MonoBehaviour
 {
     [SerializeField] AudioSource bgmPlayer;
-    [SerializeField] AudioSource fxPlayer;
-    [BoxGroup("Sound Sources"), SerializeField] AudioClip testFXSound;
 
     [BoxGroup("Info"), SerializeField, ReadOnly] float masterVolume;
     [BoxGroup("Info"), SerializeField, ReadOnly] float bgmVolume;
@@ -58,5 +56,4 @@ public class TitleSoundMenu : MonoBehaviour
         FXVolume = volumeSlider.value;
         fxVolume = PlayerPrefs.GetFloat(nameof(FXVolume));
     }
-    public void TestFXPlay() { fxPlayer.PlayOneShot(testFXSound, MasterVolume * FXVolume); }
 }

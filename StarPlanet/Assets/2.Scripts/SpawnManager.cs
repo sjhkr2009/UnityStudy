@@ -4,32 +4,27 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    float screenView;
-    float cameraSizeX;
-    float cameraSizeY;
+    float cameraSizeX => cameraController.CameraXSize;
+    float cameraSizeY => cameraController.CameraYSize;
+    float cameraPosZ => cameraController.CameraZPos;
 
     PoolManager poolManager;
+    CameraController cameraController;
 
     void Start()
     {
         poolManager = GetComponent<PoolManager>();
-        screenView = GameManager.Instance.screenHorizontal / GameManager.Instance.screenVertical;
-        cameraSizeX = Camera.main.orthographicSize * screenView;
-        cameraSizeY = Camera.main.orthographicSize;
+        cameraController = GameManager.Instance.CameraController;
     }
 
     public Vector3 RandomSpawnPositionOverMap()
     {
-        screenView = GameManager.Instance.screenHorizontal / GameManager.Instance.screenVertical;
-        cameraSizeX = Camera.main.orthographicSize * screenView;
-        cameraSizeY = Camera.main.orthographicSize;
-
         float minX = -cameraSizeX * 1.33f;
         float maxX = cameraSizeX * 1.33f;
         float posX = Random.Range(minX, maxX);
 
-        float posY = cameraSizeY + 1f;
-        if (Random.value < 0.5f) posY = cameraSizeY - 1f;
+        float posY = cameraSizeY * 1.1f + cameraPosZ;
+        if (Random.value < 0.5f) posY = -cameraSizeY * 1.1f + cameraPosZ;
 
         Vector3 spawnPos = new Vector3(posX, 0f, posY);
 
@@ -49,17 +44,17 @@ public class SpawnManager : MonoBehaviour
         Vector3 spawnPos = Vector3.zero;
         while (Vector3.Distance(spawnPos, Vector3.zero) < 2.5f)
         {
-            spawnPos = new Vector3(Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, Random.Range(-cameraSizeY * 0.95f, cameraSizeY * 0.95f));
+            spawnPos = new Vector3(Random.Range(-cameraSizeX * 0.95f, cameraSizeX * 0.95f), 0f, Random.Range(-cameraSizeY * 0.95f + cameraPosZ, cameraSizeY * 0.95f + cameraPosZ));
         }
         Component newObject = poolManager.Spawn(objectType, spawnPos, Quaternion.identity);
         return newObject;
     }
     public Component SpawnOverMapToRandom(ObjectPool objectType)
     {
-        Vector3 spawnPosUp = new Vector3(Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY + 1f);
-        Vector3 spawnPosRight = new Vector3(cameraSizeX + 1f, 0f, Random.Range(-cameraSizeY, cameraSizeY));
-        Vector3 spawnPosDown = new Vector3(Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY - 1f);
-        Vector3 spawnPosLeft = new Vector3(-cameraSizeX - 1f, 0f, Random.Range(-cameraSizeY, cameraSizeY));
+        Vector3 spawnPosUp = new Vector3(Random.Range(-cameraSizeX, cameraSizeX), 0f, cameraSizeY * 1.1f + cameraPosZ);
+        Vector3 spawnPosRight = new Vector3(cameraSizeX * 1.2f, 0f, Random.Range(-cameraSizeY + cameraPosZ, cameraSizeY + cameraPosZ));
+        Vector3 spawnPosDown = new Vector3(Random.Range(-cameraSizeX, cameraSizeX), 0f, -cameraSizeY * 1.1f + cameraPosZ);
+        Vector3 spawnPosLeft = new Vector3(-cameraSizeX * 1.2f, 0f, Random.Range(-cameraSizeY + cameraPosZ, cameraSizeY + cameraPosZ));
 
         float getPositionRandom = Random.value;
         Component newObject = null;

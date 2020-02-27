@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Scripts"), SerializeField] FeverManager feverManager;        public FeverManager FeverManager => feverManager;
     [BoxGroup("Scripts"), SerializeField] TimeManager timeManager;          public TimeManager TimeManager => timeManager;
     [BoxGroup("Scripts"), SerializeField] SpawnManager spawnManager;        public SpawnManager SpawnManager => spawnManager;
+    [BoxGroup("Scripts"), SerializeField] CameraController cameraController;public CameraController CameraController => cameraController;
 
     Vector3 mousePos;
     public event Action<Vector3> EventOnTouchScreen = n => { };
@@ -87,6 +88,7 @@ public class GameManager : MonoBehaviour
         if (spawnManager == null) spawnManager = GetComponent<SpawnManager>();
         if (star == null) star = FindObjectOfType<Star>();
         if (planet == null) planet = FindObjectOfType<Planet>();
+        if (cameraController == null) cameraController = FindObjectOfType<CameraController>();
 
         star.EventHpChanged += OnPlayerHpChanged;
         star.EventPlayerDead += OnPlayerDead;
@@ -118,7 +120,8 @@ public class GameManager : MonoBehaviour
         timeManager.EventOnTimeChanged += uiManager.TimeTextChange;
         timeManager.EventPerOneSecond += feverManager.GetFeverCountPerSecond;
         timeManager.EventPerOneSecond += scoreManager.AddScorePerSecond;
-        timeManager.EventPerSecond += enemyManager.OnSpawnControlByTime;
+        timeManager.EventPerOneSecond += cameraController.SizeUpPerSecond;
+        timeManager.EventPerSeconds += enemyManager.OnSpawnControlByTime;
 
 
         gameState = GameState.Ready;
@@ -155,7 +158,7 @@ public class GameManager : MonoBehaviour
         timeManager.EventOnTimeChanged -= uiManager.TimeTextChange;
         timeManager.EventPerOneSecond -= feverManager.GetFeverCountPerSecond;
         timeManager.EventPerOneSecond -= scoreManager.AddScorePerSecond;
-        timeManager.EventPerSecond -= enemyManager.OnSpawnControlByTime;
+        timeManager.EventPerSeconds -= enemyManager.OnSpawnControlByTime;
     }
     void Start()
     {

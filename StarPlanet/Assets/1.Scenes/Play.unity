@@ -18441,6 +18441,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -18514,6 +18515,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7957587ce9263ff45bf66486a1f5f762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraBasicSize: 12
+  sizeUpPerSecond: 0.04
 --- !u!1 &974091623
 GameObject:
   m_ObjectHideFlags: 0
@@ -45332,6 +45347,7 @@ MonoBehaviour:
   feverManager: {fileID: 1820830204}
   timeManager: {fileID: 1820830205}
   spawnManager: {fileID: 1820830206}
+  cameraController: {fileID: 963194229}
 --- !u!4 &1820830197
 Transform:
   m_ObjectHideFlags: 0

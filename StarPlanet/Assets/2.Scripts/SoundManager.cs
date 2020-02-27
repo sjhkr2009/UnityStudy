@@ -116,6 +116,5 @@ public class SoundManager : MonoBehaviour
         FXVolume = volumeSlider.value;
         fxVolume = PlayerPrefs.GetFloat(nameof(FXVolume));
     }
-    public void TestFXPlay() { testFXPlayer.PlayOneShot(testFXSound, MasterVolume * FXVolume); } //핸들 아이콘의 드래그가 끝났을때만 적용
 
 }
