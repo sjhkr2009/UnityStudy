@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
     public float sizeUpPerSecond;
     public float cameraMaxSize;
     public float CameraZPos => transform.position.z;
+    public float CameraYPos => transform.position.y;
     public float CameraXSize => mainCamera.orthographicSize * screenView;
     public float CameraYSize => mainCamera.orthographicSize;
 

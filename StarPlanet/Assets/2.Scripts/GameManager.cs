@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void OnTouchDownScreen()
     {
-        mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
+        mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, cameraController.CameraYPos));
         if (gameState == GameState.Playing) EventOnTouchScreen(mousePos);
     }
 
