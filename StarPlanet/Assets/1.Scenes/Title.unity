@@ -699,7 +699,7 @@ GameObject:
   - component: {fileID: 263185378}
   - component: {fileID: 263185377}
   m_Layer: 5
-  m_Name: ButtonToTitle
+  m_Name: ButtonToQuit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -768,8 +768,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: ButtonWarningToTitle
+      - m_Target: {fileID: 1663130902}
+        m_MethodName: ButtonWarningToQuit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1541,7 +1541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2647,7 +2647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2919,8 +2919,9 @@ MonoBehaviour:
   popUpBasicTransform: {fileID: 1550080203}
   popUpBackgroundColor: {fileID: 1911398662}
   titleText: {fileID: 747701971}
-  soundWindowTransform: {fileID: 102010593}
-  warningWindow: {fileID: 1112651776}
+  soundWindowTransform: {fileID: 1589818141}
+  warningWindow: {fileID: 1112651777}
+  warningText: {fileID: 1529683017}
 --- !u!4 &1663130903
 Transform:
   m_ObjectHideFlags: 0
@@ -3188,7 +3189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  m_BlockingObjects: 3
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
@@ -3882,7 +3883,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1663130902}
         m_MethodName: ButtonWarningClose
         m_Mode: 1
         m_Arguments:

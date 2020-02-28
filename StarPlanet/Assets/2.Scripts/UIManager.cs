@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine.UI;
 using System;
 using DG.Tweening;
-public enum NowActiveWindow { None, Pause, Sound, Gameover }
+public enum NowActiveWindow { None, Pause, Sound, Gameover, Quit }
 
 public class UIManager : MonoBehaviour
 {
@@ -107,6 +107,7 @@ public class UIManager : MonoBehaviour
 
         accelIconActive.SetActive(false);
         allPopUpWindow.SetActive(false);
+        countdownText.gameObject.SetActive(false);
         FeverGaugeReset();
     }
 
@@ -245,7 +246,7 @@ public class UIManager : MonoBehaviour
         {
             case GameState.Ready:
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
-                DOVirtual.DelayedCall(0.5f, () => { CountdownTextChange(3); }, true);
+                DOVirtual.DelayedCall(0.75f, () => { CountdownTextChange(3); }, true);
                 break;
             case GameState.Playing:
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
