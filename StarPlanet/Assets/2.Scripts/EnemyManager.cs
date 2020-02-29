@@ -106,16 +106,10 @@ public class EnemyManager : MonoBehaviour
                 }
                 else if (Random.value < tier3Probability && !isTier3cooltime)
                 {
-                    for (int i = 0; i < tier3TSSpawnCount - 1; i++)
-                    {
-                        enemy = (Enemy)poolManager.Spawn(ObjectPool.EnemyTS3, spawnManager.RandomSpawnPositionOverMap(), Quaternion.identity);
-                        AddEventToEnemy(enemy);
-                        yield return new WaitForSeconds(0.5f);
-                    }
-
-                    enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS3);
-                    spawnDelay = Mathf.Max(spawnDelay - (0.2f * tier3TSSpawnCount), 0.1f);
+                    StartCoroutine(SpawnEnemiesDirectly(ObjectPool.EnemyTS3, tier3TSSpawnCount));
                     StartCoroutine(SpawnCooldown(3));
+                    yield return new WaitForSeconds(spawnDelay);
+                    continue;
                 }
                 else if (Random.value < tier2Probability && !isTier2cooltime)
                 {
@@ -127,11 +121,23 @@ public class EnemyManager : MonoBehaviour
                     enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS1);
                 }
             }
-
             AddEventToEnemy(enemy);
             if (!spawnedEnemies.Contains(enemy)) spawnedEnemies.Add(enemy);
 
             yield return new WaitForSeconds(spawnDelay);
+        }
+    }
+
+    IEnumerator SpawnEnemiesDirectly(ObjectPool type, int count)
+    {
+        Vector3 spawnPos = spawnManager.RandomSpawnPositionOverMap();
+
+        for (int i = 0; i < count; i++)
+        {
+            Enemy enemy = (Enemy)poolManager.Spawn(type, spawnPos, Quaternion.identity);
+            AddEventToEnemy(enemy);
+            if (!spawnedEnemies.Contains(enemy)) spawnedEnemies.Add(enemy);
+            yield return new WaitForSeconds(0.4f);
         }
     }
 
@@ -377,7 +383,8 @@ public class EnemyManager : MonoBehaviour
             feverTimeCount = 0;
             tier3TSSpawnCount++;
         }
-        spawnDelay = Mathf.Max(spawnDelay - 0.2f, 1.5f);
+        if (spawnDelay > 1.0f) spawnDelay = Mathf.Max(spawnDelay - 0.1f, 1.0f);
+        else spawnDelay = Mathf.Lerp(spawnDelay, 0.1f, 0.1f);
     }
     public void OnSpawnControlByTime(int second)
     {
@@ -386,6 +393,8 @@ public class EnemyManager : MonoBehaviour
         if (currentTime > 30f) tier2Probability = Mathf.Min(Mathf.Sqrt(currentTime - 30f) * 0.033f, 0.85f);
         if (currentTime > 50f) tier3Probability = Mathf.Min(Mathf.Sqrt(currentTime - 50f) * 0.02f, 0.7f);
         if (currentTime > 100f) tier4Probability = Mathf.Min(Mathf.Sqrt(currentTime - 100f) * 0.01f, 0.5f);
+
+        if(spawnDelay > 1.5f) spawnDelay = Mathf.Max(spawnDelay - 0.01f, 1.5f);
     }
 
     public void OnSpawnControlByScore(int score)

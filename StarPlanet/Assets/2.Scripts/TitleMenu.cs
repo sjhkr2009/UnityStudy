@@ -20,6 +20,7 @@ public class TitleMenu : MonoBehaviour
     [SerializeField] RectTransform warningWindow;
     [SerializeField] Text warningText;
 
+
     bool isPopUpClosing = false;
     bool isWarningActive = false;
 

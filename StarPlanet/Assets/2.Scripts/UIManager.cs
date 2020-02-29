@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
     [BoxGroup("Playing UI")] [SerializeField] Slider starHpBar;
     [BoxGroup("Playing UI")] [SerializeField] Slider planetHpBar;
     [BoxGroup("Playing UI")] [SerializeField] Text scoreText;
+    [BoxGroup("Playing UI")] [SerializeField] Text bestScoreText;
+    [BoxGroup("Playing UI")] [SerializeField] Text timeText;
 
     //가속 버튼 관련
     [BoxGroup("Button")] [SerializeField] Image accelBackground;
@@ -40,10 +42,14 @@ public class UIManager : MonoBehaviour
     [BoxGroup("Pop-Up Window")] [SerializeField] GameObject warningWindow;
     [BoxGroup("Pop-Up Window")] [SerializeField] WarningText warningText;
     [BoxGroup("Pop-Up Window")] [SerializeField] Text totalScoreText;
-    [BoxGroup("Pop-Up Window")] [SerializeField] Text bestScoreText;
+    [BoxGroup("Pop-Up Window")] [SerializeField] Text totalBestScoreText;
+    [BoxGroup("Pop-Up Window")] [SerializeField] Text totalTimeText;
 
     [BoxGroup("Object")] [SerializeField] Star star;
     [BoxGroup("Object")] [SerializeField] Planet planet;
+
+    ScoreManager scoreManager;
+    SoundManager soundManager;
 
     bool isPopUpClosing = false;
     bool isWarningActive = false;
@@ -126,7 +132,12 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        scoreText.text = $"점수: 0    최고점수: {GameManager.Instance.ScoreManager.bestScore}";
+        scoreManager = GameManager.Instance.ScoreManager;
+        soundManager = GameManager.Instance.SoundManager;
+        scoreText.text = "Score";
+        bestScoreText.text = "Best Record";
+        timeText.text = "0.00";
+
     }
 
     void RadiusChange(float radius)
@@ -198,11 +209,12 @@ public class UIManager : MonoBehaviour
 
     public void ScoreTextChange(int value)
     {
-        scoreText.text = $"점수: {value.ToString()}    최고점수: {GameManager.Instance.ScoreManager.bestScore}";
+        scoreText.text = $"{value.ToString()}";
+        if(scoreManager.isCurrentScoreBest) bestScoreText.text = $"{value.ToString()}";
     }
     public void TimeTextChange(float time)
     {
-        //Debug.Log(time.ToString());
+        timeText.text = $"{time.ToString("0.00")}";
     }
 
     public void OnAccelerateClick()
@@ -226,15 +238,16 @@ public class UIManager : MonoBehaviour
     public void OnGameOverScorePrint(int score, bool isBestScore)
     {
         totalScoreText.text = score.ToString();
+        totalTimeText.text = timeText.text;
 
         if (isBestScore)
         {
-            bestScoreText.text = score.ToString();
+            totalBestScoreText.text = score.ToString();
             //기록 갱신 표시
         }
         else
         {
-            bestScoreText.text = GameManager.Instance.ScoreManager.bestScore.ToString();
+            totalBestScoreText.text = bestScoreText.text;
         }
     }
 
@@ -251,6 +264,11 @@ public class UIManager : MonoBehaviour
             case GameState.Playing:
                 if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
                 if (countdownText.gameObject.activeSelf) countdownText.gameObject.SetActive(false);
+                if(scoreManager.Score == 0)
+                {
+                    scoreText.text = "0";
+                    bestScoreText.text = scoreManager.BestScore.ToString();
+                }
                 break;
             case GameState.Pause:
                 allPopUpWindow.SetActive(true);
@@ -297,35 +315,41 @@ public class UIManager : MonoBehaviour
     public void ButtonGameoverToTitle()
     {
         if (isPopUpClosing) return;
+        soundManager.PlayFXSound(SoundTypeFX.ButtonClickLong);
         PopUpWindowOffAnimation(gameoverTransform);
-        DOVirtual.DelayedCall(0.2f, GameManager.Instance.LoadTitleScene, true);
+        DOVirtual.DelayedCall(0.35f, GameManager.Instance.LoadTitleScene, true);
     }
     public void ButtonGameoverToRestart()
     {
         if (isPopUpClosing) return;
+        soundManager.PlayFXSound(SoundTypeFX.ButtonClickLong);
         PopUpWindowOffAnimation(gameoverTransform);
         DOVirtual.DelayedCall(0.2f, GameManager.Instance.ReStartScene, true);
     }
     public void ButtonPauseToResume()
     {
         if (isPopUpClosing) return;
+        soundManager.PlayFXSound(SoundTypeFX.ButtonClickNormal);
         PopUpWindowOffAnimation(pauseTransform);
         DOVirtual.DelayedCall(0.2f, () => { GameManager.Instance.gameState = GameState.Playing; }, true);
     }
     public void ButtonPauseToTitle()
     {
         if (isPopUpClosing) return;
+        soundManager.PlayFXSound(SoundTypeFX.ButtonClickShort);
         OpenWarningWindow();
     }
 
     public void ButtonPauseToSound()
     {
         if (isPopUpClosing) return;
+        soundManager.PlayFXSound(SoundTypeFX.ButtonClickNormal);
         nowActive = NowActiveWindow.Sound;
     }
     public void ButtonSoundToPause()
     {
         if (isPopUpClosing) return;
+        soundManager.PlayFXSound(SoundTypeFX.ButtonClickNormal);
         nowActive = NowActiveWindow.Pause;
     }
     public void ButtonWarningClose()
@@ -337,6 +361,7 @@ public class UIManager : MonoBehaviour
     public void ButtonWarningToTitle()
     {
         if (isPopUpClosing) return;
+        soundManager.PlayFXSound(SoundTypeFX.ButtonClickLong);
         warningWindow.SetActive(false);
         isWarningActive = false;
 
@@ -354,7 +379,7 @@ public class UIManager : MonoBehaviour
         isWarningActive = true;
     }
 
-    void OnPopUp() //팝업창을 처음 열 때 공통적으로 처리할 부분. UI를 제외한 게임화면을 50% 검게 처리하고 경고창이 활성화되어 있다면 경고창을 꺼 준다. 
+    void OnPopUp()
     {
         warningWindow.SetActive(false);
         isWarningActive = false;

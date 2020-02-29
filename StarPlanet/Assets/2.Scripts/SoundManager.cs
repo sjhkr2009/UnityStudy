@@ -4,7 +4,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.UI;
 
-public enum SoundTypeFX { CorrectCol, WrongCol, NormalBomb, HexagonBomb, Healing, Booster }
+public enum SoundTypeFX { CorrectCol, WrongCol, NormalBomb, HexagonBomb, Healing, Booster, ButtonClickLong, ButtonClickNormal, ButtonClickShort }
 
 public class SoundManager : MonoBehaviour
 {
@@ -35,6 +35,9 @@ public class SoundManager : MonoBehaviour
     [BoxGroup("FX")] [SerializeField] AudioClip hexagonBombExplosion;
     [BoxGroup("FX")] [SerializeField] AudioClip healing;
     [BoxGroup("FX")] [SerializeField] AudioClip booster;
+    [BoxGroup("FX")] [SerializeField] AudioClip buttonClickLong;
+    [BoxGroup("FX")] [SerializeField] AudioClip buttonClickNormal;
+    [BoxGroup("FX")] [SerializeField] AudioClip buttonClickShort;
 
     [BoxGroup("Info"), SerializeField, ReadOnly] float masterVolume;
     [BoxGroup("Info"), SerializeField, ReadOnly] float fxVolume;
@@ -81,6 +84,15 @@ public class SoundManager : MonoBehaviour
                 break;
             case SoundTypeFX.Booster:
                 audio.PlayOneShot(booster, 0.4f * MasterVolume * FXVolume);
+                break;
+            case SoundTypeFX.ButtonClickLong:
+                audio.PlayOneShot(buttonClickLong, 0.7f * MasterVolume * FXVolume);
+                break;
+            case SoundTypeFX.ButtonClickNormal:
+                audio.PlayOneShot(buttonClickNormal, 0.8f * MasterVolume * FXVolume);
+                break;
+            case SoundTypeFX.ButtonClickShort:
+                audio.PlayOneShot(buttonClickShort, 0.5f * MasterVolume * FXVolume);
                 break;
         }
     }

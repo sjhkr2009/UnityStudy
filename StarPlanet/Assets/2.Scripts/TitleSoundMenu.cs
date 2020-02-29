@@ -6,7 +6,12 @@ using Sirenix.OdinInspector;
 
 public class TitleSoundMenu : MonoBehaviour
 {
-    [SerializeField] AudioSource bgmPlayer;
+    [BoxGroup("Audio Player"), SerializeField] AudioSource bgmPlayer;
+    [BoxGroup("Audio Player"), SerializeField] AudioSource fxPlayer;
+    
+    [BoxGroup("Sounds"), SerializeField] AudioClip buttonClickLong;
+    [BoxGroup("Sounds"), SerializeField] AudioClip buttonClickNormal;
+    [BoxGroup("Sounds"), SerializeField] AudioClip buttonClickShort;
 
     [BoxGroup("Info"), SerializeField, ReadOnly] float masterVolume;
     [BoxGroup("Info"), SerializeField, ReadOnly] float bgmVolume;
@@ -38,6 +43,10 @@ public class TitleSoundMenu : MonoBehaviour
         bgmPlayer.volume = MasterVolume * BGMVolume;
         bgmPlayer.Play();
     }
+
+    public void PlayFXButtonLong() { fxPlayer.PlayOneShot(buttonClickLong, 0.7f * MasterVolume * FXVolume); }
+    public void PlayFXButtonNormal() { fxPlayer.PlayOneShot(buttonClickNormal, 0.7f * MasterVolume * FXVolume); }
+    public void PlayFXButtonShort() { fxPlayer.PlayOneShot(buttonClickShort, 0.7f * MasterVolume * FXVolume); }
 
     public void MasterVolumeChange(Slider volumeSlider)
     {

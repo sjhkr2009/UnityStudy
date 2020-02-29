@@ -18,21 +18,31 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private int scoreTier2;
     [SerializeField] private int scoreTier3;
     [SerializeField] private int scoreTier4;
+    [ReadOnly] public bool isCurrentScoreBest;
+
+    public int BestScore
+    {
+        get => PlayerPrefs.GetInt(nameof(BestScore), 0);
+        set => PlayerPrefs.SetInt(nameof(BestScore), value);
+    }
 
     private void Awake()
     {
-        score = 0;
+        _score = 0;
         timeScoreCount = 0f;
-        _bestScore = bestScore;
+        isCurrentScoreBest = false;
+        _bestScore = BestScore;
+
+        EventOnScoreChanged += BestScoreCheck;
     }
 
-    public int bestScore
+    private void OnDestroy()
     {
-        get => PlayerPrefs.GetInt(nameof(bestScore), 0);
-        set => PlayerPrefs.SetInt(nameof(bestScore), value);
+        if(!isCurrentScoreBest) EventOnScoreChanged -= BestScoreCheck;
+        else EventOnScoreChanged -= BestScoreSave;
     }
 
-    public int score
+    public int Score
     {
         get => _score;
         set
@@ -44,7 +54,7 @@ public class ScoreManager : MonoBehaviour
 
     void AddScore(int score)
     {
-        this.score += score;
+        Score += score;
     }
 
     public void AddScorePerSecond()
@@ -58,7 +68,7 @@ public class ScoreManager : MonoBehaviour
     }
     public void ScorePerSecondUpgrade()
     {
-        addScorePerSecond = Mathf.Min(addScorePerSecond + 0.1f, 2.5f);
+        addScorePerSecond = addScorePerSecond + Mathf.Min(addScorePerSecond * 0.1f, 0.88f);
     }
 
     int ScoreCalculator(Enemy enemy)
@@ -111,24 +121,25 @@ public class ScoreManager : MonoBehaviour
             case GameState.Pause:
                 break;
             case GameState.GameOver:
-                BestScoreCheck();
+                OnGameOverScoreCheck();
                 break;
         }
     }
 
-    private void BestScoreCheck()
+    private void OnGameOverScoreCheck() { EventOnGameOver(Score, isCurrentScoreBest); }
+
+    void BestScoreCheck(int currentScore)
     {
-        _bestScore = bestScore;
-
-        if (score > bestScore)
+        if(currentScore > _bestScore)
         {
-            bestScore = score;
-            EventOnGameOver(score, true);
+            isCurrentScoreBest = true;
+            EventOnScoreChanged -= BestScoreCheck;
+            EventOnScoreChanged += BestScoreSave;
         }
-        else
-        {
-            EventOnGameOver(score, false);
-        }
+    }
 
+    void BestScoreSave(int score)
+    {
+        BestScore = score;
     }
 }

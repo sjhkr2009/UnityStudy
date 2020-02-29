@@ -136,7 +136,7 @@ public class ItemManager : MonoBehaviour
         float planetHp = GameManager.Instance.PlanetHpRate();
         float hpRate = Mathf.Min(starHp, planetHp);
 
-        if(UnityEngine.Random.value < (1.5f - hpRate))
+        if(UnityEngine.Random.value > (0.35f + hpRate))
         {
             for (int i = 0; i < 10; i++) BonusHealkitSpawn();
         }
