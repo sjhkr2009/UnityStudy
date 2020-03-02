@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        Screen.SetResolution(1080, 1920, true);
 
         if (uiManager == null) uiManager = GetComponent<UIManager>();
         if (enemyManager == null) enemyManager = GetComponent<EnemyManager>();
@@ -174,6 +175,16 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
+        //PC 부스터 조작용
+        if(Input.GetKeyDown(KeyCode.LeftControl) && gameState == GameState.Playing)
+        {
+            uiManager.OnAccelerateClick();
+        }
+        if(Input.GetKeyUp(KeyCode.LeftControl) && gameState == GameState.Playing)
+        {
+            uiManager.ExitAccelerateClick();
+        }
+        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             switch (gameState)

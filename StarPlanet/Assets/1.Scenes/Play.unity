@@ -11810,11 +11810,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b7a210df23bd255428bdf4def67109f2, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 36e3821aed1515745825f82193bddb64, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -46160,10 +46160,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -51123,7 +51123,7 @@ MonoBehaviour:
   boosterTrailParticle: {fileID: 1303850824}
   feverParticle: {fileID: 974931426}
   orbitalSpeedFactor: 1
-  boosterFactor: 1.6
+  boosterFactor: 1.66
 --- !u!54 &1934295237
 Rigidbody:
   m_ObjectHideFlags: 0

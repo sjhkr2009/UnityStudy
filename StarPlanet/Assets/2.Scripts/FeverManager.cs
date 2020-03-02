@@ -11,7 +11,7 @@ public class FeverManager : MonoBehaviour
     public event Action EventOnFeverTime = () => { };
     public event Action EventExitFeverTime = () => { };
 
-    public float feverDuration = 8f;
+    public float feverDuration;
     [ReadOnly] public int currentFeverCount = 0;
     [HideInInspector] public int maxFeverCount = 100;
     PoolManager poolManager;
@@ -21,6 +21,7 @@ public class FeverManager : MonoBehaviour
 
     private void Awake()
     {
+        feverDuration = 8f;
         currentFeverCount = 0;
         maxFeverCount = 100;
         isFeverTime = false;
@@ -71,6 +72,7 @@ public class FeverManager : MonoBehaviour
         isFeverTime = false;
         currentFeverCount = 0;
         maxFeverCount += 10;
+        if (feverDuration < 15f) feverDuration += 0.35f;
     }
 
     private void OnDestroy()
