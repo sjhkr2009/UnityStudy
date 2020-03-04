@@ -14,6 +14,7 @@ public class EnemyManager : MonoBehaviour
     FeverManager feverManager;
 
     [BoxGroup("Spawn Control"), SerializeField] float spawnDelay;
+    [BoxGroup("Spawn Control"), SerializeField] float tier1Speed;
     [BoxGroup("Spawn Control"), SerializeField] float tier2Probability;
     [SerializeField, ReadOnly] private bool isTier2cooltime;
     [BoxGroup("Spawn Control"), SerializeField] float tier3Probability;
@@ -27,6 +28,7 @@ public class EnemyManager : MonoBehaviour
     [BoxGroup("Spawn Control"), SerializeField] int tier3TPSpawnCount;
 
     List<Enemy> spawnedEnemies = new List<Enemy>();
+    
     int feverTimeCount;
 
     void Start()
@@ -43,6 +45,7 @@ public class EnemyManager : MonoBehaviour
         isTier4cooltime = false;
 
         feverTimeCount = 0;
+        tier1Speed = 1f;
         tier3TSSpawnCount = 4;
 
         StartCoroutine(nameof(EnemySpawn));
@@ -95,6 +98,7 @@ public class EnemyManager : MonoBehaviour
                 else
                 {
                     enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTP1);
+                    enemy.moveSpeed = tier1Speed;
                 }
             }
            else //To Star형 유닛 생성
@@ -119,6 +123,7 @@ public class EnemyManager : MonoBehaviour
                 else
                 {
                     enemy = (Enemy)spawnManager.SpawnOverMapToCenter(ObjectPool.EnemyTS1);
+                    enemy.moveSpeed = tier1Speed;
                 }
             }
             AddEventToEnemy(enemy);
@@ -385,6 +390,8 @@ public class EnemyManager : MonoBehaviour
         }
         if (spawnDelay > 1.0f) spawnDelay = Mathf.Max(spawnDelay - 0.1f, 1.0f);
         else spawnDelay = Mathf.Lerp(spawnDelay, 0.1f, 0.1f);
+
+        if (tier1Speed < 5f) tier1Speed += 0.2f;
     }
     public void OnSpawnControlByTime(int second)
     {
@@ -401,8 +408,9 @@ public class EnemyManager : MonoBehaviour
     {
         float currentScore = (float)score;
 
-        tier2cooltime = Mathf.Max(15f - Mathf.Sqrt(currentScore) * 0.5f, 4f);
-        if (currentScore > 100f) tier3cooltime = Mathf.Max(20f - Mathf.Sqrt(currentScore - 100f) * 0.5f, 7f);
+        if (tier1Speed < 3f) tier1Speed = Mathf.Min(1f + currentScore * 0.005f, 3f);
+        tier2cooltime = Mathf.Max(15f - Mathf.Sqrt(currentScore) * 0.5f, 2.2f);
+        if (currentScore > 100f) tier3cooltime = Mathf.Max(20f - Mathf.Sqrt(currentScore - 100f) * 0.5f, 5f);
         if (currentScore > 200f) tier4cooltime = Mathf.Max(30f - Mathf.Sqrt(currentScore - 200f) * 0.5f, 10f);
     }
 }
