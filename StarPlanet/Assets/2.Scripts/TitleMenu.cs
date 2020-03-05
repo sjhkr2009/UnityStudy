@@ -18,11 +18,12 @@ public class TitleMenu : MonoBehaviour
     [Header("Window")]
     [SerializeField] RectTransform soundWindowTransform;
     [SerializeField] RectTransform warningWindow;
+    [SerializeField] RectTransform[] tutorialWindows;
     [SerializeField] Text warningText;
 
 
     bool isPopUpClosing = false;
-    bool isWarningActive = false;
+    bool notBackground = false;
 
     private NowActiveWindow _nowActive;
     public NowActiveWindow nowActive //현재 활성화된 창의 상태. 경고창 활성화 여부 -> 팝업창 출력 -> 불필요한 메뉴 비활성화 순으로 실행한다.
@@ -35,14 +36,17 @@ public class TitleMenu : MonoBehaviour
                 case NowActiveWindow.None:
                     _nowActive = NowActiveWindow.None;
 
-                    isWarningActive = false;
+                    notBackground = false;
                     if (allPopUpWindow.activeSelf) allPopUpWindow.SetActive(false);
                     break;
 
                 case NowActiveWindow.Sound:
                     _nowActive = NowActiveWindow.Sound;
 
-                    isWarningActive = false;
+                    notBackground = false;
+                    if(warningWindow.gameObject.activeSelf) warningWindow.gameObject.SetActive(false);
+                    foreach (var item in tutorialWindows) item.gameObject.SetActive(false);
+
                     if (!allPopUpWindow.activeSelf) allPopUpWindow.SetActive(true);
                     titleText.text = "SOUND";
                     soundWindowTransform.gameObject.SetActive(true);
@@ -51,9 +55,24 @@ public class TitleMenu : MonoBehaviour
                 case NowActiveWindow.Quit:
                     _nowActive = NowActiveWindow.Quit;
 
-                    isWarningActive = true;
+                    notBackground = true;
                     if (!allPopUpWindow.activeSelf) allPopUpWindow.SetActive(true);
                     if (soundWindowTransform.gameObject.activeSelf) soundWindowTransform.gameObject.SetActive(false);
+                    foreach (var item in tutorialWindows) item.gameObject.SetActive(false);
+
+                    if (!warningWindow.gameObject.activeSelf) warningWindow.gameObject.SetActive(true);
+                    break;
+
+                case NowActiveWindow.Tutorial:
+                    _nowActive = NowActiveWindow.Tutorial;
+
+                    notBackground = true;
+                    if (!allPopUpWindow.activeSelf) allPopUpWindow.SetActive(true);
+                    if (warningWindow.gameObject.activeSelf) warningWindow.gameObject.SetActive(false);
+                    if (soundWindowTransform.gameObject.activeSelf) soundWindowTransform.gameObject.SetActive(false);
+
+                    foreach (var item in tutorialWindows) item.gameObject.SetActive(false);
+                    tutorialWindows[0].gameObject.SetActive(true);
                     break;
             }
         }
@@ -87,6 +106,9 @@ public class TitleMenu : MonoBehaviour
             case NowActiveWindow.Quit:
                 ButtonToOffAllWindow();
                 break;
+            case NowActiveWindow.Tutorial:
+                ButtonToOffAllWindow();
+                break;
             default:
                 break;
         }
@@ -97,15 +119,13 @@ public class TitleMenu : MonoBehaviour
         popUpBackgroundColor.color = Color.clear;
         popUpBackgroundColor.DOColor(new Color(0, 0, 0, 0.5f), 0.3f).SetUpdate(true);
 
-        if (isWarningActive)
+        if (notBackground)
         {
             popUpBasicTransform.gameObject.SetActive(false);
-            warningWindow.gameObject.SetActive(true);
         }
-        else if (!isWarningActive)
+        else if (!notBackground)
         {
             popUpBasicTransform.gameObject.SetActive(true);
-            warningWindow.gameObject.SetActive(false);
         }
     }
 
@@ -121,6 +141,29 @@ public class TitleMenu : MonoBehaviour
 
         nowActive = NowActiveWindow.Sound;
         PopUpWindowOnAnimation(soundWindowTransform);
+    }
+    public void ButtonToOpenTutorial()
+    {
+        if (isPopUpClosing) return;
+
+        nowActive = NowActiveWindow.Tutorial;
+        PopUpWindowOnAnimation(tutorialWindows[0]);
+    }
+    public void ButtonToCloseTutorial()
+    {
+        if (isPopUpClosing) return;
+        ButtonToOffAllWindow();
+    }
+    public void ButtonToNextTutorial(int currentPage)
+    {
+        tutorialWindows[currentPage].gameObject.SetActive(false);
+        tutorialWindows[currentPage + 1].gameObject.SetActive(true);
+        tutorialWindows[currentPage + 1].localScale = Vector3.one;
+    }
+    public void ButtonToPreviousTutorial(int currentPage)
+    {
+        tutorialWindows[currentPage].gameObject.SetActive(false);
+        tutorialWindows[currentPage - 1].gameObject.SetActive(true);
     }
     public void ButtonToWarning()
     {
@@ -156,6 +199,16 @@ public class TitleMenu : MonoBehaviour
             case NowActiveWindow.Quit:
                 PopUpWindowOffAnimation(warningWindow);
                 break;
+            case NowActiveWindow.Tutorial:
+                foreach (var page in tutorialWindows)
+                {
+                    if (page.gameObject.activeSelf)
+                    {
+                        PopUpWindowOffAnimation(page);
+                        return;
+                    }
+                }
+                break;
             default:
                 OffAllWindow();
                 break;
@@ -164,7 +217,7 @@ public class TitleMenu : MonoBehaviour
 
     void PopUpWindowOnAnimation(RectTransform windowScale)
     {
-        if (!isWarningActive)
+        if (!notBackground)
         {
             popUpBasicTransform.localScale = Vector3.one * 0.5f;
             popUpBasicTransform.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
