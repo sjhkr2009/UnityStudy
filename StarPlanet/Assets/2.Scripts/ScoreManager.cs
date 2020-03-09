@@ -115,13 +115,12 @@ public class ScoreManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Ready:
-                break;
-            case GameState.Playing:
-                break;
-            case GameState.Pause:
+                _score = 0;
                 break;
             case GameState.GameOver:
                 OnGameOverScoreCheck();
+                break;
+            default:
                 break;
         }
     }

@@ -57,7 +57,7 @@ public class FeverManager : MonoBehaviour
         }
     }
 
-    public void GetFeverCountPerSecond() { GetFeverCount(1); }
+    public void GetFeverCountPerSecond() { GetFeverCount(maxFeverCount / 100); }
 
     void FeverTime()
     {
@@ -71,7 +71,7 @@ public class FeverManager : MonoBehaviour
         EventExitFeverTime();
         isFeverTime = false;
         currentFeverCount = 0;
-        maxFeverCount += 10;
+        if(maxFeverCount < 300) maxFeverCount += 10;
         if (feverDuration < 15f) feverDuration += 0.35f;
     }
 

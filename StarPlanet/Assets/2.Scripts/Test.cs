@@ -77,4 +77,13 @@ public class Test : MonoBehaviour
 
     [Button("저장된 내용 리셋")]
     void ResetPlayerPrefs() { PlayerPrefs.DeleteAll(); }
+
+    [Button("연산 테스트")]
+    void TestCal()
+    {
+        Debug.Log($"255 / 100 = {255 / 100}");
+        Debug.Log($"100 / 100 = {100 / 100}");
+        Debug.Log($"300 / 100 = {300 / 100}");
+        Debug.Log($"110 / 100 = {110 / 100}");
+    }
 }

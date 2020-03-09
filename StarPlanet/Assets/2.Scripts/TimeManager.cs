@@ -44,10 +44,7 @@ public class TimeManager : MonoBehaviour
             case GameState.Playing:
                 isPlaying = true;
                 break;
-            case GameState.Pause:
-                isPlaying = false;
-                break;
-            case GameState.GameOver:
+            default:
                 isPlaying = false;
                 break;
         }
