@@ -8,20 +8,22 @@ using DG.Tweening;
 
 public class TitleMenu : MonoBehaviour
 {
-    
+    [SerializeField] Text bestScoreText; 
     [Header("Basic")]
     [SerializeField] GameObject allPopUpWindow;
     [SerializeField] PopUpWindow popUpWindow;
     [SerializeField] RectTransform popUpBasicTransform;
     [SerializeField] Image popUpBackgroundColor;
     [SerializeField] Text titleText;
+    [SerializeField] RectTransform popUpTextTransform;
+    [SerializeField] Text popUpText;
     [Header("Window")]
     [SerializeField] RectTransform soundWindowTransform;
     [SerializeField] RectTransform warningWindow;
     [SerializeField] RectTransform[] tutorialWindows;
     [SerializeField] Text warningText;
 
-
+    Vector3 popUpTextOriginPos;
     bool isPopUpClosing = false;
     bool notBackground = false;
 
@@ -52,8 +54,8 @@ public class TitleMenu : MonoBehaviour
                     soundWindowTransform.gameObject.SetActive(true);
                     break;
 
-                case NowActiveWindow.Quit:
-                    _nowActive = NowActiveWindow.Quit;
+                case NowActiveWindow.Warning:
+                    _nowActive = NowActiveWindow.Warning;
 
                     notBackground = true;
                     if (!allPopUpWindow.activeSelf) allPopUpWindow.SetActive(true);
@@ -78,9 +80,16 @@ public class TitleMenu : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        popUpTextOriginPos = popUpTextTransform.position;
+        Debug.Log($"팝업 메시지 위치: {popUpTextOriginPos}");
+    }
+
     private void Start()
     {
         if (allPopUpWindow.activeSelf) OffAllWindow();
+        bestScoreText.text = $"Best Record: {PlayerPrefs.GetInt("BestScore", 0)}";
 
         popUpWindow.EventOnPopUpOpen += OnPopUp;
     }
@@ -98,12 +107,12 @@ public class TitleMenu : MonoBehaviour
         switch (nowActive)
         {
             case NowActiveWindow.None:
-                ButtonToWarning();
+                ButtonToQuitWarning();
                 break;
             case NowActiveWindow.Sound:
                 ButtonToOffAllWindow();
                 break;
-            case NowActiveWindow.Quit:
+            case NowActiveWindow.Warning:
                 ButtonToOffAllWindow();
                 break;
             case NowActiveWindow.Tutorial:
@@ -165,24 +174,48 @@ public class TitleMenu : MonoBehaviour
         tutorialWindows[currentPage].gameObject.SetActive(false);
         tutorialWindows[currentPage - 1].gameObject.SetActive(true);
     }
-    public void ButtonToWarning()
+    public void ButtonToQuitWarning()
     {
         if (isPopUpClosing) return;
 
-        nowActive = NowActiveWindow.Quit;
+        nowActive = NowActiveWindow.Warning;
         PopUpWindowOnAnimation(warningWindow);
         warningText.text = "게임을 종료하시겠습니까?";
+    }
+    public void ButtonToResetWarning()
+    {
+        if (isPopUpClosing) return;
+
+        nowActive = NowActiveWindow.Warning;
+        PopUpWindowOnAnimation(warningWindow);
+        warningText.text = "모든 데이터가 초기화됩니다. 계속하시겠습니까?";
     }
     public void ButtonWarningToQuit()
     {
         Application.Quit();
+    }
+    public void ButtonWarningToReset()
+    {
+        if (isPopUpClosing) return;
+        PlayerPrefs.DeleteAll();
+        bestScoreText.text = $"Best Record: {PlayerPrefs.GetInt("BestScore", 0)}";
+        ButtonToOffAllWindow();
     }
     public void ButtonWarningClose()
     {
         if (isPopUpClosing) return;
         ButtonToOffAllWindow();
     }
+    public void PopUpText(string message)
+    {
+        popUpText.gameObject.SetActive(true);
+        popUpText.DOFade(0.75f, 0f);
+        popUpText.text = message;
+        popUpTextTransform.position = popUpTextOriginPos;
 
+        popUpTextTransform.DOMoveY(popUpTextOriginPos.y * 1.2f, 2f).SetEase(Ease.Linear);
+        popUpText.DOFade(0f, 2f).OnComplete(() => { popUpText.gameObject.SetActive(false); });
+    }
 
     public void ButtonToOffAllWindow()
     {
@@ -196,7 +229,7 @@ public class TitleMenu : MonoBehaviour
             case NowActiveWindow.Sound:
                 PopUpWindowOffAnimation(soundWindowTransform);
                 break;
-            case NowActiveWindow.Quit:
+            case NowActiveWindow.Warning:
                 PopUpWindowOffAnimation(warningWindow);
                 break;
             case NowActiveWindow.Tutorial:

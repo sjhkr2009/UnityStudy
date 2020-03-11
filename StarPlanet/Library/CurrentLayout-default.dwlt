@@ -115,7 +115,7 @@ MonoBehaviour:
   m_MinSize: {x: 1121, y: 394}
   m_MaxSize: {x: 26016, y: 14044}
   vertical: 0
-  controlID: 49
+  controlID: 127
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_MinSize: {x: 642, y: 394}
   m_MaxSize: {x: 18012, y: 14044}
   vertical: 1
-  controlID: 125
+  controlID: 154
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 642, y: 272}
   m_MaxSize: {x: 18012, y: 10022}
   vertical: 0
-  controlID: 126
+  controlID: 155
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -442,9 +442,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 509.55954, y: 832.4397, z: -614.86206}
+    m_Target: {x: 357.53815, y: 1566.5377, z: -887.25}
     speed: 2
-    m_Value: {x: 509.55954, y: 832.4397, z: -614.86206}
+    m_Value: {x: 357.53815, y: 1566.5377, z: -887.25}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -477,9 +477,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 779.2011
+    m_Target: 1986.5046
     speed: 2
-    m_Value: 779.2011
+    m_Value: 1986.5046
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -498,7 +498,7 @@ MonoBehaviour:
     m_DynamicClip: 1
     m_OcclusionCulling: 0
   m_ShowGlobalGrid: 1
-  m_LastSceneViewRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
@@ -129356,9 +129356,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 52700000
-      m_LastClickedID: 28754
-      m_ExpandedIDs: 38e1ffffbee8ffffc4e9ffff00eaffff6efbffffd04c0000a44d0000ce4f00000c5000004050000084500000de5e00001a620000a26700003e68000046680000c6680000d868000002690000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: bef5fffff6f5ffff6efbffff3a590000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -129464,18 +129464,18 @@ MonoBehaviour:
     m_ExpandedIDs: ffffffff00000000f8360000b23700000c380000203800006c3a0000763d00009a3d0000ee40000002410000ce4200005c470000764700003a4a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Title
+      m_OriginalName: Title
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 15894
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_SearchString: 

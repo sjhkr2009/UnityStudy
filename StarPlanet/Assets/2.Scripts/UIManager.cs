@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine.UI;
 using System;
 using DG.Tweening;
-public enum NowActiveWindow { None, Pause, Sound, Gameover, Quit, Tutorial }
+public enum NowActiveWindow { None, Pause, Sound, Gameover, Warning, Tutorial }
 
 public class UIManager : MonoBehaviour
 {
