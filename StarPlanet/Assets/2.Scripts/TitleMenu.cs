@@ -5,9 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 
+public enum WarningMode { Quit, Reset }
 
 public class TitleMenu : MonoBehaviour
 {
+    [SerializeField] RectTransform titleImage;
+    [SerializeField] GameObject mainMenu;
     [SerializeField] Text bestScoreText; 
     [Header("Basic")]
     [SerializeField] GameObject allPopUpWindow;
@@ -26,6 +29,26 @@ public class TitleMenu : MonoBehaviour
     Vector3 popUpTextOriginPos;
     bool isPopUpClosing = false;
     bool notBackground = false;
+    WarningMode _warningMode;
+
+    WarningMode warningMode
+    {
+        get => _warningMode;
+        set
+        {
+            switch (value)
+            {
+                case WarningMode.Quit:
+                    _warningMode = WarningMode.Quit;
+                    warningText.text = "게임을 종료하시겠습니까?";
+                    break;
+                case WarningMode.Reset:
+                    _warningMode = WarningMode.Reset;
+                    warningText.text = "모든 데이터가 초기화됩니다. 계속하시겠습니까?";
+                    break;
+            }
+        }
+    }
 
     private NowActiveWindow _nowActive;
     public NowActiveWindow nowActive //현재 활성화된 창의 상태. 경고창 활성화 여부 -> 팝업창 출력 -> 불필요한 메뉴 비활성화 순으로 실행한다.
@@ -84,6 +107,13 @@ public class TitleMenu : MonoBehaviour
     {
         popUpTextOriginPos = popUpTextTransform.position;
         Debug.Log($"팝업 메시지 위치: {popUpTextOriginPos}");
+
+        titleImage.localScale = Vector3.zero;
+        mainMenu.SetActive(false);
+        titleImage.DOScale(1f, 1f).SetEase(Ease.OutBack).OnComplete(() =>
+        {
+            DOVirtual.DelayedCall(0.3f, () => { mainMenu.SetActive(true); });
+        });
     }
 
     private void Start()
@@ -163,43 +193,58 @@ public class TitleMenu : MonoBehaviour
         if (isPopUpClosing) return;
         ButtonToOffAllWindow();
     }
-    public void ButtonToNextTutorial(int currentPage)
+    public void ButtonToNextTutorial(int currentPageIndex)
     {
-        tutorialWindows[currentPage].gameObject.SetActive(false);
-        tutorialWindows[currentPage + 1].gameObject.SetActive(true);
-        tutorialWindows[currentPage + 1].localScale = Vector3.one;
+        tutorialWindows[currentPageIndex].gameObject.SetActive(false);
+        tutorialWindows[currentPageIndex + 1].gameObject.SetActive(true);
+        tutorialWindows[currentPageIndex + 1].localScale = Vector3.one;
     }
-    public void ButtonToPreviousTutorial(int currentPage)
+    public void ButtonToPreviousTutorial(int currentPageIndex)
     {
-        tutorialWindows[currentPage].gameObject.SetActive(false);
-        tutorialWindows[currentPage - 1].gameObject.SetActive(true);
+        tutorialWindows[currentPageIndex].gameObject.SetActive(false);
+        tutorialWindows[currentPageIndex - 1].gameObject.SetActive(true);
     }
     public void ButtonToQuitWarning()
     {
         if (isPopUpClosing) return;
+        warningMode = WarningMode.Quit;
 
         nowActive = NowActiveWindow.Warning;
         PopUpWindowOnAnimation(warningWindow);
-        warningText.text = "게임을 종료하시겠습니까?";
     }
     public void ButtonToResetWarning()
     {
         if (isPopUpClosing) return;
+        warningMode = WarningMode.Reset;
 
         nowActive = NowActiveWindow.Warning;
         PopUpWindowOnAnimation(warningWindow);
-        warningText.text = "모든 데이터가 초기화됩니다. 계속하시겠습니까?";
     }
-    public void ButtonWarningToQuit()
+    public void ButtonWarningToYes()
+    {
+        switch (warningMode)
+        {
+            case WarningMode.Quit:
+                WarningToQuit();
+                break;
+            case WarningMode.Reset:
+                WarningToReset();
+                break;
+        }
+    }
+    void WarningToQuit()
     {
         Application.Quit();
     }
-    public void ButtonWarningToReset()
+    void WarningToReset()
     {
         if (isPopUpClosing) return;
         PlayerPrefs.DeleteAll();
         bestScoreText.text = $"Best Record: {PlayerPrefs.GetInt("BestScore", 0)}";
+
         ButtonToOffAllWindow();
+
+        PopUpText("데이터가 삭제되었습니다");
     }
     public void ButtonWarningClose()
     {
