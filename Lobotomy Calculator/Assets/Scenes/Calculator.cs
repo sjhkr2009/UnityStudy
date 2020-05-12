@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
 
 public class Calculator : MonoBehaviour
@@ -108,7 +109,7 @@ public class Calculator : MonoBehaviour
             CalculateSpecialExp();
         }
     }
-    [BoxGroup("게임 내 변수"), SerializeField, ReadOnly] private int eduAliveBonus;
+    [BoxGroup("게임 내 변수"), SerializeField, ReadOnly] private int eduAliveBonus = 0;
     public int EduAliveBonus
     {
         get => eduAliveBonus;
@@ -118,7 +119,7 @@ public class Calculator : MonoBehaviour
             CalculateSpecialExp();
         }
     }
-    [BoxGroup("게임 내 변수"), SerializeField, ReadOnly] private int eduLaborBonus;
+    [BoxGroup("게임 내 변수"), SerializeField, ReadOnly] private int eduLaborBonus = 0;
     public int EduLaborBonus
     {
         get => eduLaborBonus;
@@ -154,7 +155,7 @@ public class Calculator : MonoBehaviour
     }
 
     //DmgExp 관련 변수
-    [BoxGroup("직원 및 환상체 정보"), SerializeField, ReadOnly] private int _startHp = 100;
+    [BoxGroup("직원 및 환상체 정보"), SerializeField, ReadOnly] private int _startHp = 0;
     public int StartHp
     {
         get => _startHp;
@@ -164,7 +165,7 @@ public class Calculator : MonoBehaviour
             DmgExp = CalculateDmgExp(_startHp, _endHp);
         }
     }
-    [BoxGroup("직원 및 환상체 정보"), SerializeField, ReadOnly] private int _endHp = 50;
+    [BoxGroup("직원 및 환상체 정보"), SerializeField, ReadOnly] private int _endHp = 0;
     public int EndHp
     {
         get => _endHp;
@@ -215,6 +216,7 @@ public class Calculator : MonoBehaviour
     private float CalculateDmgExp(int start, int end)
     {
         if (isPale) return 1.5f;
+        if (start == 0) return 0f;
         
         float playerHp = (float)end / (float)start;
         float dmgExp = 1f;
@@ -288,4 +290,13 @@ public class Calculator : MonoBehaviour
         PeBox = num;
     }
     
+    public void DontTouchMe()
+    {
+        Application.Quit();
+    }
+
+    public void ReStart()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
