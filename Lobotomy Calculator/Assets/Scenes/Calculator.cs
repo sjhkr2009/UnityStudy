@@ -1,11 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Sirenix.OdinInspector;
 
 public class Calculator : MonoBehaviour
 {
-    
+    [BoxGroup("UI"), SerializeField] Toggle getManualUI;
+    [BoxGroup("UI"), SerializeField] Dropdown eduAliveBonusUI;
+    [BoxGroup("UI"), SerializeField] Dropdown eduLaborBonusUI;
+    [BoxGroup("UI"), SerializeField] Dropdown workTypeUI;
+    [BoxGroup("UI"), SerializeField] Dropdown playerLevelUI;
+    [BoxGroup("UI"), SerializeField] Dropdown enemyLevelUI;
+    [BoxGroup("UI"), SerializeField] Toggle isPaleUI;
+    [BoxGroup("UI"), SerializeField] InputField startHpUI;
+    [BoxGroup("UI"), SerializeField] InputField endHpUI;
+    [BoxGroup("UI"), SerializeField] InputField peBoxUI;
+    [BoxGroup("UI"), SerializeField] Text resultUI;
+    [BoxGroup("UI"), SerializeField] GameObject onPaleUI;
+    [BoxGroup("UI"), SerializeField] GameObject offPaleUI;
+
     [BoxGroup("계산 결과"), SerializeField, ReadOnly] private float result;
     public float Result
     {
@@ -13,8 +27,7 @@ public class Calculator : MonoBehaviour
         set
         {
             result = value;
-            Debug.Log($"계산 결과: {result}");
-            //화면상에 결과 표시
+            resultUI.text = value.ToString();
         }
     }
 
@@ -49,7 +62,7 @@ public class Calculator : MonoBehaviour
             FinalCalculate();
         }
     }
-    [BoxGroup("최종 변수"), SerializeField, ReadOnly] private int _peBox = 10;
+    [BoxGroup("최종 변수"), SerializeField, ReadOnly] private int _peBox = 0;
     public int PeBox
     {
         get => _peBox;
@@ -78,16 +91,20 @@ public class Calculator : MonoBehaviour
         set
         {
             isPale = value;
+            startHpUI.readOnly = value;
+            endHpUI.readOnly = value;
+            onPaleUI.SetActive(value);
+            offPaleUI.SetActive(!value);
             DmgExp = CalculateDmgExp(_startHp, _endHp);
         }
     }
-    [BoxGroup("게임 내 변수"), SerializeField, ReadOnly] bool getMenual = false;
-    public bool GetMenual
+    [BoxGroup("게임 내 변수"), SerializeField, ReadOnly] bool getManual = false;
+    public bool GetManual
     {
-        get => getMenual;
+        get => getManual;
         set
         {
-            getMenual = value;
+            getManual = value;
             CalculateSpecialExp();
         }
     }
@@ -216,7 +233,7 @@ public class Calculator : MonoBehaviour
     {
         float specialExp = 1f;
 
-        if (getMenual) specialExp += 0.5f;
+        if (getManual) specialExp += 0.5f;
 
         if (eduAliveBonus == 1) specialExp += 0.01f;
         else if (eduAliveBonus == 2) specialExp += 0.03f;
@@ -236,4 +253,39 @@ public class Calculator : MonoBehaviour
         float _result = (float)_peBox * _levelExp * _dmgExp * _specialExp;
         Result = Mathf.Round(_result * 100) * 0.01f;
     }
+
+    public void InputGetMenual() { GetManual = getManualUI.isOn; }
+    public void InputEduAlive() { EduAliveBonus = eduAliveBonusUI.value; }
+    public void InputEduLabor() { EduLaborBonus = eduLaborBonusUI.value; }
+    public void InputWorkType()
+    {
+        int value = workTypeUI.value;
+        if (value == 0 && IsJustice) IsJustice = false;
+        else if (value == 1 && !IsJustice) IsJustice = true;
+    }
+    public void InputPlayerLevel() { PlayerLevel = playerLevelUI.value + 1; }
+    public void InputEnemyLevel() { EnemyLevel = enemyLevelUI.value + 1; }
+    public void InputIsPale()
+    { 
+        IsPale = isPaleUI.isOn;
+    }
+    public void InputStartHp()
+    {
+        int num = 0;
+        int.TryParse(startHpUI.text, out num);
+        StartHp = num;
+    }
+    public void InputEndHp()
+    {
+        int num = 0;
+        int.TryParse(endHpUI.text, out num);
+        EndHp = num;
+    }
+    public void InputPeBox()
+    {
+        int num = 0;
+        int.TryParse(peBoxUI.text, out num);
+        PeBox = num;
+    }
+    
 }
