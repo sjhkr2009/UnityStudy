@@ -4,15 +4,29 @@ using UnityEngine;
 
 public class AF_BuildManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public AF_Race race;
 
-    // Update is called once per frame
-    void Update()
+    RaceFactory raceFactory;
+
+    UnitGeneratorGround unitGeneratorGround;
+    CapacityBuilding capacityBuilding;
+
+    private void Start()
     {
-        
+        switch (race)
+        {
+            case AF_Race.Terran:
+                raceFactory = new TerranFactory();
+                break;
+            case AF_Race.Protoss:
+                raceFactory = new ProtossFactory();
+                break;
+        }
+
+        unitGeneratorGround = raceFactory.GetUnitGeneratorGround();
+        capacityBuilding = raceFactory.GetCapacityBuilding();
+
+        unitGeneratorGround.MakeUnit();
+        capacityBuilding.MakeUnit();
     }
 }

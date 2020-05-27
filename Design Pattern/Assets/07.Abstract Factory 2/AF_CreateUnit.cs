@@ -2,17 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AF_CreateUnit : MonoBehaviour
+public abstract class UnitGeneratorGround
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public abstract void MakeUnit();
+}
 
-    // Update is called once per frame
-    void Update()
+public class T_Barrack : UnitGeneratorGround
+{
+    public override void MakeUnit()
     {
-        
+        Debug.Log("배럭 생성");
+    }
+}
+
+public class P_Gateway : UnitGeneratorGround
+{
+    public override void MakeUnit()
+    {
+        Debug.Log("게이트웨이 생성");
     }
 }
