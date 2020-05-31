@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 
-public class DataType : MonoBehaviour
+public class C01_DataType : MonoBehaviour
 {
+    // 01. 자료형
+    
     private void Start()
     {
         // 1. 자료형 정리
@@ -43,6 +45,17 @@ public class DataType : MonoBehaviour
         aInt = 0b1101; //(=13)
         aInt = 0x2F; //(=47)
 
+        //--------------------------------------------------------------------------------------
+
+        //1.2. var
+
+        //var은 타입을 컴파일러가 알아서 찾도록 한다.
+
+        var a = 3;
+        var b = "Hello World!";
+
+        //하지만 C++이나 C#의 장점은 타입을 강력하게 지정시켜 준다는 것.
+        //var의 남용은 자제하고, 기존 타입으로 선언할 수 있는 경우엔 가급적 그쪽을 사용하자.
 
 
 
@@ -107,6 +120,7 @@ public class DataType : MonoBehaviour
         //3.1. 비트 연산
 
         // << >> &(and) |(or) ^(xor) ~(not)
+        // 비트연산도 자기 자신에 대한 연산일 경우 >>=, ~=, &= 등으로 줄일 수 있다.
 
         aInt = 4; //(= 0b100)
         aInt = aInt << 1; //이진수로 표현된 모든 비트를 1칸씩 왼쪽으로 민다. 즉 0b100 -> 0b1000으로, aInt는 8이 된다.
@@ -147,5 +161,26 @@ public class DataType : MonoBehaviour
         aInt = id ^ key; //이 상태로 데이터를 전송하면, key 값을 모르는 사람은 aInt 데이터를 가로채도 무슨 수인지 알 수 없다.
 
         bInt = aInt ^ key; //다시 key를 ^연산하면 원래의 123이 나온다.
+
+        //--------------------------------------------------------------------------------------
+
+        //3.2. 연산 우선순위
+
+        /*
+         * 1. ++ --
+         * 2. * / %
+         * 3. + -
+         * 4. << >>
+         * 5. < >
+         * 6. == !=
+         * 7. &
+         * 8. ^
+         * 9. |
+         * ...
+         *
+        */
+
+        //단, 실제로 우선순위를 전부 외우지는 않고, 우선순위를 가져야 하는 부분은 괄호로 묶는 게 좋다.
+        
     }
 }
