@@ -19,26 +19,36 @@ public class C07_OOP_Class : MonoBehaviour
         C07_1_CustomClass01 customClass1 = new C07_1_CustomClass01();
         C07_1_CustomClass01 customClass2 = new C07_1_CustomClass01("어둠 살수");
     }
+    /// <summary>
+    /// override에서 base 함수를 사용하지 않은 경우, 부모 클래스의 함수는 동작하지 않는다.
+    /// </summary>
     [Button]
     void Test02()
     {
         C07_3_Player player1 = new C07_3_Knight();
         C07_3_Player player2 = new C07_3_Archor();
         C07_3_Player player3 = new C07_3_Mage();
+        Debug.Log("--------------이동 함수 발동 시-----------");
+        player1.Move(); // 기사의 Move()는 new로 선언했으므로 별개의 함수다. 여기선 Player로 불러왔으니 Player의 이동 함수만 실행된다.
+        player2.Move(); // 궁수의 Move()는 부모 클래스를 오버라이드했다. 따라서 자식 클래스 Archor의 이동 함수만 실행된다.
+        player3.Move(); // 마법사의 Move()는 부모 클래스를 오버라이드했지만, 부모 클래스의 함수를 base.Move()로 추가해 주었다. 따라서 부모 클래스와 자식 클래스의 함수가 둘 다 실행된다.
     }
+    /// <summary>
+    /// 클래스 간의 다형성을 이용해 부모와 자식 클래스를 오갈 수 있다. 하지만 부모 클래스를 자식으로 변화시킬 때는 변화에 성공할 수도, 실패할 수도 있는데, 이는 is나 as로 체크한다.
+    /// </summary>
     [Button]
     void Test03()
     {
         C07_3_Player player = GetPlayer(1);
-        bool isKnight = player is C07_3_Knight;
+        bool isKnight = player is C07_3_Knight; //'변수 is 클래스'의 형태를 bool 값으로 반환한다. 변수가 해당 클래스거나 해당 클래스의 자식 클래스면 true 이다.
         if (isKnight) Debug.Log("기사 생성");
         else if (player is C07_3_Archor) Debug.Log("궁수 생성");
 
-        C07_3_Player player2 = GetPlayer(2);
-        player2.Attack();
+        C07_3_Player player2 = GetPlayer(2); //Player로 불러왔으므로 아직 Mage에만 존재하는 mp 변수는 쓸 수 없다.
+        player2.Attack(); //Player 클래스에 존재하는 함수나 변수는 조작 가능하다.
 
-        C07_3_Mage mage = player2 as C07_3_Mage;
-        mage.mp = 100;
+        C07_3_Mage mage = player2 as C07_3_Mage; //자식 클래스로 캐스팅할 수 있다. Mage를 가지고 있지 않다면 Null Reference 에러가 뜬다.
+        mage.mp = 100; //Mage로 불러왔으니 Mage에만 존재하는 변수를 조작할 수 있다.
         Debug.Log($"마법사의 마나: {mage.mp}");
     }
 
@@ -160,16 +170,17 @@ class C07_3_Player
     public int hp;
     public int power;
 
-    public virtual void Move()
+    public virtual void Move()  //오버라이드를 허용하려면 virtual로 선언한다. 오버라이드 하지 않으면 그냥 이 함수가 발동된다.
+                                //그렇다고 모든 함수를 virtual로 선언하지는 말 것. virtual이 성능상 좀 더 떨어진다.
     {
         Debug.Log("이동 명령 받음");
     }
-    public virtual void Attack() { }
+    public virtual void Attack() { } //참고로 오버로드(overload)와 오버라이드(override)는 다르다. 오버로드는 같은 함수명을 인자나 반환형만 달리해서 여러 개 선언하는 것이다.
 }
 
 class C07_3_Knight : C07_3_Player
 {
-    public new void Move() //
+    public new void Move() //부모 클래스의 함수와 무관한 별개의 함수로 선언한다. 이 때도 base.Move()로 부모 함수를 포함시킬 수는 있지만, Player로 선언하고 Move()를 발동하면 이 함수는 동작하지 않는다.
     {
         Debug.Log("기사 이동");
     }
@@ -177,7 +188,7 @@ class C07_3_Knight : C07_3_Player
     {
         Move();
     }
-    public override void Attack()
+    public override void Attack() //부모 클래스의 Attack()을 이 함수로 덮어씌운다. 부모 클래스의 함수가 발동되면 이 함수가 대신 실행된다.
     {
         Debug.Log("기사 공격");
     }
@@ -200,7 +211,7 @@ class C07_3_Archor : C07_3_Player
 class C07_3_Mage : C07_3_Player
 {
     public int mp;
-    public override void Move()
+    public override void Move() //부모 클래스의 함수를 발동시켰을 때, 부모 클래스의 함수도 발동시키고, 자식 클래스의 함수도 추가로 발동하고 싶다면 base.함수명() 을 넣어주면 된다.
     {
         base.Move();
         Debug.Log("마법사 이동");

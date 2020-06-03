@@ -112,7 +112,7 @@ public class C05_OOP_Basic : MonoBehaviour
     // 메모리엔 '스택(stack)'과 '힙(heap)'이라는 두 개의 공간이 있다.
 
     //복사 타입은 stack 영역에 본체를 갖는다. 선언될 경우 stack영역에 자신의 값을 저장한다. void, int, string 등의 변수나 함수도 여기에 해당한다.
-    //참조 타입은 heap 영역에 주소를 갖는다. 클래스를 new로 생성할 경우에만 stack에 자신의 공간을 실제로 만들고, 해당 Class 변수는 heap에서 stack에 할당된 공간을 가리키는 포인터가 된다.
+    //참조 타입은 heap 영역에 본체를 갖고, new로 생성할 경우 heap 영역을 가리키는 주소값을 stack에 저장한다. 해당 Class 변수는 heap에 할당된 공간을 가리키는 포인터가 된다.
 
     //stack 영역은 함수가 시작할 때 할당되고 끝나면 사라지며 자동으로 메모리 관리가 된다.
     //heap 영역은 메모리를 할당했으면 Delete를 명령하지 않는 한 계속 남아있게 된다.

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-abstract class Creature
+﻿abstract class Creature
 {
     protected Creature(CreatureType type)
     {
@@ -29,9 +25,23 @@ abstract class Creature
     public int GetHp() { return _hp; }
     public int GetPower() { return _power; }
     public bool IsDead() { return _hp <= 0; }
-    public void GetDamage(int damage)
+    public void OnDamaged(int damage)
     {
         _hp -= damage;
         if (_hp < 0) _hp = 0;
+    }
+    public void OnDamaged(Creature attacker, int damage)
+    {
+        _hp -= damage;
+        if (_hp < 0) _hp = 0;
+    }
+    public void OnDamaged(Creature attacker)
+    {
+        _hp -= attacker.GetPower();
+        if (_hp < 0) _hp = 0;
+    }
+    public void Attack(Creature attackedObject)
+    {
+        attackedObject.OnDamaged(GetHp());
     }
 }

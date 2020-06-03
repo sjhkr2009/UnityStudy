@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-class Player : Creature
+﻿class Player : Creature
 {
     protected Player(PlayerType type) : base(CreatureType.Player)
     {
@@ -18,4 +14,15 @@ class Player : Creature
         Thief = 4
     }
     protected PlayerType playerType = PlayerType.None;
+}
+
+class Knight : Player
+{
+    static int knightCount = 0;
+    public Knight() : base(PlayerType.Knight)
+    {
+        SetInfo(200, 10);
+        knightCount++;
+        name = "기사 " + knightCount;
+    }
 }

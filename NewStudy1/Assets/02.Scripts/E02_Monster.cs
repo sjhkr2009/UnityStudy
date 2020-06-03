@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-class Monster : Creature
+﻿class Monster : Creature
 {
     protected Monster(MonsterType type) : base(CreatureType.Monster)
     {
