@@ -19,7 +19,47 @@ public class C07_OOP_Class : MonoBehaviour
         C07_1_CustomClass01 customClass1 = new C07_1_CustomClass01();
         C07_1_CustomClass01 customClass2 = new C07_1_CustomClass01("어둠 살수");
     }
+    [Button]
+    void Test02()
+    {
+        C07_3_Player player1 = new C07_3_Knight();
+        C07_3_Player player2 = new C07_3_Archor();
+        C07_3_Player player3 = new C07_3_Mage();
+    }
+    [Button]
+    void Test03()
+    {
+        C07_3_Player player = GetPlayer(1);
+        bool isKnight = player is C07_3_Knight;
+        if (isKnight) Debug.Log("기사 생성");
+        else if (player is C07_3_Archor) Debug.Log("궁수 생성");
 
+        C07_3_Player player2 = GetPlayer(2);
+        player2.Attack();
+
+        C07_3_Mage mage = player2 as C07_3_Mage;
+        mage.mp = 100;
+        Debug.Log($"마법사의 마나: {mage.mp}");
+    }
+
+    C07_3_Player GetPlayer(int type)
+    {
+        C07_3_Player player = null;
+        switch (type)
+        {
+            case 0:
+                player = new C07_3_Knight();
+                break;
+            case 1:
+                player = new C07_3_Archor();
+                break;
+            case 2:
+                player = new C07_3_Mage();
+                break;
+        }
+
+        return player;
+    }
 }
 
 //1. 상속성
@@ -93,19 +133,84 @@ class C07_1_CustomClass01 : C07_1_Player
 
 //접근 한정자를 통해 은닉성을 제어할 수 있다.
 
-//public : 외부에서 자유롭게 가젿
+//public : 외부에서 자유롭게 가져다 쓸 수 있음
+//protected : 해당 클래스를 상속받은 경우에만 외부에서 사용할 수 있음
+//private(기본값) : 선언된 클래스 외부에서 사용 불가
 
-class Knight
+class C07_2_Player
 {
     public string name;
-    private int id;
+    private int _id;
 
-    public void Move()
+    public void SetId(int id) //이렇게 private 변수를 public 함수를 통해 변경하면, 외부에서 변경한 지점을 찾을 때 함수에 break point를 찍고 편리하게 디버깅할 수 있다.
     {
-
+        _id = id; //private 함수는 this.변수명으로 대입하기보다, _변수명 또는 멤버 변수라는 의미로 m_변수명 으로 표기하는 것이 선호된다.
     }
-    private void SecretFunction()
-    {
+}
 
+
+
+
+// 3. 다형성
+
+// 부모 클래스를 통해 변수를 선언하거나 함수를 사용하면, 하나의 변수로 여러 자식 클래스들을 제어할 수 있다.
+
+class C07_3_Player
+{
+    public int hp;
+    public int power;
+
+    public virtual void Move()
+    {
+        Debug.Log("이동 명령 받음");
+    }
+    public virtual void Attack() { }
+}
+
+class C07_3_Knight : C07_3_Player
+{
+    public new void Move() //
+    {
+        Debug.Log("기사 이동");
+    }
+    public C07_3_Knight()
+    {
+        Move();
+    }
+    public override void Attack()
+    {
+        Debug.Log("기사 공격");
+    }
+}
+class C07_3_Archor : C07_3_Player
+{
+    public override void Move()
+    {
+        Debug.Log("궁수 이동");
+    }
+    public C07_3_Archor()
+    {
+        Move();
+    }
+    public override void Attack()
+    {
+        Debug.Log("궁수 공격");
+    }
+}
+class C07_3_Mage : C07_3_Player
+{
+    public int mp;
+    public override void Move()
+    {
+        base.Move();
+        Debug.Log("마법사 이동");
+    }
+    public C07_3_Mage()
+    {
+        Move();
+    }
+    public override void Attack()
+    {
+        Debug.Log("마법사 공격");
     }
 }
