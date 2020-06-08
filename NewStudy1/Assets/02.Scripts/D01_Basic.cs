@@ -104,11 +104,12 @@ public class AlgorithmTest : MonoBehaviour
     protected int WaitFrameTime = 33;
     List<double> results = new List<double>();
 
-    [SerializeField, ReadOnly] protected string code1 = "비어 있음";
-    [SerializeField, ReadOnly] protected string code2 = "비어 있음";
-    [SerializeField, ReadOnly] protected string code3 = "비어 있음";
-    [SerializeField, ReadOnly] protected string code4 = "비어 있음";
-    [SerializeField, ReadOnly] protected string code5 = "비어 있음";
+    [SerializeField, ReadOnly] protected string code1 = "-";
+    [SerializeField, ReadOnly] protected string code2 = "-";
+    [SerializeField, ReadOnly] protected string code3 = "-";
+    [SerializeField, ReadOnly] protected string code4 = "-";
+    [SerializeField, ReadOnly] protected string code5 = "-";
+    [SerializeField] bool debugEveryWorktime = false;
 
     public enum TestCodeNumber { Code1, Code2, Code3, Code4, Code5, None }
 
@@ -118,13 +119,14 @@ public class AlgorithmTest : MonoBehaviour
     [SerializeField, ShowIf(nameof(isCustomFPS))] int fps = 30;
 
     [Button, DetailedInfoBox("선택한 코드와 실행횟수를 바탕으로 테스트를 실행합니다.", "선택한 코드와 실행횟수를 바탕으로 테스트를 실행합니다." +
-        "\n - 최대 5개의 코드 동작시간을 체크할 수 있습니다. Code Number에서 테스트할 코드를 선택하고, 테스트할 횟수를 Total Test Count에 입력하세요." +
+        "\n - 최대 5개의 코드 동작시간을 체크할 수 있습니다. Code Number에서 테스트할 코드를 선택하고, 테스트할 횟수를 Total Test Count에 입력하세요. Debug Every Worktime을 체크하면 매 실행마다 작업 시간을 출력합니다." +
         "\n - 기본적으로 초당 30프레임을 기준으로 작동합니다. FPS를 변경하길 원할 경우, Is Custom FPS를 체크하고 원하는 초당 프레임을 입력하세요.")]
     void Test()
     {
         int count = 0;
         int waitTime = WaitFrameTime;
         if (isCustomFPS) waitTime = 1000 / fps;
+        string codeNum = "";
 
         results.Clear();
         double totalTime = 0;
@@ -144,24 +146,48 @@ public class AlgorithmTest : MonoBehaviour
             //테스트할 코드 입력
             //------------------------------------------------------------------------------------
 
-            if (codeNumber == TestCodeNumber.Code1) TestCode01();
-            else if (codeNumber == TestCodeNumber.Code2) TestCode02();
-            else if (codeNumber == TestCodeNumber.Code3) TestCode03();
-            else if (codeNumber == TestCodeNumber.Code4) TestCode04();
-            else if (codeNumber == TestCodeNumber.Code5) TestCode05();
-            else TestCodeDefault();
+            if (codeNumber == TestCodeNumber.Code1)
+            {
+                TestCode01();
+                codeNum = "1번 함수";
+            }
+            else if (codeNumber == TestCodeNumber.Code2)
+            {
+                TestCode02();
+                codeNum = "2번 함수";
+            }
+            else if (codeNumber == TestCodeNumber.Code3)
+            {
+                TestCode03();
+                codeNum = "3번 함수";
+            }
+            else if (codeNumber == TestCodeNumber.Code4)
+            {
+                TestCode04();
+                codeNum = "4번 함수";
+            }
+            else if (codeNumber == TestCodeNumber.Code5)
+            {
+                TestCode05();
+                codeNum = "5번 함수";
+            }
+            else
+            {
+                TestCodeDefault();
+                codeNum = "빈 함수";
+            }
 
             //------------------------------------------------------------------------------------
 
             stopwatch.Stop();
-            UnityEngine.Debug.Log($"코드 실행에 걸린 시간 : {stopwatch.Elapsed.TotalMilliseconds}ms");
+            if (debugEveryWorktime) UnityEngine.Debug.Log($"실행에 걸린 시간 : {stopwatch.Elapsed.TotalMilliseconds}ms");
             results.Add(stopwatch.Elapsed.TotalMilliseconds);
         }
 
         results.RemoveAt(0);    //첫 시행엔 시간이 오래 걸리므로 첫 번째 측정값은 지운다.
         foreach (double value in results) totalTime += value;
 
-        UnityEngine.Debug.Log($"실행 당 평균 동작 시간 : {(totalTime / (double)(totalTestCount - 1)).ToString("0.000000")} 밀리초" + 
+        UnityEngine.Debug.Log($"[{codeNum}] 실행 당 평균 동작 시간 : {(totalTime / (double)(totalTestCount - 1)).ToString("0.000000")} 밀리초" + 
             $"\n실행 횟수 : {totalTestCount - 1}회 (첫 실행 제외)");    //첫 시행값은 지웠으니 시행횟수에서도 1을 빼고 나눈다.
     }
     public virtual void TestCode01() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
