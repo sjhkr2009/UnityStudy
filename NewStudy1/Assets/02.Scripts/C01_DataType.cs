@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 
+//C# 프로그래밍 기초
+
 public class C01_DataType : MonoBehaviour
 {
     // 01. 자료형

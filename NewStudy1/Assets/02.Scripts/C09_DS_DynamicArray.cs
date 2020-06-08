@@ -51,4 +51,61 @@ public class C09_DS_DynamicArray : MonoBehaviour
         list.Clear(); //리스트의 모든 내용을 삭제한다.
         Debug.Log("빈 리스트 : " + ListToString<int>(list));
     }
+
+    // RPG 게임에서 소환된 몬스터는 부여된 ID를 통해 식별하게 된다. 이 때, 리스트는 어떤 ID에 해당하는 오브젝트를 찾아내기 어렵다는 단점이 있다.
+    // 생성/소멸이 반복되니 계속 인덱스가 바뀌니, 사실상 리스트 처음부터 끝까지 훑어 찾는 작업을 매번 해야 한다.
+    // 이렇게 특정 요소에 접근해야 할 경우 후술할 딕셔너리를 사용한다.
+
+
+
+
+    //--------------------------------------------------------------
+
+
+
+
+
+    // 2. 딕셔너리 (Dictionary)
+
+    // Key와 Value의 하나의 쌍을 저장하는 동적 배열.
+    // 배열의 순서가 지속적으로 바뀌거나 의도적으로 뒤섞을 때, 요소에 쉽게 접근하기 위해 사용한다.
+
+    // 딕셔너리가 빠르게 요소를 찾을 수 있는 이유는 'Hashtable' 구조이기 때문.
+    // 1만개의 정보가 있을 경우, 이를 한 공간에 모두 저장하지 않고 여러 공간에 나누어 저장한다. 즉 딕셔너리는 2개 이상 공간의 집합으로 구성된다.
+    // 따라서 메모리 공간을 많이 차지하는 대신, 데이터를 찾아내는 성능을 높이게 된다.
+
+    [Button]
+    void Test02_Dictionary()
+    {
+        Dictionary<int, C09_Monster> dic = new Dictionary<int, C09_Monster>(); //생성 시 <Key, Value> 형태로 입력한다.
+
+        dic.Add(1, new C09_Monster(1)); //Add.(Key Value) 로 값을 추가한다. 삭제도 Remove(key)로 가능하다.
+
+        for (int i = 2; i <= 100; i++)
+        {
+            dic.Add(i, new C09_Monster(i));
+        }
+        C09_Monster monster54 = dic[54];                    //딕셔너리는 '딕셔너리[key]'로 불러올 수 있지만, 해당 키가 없으면 에러가 난다.
+        Debug.Log($"54번 몬스터 : {monster54.name}");
+
+        C09_Monster monster73;
+        bool found = dic.TryGetValue(73, out monster73);    //따라서 TryGetValue(key, out 저장할 변수) 를 통해 불러온다. 못찾았으면 false를 반환한다.
+        if (found) Debug.Log($"73번 몬스터 : {monster73.name}");
+        else Debug.Log($"정보를 찾지 못했습니다. ({nameof(monster73)})");
+
+        C09_Monster monster150;
+        found = dic.TryGetValue(150, out monster150);
+        if (found) Debug.Log($"150번 몬스터 : {monster150.name}");
+        else Debug.Log($"정보를 찾지 못했습니다. ({nameof(monster150)})");
+    }
+
+}
+
+class C09_Monster
+{
+    public string name;
+    public C09_Monster(int count)
+    {
+        name = "몬스터 " + count;
+    }
 }
