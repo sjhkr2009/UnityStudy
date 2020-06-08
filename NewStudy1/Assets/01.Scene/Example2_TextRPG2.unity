@@ -305,6 +305,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 709859653}
+  - component: {fileID: 709859654}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -326,6 +327,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &709859654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709859652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2839db7d94f7e524c82f7469859e86c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: {fileID: 1489280800}
+  startText: "\uCE90\uB9AD\uD130 \uC0DD\uC131\uC744 \uC2DC\uC791\uD569\uB2C8\uB2E4.
+    \uC6D0\uD558\uC2DC\uB294 \uC9C1\uC5C5\uC744 \uC120\uD0DD\uD558\uC138\uC694.\n[1]
+    \uC804\uC0AC\n[2] \uAD81\uC218\n[3] \uB9C8\uBC95\uC0AC\n[4] \uB3C4\uC801"
+  lobbyText: "\uB85C\uBE44\uC5D0 \uC785\uC7A5\uD558\uC168\uC2B5\uB2C8\uB2E4.\n[1]
+    \uB9C8\uC744\uB85C \uAC00\uAE30\n[2] \uD544\uB4DC\uB85C \uAC00\uAE30\n[3] \uC885\uB8CC\uD558\uAE30"
+  townText: "\uB9C8\uC744\uC785\uB2C8\uB2E4. HP\uAC00 \uCD5C\uB300\uCE58\uB85C \uD68C\uBCF5\uB429\uB2C8\uB2E4.\n[1]
+    \uB85C\uBE44\uB85C \uAC00\uAE30\n[2] \uD544\uB4DC\uB85C \uAC00\uAE30"
+  fieldText: "\uD544\uB4DC\uC5D0 \uC9C4\uC785\uD588\uC2B5\uB2C8\uB2E4."
+  battleEndText: "[1] \uB9C8\uC744\uB85C \uB3CC\uC544\uAC00\uAE30\n[2] \uD544\uB4DC\uB85C
+    \uAC00\uAE30"
 --- !u!1 &1061989668
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,7 +580,7 @@ MonoBehaviour:
     m_Alignment: 6
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 

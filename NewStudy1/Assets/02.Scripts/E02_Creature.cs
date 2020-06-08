@@ -16,7 +16,13 @@
     public string name;
     private int _hp;
     private int _power;
+    public int maxHp { get; protected set; }
+    public float damageDifference { get; protected set; }
 
+    public void HealTo(int value)
+    {
+        _hp = value;
+    }
     public void SetInfo(int hp, int power)
     {
         _hp = hp;

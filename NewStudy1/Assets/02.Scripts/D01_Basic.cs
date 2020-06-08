@@ -96,12 +96,19 @@ public class D01_Basic : MonoBehaviour
 /// MonoBehaviour를 대체하는 알고리즘 테스트용 코드입니다.
 /// TestCode01~05를 오버라이드해서 코드 작동 시간을 테스트할 수 있으며, 오버라이드 시 베이스 코드는 상속받지 마세요. (Debug.Log에 많은 시간이 소요됩니다)
 /// 작성한 코드의 순수한 동작 시간을 알기 위해서 비어 있는 가상함수의 작동시간을 측정하고 싶다면, Code Number를 None으로 설정하면 됩니다.
+/// code 1~5는 인스펙터에서 식별하기 위한 정보입니다. 코드가 어떤 내용인지 간략한 설명을 적어주세요.
 /// </summary>
 public class AlgorithmTest : MonoBehaviour
 {
     int lastTick = 0;
     protected int WaitFrameTime = 33;
     List<double> results = new List<double>();
+
+    [SerializeField, ReadOnly] protected string code1 = "비어 있음";
+    [SerializeField, ReadOnly] protected string code2 = "비어 있음";
+    [SerializeField, ReadOnly] protected string code3 = "비어 있음";
+    [SerializeField, ReadOnly] protected string code4 = "비어 있음";
+    [SerializeField, ReadOnly] protected string code5 = "비어 있음";
 
     public enum TestCodeNumber { Code1, Code2, Code3, Code4, Code5, None }
 
