@@ -99,26 +99,30 @@ public class D02_Lists : AlgorithmTest
     {
         code3 = "연결 리스트 - 데이터 추가와 삭제";
 
-        data3.AddLast(101); //마우스를 대 보면 각 Add 함수가 LinkedListNode 형식을 반환하는 형식임을 알 수 있다. (List의 경우는 void 함수)
+        LinkedListNode<int> node0 = data3.AddLast(101); //마우스를 대 보면 각 Add 함수가 LinkedListNode 형식을 반환하는 형식임을 알 수 있다. (List의 경우는 void 함수)
         data3.AddLast(102);
-        LinkedListNode<int> node = data3.AddLast(103); //해당 형식으로 반환형을 받을 수 있다.
+        LinkedListNode<int> node1 = data3.AddLast(103); //해당 형식으로 반환형을 받을 수 있다.
         data3.AddLast(104);
-        data3.AddLast(105);
-
-        data3.Remove(node); //연결 리스트는 인덱스를 갖지 않으므로 LinkedListNode로 값의 주소를 저장해 두었다가 삭제할 수 있다.
+        LinkedListNode<int> node2 = data3.AddLast(105);
+        
+        data3.Remove(node0); //연결 리스트는 인덱스를 갖지 않으므로 LinkedListNode로 값의 주소를 저장해 두었다가 삭제할 수 있다.
+        data3.Remove(node1);
+        data3.Remove(node2);
     }
 
     public override void TestCode04()
     {
         code4 = "연결 리스트 직접 구현 - 데이터 추가와 삭제";
 
-        data3_1.AddLast(101);
+        D02_Room<int> node0 = data3_1.AddLast(101);
         data3_1.AddLast(102);
-        D02_Room<int> node = data3_1.AddLast(103);
+        D02_Room<int> node1 = data3_1.AddLast(103);
         data3_1.AddLast(104);
-        data3_1.AddLast(105);
+        D02_Room<int> node2 = data3_1.AddLast(105);
 
-        data3_1.Remove(node);
+        data3_1.Remove(node0);
+        data3_1.Remove(node1);
+        data3_1.Remove(node2);
     }
 
     //-----------------------------------------------------------------------------------------
@@ -224,13 +228,12 @@ public class D02_MyLinkedList<T>
     }
     public void Remove(D02_Room<T> room)
     {
-        if (room != last) room.prev.next = room.next;
-        else room.prev = last;
+        if (room != first) room.prev.next = room.next;
+        else first = room.next;
 
-        if (room != first) room.next.prev = room.prev;
-        else room.next = first;
+        if (room != last) room.next.prev = room.prev;
+        else last = room.prev;
 
         count--;
-        room = null;
     }
 }

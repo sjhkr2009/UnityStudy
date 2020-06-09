@@ -109,14 +109,15 @@ public class AlgorithmTest : MonoBehaviour
     [SerializeField, ReadOnly] protected string code3 = "-";
     [SerializeField, ReadOnly] protected string code4 = "-";
     [SerializeField, ReadOnly] protected string code5 = "-";
-    [SerializeField] bool debugEveryWorktime = false;
+    [SerializeField, HideIf(nameof(doOneTime))] bool debugEveryWorktime = false;
 
     public enum TestCodeNumber { Code1, Code2, Code3, Code4, Code5, None }
 
     [SerializeField] TestCodeNumber codeNumber = TestCodeNumber.Code1;
-    [SerializeField] int totalTestCount = 30;
-    [SerializeField] bool isCustomFPS = false;
-    [SerializeField, ShowIf(nameof(isCustomFPS))] int fps = 30;
+    [SerializeField, HideIf(nameof(doOneTime))] int totalTestCount = 30;
+    [SerializeField, PropertyOrder(-1)] bool doOneTime = false;
+    [SerializeField, HideIf(nameof(doOneTime))] bool isCustomFPS = false;
+    [SerializeField, ShowIf(nameof(isCustomFPS)), HideIf(nameof(doOneTime))] int fps = 30;
 
     [Button, DetailedInfoBox("선택한 코드와 실행횟수를 바탕으로 테스트를 실행합니다.", "선택한 코드와 실행횟수를 바탕으로 테스트를 실행합니다." +
         "\n - 최대 5개의 코드 동작시간을 체크할 수 있습니다. Code Number에서 테스트할 코드를 선택하고, 테스트할 횟수를 Total Test Count에 입력하세요. Debug Every Worktime을 체크하면 매 실행마다 작업 시간을 출력합니다." +
@@ -180,7 +181,14 @@ public class AlgorithmTest : MonoBehaviour
             //------------------------------------------------------------------------------------
 
             stopwatch.Stop();
-            if (debugEveryWorktime) UnityEngine.Debug.Log($"실행에 걸린 시간 : {stopwatch.Elapsed.TotalMilliseconds}ms");
+
+            if (doOneTime)
+            {
+                UnityEngine.Debug.Log($"[{codeNum}] 실행에 걸린 시간 : {stopwatch.Elapsed.TotalMilliseconds}ms");
+                return;
+            }
+
+            if (debugEveryWorktime) UnityEngine.Debug.Log($"[{codeNum}] {count}회차 실행시간 : {stopwatch.Elapsed.TotalMilliseconds}ms");
             results.Add(stopwatch.Elapsed.TotalMilliseconds);
         }
 
