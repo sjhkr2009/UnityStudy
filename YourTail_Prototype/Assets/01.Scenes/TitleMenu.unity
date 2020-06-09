@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 1934738175}
   - component: {fileID: 1934738174}
   - component: {fileID: 1934738173}
+  - component: {fileID: 1934738176}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -385,30 +386,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1934738171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 055ff8c7ba499e14eab3df6690c845f0, type: 3}
+  m_Script: {fileID: 11500000, guid: c6acbef854d8afa458e8e99e56d010fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isChangeScale: 1
-  isChangePosition: 1
+  isChangePosition: 0
+  isChangeFade: 0
   ignoreTimescale: 1
-  playOnStart: 1
-  isFrom: 1
-  positionDuration: 1
-  positionDelay: 3
-  setPositionInVector: 1
-  positionFromTransform: {fileID: 0}
-  positionToTransform: {fileID: 0}
-  positionFromVector: {x: 1920, y: 540, z: 0}
-  positionToVector: {x: 0, y: 0, z: 0}
-  positionCurve: 6
-  scaleDuration: 1
-  scaleDelay: 4.25
-  setScaleInVector: 0
-  scaleFromFloat: 0.5
-  scaleToFloat: 0
-  scaleFromVector: {x: 0, y: 0, z: 0}
-  scaleToVector: {x: 0, y: 0, z: 0}
-  scaleCurve: 24
+  duration: 0.25
+  delay: 0
+  scaleTarget: {x: 1.15, y: 1.15, z: 1.15}
+  scaleMoveMode: 30
+  positionTarget: {x: 0, y: 0, z: 0}
+  positionMoveMode: 5
+  alphaTarget: 0
+  alphaMoveMode: 5
+  onExitRestore: 1
+  warning: "\uADF8\uAC70 \uD568\uBD80\uB85C \uB044\uBA74 \uB9F4\uB9E4\uB9DE\uC2B4\uBBF8\uB2E4"
 --- !u!114 &1934738174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,6 +443,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1934738171}
   m_CullTransparentMesh: 0
+--- !u!114 &1934738176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934738171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056a21e8db754a84098e47a82c245087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isChangeScale: 1
+  isChangePosition: 0
+  isChangeFade: 1
+  ignoreTimescale: 1
+  duration: 0.66
+  delay: 0
+  scaleTarget: {x: 1.33, y: 1.33, z: 1.33}
+  scaleMoveMode: 9
+  positionTarget: {x: 0, y: 0, z: 0}
+  positionMoveMode: 5
+  alphaTarget: 0
+  alphaMoveMode: 8
 --- !u!1 &1943240981
 GameObject:
   m_ObjectHideFlags: 0
