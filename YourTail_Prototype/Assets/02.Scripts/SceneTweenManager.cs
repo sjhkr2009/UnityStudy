@@ -8,21 +8,29 @@ using DG.Tweening;
 
 public class SceneTweenManager : MonoBehaviour
 {
-    public static SceneTweenManager instance { get; private set; }
+    public static SceneTweenManager Instance { get; private set; }
 
     private void Start()
     {
-        if (instance != null)
+        if (Instance != null)
         {
             DestroyImmediate(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
         if (fadeImage == null) fadeImage = GetComponentInChildren<CanvasGroup>();
-        if (loadingText == null) loadingText = GetComponentInChildren<Text>();
         if (loadingUI == null) loadingUI = transform.Find("LoadingUI").gameObject;
+        if(loadingText == null) loadingText = loadingUI.GetComponentInChildren<Text>();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     //------------------------------------------------------------------------
 
     [SerializeField] CanvasGroup fadeImage;
@@ -62,7 +70,7 @@ public class SceneTweenManager : MonoBehaviour
             lerpTime += Time.deltaTime;
             if (percentage < 99f)
             {
-                percentage = Mathf.Lerp(percentage, async.progress + 9f, lerpTime);
+                percentage = Mathf.Lerp(percentage, (async.progress * 100f) + 9f, lerpTime);
                 if (percentage >= 99f) lerpTime = 0f;
             }
             else percentage = Mathf.Lerp(percentage, 100f, lerpTime);
@@ -72,6 +80,13 @@ public class SceneTweenManager : MonoBehaviour
             loadingText.text = $"{Mathf.RoundToInt(percentage)}%";
 
         }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        fadeImage.DOFade(0f, duration)
+            .OnStart(() => loadingUI.SetActive(false))
+            .OnComplete(() => fadeImage.blocksRaycasts = false);
     }
 
 }

@@ -7,19 +7,21 @@ using DG.Tweening;
 
 public class TweenOnPointerEnter : TweenBase, IPointerEnterHandler,IPointerExitHandler
 {
-    #region 쓰잘데기 없는 부분
-    [SerializeField, Space(8f)] bool onExitRestore = true;
-    [HideIf(nameof(onExitRestore)), SerializeField, ReadOnly] string warning = "그거 함부로 끄면 맴매맞슴미다";
-    #endregion
+    bool isChanging = false;
     public void OnPointerEnter(PointerEventData eventData)
     {
         DoChange();
+        isChanging = true;
+        DOVirtual.DelayedCall(Delay, () => { isChanging = false; });
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        transform.DOKill();
-        image.DOKill();
+        if (isChanging)
+        {
+            image.DOKill();
+            transform.DOKill();
+        }
         DoOrigin();
     }
     void Start()
