@@ -101,7 +101,7 @@ public class D01_Basic : MonoBehaviour
 public class AlgorithmTest : MonoBehaviour
 {
     int lastTick = 0;
-    protected int WaitFrameTime = 33;
+    protected int WaitFrameTime = 17;
     List<double> results = new List<double>();
 
     [SerializeField, ReadOnly] protected string code1 = "-";
@@ -121,7 +121,7 @@ public class AlgorithmTest : MonoBehaviour
 
     [Button, DetailedInfoBox("선택한 코드와 실행횟수를 바탕으로 테스트를 실행합니다.", "선택한 코드와 실행횟수를 바탕으로 테스트를 실행합니다." +
         "\n - 최대 5개의 코드 동작시간을 체크할 수 있습니다. Code Number에서 테스트할 코드를 선택하고, 테스트할 횟수를 Total Test Count에 입력하세요. Debug Every Worktime을 체크하면 매 실행마다 작업 시간을 출력합니다." +
-        "\n - 기본적으로 초당 30프레임을 기준으로 작동합니다. FPS를 변경하길 원할 경우, Is Custom FPS를 체크하고 원하는 초당 프레임을 입력하세요.")]
+        "\n - 기본적으로 초당 60프레임을 기준으로 작동합니다. FPS를 변경하길 원할 경우, Is Custom FPS를 체크하고 원하는 초당 프레임을 입력하세요.")]
     void Test()
     {
         int count = 0;
@@ -131,6 +131,8 @@ public class AlgorithmTest : MonoBehaviour
 
         results.Clear();
         double totalTime = 0;
+
+        lastTick = Environment.TickCount;
 
         while (count < totalTestCount)
         {

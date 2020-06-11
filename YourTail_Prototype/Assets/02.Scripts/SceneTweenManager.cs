@@ -52,7 +52,6 @@ public class SceneTweenManager : MonoBehaviour
             });
     }
 
-
     IEnumerator SceneLoading(string nextScene)
     {
         loadingUI.SetActive(true);

@@ -516,7 +516,7 @@ MonoBehaviour:
   duration: 0.25
   delay: 0
   scaleTarget: {x: 1.15, y: 1.15, z: 1.15}
-  scaleMoveMode: 30
+  scaleMoveMode: 24
   positionTarget: {x: 0, y: 0, z: 0}
   positionMoveMode: 5
   alphaTarget: 0
@@ -552,7 +552,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: START
 --- !u!222 &1934738175
 CanvasRenderer:
   m_ObjectHideFlags: 0
