@@ -109,13 +109,18 @@ public class AlgorithmTest : MonoBehaviour
     [SerializeField, ReadOnly] protected string code3 = "-";
     [SerializeField, ReadOnly] protected string code4 = "-";
     [SerializeField, ReadOnly] protected string code5 = "-";
+    [SerializeField, ReadOnly] protected string code6 = "-";
+    [SerializeField, ReadOnly] protected string code7 = "-";
+    [SerializeField, ReadOnly] protected string code8 = "-";
+    [SerializeField, ReadOnly] protected string code9 = "-";
+    [SerializeField, ReadOnly] protected string code10 = "-";
     [SerializeField, HideIf(nameof(doOneTime))] bool debugEveryWorktime = false;
 
-    public enum TestCodeNumber { Code1, Code2, Code3, Code4, Code5, None }
+    public enum TestCodeNumber { Code1, Code2, Code3, Code4, Code5, Code6, Code7, Code8, Code9, Code10, None }
 
     [SerializeField] TestCodeNumber codeNumber = TestCodeNumber.Code1;
     [SerializeField, HideIf(nameof(doOneTime))] int totalTestCount = 30;
-    [SerializeField, PropertyOrder(-1)] bool doOneTime = false;
+    [SerializeField, PropertyOrder(-1)] protected bool doOneTime = false;
     [SerializeField, HideIf(nameof(doOneTime))] bool isCustomFPS = false;
     [SerializeField, ShowIf(nameof(isCustomFPS)), HideIf(nameof(doOneTime))] int fps = 30;
 
@@ -174,6 +179,31 @@ public class AlgorithmTest : MonoBehaviour
                 TestCode05();
                 codeNum = "5번 함수";
             }
+            else if (codeNumber == TestCodeNumber.Code6)
+            {
+                TestCode06();
+                codeNum = "6번 함수";
+            }
+            else if (codeNumber == TestCodeNumber.Code7)
+            {
+                TestCode07();
+                codeNum = "7번 함수";
+            }
+            else if (codeNumber == TestCodeNumber.Code8)
+            {
+                TestCode08();
+                codeNum = "8번 함수";
+            }
+            else if (codeNumber == TestCodeNumber.Code9)
+            {
+                TestCode09();
+                codeNum = "9번 함수";
+            }
+            else if (codeNumber == TestCodeNumber.Code10)
+            {
+                TestCode10();
+                codeNum = "10번 함수";
+            }
             else
             {
                 TestCodeDefault();
@@ -205,6 +235,12 @@ public class AlgorithmTest : MonoBehaviour
     public virtual void TestCode03() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
     public virtual void TestCode04() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
     public virtual void TestCode05() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
+    public virtual void TestCode06() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
+    public virtual void TestCode07() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
+    public virtual void TestCode08() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
+    public virtual void TestCode09() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
+    public virtual void TestCode10() { UnityEngine.Debug.Log("이 코드는 비어 있습니다."); }
+
     public virtual void TestCodeDefault() { }
 
 }
