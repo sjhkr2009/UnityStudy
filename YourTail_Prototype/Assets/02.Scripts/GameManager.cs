@@ -22,12 +22,20 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null) Destroy(gameObject);
         Instance = this;
+
+        if (CocktailManager == null)
+        {
+            CocktailManager = GetComponent<CocktailManager>();
+            if (CocktailManager == null) CocktailManager = gameObject.AddComponent<CocktailManager>();
+        }
     }
+
+    public static CocktailManager CocktailManager { get; private set; }
 
     [ShowInInspector] private Customers _currentCustomer { get; set; }
     [ShowInInspector] private Order _currentOrder { get; set; }
-    [ShowInInspector] private BaseMaterial _currrentBaseMaterial { get; set; }
-    [ShowInInspector] public List<SubMaterials> currentSubMaterials = new List<SubMaterials>();
+    [ShowInInspector] private List<BaseMaterials> currentBaseMaterials = new List<BaseMaterials>();
+    [ShowInInspector] private List<SubMaterials> currentSubMaterials = new List<SubMaterials>();
     [ShowInInspector] private Cocktail _currentCocktail { get; set; }
 
     public Customers CurrentCustomer
@@ -36,7 +44,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _currentCustomer = value;
-            OnSetCustomer();
+            OnSetCustomer(value);
         }
     }
     public Order CurrentOrder
@@ -45,16 +53,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _currentOrder = value;
-            OnSetOrder();
-        }
-    }
-    public BaseMaterial CurrentBaseMaterial
-    {
-        get => _currrentBaseMaterial;
-        set
-        {
-            _currrentBaseMaterial = value;
-            OnSetBaseMaterial();
+            OnSetOrder(value);
         }
     }
     public Cocktail CurrentCocktail
@@ -63,16 +62,32 @@ public class GameManager : MonoBehaviour
         set
         {
             _currentCocktail = value;
-            OnSetCocktail();
+            OnSetCocktail(value);
         }
+    }
+    public void AddCurrentBase(string itemcode)
+    {
+        BaseMaterials value = CocktailManager.BaseMaterialData[itemcode];
+
+        if (currentBaseMaterials.Contains(value)) return;
+        currentBaseMaterials.Add(value);
+        OnSetBaseMaterial(value);
+    }
+    public void AddCurrentSub(string itemcode)
+    {
+        SubMaterials value = CocktailManager.SubMaterialData[itemcode];
+
+        if (currentSubMaterials.Contains(value)) return;
+        currentSubMaterials.Add(value);
+        OnSetSubMaterial(value);
     }
 
     public Action<GameState> OnGameStateChange = n => { };
-    public Action OnSetCustomer = () => { };
-    public Action OnSetOrder = () => { };
-    public Action OnSetBaseMaterial = () => { };
-    public Action OnSetSubMaterial = () => { };
-    public Action OnSetCocktail = () => { };
+    public Action<Customers> OnSetCustomer = n => { };
+    public Action<Order> OnSetOrder = n => { };
+    public Action<BaseMaterials> OnSetBaseMaterial = n => { };
+    public Action<SubMaterials> OnSetSubMaterial = n => { };
+    public Action<Cocktail> OnSetCocktail = n => { };
 
     [SerializeField, ReadOnly] private GameState _gameState = GameState.None;
     public GameState GameState
@@ -118,20 +133,20 @@ public class GameManager : MonoBehaviour
 
     void MainInSelectSub()
     {
-        if (CurrentBaseMaterial == null) CurrentBaseMaterial = new BaseMaterial();
         Debug.Log("부재료 선택");
     }
     void MainInCombine()
     {
         if (currentSubMaterials.Count == 0) currentSubMaterials.Add(new SubMaterials());
         Combine();
-        Debug.Log($"조합: {CurrentCocktail.cocktailName} 번 칵테일");
+        Debug.Log($"조합: {CurrentCocktail.cocktailName} 칵테일");
     }
     void MainInSetCocktail()
     {
         CorrectCheck();
         CurrentCustomer.currentIndex++; //이 작업이 유효하려면 각 손님을 싱글톤으로 생성하거나, 손님의 정보가 PlayerPrefs 또는 Dictionary 등으로 게임내에 저장되어야 함.
 
+        currentBaseMaterials.Clear();
         currentSubMaterials.Clear();
     }
 
@@ -151,88 +166,15 @@ public class GameManager : MonoBehaviour
     {
         GameState = (GameState)(((int)GameState + 1) % 6);
     }
-    //재료 선택하기. 이후 재료 관리 스크립트 따로 작성할 것.
-    public void SetBaseMaterial(int id)
-    {
-        switch (id)
-        {
-            case 1:
-                CurrentBaseMaterial = new Rum();
-                break;
-            case 2:
-                CurrentBaseMaterial = new Brandy();
-                break;
-            default:
-                CurrentBaseMaterial = new BaseMaterial();
-                break;
-        }
-    }
-    public void SetSubMaterial(int id)
-    {
-        switch (id)
-        {
-            case 1:
-                currentSubMaterials.Add(new Curacao());
-                break;
-            case 2:
-                currentSubMaterials.Add(new Pineapple());
-                break;
-            case 3:
-                currentSubMaterials.Add(new Lime());
-                break;
-            case 4:
-                currentSubMaterials.Add(new Lemon());
-                break;
-            default:
-                currentSubMaterials.Add(new SubMaterials());
-                break;
-        }
-        OnSetSubMaterial();
-    }
-    //조합하기. 칵테일의 데이터베이스를 가진 곳에서 실행할 것.
+    //조합하기
     void Combine()
     {
-        List<int> materials = new List<int>();
-
-        foreach (var item in currentSubMaterials)
-        {
-            materials.Add(item.Id);
-        }
-        materials.Sort();
-        materials.Insert(0, CurrentBaseMaterial.Id);
-
-        CurrentCocktail = MakeCocktail(materials);
+        CurrentCocktail = CocktailManager.MakeCocktail(currentBaseMaterials, currentSubMaterials);
     }
-    //모든 칵테일의 조합식을 가지고 있는 스크립트로 옮길 것.
-    List<Cocktail> cocktailDatabase = new List<Cocktail>();
     private void Start()
     {
-        cocktailDatabase.Add(new BetweenTheSheets());
-        cocktailDatabase.Add(new BlueHawaii());
-
         GameState = GameState.None;
     }
-    Cocktail MakeCocktail(List<int> materials)
-    {
-        Cocktail cocktail = new Cocktail();
-        for (int i = 0; i < cocktailDatabase.Count; i++)
-        {
-            int correct = 0;
-            for (int j = 0; j < cocktailDatabase[i].MaterialCode.Count; j++)
-            {
-                if (materials[j] == cocktailDatabase[i].MaterialCode[j]) correct++;
-                else break;
-            }
-            if(correct == cocktailDatabase[i].MaterialCode.Count)
-            {
-                cocktail = cocktailDatabase[i];
-                return cocktail;
-            }
-        }
-        return cocktail;
-    }
-
-    //칵테일 평가
     public float CorrectCheck()
     {
         float satisfaction = 0f;
