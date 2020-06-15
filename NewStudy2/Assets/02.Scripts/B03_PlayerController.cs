@@ -10,8 +10,8 @@ public class B03_PlayerController : MonoBehaviour
 
     void Start()
     {
-        A01_Manager.InputManager.OnKeyAction -= OnKeyBoard; //혹시 이 함수가 구독되어 있는데 또 추가하면 두 번 추가되므로, 한번 뺀 다음 추가하는게 안전하다.
-        A01_Manager.InputManager.OnKeyAction += OnKeyBoard;
+        A01_Manager.Input.OnKeyAction -= OnKeyBoard; //혹시 이 함수가 구독되어 있는데 또 추가하면 두 번 추가되므로, 한번 뺀 다음 추가하는게 안전하다.
+        A01_Manager.Input.OnKeyAction += OnKeyBoard;
     }
 
     void OnKeyBoard()

@@ -41,14 +41,17 @@ public class A01_Manager : MonoBehaviour
     //----------------------------------------------------------------------------------
 
     // 다른 매니저 클래스 가져오기
-    B02_InputManager _inputManager = new B02_InputManager();
-    public static B02_InputManager InputManager => Instance._inputManager;
-    // 그냥 _inputManager가 아니라 Instance._inputManager를 호출함으로써, 이 매니저를 호출하지 않았더라도 Init()이 발동될 것이다.
+    B02_InputManager _input = new B02_InputManager();
+    public static B02_InputManager Input => Instance._input;
+    // 그냥 _input이 아니라 Instance._input을 호출함으로써, 이 매니저를 호출하지 않았더라도 Init()이 발동될 것이다.
 
     private void Update()
     {
-        _inputManager.OnUpdate();   // 매니저 클래스에서 한 번만 키 입력을 체크하면 된다.
+        _input.OnUpdate();   // 매니저 클래스에서 한 번만 키 입력을 체크하면 된다.
     }
 
+
+    C02_ResourceManager _resource = new C02_ResourceManager();
+    public static C02_ResourceManager Resource => Instance._resource;
 
 }
