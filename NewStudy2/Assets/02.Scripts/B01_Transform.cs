@@ -27,7 +27,7 @@ public class B01_Transform : MonoBehaviour
             else transform.position += Vector3.back * Time.deltaTime * speed;
         }
         // 월드 좌표계가 아닌, 캐릭터의 정면을 향해 움직여야 한다.
-        // transform.TransformDirection(벡터 값)을 통해 월드 좌표를 캐릭터 기준 로컬 좌표로 변환할 수 있다.
+        // transform.TransformDirection(벡터 값)을 통해 월드 좌표를 캐릭터 기준 로컬 좌표로 변환할 수 있다. 반대로 캐릭터 기준 좌표를 월드 좌표로 변환하려면 InverseTransformDirection을 사용하면 된다.
         // Translate로 이동 시 이는 기본 적용되어 있다.
 
         if (Input.GetKey(KeyCode.A))

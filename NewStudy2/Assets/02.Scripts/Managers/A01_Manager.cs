@@ -32,9 +32,14 @@ public class A01_Manager : MonoBehaviour
                 obj = new GameObject("GameManager");
                 obj.AddComponent<A01_Manager>();
             }
+            _instance = obj.GetComponent<A01_Manager>();
+
+            if(_instance == null)
+            {
+                _instance = obj.AddComponent<A01_Manager>();
+            }
 
             DontDestroyOnLoad(obj);
-            _instance = obj.GetComponent<A01_Manager>();
         }
     }
 
@@ -43,11 +48,11 @@ public class A01_Manager : MonoBehaviour
     // 다른 매니저 클래스 가져오기
     B02_InputManager _input = new B02_InputManager();
     public static B02_InputManager Input => Instance._input;
-    // 그냥 _input이 아니라 Instance._input을 호출함으로써, 이 매니저를 호출하지 않았더라도 Init()이 발동될 것이다.
+    // Instance._input을 호출함으로써, 이 매니저를 호출하지 않았더라도 Init()이 발동될 것이다.
 
     private void Update()
     {
-        _input.OnUpdate();   // 매니저 클래스에서 한 번만 키 입력을 체크하면 된다.
+        Input.OnUpdate();   // 매니저 클래스에서 한 번만 키 입력을 체크하면 된다.
     }
 
 
