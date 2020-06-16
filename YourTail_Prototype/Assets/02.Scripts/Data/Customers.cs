@@ -5,11 +5,21 @@ using UnityEngine;
 public class Customers
 {
     protected List<Order> wishlist = new List<Order>();
+    public string Name { get; protected set; }
     public float Satisfaction { get; set; }
-    public int currentIndex = 0;
+    public int _currentIndex;
+    public int CurrentIndex
+    {
+        get => _currentIndex;
+        set
+        {
+            if (wishlist.Count == 0) _currentIndex = 0;
+            else _currentIndex = (value % wishlist.Count);
+        }
+    }
     public Order GetOrder()
     {
-        return wishlist[currentIndex];
+        return wishlist[CurrentIndex];
     }
     protected void SetOrder(string orderContents, CocktailName? requiredCocktail = null, int? requiredSweet = null, int? requiredProof = null, int? requiredFresh = null)
     {
@@ -19,7 +29,12 @@ public class Customers
         order.requiredProof = (requiredProof != null) ? requiredProof : null;
         order.requiredFresh = (requiredFresh != null) ? requiredFresh : null;
         order.orderContents = orderContents;
+        order.CustomerName = Name;
         wishlist.Add(order);
+    }
+    public Customers()
+    {
+        CurrentIndex = 0;
     }
 }
 
@@ -27,8 +42,21 @@ public class Eagle : Customers
 {
     public Eagle()
     {
+        Name = "독수리";
+        
         SetOrder("비트윈 더 시트 주세요.", CocktailName.BetweenTheSheets, requiredProof: 4);
         SetOrder("뒷맛 깔끔한 걸로 한 잔 부탁드려요.", requiredFresh: 4);
+    }
+}
+
+public class Dove : Customers
+{
+    public Dove()
+    {
+        Name = "비둘기";
+
+        SetOrder("블루 하와이! 비슷한거라도 좋아요.", CocktailName.BlueHawaii, 3, 2, 5);
+        SetOrder("적당한걸로...", requiredSweet: 3, requiredFresh: 3, requiredProof: 3);
     }
 }
 
@@ -39,4 +67,6 @@ public class Order
     public int? requiredProof = null;
     public int? requiredFresh = null;
     public string orderContents = "";
+
+    public string CustomerName { get; set; }
 }
