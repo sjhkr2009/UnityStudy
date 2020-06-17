@@ -12,16 +12,21 @@ public class E01_CameraController : MonoBehaviour
     [SerializeField] Vector3 _delta;
     [SerializeField] GameObject _player;
 
+    Vector3 PlayerPos
+    {
+        get => _player.transform.position + (Vector3.up * 1.2f);
+    }
+
     void MoveToPlayer()
     {
         // 플레이어를 따라 이동만 하게 한다. delta는 플레이어로부터 카메라가 떨어져 있는 거리이다.
-        transform.position = _player.transform.position + _delta;
+        transform.position = PlayerPos + _delta;
     }
 
     void LookAtPlayer()
     {
         // 카메라의 각도가 항상 플레이어를 바라보게 한다.
-        transform.LookAt(_player.transform.position + (Vector3.up * 1.2f));
+        transform.LookAt(PlayerPos);
     }
 
     void LateUpdate()
@@ -29,12 +34,33 @@ public class E01_CameraController : MonoBehaviour
         // 플레이어 이동이 끝난 후에 카메라를 변경해야 하므로, LateUpdate에서 실행한다.
         // Update에서 실행하면 플레이어와 카메라의 Update문 중 어느쪽이 먼저 실행되는가는 랜덤이므로, 카메라가 덜덜 떨리는 현상이 발생한다.
         MoveToPlayer();
+        IgnoreWall();
         LookAtPlayer();
+    }
+
+    private void Start()
+    {
+        if (_cameraMode == E02_Define.CameraMode.QuarterView) SetQuarterView(_delta);
     }
 
     public void SetQuarterView(Vector3 delta)
     {
         _cameraMode = E02_Define.CameraMode.QuarterView;
         _delta = delta;
+    }
+
+    void IgnoreWall()
+    {
+        Debug.DrawRay(PlayerPos, _delta, Color.green);
+
+        Ray ray = new Ray(PlayerPos, _delta);
+        RaycastHit hit;
+
+        if(Physics.Raycast(ray, out hit, _delta.magnitude, LayerMask.GetMask("Wall")))
+        {
+            Vector3 dir = _delta.normalized;
+            float setDistance = (hit.point - PlayerPos).magnitude * 0.8f;
+            transform.position = PlayerPos + (dir * setDistance);
+        }
     }
 }

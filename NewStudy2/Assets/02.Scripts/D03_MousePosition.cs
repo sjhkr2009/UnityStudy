@@ -84,18 +84,23 @@ public class D03_MousePosition : MonoBehaviour
 
     [SerializeField] bool isTest = false;
     [SerializeField] bool useLayerMask;
-    private void Update()
+    private void Start()
     {
-        if (Input.GetMouseButton(0))
-        {
-            if (useLayerMask)
-            {
-                ClickObjectByLayermask();
-                return;
-            }
+        A01_Manager.Input.OnMouseEvent -= OnMouseAction;
+        A01_Manager.Input.OnMouseEvent += OnMouseAction;
+    }
 
-            if (isTest) TestClickObject();
-            else ClickObject();
+    void OnMouseAction(E02_Define.MouseEvent evt)
+    {
+        if (evt != E02_Define.MouseEvent.Press) return;
+
+        if (useLayerMask)
+        {
+            ClickObjectByLayermask();
+            return;
         }
+
+        if (isTest) TestClickObject();
+        else ClickObject();
     }
 }

@@ -9,11 +9,19 @@ public class B02_InputManager
     // 오브젝트들의 Update문마다 입력을 체크하면 부하가 심하니, 이곳의 Update를 통해 입력을 체크하고 이벤트로 다른 곳에 넘겨준다.
 
     public Action OnKeyAction = null;
+    public Action<E02_Define.MouseEvent> OnMouseEvent = null;
 
     public void OnUpdate()
     {
-        if (!Input.anyKey) return; //아무 입력도 없으면 바로 리턴
+        if (Input.anyKey && OnKeyAction != null) OnKeyAction(); // OnKeyAction이 null이 아닐 경우, 실행시킨다.
 
-        OnKeyAction?.Invoke(); // OnKeyAction이 null이 아닐 경우, 실행시킨다.
+        if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
+        {
+            OnMouseEvent(E02_Define.MouseEvent.Press);
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            OnMouseEvent(E02_Define.MouseEvent.Click);
+        }
     }
 }
