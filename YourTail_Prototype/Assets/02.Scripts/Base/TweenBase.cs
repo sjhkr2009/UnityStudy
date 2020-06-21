@@ -26,9 +26,7 @@ public class TweenBase : MonoBehaviour
     public float Delay => delay;
     public float Duration => duration;
 
-    bool isFrom = false;
-    [Button("현재 모드 : To", ButtonSizes.Medium), HideIf(nameof(isFrom)), BoxGroup("설정")] void SetFrom() { isFrom = true; }
-    [Button("현재 모드 : From", ButtonSizes.Medium), ShowIf(nameof(isFrom)), BoxGroup("설정")] void SetTo() { isFrom = false; }
+    [SerializeField] bool isFrom = false;
 
     [SerializeField, ShowIf(nameof(changeScale)), BoxGroup("설정"), PropertyOrder(1)] Vector3 scaleTarget;
     [SerializeField, ShowIf(nameof(changeScale)), BoxGroup("설정"), PropertyOrder(1)] Ease scaleMoveMode = Ease.InQuad;

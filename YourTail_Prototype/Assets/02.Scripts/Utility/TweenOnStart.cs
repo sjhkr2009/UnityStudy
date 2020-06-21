@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class TweenOnStart : TweenBase
 {
+    [SerializeField] bool onEnable = false;
     void Start()
     {
-        DoChange();
+        if (!onEnable) DoChange();
+    }
+    private void OnEnable()
+    {
+        if (onEnable) DoChange();
     }
 }

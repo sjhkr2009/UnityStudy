@@ -58,5 +58,7 @@ public class A01_Manager : MonoBehaviour
 
     C02_ResourceManager _resource = new C02_ResourceManager();
     public static C02_ResourceManager Resource => Instance._resource;
+    G10_UIManager _ui = new G10_UIManager();
+    public static G10_UIManager UI => Instance._ui;
 
 }

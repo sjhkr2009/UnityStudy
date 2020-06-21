@@ -21,7 +21,7 @@ public class C02_ResourceManager
         return Object.Instantiate(gameObject, parent);
     }
 
-    public void Destroy(GameObject gameObject, float delay)
+    public void Destroy(GameObject gameObject, float delay = 0f)
     {
         Object.Destroy(gameObject, delay);
     }

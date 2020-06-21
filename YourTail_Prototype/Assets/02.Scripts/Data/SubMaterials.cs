@@ -7,6 +7,7 @@ public class SubMaterials : CocktailMaterials
     public SubMaterials(int id) : base(MaterialType.Sub)
     {
         SetID(id);
+        image = GameManager.Resource.LoadImage(Define.ImageType.Sub, id);
     }
     public SubMaterials() : base(MaterialType.Sub)
     {

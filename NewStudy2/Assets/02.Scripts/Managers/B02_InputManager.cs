@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class B02_InputManager
 {
@@ -13,7 +14,10 @@ public class B02_InputManager
 
     public void OnUpdate()
     {
-        if (Input.anyKey && OnKeyAction != null) OnKeyAction(); // OnKeyAction이 null이 아닐 경우, 실행시킨다.
+        if (EventSystem.current.IsPointerOverGameObject()) return; // EventSystem을 이용한 이벤트가 발생한 경우(UI 등), 게임 내 조작이 아닌 UI상의 조작일 수 있으니 바로 리턴한다.
+
+
+        if (Input.anyKey && OnKeyAction != null) OnKeyAction();
 
         if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
         {

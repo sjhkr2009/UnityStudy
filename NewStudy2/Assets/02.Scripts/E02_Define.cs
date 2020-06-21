@@ -15,4 +15,14 @@ public class E02_Define
         Press,
         Click
     }
+
+    // UI의 버튼 동작을 입력하는 enum 값
+    // 기타 다른 여러 모드를 선택하는 enum 값들도 Define에 저장한다.
+
+    public enum EventType
+    {
+        Click,
+        Drag
+    }
+
 }

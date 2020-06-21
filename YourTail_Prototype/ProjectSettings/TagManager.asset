@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Customer
+    uniqueID: 3393002739
+    locked: 0
+  - name: CustomerSelectUI
+    uniqueID: 145070945
+    locked: 0
+  - name: SelectedCustomer
+    uniqueID: 3361811731
+    locked: 0
+  - name: Table
+    uniqueID: 3349708257
+    locked: 0

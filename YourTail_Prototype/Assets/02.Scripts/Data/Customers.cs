@@ -6,6 +6,7 @@ public class Customers
 {
     protected List<Order> wishlist = new List<Order>();
     public string Name { get; protected set; }
+    public Sprite image;
     public float Satisfaction { get; set; }
     public int _currentIndex;
     public int CurrentIndex
@@ -32,15 +33,16 @@ public class Customers
         order.CustomerName = Name;
         wishlist.Add(order);
     }
-    public Customers()
+    public Customers(int imageIndex)
     {
         CurrentIndex = 0;
+        image = GameManager.Resource.LoadImage(Define.ImageType.Customer, imageIndex);
     }
 }
 
 public class Eagle : Customers
 {
-    public Eagle()
+    public Eagle() : base(1)
     {
         Name = "독수리";
         
@@ -51,7 +53,7 @@ public class Eagle : Customers
 
 public class Dove : Customers
 {
-    public Dove()
+    public Dove() : base(2)
     {
         Name = "비둘기";
 

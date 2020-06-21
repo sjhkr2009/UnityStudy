@@ -7,8 +7,10 @@ public class CocktailMaterials
 {
     public string Name { get; set; }
     public string Id { get; private set; }
+    public int Index { get; private set; }
     public void SetID(int code)
     {
+        Index = code;
         if (materialType == MaterialType.Base)
             Id = "B" + code.ToString();
         else if (materialType == MaterialType.Sub)

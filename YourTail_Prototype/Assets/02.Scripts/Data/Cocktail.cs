@@ -18,6 +18,8 @@ public class Cocktail
     public List<string> SubIDList { get; private set; } = new List<string>();
     public CocktailName cocktailName = CocktailName.None;
 
+    public Sprite image;
+
     protected void AddBase(BaseMaterials material)
     {
         BaseMaterials.Add(material);
@@ -40,6 +42,7 @@ public class Cocktail
     public Cocktail(int id)
     {
         SetID(id);
+        image = GameManager.Resource.LoadImage(Define.ImageType.Cocktail, id);
     }
     public Cocktail()
     {
