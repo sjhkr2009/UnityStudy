@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/1.Scenes/Scene4 (Shooting Game).unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0

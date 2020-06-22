@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/1.Scenes/2.Override.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
