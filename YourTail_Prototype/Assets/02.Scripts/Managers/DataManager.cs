@@ -115,6 +115,7 @@ public class DataManager : MonoBehaviour
     public void SelectCustomer(Customers customer)
     {
         CurrentCustomer = customer;
+        CurrentOrder = customer.GetOrder();
     }
     public Cocktail MakeCocktail(List<BaseMaterials> currentBases, List<SubMaterials> currentSubs)
     {

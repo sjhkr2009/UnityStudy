@@ -23,6 +23,10 @@ public class TableController : MonoBehaviour
         if (selectUI.activeSelf)
             selectUI.SetActive(false);
 
+        selectUI.GetOrAddComponent<EscapeOnClick>().isUI = false;
+        GameManager.Input.InputEscape -= CancelOrder;
+        GameManager.Input.InputEscape += CancelOrder;
+
         GameManager.Instance.OnGameStateChange -= OnGameStateChange;
         GameManager.Instance.OnGameStateChange += OnGameStateChange;
         StartCoroutine(nameof(SetTable));
@@ -30,8 +34,15 @@ public class TableController : MonoBehaviour
 
     void OnGameStateChange(GameState gameState)
     {
-        if (gameState == GameState.Idle) StartCoroutine(nameof(SetTable));
-        else StopAllCoroutines();
+        switch (gameState)
+        {
+            case GameState.Idle:
+                StartCoroutine(nameof(SetTable));
+                break;
+            default:
+                StopAllCoroutines();
+                break;
+        }
     }
 
     IEnumerator SetTable()
@@ -96,5 +107,11 @@ public class TableController : MonoBehaviour
         GameManager.Data.SelectCustomer(customer);
         GameManager.UI.OpenPopupUI<OrderBubble>();
         selectUI.SetActive(true);
+    }
+    void CancelOrder()
+    {
+        if (!selectUI.activeSelf) return;
+        GameManager.UI.ClosePopupUI();
+        selectUI.SetActive(false);
     }
 }

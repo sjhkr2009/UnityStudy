@@ -30,17 +30,18 @@ public class GameManager : MonoBehaviour
             Data = GetComponent<DataManager>();
             if (Data == null) Data = gameObject.AddComponent<DataManager>();
         }
-        if (Input == null)
-        {
-            Input = GetComponent<InputManager>();
-            if (Input == null) Input = gameObject.AddComponent<InputManager>();
-        }
+        //if (Input == null)
+        //{
+        //    Input = GetComponent<InputManager>();
+        //    if (Input == null) Input = gameObject.AddComponent<InputManager>();
+        //}
     }
 
 
     // Get Manager Class
     public static DataManager Data { get; private set; }
-    public static InputManager Input { get; private set; }
+    InputManager _input = new InputManager();
+    public static InputManager Input => Instance._input;
     ResourceManager _resource = new ResourceManager();
     public static ResourceManager Resource => Instance._resource;
     UIManager _ui = new UIManager();
@@ -136,6 +137,11 @@ public class GameManager : MonoBehaviour
         Input.InputMaterialSelect += SelectMaterial;
         Input.InputStateChange += StateChange;
         Input.InputNextState += InNextState;
+    }
+
+    private void Update()
+    {
+        Input.OnUpdate();
     }
 
     void MainInOrder()

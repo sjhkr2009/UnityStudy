@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum InputButton
-{
-    None,
-    MaterialSelect,
-    StateChange
-}
+//public enum InputButton
+//{
+//    None,
+//    MaterialSelect,
+//    StateChange
+//}
 
 /// <summary>
 /// 씬 전환을 제외한 게임 내 동작은 InputManager를 통해 관리합니다.
 /// </summary>
-public class InputManager : MonoBehaviour
+public class InputManager
 {
     public event Action<int> InputMaterialSelect;
     public event Action<GameState> InputStateChange;
     public event Action InputNextState;
+    public event Action InputEscape;
 
     public void InMaterialSelect(int number)
     {
@@ -30,5 +31,15 @@ public class InputManager : MonoBehaviour
     public void InNextState()
     {
         InputNextState();
+    }
+
+    public void InEscape()
+    {
+        InputEscape();
+    }
+    public void OnUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            InputEscape();
     }
 }
