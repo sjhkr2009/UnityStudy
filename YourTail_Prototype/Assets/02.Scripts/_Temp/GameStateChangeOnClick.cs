@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SelectMaterialOnClick : MonoBehaviour, IPointerClickHandler
+public class GameStateChangeOnClick : MonoBehaviour, IPointerClickHandler
 {
-    public int index = 1;
+    public GameState targetState;
+    
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameManager.Input.InMaterialSelect(index);
+        GameManager.Instance.GameState = targetState;
     }
 }

@@ -15,14 +15,14 @@ using System;
 /// </summary>
 public class InputManager
 {
-    public event Action<int> InputMaterialSelect;
+    public event Action<string> InputMaterialSelect;
     public event Action<GameState> InputStateChange;
     public event Action InputNextState;
     public event Action InputEscape;
 
-    public void InMaterialSelect(int number)
+    public void InMaterialSelect(string id)
     {
-        InputMaterialSelect(number);
+        InputMaterialSelect(id);
     }
     public void InStateChange(GameState state)
     {

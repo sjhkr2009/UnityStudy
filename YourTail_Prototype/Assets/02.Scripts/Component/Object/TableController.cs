@@ -31,6 +31,12 @@ public class TableController : MonoBehaviour
         GameManager.Instance.OnGameStateChange += OnGameStateChange;
         StartCoroutine(nameof(SetTable));
     }
+    private void OnDestroy()
+    {
+        foreach (Table item in tables) item.EventOnSelectCustomer -= GetOrder;
+        GameManager.Input.InputEscape -= CancelOrder;
+        GameManager.Instance.OnGameStateChange -= OnGameStateChange;
+    }
 
     void OnGameStateChange(GameState gameState)
     {
@@ -110,7 +116,7 @@ public class TableController : MonoBehaviour
     }
     void CancelOrder()
     {
-        if (!selectUI.activeSelf) return;
+        if (!selectUI.activeSelf || GameManager.Instance.GameState != GameState.Idle) return;
         GameManager.UI.ClosePopupUI();
         selectUI.SetActive(false);
     }

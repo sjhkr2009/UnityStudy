@@ -51,6 +51,37 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    [ShowInInspector] public List<BaseMaterials> CurrentBaseMaterials { get; private set; } = new List<BaseMaterials>();
+    [ShowInInspector] public List<SubMaterials> CurrentSubMaterials { get; private set; } = new List<SubMaterials>();
+    [SerializeField, ReadOnly] int maxBase = 1;
+    [SerializeField] int maxSub = 2;
+
+    public void AddCurrentBase(BaseMaterials item)
+    {
+        CurrentBaseMaterials.Add(item);
+        OnAddBaseMaterial(item);
+    }
+    public void RemoveCurrentBase(BaseMaterials item)
+    {
+        CurrentBaseMaterials.Remove(item);
+        OnRemoveBaseMaterial(item);
+    }
+
+    public void AddCurrentSub(SubMaterials item)
+    {
+        CurrentSubMaterials.Add(item);
+        OnAddSubMaterial(item);
+    }
+    public void RemoveCurrentSub(SubMaterials item)
+    {
+        CurrentSubMaterials.Remove(item);
+        OnRemoveSubMaterial(item);
+    }
+    public Action<BaseMaterials> OnAddBaseMaterial = n => { };
+    public Action<BaseMaterials> OnRemoveBaseMaterial = n => { };
+    public Action<SubMaterials> OnAddSubMaterial = n => { };
+    public Action<SubMaterials> OnRemoveSubMaterial = n => { };
+
     #region 데이터베이스 세팅
     void Start()
     {
@@ -61,6 +92,8 @@ public class DataManager : MonoBehaviour
     {
         CurrentCustomer = null;
 
+        GameManager.Input.InputMaterialSelect -= SelectMaterial;
+        GameManager.Input.InputMaterialSelect += SelectMaterial;
 
         if (CustomerList.Count > 0) CustomerList.Clear();
         if (BaseMaterialData.Count > 0) BaseMaterialData.Clear();
@@ -108,6 +141,25 @@ public class DataManager : MonoBehaviour
     }
     #endregion
     
+    public void OnGameStateChange(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Order:
+                break;
+            case GameState.SelectBase:
+                break;
+            case GameState.SelectSub:
+                break;
+            case GameState.Combine:
+                CurrentCocktail = MakeCocktail(CurrentBaseMaterials, CurrentSubMaterials);
+                Debug.Log($"조합: {CurrentCocktail.cocktailName} 칵테일");
+                break;
+            case GameState.SetCocktail:
+                break;
+        }
+    }
+
     public Customers GetRandomCustomer()
     {
         return CustomerList[UnityEngine.Random.Range(0, CustomerList.Count)];
@@ -116,6 +168,32 @@ public class DataManager : MonoBehaviour
     {
         CurrentCustomer = customer;
         CurrentOrder = customer.GetOrder();
+    }
+
+    public void SelectMaterial(string id)
+    {
+        BaseMaterials selectedBase = null;
+        SubMaterials selectedSub = null;
+        if(BaseMaterialData.TryGetValue(id, out selectedBase))
+        {
+            if (CurrentBaseMaterials.Contains(selectedBase))
+            {
+                RemoveCurrentBase(selectedBase);
+                return;
+            }
+            if (CurrentBaseMaterials.Count >= maxBase) RemoveCurrentBase(CurrentBaseMaterials[maxBase - 1]);
+            AddCurrentBase(selectedBase);
+        }
+        else if(SubMaterialData.TryGetValue(id, out selectedSub))
+        {
+            if (CurrentSubMaterials.Contains(selectedSub))
+            {
+                RemoveCurrentSub(selectedSub);
+                return;
+            }
+            if (CurrentSubMaterials.Count >= maxSub) RemoveCurrentSub(CurrentSubMaterials[maxSub - 1]);
+            AddCurrentSub(selectedSub);
+        }
     }
     public Cocktail MakeCocktail(List<BaseMaterials> currentBases, List<SubMaterials> currentSubs)
     {

@@ -38,7 +38,9 @@ public class UIBase : MonoBehaviour
     protected Text GetText(int index) { return Get<Text>(index); }
     protected Image GetImage(int index) { return Get<Image>(index); }
 
-
+    // 매핑한 하위 오브젝트들에 클릭(및 다른 형태의) 이벤트를 추가해주는 임시 함수. 
+    // 우선 개별 스크립트를 만들어 붙이고, 나중에 아이콘 클릭 관련 함수가 많아질 때 이 방식으로 변경할 예정.
+    // 게임 특성상 PointerEventData가 불필요한 경우가 많으므로, EventHandler에 매개변수가 없는 클릭 이벤트 등을 추가해주고, Action(매개변수 X)을 변수로 받는 AddEvent 함수를 오버로드하는 것이 쓰기 편할듯.
     public static void AddEvent(GameObject gameObject, Action<PointerEventData> action, Define.EventType eventType = Define.EventType.Click)
     {
         EventHandler eventHandler = gameObject.GetOrAddComponent<EventHandler>();
