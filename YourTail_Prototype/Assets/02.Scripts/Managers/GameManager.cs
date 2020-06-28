@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
     public static ResourceManager Resource => Instance._resource;
     UIManager _ui = new UIManager();
     public static UIManager UI => Instance._ui;
+    SoundManager _sound = new SoundManager();
+    public static SoundManager Sound => Instance._sound;
 
     public Action<GameState> OnGameStateChange = n => { };
     [SerializeField, ReadOnly] private GameState _gameState = GameState.Idle;
@@ -83,6 +85,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         GameState = GameState.Idle;
+        Sound.Init();
 
         Input.InputStateChange -= StateChange;
         Input.InputNextState -= InNextState;

@@ -12,6 +12,13 @@ public class Define
         Customer
     }
 
+    public enum SoundType
+    {
+        BGM,
+        FX,
+        Count
+    }
+
     public enum EventType
     {
         Click

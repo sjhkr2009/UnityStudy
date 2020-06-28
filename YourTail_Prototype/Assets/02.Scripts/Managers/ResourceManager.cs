@@ -6,7 +6,10 @@ public class ResourceManager
 {
     public T Load<T>(string path) where T : Object
     {
-        return Resources.Load<T>(path);
+        T loaded = Resources.Load<T>(path);
+        if (loaded == null)
+            Debug.Log($"로드에 실패했습니다. 주소를 다시 확인해주세요. {path}");
+        return loaded;
     }
 
     public Sprite LoadImage(Define.ImageType type, int id)
