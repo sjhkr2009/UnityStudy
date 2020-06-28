@@ -615,7 +615,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uCE75\uD14C\uC77C\uBA85\n(Cocktail Name)"
+  m_Text: 
 --- !u!1 &1357610183527789541
 GameObject:
   m_ObjectHideFlags: 0

@@ -53,3 +53,6 @@ TagManager:
   - name: Table
     uniqueID: 3349708257
     locked: 0
+  - name: Light
+    uniqueID: 3556476729
+    locked: 0
