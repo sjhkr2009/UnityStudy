@@ -17,6 +17,14 @@ public class Cocktail
     public List<string> BaseIDList { get; private set; } = new List<string>();
     public List<string> SubIDList { get; private set; } = new List<string>();
     public CocktailName cocktailName = CocktailName.None;
+    public string Name_kr { get; private set; }
+    public string Name_en { get; private set; }
+
+    protected void SetName(string koreanName, string englishName)
+    {
+        Name_kr = koreanName;
+        Name_en = englishName;
+    }
 
     public Sprite image;
 
@@ -47,7 +55,14 @@ public class Cocktail
     public Cocktail()
     {
         SetID(0);
+        image = GameManager.Resource.LoadImage(Define.ImageType.Cocktail, 0);
+
         cocktailName = CocktailName.None;
+        SetName("쓰레기", "Food Waste");
+
+        Sweetness = 0;
+        Proof = 0;
+        Refreshment = 0;
     }
 }
 
@@ -60,6 +75,7 @@ class BetweenTheSheets : Cocktail
         AddSub(new Curacao());
 
         cocktailName = CocktailName.BetweenTheSheets;
+        SetName("비트윈 더 시트", "Between The Sheets");
 
         Sweetness = 2;
         Proof = 4;
@@ -76,6 +92,7 @@ class BlueHawaii : Cocktail
         AddSub(new Pineapple());
 
         cocktailName = CocktailName.BlueHawaii;
+        SetName("블루 하와이", "Blue Hawaii");
 
         Sweetness = 3;
         Proof = 2;

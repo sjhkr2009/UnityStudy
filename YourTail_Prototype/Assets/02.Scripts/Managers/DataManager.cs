@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class DataManager : MonoBehaviour
 {
@@ -156,6 +157,8 @@ public class DataManager : MonoBehaviour
                 Debug.Log($"조합: {CurrentCocktail.cocktailName} 칵테일");
                 break;
             case GameState.SetCocktail:
+                CurrentCorrectCheck();
+                DOVirtual.DelayedCall(0.5f, CurrentReset);
                 break;
         }
     }
@@ -295,5 +298,13 @@ public class DataManager : MonoBehaviour
             default:
                 return 0f;
         }
+    }
+    void CurrentReset()
+    {
+        CurrentCustomer = null;
+        CurrentOrder = null;
+        CurrentCocktail = null;
+        CurrentBaseMaterials.Clear();
+        CurrentSubMaterials.Clear();
     }
 }

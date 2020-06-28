@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Table : MonoBehaviour
 {
-    Vector3 originPos;
+    [SerializeField] Vector3 originPos;
     
     bool _hasCustomer = false;
     public bool HasCustomer
@@ -27,11 +27,14 @@ public class Table : MonoBehaviour
     [ReadOnly] public Customers currentCustomer;
     [ReadOnly] public SpriteRenderer customerImage;
     public Action<Customers> EventOnSelectCustomer = c => { };
-    
+
+    private void Awake()
+    {
+        originPos = transform.position;
+    }
     void Start()
     {
         customerImage = gameObject.GetOrAddComponent<SpriteRenderer>();
-        originPos = transform.position;
         customerImage.sortingLayerName = "Customer";
         DeleteCustomer();
     }

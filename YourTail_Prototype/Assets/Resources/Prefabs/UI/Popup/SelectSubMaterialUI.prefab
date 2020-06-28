@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 1338435905796038239}
   - component: {fileID: 3408516021135239283}
   m_Layer: 5
-  m_Name: Background
+  m_Name: BlockRaycast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

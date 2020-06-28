@@ -43,7 +43,12 @@ public class TableController : MonoBehaviour
         switch (gameState)
         {
             case GameState.Idle:
+                if (selectUI.activeSelf) selectUI.SetActive(false);
                 StartCoroutine(nameof(SetTable));
+                break;
+            case GameState.SetCocktail:
+                DeleteCustomer(GameManager.Data.CurrentCustomer);
+                StopAllCoroutines();
                 break;
             default:
                 StopAllCoroutines();
@@ -59,11 +64,11 @@ public class TableController : MonoBehaviour
 
             yield return new WaitForSeconds(3f);
 
-            if (!HasEmptyTable()) break;
+            if (!HasEmptyTable()) continue;
 
             Customers newCustomer = GameManager.Data.GetRandomCustomer();
 
-            if (IsExistCustomer(newCustomer)) break;
+            if (IsExistCustomer(newCustomer)) continue;
 
             while (true)
             {
@@ -119,5 +124,13 @@ public class TableController : MonoBehaviour
         if (!selectUI.activeSelf || GameManager.Instance.GameState != GameState.Idle) return;
         GameManager.UI.ClosePopupUI();
         selectUI.SetActive(false);
+    }
+    void DeleteCustomer(Customers customer)
+    {
+        foreach (Table table in tables)
+        {
+            if (table.currentCustomer == GameManager.Data.CurrentCustomer)
+                table.DeleteCustomer();
+        }
     }
 }

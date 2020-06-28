@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
 using TMPro;
+using DG.Tweening;
 
 public enum GameState
 {
@@ -124,14 +125,12 @@ public class GameManager : MonoBehaviour
     void MainInCombine()
     {
         UI.ClosePopupUI();
+        UI.OpenPopupUI<MakeCocktailUI>();
     }
     void MainInSetCocktail()
     {
-        Data.CurrentCorrectCheck();
-
-        //currentBaseMaterials.Clear();
-        //currentSubMaterials.Clear();
         UI.CloseAllPopup();
+        DOVirtual.DelayedCall(0.65f, () => { GameState = GameState.Idle; });
     }
 
     //임시 진행 버튼
