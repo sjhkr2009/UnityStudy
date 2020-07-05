@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SubMaterials
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 21300000, guid: 9767fb86e6ef7b340accfbf38fe90899, type: 3}
-  - {fileID: 21300000, guid: c7b9a69adf617ca42802fa9d8511cb5a, type: 3}
-  - {fileID: 21300000, guid: c7b9a69adf617ca42802fa9d8511cb5a, type: 3}
+  - {fileID: 21300000, guid: 0067e16d611460a41adf255518039209, type: 3}
+  - {fileID: 21300000, guid: 02a52276685146048affd4c11d34725e, type: 3}
+  - {fileID: 21300000, guid: 1abbba16a6c6cfd4b9c688f9bd8f2e18, type: 3}
+  - {fileID: 21300000, guid: 60640744e2d6db94abdc59e520750793, type: 3}
