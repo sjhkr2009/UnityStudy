@@ -20,6 +20,7 @@ class Rum : BaseMaterials
     public Rum() : base(1)
     {
         Name = "럼";
+        Info = "짱 맛있음";
     }
 }
 
@@ -28,5 +29,6 @@ class Brandy : BaseMaterials
     public Brandy() : base(2)
     {
         Name = "브랜디";
+        Info = "이걸 왜마심?";
     }
 }

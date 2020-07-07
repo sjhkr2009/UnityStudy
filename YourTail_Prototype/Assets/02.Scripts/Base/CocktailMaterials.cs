@@ -7,6 +7,7 @@ public class CocktailMaterials
 {
     public string Name { get; set; }
     public string Id { get; private set; }
+    public string Info { get; protected set; }
     public int Index { get; private set; }
     public void SetID(int code)
     {

@@ -89,16 +89,19 @@ public class GameManager : MonoBehaviour
 
         Input.InputStateChange -= StateChange;
         Input.InputNextState -= InNextState;
+        Input.InputEscape -= OnEscape;
         OnGameStateChange -= Data.OnGameStateChange;
 
         Input.InputStateChange += StateChange;
         Input.InputNextState += InNextState;
+        Input.InputEscape += OnEscape;
         OnGameStateChange += Data.OnGameStateChange;
     }
     private void OnDestroy()
     {
         Input.InputStateChange -= StateChange;
         Input.InputNextState -= InNextState;
+        Input.InputEscape -= OnEscape;
         OnGameStateChange -= Data.OnGameStateChange;
     }
 
@@ -140,5 +143,9 @@ public class GameManager : MonoBehaviour
     void InNextState()
     {
         GameState = (GameState)(((int)GameState + 1) % 6);
+    }
+    void OnEscape()
+    {
+        UI.TryClosePopupUI<MaterialInfoWindow>(); //추후 실패 시 옵션창을 띄울 것.
     }
 }

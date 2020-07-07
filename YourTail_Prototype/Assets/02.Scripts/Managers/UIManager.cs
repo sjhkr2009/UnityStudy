@@ -97,6 +97,27 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 특정 팝업창을 지정하여, 해당 팝업이 가장 위에 있다면 닫습니다. 아니라면 아무 동작도 실행하지 않습니다.
+    /// 게임 진행과 무관한 도움말 등이 열려 있을 때 Escape로 닫는 용도로 사용됩니다. 아무 동작도 실행하지 않으면 false, 성공적으로 창을 닫았으면 true를 반환합니다.
+    /// </summary>
+    /// <param name="targetPopUp"></param>
+    public bool TryClosePopupUI<T>(string name = null)
+    {
+        if (popupUI.Count == 0) return false;
+        if (string.IsNullOrEmpty(name)) name = typeof(T).Name;
+
+        UIBase_Popup nowPopup = popupUI.Peek();
+        if (nowPopup.name == name + "(Clone)")
+        {
+            ClosePopupUI();
+            return true;
+        }
+        else Debug.Log("대상 팝업창이 오픈되어있지 않습니다.");
+
+        return false;
+    }
+
+    /// <summary>
     /// 특정 팝업창을 지정하여 닫습니다. 매개변수가 없는 ClosePopupUI()에 비해 부하율이 높습니다. 필요한 상황에서만 사용하세요.
     /// </summary>
     public void ClosePopupUI<T>(string name = null)

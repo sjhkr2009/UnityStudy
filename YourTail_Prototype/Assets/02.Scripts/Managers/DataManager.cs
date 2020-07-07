@@ -18,6 +18,11 @@ public class DataManager : MonoBehaviour
     public List<Cocktail> CocktailList { get; private set; } = new List<Cocktail>();
 
 
+    // 현재 정보를 요청하는 재료의 클래스. 재료 선택 화면에서 ? 버튼을 눌러 정보를 확인할 때 사용한다.
+    public CocktailMaterials CurrentMaterialInfo { get; set; }
+    void SetMaterialInfo(CocktailMaterials material) => CurrentMaterialInfo = material;
+
+    #region 현재 정보
     [ShowInInspector] private Order _currentOrder { get; set; }
     public Action<Order> OnSetOrder = n => { };
     public Order CurrentOrder
@@ -83,6 +88,8 @@ public class DataManager : MonoBehaviour
     public Action<SubMaterials> OnAddSubMaterial = n => { };
     public Action<SubMaterials> OnRemoveSubMaterial = n => { };
 
+    #endregion
+
     #region 데이터베이스 세팅
     void Start()
     {
@@ -94,7 +101,10 @@ public class DataManager : MonoBehaviour
         CurrentCustomer = null;
 
         GameManager.Input.InputMaterialSelect -= SelectMaterial;
+        GameManager.Input.InputMaterialInfo -= SetMaterialInfo;
+
         GameManager.Input.InputMaterialSelect += SelectMaterial;
+        GameManager.Input.InputMaterialInfo += SetMaterialInfo;
 
         if (CustomerList.Count > 0) CustomerList.Clear();
         if (BaseMaterialData.Count > 0) BaseMaterialData.Clear();
