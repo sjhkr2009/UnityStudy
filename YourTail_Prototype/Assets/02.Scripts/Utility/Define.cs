@@ -23,4 +23,13 @@ public class Define
     {
         Click
     }
+
+    public enum CocktailTag
+    {
+        태그1,
+        태그2,
+        태그3
+    }
+
+    public const float CocktailMaxProof = 50f;
 }

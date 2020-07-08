@@ -39,9 +39,29 @@ public class Cocktail
         SubIDList.Add(material.Id);
     }
 
-    public int Sweetness { get; protected set; }
     public int Proof { get; protected set; }
-    public int Refreshment { get; protected set; }
+    public List<Define.CocktailTag> Tags { get; private set; } = new List<Define.CocktailTag>();
+    public string Info { get; protected set; }
+
+    protected void AddTag(Define.CocktailTag tag) => Tags.Add(tag);
+    public List<string> GetTagToString()
+    {
+        List<string> tagList = new List<string>();
+        
+        foreach (Define.CocktailTag tag in Tags)
+            tagList.Add(tag.ToString());
+
+        return tagList;
+    }
+    public int GetProofGrade()
+    {
+        if (Proof <= 5) return 0;
+        else if (Proof <= 10) return 1;
+        else if (Proof <= 19) return 2;
+        else if (Proof <= 30) return 3;
+        else return 4;
+    }
+
     public string Id { get; private set; }
     public void SetID(int code)
     {
@@ -60,9 +80,9 @@ public class Cocktail
         cocktailName = CocktailName.None;
         SetName("쓰레기", "Food Waste");
 
-        Sweetness = 0;
-        Proof = 0;
-        Refreshment = 0;
+        Proof = 1;
+        AddTag(Define.CocktailTag.태그1);
+        Info = "뭔가 잘못된 것 같다.";
     }
 }
 
@@ -77,9 +97,10 @@ class BetweenTheSheets : Cocktail
         cocktailName = CocktailName.BetweenTheSheets;
         SetName("비트윈 더 시트", "Between The Sheets");
 
-        Sweetness = 2;
-        Proof = 4;
-        Refreshment = 2;
+        Proof = 40;
+        AddTag(Define.CocktailTag.태그2);
+        AddTag(Define.CocktailTag.태그3);
+        Info = "이 술을 누군가에게 건넬 때는 한 번 더 고민해보는 게 좋다.";
     }
 }
 
@@ -94,8 +115,8 @@ class BlueHawaii : Cocktail
         cocktailName = CocktailName.BlueHawaii;
         SetName("블루 하와이", "Blue Hawaii");
 
-        Sweetness = 3;
-        Proof = 2;
-        Refreshment = 5;
+        Proof = 16;
+        AddTag(Define.CocktailTag.태그3);
+        Info = "하와이의 푸른 바다를 연상케 하는 청량감이 느껴진다.";
     }
 }

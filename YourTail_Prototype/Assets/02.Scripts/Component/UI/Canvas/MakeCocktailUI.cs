@@ -11,9 +11,9 @@ public class MakeCocktailUI : UIBase_Popup
     enum Texts
     {
         CocktailName,
-        CocktailSweet,
         CocktailProof,
-        CocktailFresh
+        CocktailTag,
+        CocktailInfo
     }
     
     enum Buttons
@@ -23,7 +23,13 @@ public class MakeCocktailUI : UIBase_Popup
     
     enum Images
     {
-        CocktailImage
+        CocktailImage,
+        ProofSliderColor
+    }
+
+    enum Sliders
+    {
+        ProofSlider
     }
     
     void Start()
@@ -41,6 +47,7 @@ public class MakeCocktailUI : UIBase_Popup
         Bind<Text>(typeof(Texts));
         Bind<Button>(typeof(Buttons));
         Bind<Image>(typeof(Images));
+        Bind<Slider>(typeof(Sliders));
 
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.SetCocktail; });
 
@@ -64,19 +71,32 @@ public class MakeCocktailUI : UIBase_Popup
 
         GetImage((int)Images.CocktailImage).sprite = myCocktail.image;
         GetText((int)Texts.CocktailName).text = $"{myCocktail.Name_kr}\n({myCocktail.Name_en})";
-        GetText((int)Texts.CocktailSweet).text = IntToStarText(myCocktail.Sweetness);
-        GetText((int)Texts.CocktailProof).text = IntToStarText(myCocktail.Proof);
-        GetText((int)Texts.CocktailFresh).text = IntToStarText(myCocktail.Refreshment);
+
+        float proofNormalize = myCocktail.Proof / Define.CocktailMaxProof;
+        Get<Slider>((int)Sliders.ProofSlider).DOValue(proofNormalize, 0.7f).
+            OnComplete(() =>
+            {
+                GetText((int)Texts.CocktailProof).text = $"{myCocktail.Proof}%";
+            });
+        GetImage((int)Images.ProofSliderColor).DOColor(ProofToColor(proofNormalize), 0.7f);
+
+        GetText((int)Texts.CocktailTag).text = ListToString(myCocktail.GetTagToString());
+        GetText((int)Texts.CocktailInfo).text = myCocktail.Info;
     }
 
-    string IntToStarText(int value)
+    string ListToString(List<string> list)
     {
-        if (value <= 0) return "-";
-
         string result = "";
-        for (int i = 0; i < value; i++)
-            result += "★";
-
+        for (int i = 0; i < list.Count; i++)
+        {
+            result += list[i];
+            if (i != list.Count - 1) result += ", ";
+        }
         return result;
+    }
+    Color ProofToColor(float proof)
+    {
+        float hue = Mathf.Clamp(0.5f - (proof * 0.6f), 0f, 0.5f);
+        return Color.HSVToRGB(hue, 0.5f, 1f);
     }
 }

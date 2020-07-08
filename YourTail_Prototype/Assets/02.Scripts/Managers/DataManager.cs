@@ -250,65 +250,81 @@ public class DataManager : MonoBehaviour
 
     float CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)
     {
-        if(customer == null) customer = CustomerNameData[order.CustomerName];
-        Debug.Log($"{order.CustomerName} 의 현재 오더 : {customer.CurrentIndex + 1}");
+        if (customer == null) customer = CustomerNameData[order.CustomerName];
 
-        float satisfaction = 0f;
-        float checkpoint = 0f;
+        int score = 0;
 
-        if (order.requiredCocktail != null)
+        if(order.requiredCocktail != null)
         {
-            checkpoint++;
-            Debug.Log($"요구 칵테일 : {order.requiredCocktail} / 제공된 칵테일 : {cocktail.cocktailName}");
-            if (cocktail.cocktailName == order.requiredCocktail) satisfaction += 100f;
-        }
-        if (order.requiredSweet != null)
-        {
-            checkpoint++;
-            Debug.Log($"요구 당도 : {order.requiredSweet} / 제공된 당도 : {cocktail.Sweetness}");
-            satisfaction += SatisfactionCheck(cocktail.Sweetness, (int)order.requiredSweet);
-        }
-        if (order.requiredProof != null)
-        {
-            checkpoint++;
-            Debug.Log($"요구 도수 : {order.requiredProof} / 제공된 도수 : {cocktail.Proof}");
-            satisfaction += SatisfactionCheck(cocktail.Proof, (int)order.requiredProof);
-        }
-        if (order.requiredFresh != null)
-        {
-            checkpoint++;
-            Debug.Log($"요구 청량감 : {order.requiredFresh} / 제공된 청량감 : {cocktail.Refreshment}");
-            satisfaction += SatisfactionCheck(cocktail.Refreshment, (int)order.requiredFresh);
+
         }
 
-        if (checkpoint == 0) checkpoint = 1f;
-        float successPoint = Mathf.Clamp(satisfaction / checkpoint, 0f, 100f);
-
-        Debug.Log("만족도 : " + successPoint);
-        
-        if (successPoint >= 75f) customer.CurrentIndex++;
-
-        Debug.Log($"{order.CustomerName} 의 평가 후 오더 : {customer.CurrentIndex + 1}");
-
-        return successPoint;
+        return 0;
     }
-    private float SatisfactionCheck(int current, int required)
-    {
-        int difference = Mathf.Abs(required - current);
-        switch (difference)
-        {
-            case 0:
-                return 100f;
-            case 1:
-                return 85f;
-            case 2:
-                return 60f;
-            case 3:
-                return 30f;
-            default:
-                return 0f;
-        }
-    }
+
+    #region 폐기된 로직
+    //float CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)
+    //{
+    //    if(customer == null) customer = CustomerNameData[order.CustomerName];
+    //    Debug.Log($"{order.CustomerName} 의 현재 오더 : {customer.CurrentIndex + 1}");
+
+    //    float satisfaction = 0f;
+    //    float checkpoint = 0f;
+
+    //    if (order.requiredCocktail != null)
+    //    {
+    //        checkpoint++;
+    //        Debug.Log($"요구 칵테일 : {order.requiredCocktail} / 제공된 칵테일 : {cocktail.cocktailName}");
+    //        if (cocktail.cocktailName == order.requiredCocktail) satisfaction += 100f;
+    //    }
+    //    if (order.requiredSweet != null)
+    //    {
+    //        checkpoint++;
+    //        Debug.Log($"요구 당도 : {order.requiredSweet} / 제공된 당도 : {cocktail.Sweetness}");
+    //        satisfaction += SatisfactionCheck(cocktail.Sweetness, (int)order.requiredSweet);
+    //    }
+    //    if (order.requiredProof != null)
+    //    {
+    //        checkpoint++;
+    //        Debug.Log($"요구 도수 : {order.requiredProof} / 제공된 도수 : {cocktail.Proof}");
+    //        satisfaction += SatisfactionCheck(cocktail.Proof, (int)order.requiredProof);
+    //    }
+    //    if (order.requiredFresh != null)
+    //    {
+    //        checkpoint++;
+    //        Debug.Log($"요구 청량감 : {order.requiredFresh} / 제공된 청량감 : {cocktail.Refreshment}");
+    //        satisfaction += SatisfactionCheck(cocktail.Refreshment, (int)order.requiredFresh);
+    //    }
+
+    //    if (checkpoint == 0) checkpoint = 1f;
+    //    float successPoint = Mathf.Clamp(satisfaction / checkpoint, 0f, 100f);
+
+    //    Debug.Log("만족도 : " + successPoint);
+
+    //    if (successPoint >= 75f) customer.CurrentIndex++;
+
+    //    Debug.Log($"{order.CustomerName} 의 평가 후 오더 : {customer.CurrentIndex + 1}");
+
+    //    return successPoint;
+    //}
+    //private float SatisfactionCheck(int current, int required)
+    //{
+    //    int difference = Mathf.Abs(required - current);
+    //    switch (difference)
+    //    {
+    //        case 0:
+    //            return 100f;
+    //        case 1:
+    //            return 85f;
+    //        case 2:
+    //            return 60f;
+    //        case 3:
+    //            return 30f;
+    //        default:
+    //            return 0f;
+    //    }
+    //}
+    #endregion
     void CurrentReset()
     {
         CurrentCustomer = null;
