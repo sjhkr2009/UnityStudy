@@ -90,7 +90,7 @@ class BetweenTheSheets : Cocktail
 {
     public BetweenTheSheets() : base(1)
     {
-        AddBase(new Brandy());
+        AddBase(new Vodka());
         AddSub(new Lemon());
         AddSub(new Curacao());
 
@@ -108,7 +108,7 @@ class BlueHawaii : Cocktail
 {
     public BlueHawaii() : base(2)
     {
-        AddBase(new Rum());
+        AddBase(new Tequilla());
         AddSub(new Curacao());
         AddSub(new Pineapple());
 

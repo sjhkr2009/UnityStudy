@@ -115,8 +115,8 @@ public class DataManager : MonoBehaviour
         AddCustomer(new Eagle());
         AddCustomer(new Dove());
 
-        AddBase(new Rum());
-        AddBase(new Brandy());
+        AddBase(new Tequilla());
+        AddBase(new Vodka());
 
         AddSub(new Curacao());
         AddSub(new Pineapple());
