@@ -90,11 +90,13 @@ public class GameManager : MonoBehaviour
         Input.InputStateChange -= StateChange;
         Input.InputNextState -= InNextState;
         Input.InputEscape -= OnEscape;
+        Input.InputRetryCocktail -= OnRetryCocktail;
         OnGameStateChange -= Data.OnGameStateChange;
 
         Input.InputStateChange += StateChange;
         Input.InputNextState += InNextState;
         Input.InputEscape += OnEscape;
+        Input.InputRetryCocktail += OnRetryCocktail;
         OnGameStateChange += Data.OnGameStateChange;
     }
     private void OnDestroy()
@@ -102,6 +104,7 @@ public class GameManager : MonoBehaviour
         Input.InputStateChange -= StateChange;
         Input.InputNextState -= InNextState;
         Input.InputEscape -= OnEscape;
+        Input.InputRetryCocktail -= OnRetryCocktail;
         OnGameStateChange -= Data.OnGameStateChange;
     }
 
@@ -147,5 +150,11 @@ public class GameManager : MonoBehaviour
     void OnEscape()
     {
         UI.TryClosePopupUI<MaterialInfoWindow>(); //추후 실패 시 옵션창을 띄울 것.
+    }
+    void OnRetryCocktail()
+    {
+        UI.ClosePopupUI<MakeCocktailUI>();
+        Data.OnRetry();
+        GameState = GameState.SelectBase;
     }
 }

@@ -8,6 +8,10 @@ public class SelectBaseMaterialUI : UIBase_Popup
 {
     enum MaterialImages
     {
+        Tequilla,
+        Vodka,
+        Whisky,
+        Gin,
         Rum,
         Brandy
     }
@@ -49,7 +53,7 @@ public class SelectBaseMaterialUI : UIBase_Popup
     }
     void SetBaseImage()
     {
-        for (int i = 0; i < GameManager.Data.BaseMaterialList.Count; i++)
+        for (int i = 0; i < GameManager.Data.BaseMaterialIndexData.Count; i++)
             SetIcon(i);
     }
 
@@ -57,7 +61,7 @@ public class SelectBaseMaterialUI : UIBase_Popup
     {
         Image _image = GetImage(index);
         MaterialIcon icon = _image.gameObject.GetOrAddComponent<MaterialIcon>();
-        icon.myMaterial = GameManager.Data.BaseMaterialList[index];
+        icon.myMaterial = GameManager.Data.BaseMaterialIndexData[index + 1];
 
         _image.sprite = icon.myMaterial.image;
     }

@@ -122,6 +122,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void ClosePopupUI<T>(string name = null)
     {
+        if (TryClosePopupUI<T>()) return;
+
         if (popupUI.Count == 0) return;
         if (string.IsNullOrEmpty(name)) name = typeof(T).Name;
 

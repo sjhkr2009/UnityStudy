@@ -38,4 +38,13 @@ public static class Extension
 
         return null;
     }
+
+    public static void OpenWindow(this List<GameObject> windowList, int index)
+    {
+        for (int i = 0; i < windowList.Count; i++)
+        {
+            if (i != index) windowList[i].SetActive(false);
+            else windowList[i].SetActive(true);
+        }
+    }
 }

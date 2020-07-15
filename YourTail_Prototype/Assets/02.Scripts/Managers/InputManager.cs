@@ -19,12 +19,14 @@ public class InputManager
     public event Action<CocktailMaterials> InputMaterialInfo;
     public event Action<GameState> InputStateChange;
     public event Action InputNextState;
+    public event Action InputRetryCocktail;
     public event Action InputEscape;
 
     public void InMaterialSelect(string id) => InputMaterialSelect(id);
     public void InMaterialInfo(CocktailMaterials material) => InputMaterialInfo(material);
     public void InStateChange(GameState state) => InputStateChange(state);
     public void InNextState() => InputNextState();
+    public void InRetryCocktail() => InputRetryCocktail();
     public void InEscape() => InputEscape();
     public void OnUpdate()
     {

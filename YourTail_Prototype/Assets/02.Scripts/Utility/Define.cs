@@ -32,4 +32,7 @@ public class Define
     }
 
     public const float CocktailMaxProof = 50f;
+
+    public const float Evaluate_GoodHigherThan = 70f;
+    public const float Evaluate_BadLowerThan = 30f;
 }

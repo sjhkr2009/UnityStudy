@@ -26,7 +26,7 @@ public class Customers
     {
         Order order = new Order();
         order.requiredCocktail = (requiredCocktail != null) ? requiredCocktail : null;
-        order.requiredProof = (requiredProof != null) ? requiredProof : null;
+        order.requiredProofGrade = (requiredProof != null) ? requiredProof : null;
         order.requiredTag = (requiredTags != null) ? requiredTags : null;
         order.orderContents = orderContents;
         order.CustomerName = Name;
@@ -64,7 +64,7 @@ public class Dove : Customers
 public class Order
 {
     public CocktailName? requiredCocktail = null;
-    public int? requiredProof = null;
+    public int? requiredProofGrade = null;
     public List<Define.CocktailTag> requiredTag = null;
     public string orderContents = "";
 

@@ -81,7 +81,6 @@ public class Cocktail
         SetName("쓰레기", "Food Waste");
 
         Proof = 1;
-        AddTag(Define.CocktailTag.태그1);
         Info = "뭔가 잘못된 것 같다.";
     }
 }
@@ -90,9 +89,8 @@ class BetweenTheSheets : Cocktail
 {
     public BetweenTheSheets() : base(1)
     {
-        AddBase(new Vodka());
-        AddSub(new Lemon());
-        AddSub(new Curacao());
+        AddBase(new Bmt_Vodka());
+        AddSub(new Smt_GrenadineSyrup());
 
         cocktailName = CocktailName.BetweenTheSheets;
         SetName("비트윈 더 시트", "Between The Sheets");
@@ -108,9 +106,7 @@ class BlueHawaii : Cocktail
 {
     public BlueHawaii() : base(2)
     {
-        AddBase(new Tequilla());
-        AddSub(new Curacao());
-        AddSub(new Pineapple());
+        AddBase(new Bmt_Tequilla());
 
         cocktailName = CocktailName.BlueHawaii;
         SetName("블루 하와이", "Blue Hawaii");

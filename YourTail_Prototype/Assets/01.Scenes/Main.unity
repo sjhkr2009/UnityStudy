@@ -637,7 +637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxBase: 1
-  maxSub: 2
+  maxSub: 3
 --- !u!114 &696954612
 MonoBehaviour:
   m_ObjectHideFlags: 0

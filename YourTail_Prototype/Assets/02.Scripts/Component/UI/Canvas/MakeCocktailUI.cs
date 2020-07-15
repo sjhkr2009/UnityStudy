@@ -18,7 +18,8 @@ public class MakeCocktailUI : UIBase_Popup
     
     enum Buttons
     {
-        NextButton
+        NextButton,
+        RetryButton
     }
     
     enum Images
@@ -39,6 +40,7 @@ public class MakeCocktailUI : UIBase_Popup
     private void OnDestroy()
     {
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
+        GetButton((int)Buttons.RetryButton).onClick.RemoveAllListeners();
     }
     public override void Init()
     {
@@ -50,6 +52,7 @@ public class MakeCocktailUI : UIBase_Popup
         Bind<Slider>(typeof(Sliders));
 
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.SetCocktail; });
+        GetButton((int)Buttons.RetryButton).onClick.AddListener(() => { GameManager.Input.InRetryCocktail(); });
 
         if (makingImage == null)
             makingImage = GameManager.Resource.LoadImage(Define.ImageType.Cocktail, 0);

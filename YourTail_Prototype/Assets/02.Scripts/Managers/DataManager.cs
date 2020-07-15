@@ -10,10 +10,10 @@ public class DataManager : MonoBehaviour
     public List<Customers> CustomerList { get; private set; } = new List<Customers>();
     public Dictionary<string, Customers> CustomerNameData { get; private set; } = new Dictionary<string, Customers>();
 
-    public Dictionary<string, BaseMaterials> BaseMaterialData { get; private set; } = new Dictionary<string, BaseMaterials>();
-    public List<BaseMaterials> BaseMaterialList { get; private set; } = new List<BaseMaterials>();
-    public Dictionary<string, SubMaterials> SubMaterialData { get; private set; } = new Dictionary<string, SubMaterials>();
-    public List<SubMaterials> SubMaterialList { get; private set; } = new List<SubMaterials>();
+    public Dictionary<string, BaseMaterials> BaseMaterialIdData { get; private set; } = new Dictionary<string, BaseMaterials>();
+    public Dictionary<int, BaseMaterials> BaseMaterialIndexData { get; private set; } = new Dictionary<int, BaseMaterials>();
+    public Dictionary<string, SubMaterials> SubMaterialIdData { get; private set; } = new Dictionary<string, SubMaterials>();
+    public Dictionary<int, SubMaterials> SubMaterialIndexData { get; private set; } = new Dictionary<int, SubMaterials>();
     public Dictionary<string, Cocktail> CocktailData { get; private set; } = new Dictionary<string, Cocktail>();
     public List<Cocktail> CocktailList { get; private set; } = new List<Cocktail>();
 
@@ -91,11 +91,7 @@ public class DataManager : MonoBehaviour
     #endregion
 
     #region 데이터베이스 세팅
-    void Start()
-    {
-        Init();
-    }
-
+    void Start() => Init();
     void Init()
     {
         CurrentCustomer = null;
@@ -106,22 +102,61 @@ public class DataManager : MonoBehaviour
         GameManager.Input.InputMaterialSelect += SelectMaterial;
         GameManager.Input.InputMaterialInfo += SetMaterialInfo;
 
+        SetCustomers();
+        SetSpirits();
+        SetSubMaterials();
+        SetCocktails();
+    }
+    void SetCustomers()
+    {
         if (CustomerList.Count > 0) CustomerList.Clear();
-        if (BaseMaterialData.Count > 0) BaseMaterialData.Clear();
-        if (SubMaterialData.Count > 0) SubMaterialData.Clear();
-        if (CocktailData.Count > 0) CocktailData.Clear();
-        if (CocktailList.Count > 0) CocktailList.Clear();
+        if (CustomerNameData.Count > 0) CustomerNameData.Clear();
 
         AddCustomer(new Eagle());
         AddCustomer(new Dove());
+    }
+    void SetSpirits()
+    {
+        if (BaseMaterialIdData.Count > 0) BaseMaterialIdData.Clear();
+        if (BaseMaterialIndexData.Count > 0) BaseMaterialIndexData.Clear();
 
-        AddBase(new Tequilla());
-        AddBase(new Vodka());
+        AddBase(new Bmt_Tequilla());
+        AddBase(new Bmt_Vodka());
+        AddBase(new Bmt_Whisky());
+        AddBase(new Bmt_Gin());
+        AddBase(new Bmt_Rum());
 
-        AddSub(new Curacao());
-        AddSub(new Pineapple());
-        AddSub(new Lime());
-        AddSub(new Lemon());
+        AddBase(new Bmt_Brandy());
+    }
+    void SetSubMaterials()
+    {
+        if (SubMaterialIdData.Count > 0) SubMaterialIdData.Clear();
+        if (SubMaterialIndexData.Count > 0) SubMaterialIndexData.Clear();
+
+        AddSub(new Smt_OrangeJuice());
+        AddSub(new Smt_LimeJuice());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_GrenadineSyrup());
+        AddSub(new Smt_TonicWater());
+
+        AddSub(new Smt_OrangeLiqueur());
+        AddSub(new Smt_SodaWater());
+        AddSub(new Smt_Amaretto());
+        AddSub(new Smt_GingerBeer());
+        AddSub(new Smt_CoffeeLiqueur());
+
+        AddSub(new Smt_Vermouth());
+        AddSub(new Smt_Mint());
+        AddSub(new Smt_Sugar());
+        AddSub(new Smt_Campari());
+        AddSub(new Smt_CherryLiqueur());
+
+        AddSub(new Smt_Cola());
+    }
+    void SetCocktails()
+    {
+        if (CocktailData.Count > 0) CocktailData.Clear();
+        if (CocktailList.Count > 0) CocktailList.Clear();
 
         AddCocktail(new BetweenTheSheets());
         AddCocktail(new BlueHawaii());
@@ -134,15 +169,13 @@ public class DataManager : MonoBehaviour
     }
     void AddBase(BaseMaterials item)
     {
-        string id = item.Id;
-        BaseMaterialData.Add(id, item);
-        BaseMaterialList.Add(item);
+        BaseMaterialIdData.Add(item.Id, item);
+        BaseMaterialIndexData.Add(item.Index, item);
     }
     void AddSub(SubMaterials item)
     {
-        string id = item.Id;
-        SubMaterialData.Add(id, item);
-        SubMaterialList.Add(item);
+        SubMaterialIdData.Add(item.Id, item);
+        SubMaterialIndexData.Add(item.Index, item);
     }
     void AddCocktail(Cocktail item)
     {
@@ -187,7 +220,7 @@ public class DataManager : MonoBehaviour
     {
         BaseMaterials selectedBase = null;
         SubMaterials selectedSub = null;
-        if(BaseMaterialData.TryGetValue(id, out selectedBase))
+        if(BaseMaterialIdData.TryGetValue(id, out selectedBase))
         {
             if (CurrentBaseMaterials.Contains(selectedBase))
             {
@@ -197,7 +230,7 @@ public class DataManager : MonoBehaviour
             if (CurrentBaseMaterials.Count >= maxBase) RemoveCurrentBase(CurrentBaseMaterials[maxBase - 1]);
             AddCurrentBase(selectedBase);
         }
-        else if(SubMaterialData.TryGetValue(id, out selectedSub))
+        else if(SubMaterialIdData.TryGetValue(id, out selectedSub))
         {
             if (CurrentSubMaterials.Contains(selectedSub))
             {
@@ -248,83 +281,52 @@ public class DataManager : MonoBehaviour
         return CorrectCheck(CurrentCocktail, CurrentOrder);
     }
 
-    float CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)
+    int CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)
     {
         if (customer == null) customer = CustomerNameData[order.CustomerName];
 
-        int score = 0;
+        float score = 0f;
+        int checkpoint = 0;
 
         if(order.requiredCocktail != null)
         {
-
+            checkpoint++;
+            if (order.requiredCocktail == cocktail.cocktailName) score += 100f;
         }
 
-        return 0;
+        if(order.requiredProofGrade != null)
+        {
+            checkpoint++;
+            int difference = Mathf.Abs((int)order.requiredProofGrade - cocktail.GetProofGrade());
+            score += Mathf.Clamp((100f - 10 * (difference * difference)), 0f, 100f);
+        }
+
+        if(order.requiredTag != null && order.requiredTag.Count > 0)
+        {
+            checkpoint++;
+            float _score = 0;
+            foreach (Define.CocktailTag tag in order.requiredTag)
+            {
+                if (cocktail.Tags.Contains(tag)) _score += 100f;
+            }
+            score += _score / order.requiredTag.Count;
+        }
+
+        float finalScore = Mathf.Clamp(score / (float)checkpoint, 0f, 100f);
+
+        int result = 0;
+        if (finalScore > Define.Evaluate_GoodHigherThan) result = 1;
+        else if (finalScore < Define.Evaluate_BadLowerThan) result = -1;
+
+        return result;
     }
 
-    #region 폐기된 로직
-    //float CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)
-    //{
-    //    if(customer == null) customer = CustomerNameData[order.CustomerName];
-    //    Debug.Log($"{order.CustomerName} 의 현재 오더 : {customer.CurrentIndex + 1}");
-
-    //    float satisfaction = 0f;
-    //    float checkpoint = 0f;
-
-    //    if (order.requiredCocktail != null)
-    //    {
-    //        checkpoint++;
-    //        Debug.Log($"요구 칵테일 : {order.requiredCocktail} / 제공된 칵테일 : {cocktail.cocktailName}");
-    //        if (cocktail.cocktailName == order.requiredCocktail) satisfaction += 100f;
-    //    }
-    //    if (order.requiredSweet != null)
-    //    {
-    //        checkpoint++;
-    //        Debug.Log($"요구 당도 : {order.requiredSweet} / 제공된 당도 : {cocktail.Sweetness}");
-    //        satisfaction += SatisfactionCheck(cocktail.Sweetness, (int)order.requiredSweet);
-    //    }
-    //    if (order.requiredProof != null)
-    //    {
-    //        checkpoint++;
-    //        Debug.Log($"요구 도수 : {order.requiredProof} / 제공된 도수 : {cocktail.Proof}");
-    //        satisfaction += SatisfactionCheck(cocktail.Proof, (int)order.requiredProof);
-    //    }
-    //    if (order.requiredFresh != null)
-    //    {
-    //        checkpoint++;
-    //        Debug.Log($"요구 청량감 : {order.requiredFresh} / 제공된 청량감 : {cocktail.Refreshment}");
-    //        satisfaction += SatisfactionCheck(cocktail.Refreshment, (int)order.requiredFresh);
-    //    }
-
-    //    if (checkpoint == 0) checkpoint = 1f;
-    //    float successPoint = Mathf.Clamp(satisfaction / checkpoint, 0f, 100f);
-
-    //    Debug.Log("만족도 : " + successPoint);
-
-    //    if (successPoint >= 75f) customer.CurrentIndex++;
-
-    //    Debug.Log($"{order.CustomerName} 의 평가 후 오더 : {customer.CurrentIndex + 1}");
-
-    //    return successPoint;
-    //}
-    //private float SatisfactionCheck(int current, int required)
-    //{
-    //    int difference = Mathf.Abs(required - current);
-    //    switch (difference)
-    //    {
-    //        case 0:
-    //            return 100f;
-    //        case 1:
-    //            return 85f;
-    //        case 2:
-    //            return 60f;
-    //        case 3:
-    //            return 30f;
-    //        default:
-    //            return 0f;
-    //    }
-    //}
-    #endregion
+    public void OnRetry()
+    {
+        CurrentBaseMaterials.Clear();
+        CurrentSubMaterials.Clear();
+        CurrentCocktail = null;
+    }
     void CurrentReset()
     {
         CurrentCustomer = null;
