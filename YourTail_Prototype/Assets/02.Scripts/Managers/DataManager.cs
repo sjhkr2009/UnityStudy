@@ -158,8 +158,34 @@ public class DataManager : MonoBehaviour
         if (CocktailData.Count > 0) CocktailData.Clear();
         if (CocktailList.Count > 0) CocktailList.Clear();
 
-        AddCocktail(new BetweenTheSheets());
-        AddCocktail(new BlueHawaii());
+        AddCocktail(new Ckt_TequillaSunrise());
+        AddCocktail(new Ckt_TequillaTonic());
+        AddCocktail(new Ckt_Margarita());
+        AddCocktail(new Ckt_Paloma());
+        AddCocktail(new Ckt_GodMother());
+
+        AddCocktail(new Ckt_MoscowMule());
+        AddCocktail(new Ckt_VodkaTonic());
+        AddCocktail(new Ckt_BlackRussian());
+        AddCocktail(new Ckt_Screwdriver());
+        AddCocktail(new Ckt_Cosmopolitan());
+
+        AddCocktail(new Ckt_GodFather());
+        AddCocktail(new Ckt_Manhattan());
+        AddCocktail(new Ckt_MintJulep());
+        AddCocktail(new Ckt_WhiskeySour());
+        AddCocktail(new Ckt_HighBall());
+
+        AddCocktail(new Ckt_Negroni());
+        AddCocktail(new Ckt_DryMartini());
+        AddCocktail(new Ckt_Aviation());
+        AddCocktail(new Ckt_GinTonic());
+        AddCocktail(new Ckt_PinkLady());
+
+        AddCocktail(new Ckt_Daiquiri());
+        AddCocktail(new Ckt_Mojito());
+        AddCocktail(new Ckt_Bacardi());
+        AddCocktail(new Ckt_CubaLibre());
     }
     
     void AddCustomer(Customers item)
