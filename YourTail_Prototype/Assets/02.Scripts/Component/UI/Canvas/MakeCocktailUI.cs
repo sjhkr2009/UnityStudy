@@ -46,6 +46,8 @@ public class MakeCocktailUI : UIBase_Popup
     {
         base.Init();
 
+        GameManager.UI.OpenPopupUI<CocktailMaking>();
+
         Bind<Text>(typeof(Texts));
         Bind<Button>(typeof(Buttons));
         Bind<Image>(typeof(Images));
@@ -60,7 +62,7 @@ public class MakeCocktailUI : UIBase_Popup
         Image cocktailImage = GetImage((int)Images.CocktailImage);
         cocktailImage.sprite = makingImage;
 
-        cocktailImage.transform.DORotate(Vector3.forward * -720f, 2.5f, RotateMode.LocalAxisAdd).OnComplete(() =>
+        cocktailImage.transform.DORotate(Vector3.forward * -360f, 1f, RotateMode.LocalAxisAdd).OnComplete(() =>
         {
             Debug.Log("칵테일 출력");
             myCocktail = GameManager.Data.CurrentCocktail;
