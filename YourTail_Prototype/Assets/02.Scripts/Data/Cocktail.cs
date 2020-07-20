@@ -54,18 +54,27 @@ public class Cocktail
     {
         BaseMaterials.Add(material);
         BaseIDList.Add(material.Id);
+        AddTag(material.Tags);
     }
     protected void AddSub(SubMaterials material)
     {
         SubMaterials.Add(material);
         SubIDList.Add(material.Id);
+        AddTag(material.Tags);
     }
 
     public int Proof { get; protected set; }
     public List<Define.CocktailTag> Tags { get; private set; } = new List<Define.CocktailTag>();
     public string Info { get; protected set; }
 
-    protected void AddTag(Define.CocktailTag tag) => Tags.Add(tag);
+    protected void AddTag(Define.CocktailTag tag) { if(!Tags.Contains(tag)) Tags.Add(tag); }
+    protected void AddTag(List<Define.CocktailTag> tags)
+    {
+        foreach (Define.CocktailTag tag in tags)
+        {
+            AddTag(tag);
+        }
+    }
     public List<string> GetTagToString()
     {
         List<string> tagList = new List<string>();

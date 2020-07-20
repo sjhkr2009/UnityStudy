@@ -26,9 +26,30 @@ public class Define
 
     public enum CocktailTag
     {
-        태그1,
-        태그2,
-        태그3
+        Null,
+        데킬라,
+        보드카,
+        위스키,
+        진,
+        럼,
+        브랜디,
+        주스,
+        과일,
+        시럽,
+        오렌지,
+        라임,
+        레몬,
+        석류,
+        탄산,
+        리큐어,
+        아몬드,
+        생강,
+        주류,
+        커피,
+        민트,
+        설탕,
+        체리,
+        음료수
     }
 
     public const float CocktailMaxProof = 50f;

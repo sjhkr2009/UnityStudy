@@ -18,6 +18,8 @@ public class CocktailMaterials
             Id = "S" + code.ToString();
     }
 
+    public List<Define.CocktailTag> Tags { get; protected set; } = new List<Define.CocktailTag>();
+
     public Sprite image;
     public enum MaterialType
     {
