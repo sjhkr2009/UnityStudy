@@ -16,12 +16,19 @@ public class Define
     {
         BGM,
         FX,
+        LoopFX,
         Count
     }
 
     public enum EventType
     {
         Click
+    }
+
+    public enum CustomerType
+    {
+        Eagle,
+        Dove
     }
 
     public enum CocktailTag

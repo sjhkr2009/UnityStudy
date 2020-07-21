@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Customers
 {
-    protected List<Order> wishlist = new List<Order>();
+    protected Dictionary<int, List<Order>> wishlist = new Dictionary<int, List<Order>>();
     public string Name { get; protected set; }
+    public string ID { get; private set; }
     public Sprite image;
     public float Satisfaction { get; set; }
-    public int _currentIndex;
+    public int Level { get; set; }
+    private int _currentIndex;
     public int CurrentIndex
     {
         get => _currentIndex;
@@ -18,11 +20,14 @@ public class Customers
             else _currentIndex = (value % wishlist.Count);
         }
     }
-    public Order GetOrder()
+    protected void SetWishlist(int maxLevel)
     {
-        return wishlist[CurrentIndex];
+        for (int i = 1; i <= maxLevel; i++)
+            wishlist.Add(i, new List<Order>());
     }
-    protected void SetOrder(string orderContents, CocktailName? requiredCocktail = null, int? requiredProofGrade = null, List<Define.CocktailTag> requiredTags = null)
+    public Order GetOrder() => wishlist[Level][CurrentIndex];
+    public Order GetRandomOrder() => wishlist[Level][Random.Range(0, wishlist[Level].Count)];
+    protected void SetOrder(int level, string orderContents, CocktailName? requiredCocktail = null, int? requiredProofGrade = null, List<Define.CocktailTag> requiredTags = null)
     {
         Order order = new Order();
         order.requiredCocktail = (requiredCocktail != null) ? requiredCocktail : null;
@@ -30,12 +35,14 @@ public class Customers
         order.requiredTag = (requiredTags != null) ? requiredTags : null;
         order.orderContents = orderContents;
         order.CustomerName = Name;
-        wishlist.Add(order);
+        wishlist[level].Add(order);
     }
-    public Customers(int imageIndex)
+    public Customers(int index)
     {
         CurrentIndex = 0;
-        image = GameManager.Resource.LoadImage(Define.ImageType.Customer, imageIndex);
+        Level = 1;
+        ID = $"CT{index}";
+        image = GameManager.Resource.LoadImage(Define.ImageType.Customer, index);
     }
 }
 
@@ -45,8 +52,8 @@ public class Eagle : Customers
     {
         Name = "독수리";
         
-        SetOrder("비트윈 더 시트 주세요.", requiredProofGrade: 4);
-        SetOrder("뒷맛 깔끔한 걸로 한 잔 부탁드려요.", requiredProofGrade: 2);
+        SetOrder(1, "비트윈 더 시트 주세요.", requiredProofGrade: 4);
+        SetOrder(1, "뒷맛 깔끔한 걸로 한 잔 부탁드려요.", requiredProofGrade: 2);
     }
 }
 
@@ -56,8 +63,8 @@ public class Dove : Customers
     {
         Name = "비둘기";
 
-        SetOrder("블루 하와이! 비슷한거라도 좋아요.", requiredProofGrade: 2);
-        SetOrder("적당한걸로...", requiredProofGrade: 3);
+        SetOrder(1, "블루 하와이! 비슷한거라도 좋아요.", requiredProofGrade: 2);
+        SetOrder(2, "적당한걸로...", requiredProofGrade: 3);
     }
 }
 
