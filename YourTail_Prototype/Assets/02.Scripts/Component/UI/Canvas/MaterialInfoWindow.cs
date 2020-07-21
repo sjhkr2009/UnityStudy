@@ -14,7 +14,12 @@ public class MaterialInfoWindow : UIBase_Popup
     }
     enum Images
     {
-        MaterialImage
+        MaterialImage,
+        IconBackground
+    }
+    enum Transforms
+    {
+        IconBackground
     }
 
     private void Start() => Init();
@@ -25,6 +30,7 @@ public class MaterialInfoWindow : UIBase_Popup
 
         Bind<Text>(typeof(Texts));
         Bind<Image>(typeof(Images));
+        Bind<RectTransform>(typeof(Transforms));
 
         SetInfo();
     }
@@ -35,5 +41,16 @@ public class MaterialInfoWindow : UIBase_Popup
         GetText((int)Texts.Info).text = myMaterial.Info;
 
         GetImage((int)Images.MaterialImage).sprite = myMaterial.image;
+
+
+        if (myMaterial.materialType == CocktailMaterials.MaterialType.Base)
+        {
+            GetImage((int)Images.IconBackground).enabled = false;
+            Get<RectTransform>((int)Transforms.IconBackground).sizeDelta = Define.baseMaterialSize;
+        }
+        else
+        {
+            GetImage((int)Images.IconBackground).enabled = true;
+        }
     }
 }

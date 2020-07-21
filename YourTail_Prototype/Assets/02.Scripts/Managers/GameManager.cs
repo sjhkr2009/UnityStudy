@@ -60,6 +60,9 @@ public class GameManager : MonoBehaviour
             _gameState = value;
             switch (value)
             {
+                case GameState.Idle:
+                    MainInIdle();
+                    break;
                 case GameState.Order:
                     MainInOrder();
                     break;
@@ -113,6 +116,10 @@ public class GameManager : MonoBehaviour
         Input.OnUpdate();
     }
 
+    void MainInIdle()
+    {
+        UI.CloseAllPopup();
+    }
     void MainInOrder()
     {
         Data.CurrentCocktail = new Cocktail();
@@ -139,7 +146,7 @@ public class GameManager : MonoBehaviour
     void MainInSetCocktail()
     {
         UI.CloseAllPopup();
-        DOVirtual.DelayedCall(0.65f, () => { GameState = GameState.Idle; });
+        UI.OpenPopupUI<SetCocktailUI>();
     }
 
     //임시 진행 버튼

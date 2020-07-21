@@ -56,4 +56,6 @@ public class Define
 
     public const float Evaluate_GoodHigherThan = 70f;
     public const float Evaluate_BadLowerThan = 30f;
+
+    public static Vector2 baseMaterialSize => new Vector2(170f, 586f);
 }

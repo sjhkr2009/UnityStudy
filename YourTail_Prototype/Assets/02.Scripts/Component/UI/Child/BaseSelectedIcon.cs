@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class BaseSelectedIcon : MonoBehaviour
+public class BaseSelectedIcon : MonoBehaviour, IPointerClickHandler
 {
     BaseMaterials selectedMaterial = null;
     Image myImage;
@@ -64,5 +65,13 @@ public class BaseSelectedIcon : MonoBehaviour
         //selectedMaterial = null;
         //myImage.sprite = null;
         SetIcon();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(selectedMaterial != null)
+        {
+            GameManager.Input.InMaterialSelect(selectedMaterial.Id);
+        }
     }
 }

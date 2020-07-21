@@ -88,6 +88,8 @@ public class DataManager : MonoBehaviour
     public Action<SubMaterials> OnAddSubMaterial = n => { };
     public Action<SubMaterials> OnRemoveSubMaterial = n => { };
 
+    public int CurrentGrade { get; private set; }
+
     #endregion
 
     #region 데이터베이스 세팅
@@ -215,6 +217,9 @@ public class DataManager : MonoBehaviour
     {
         switch (state)
         {
+            case GameState.Idle:
+                CurrentReset();
+                break;
             case GameState.Order:
                 break;
             case GameState.SelectBase:
@@ -223,11 +228,10 @@ public class DataManager : MonoBehaviour
                 break;
             case GameState.Combine:
                 CurrentCocktail = MakeCocktail(CurrentBaseMaterials, CurrentSubMaterials);
-                Debug.Log($"조합: {CurrentCocktail.cocktailName} 칵테일");
+                CurrentCorrectCheck();
                 break;
             case GameState.SetCocktail:
-                CurrentCorrectCheck();
-                DOVirtual.DelayedCall(0.5f, CurrentReset);
+                //데이터 저장
                 break;
         }
     }
@@ -302,9 +306,9 @@ public class DataManager : MonoBehaviour
 
         return empty;
     }
-    public float CurrentCorrectCheck()
+    void CurrentCorrectCheck()
     {
-        return CorrectCheck(CurrentCocktail, CurrentOrder);
+        CurrentGrade = CorrectCheck(CurrentCocktail, CurrentOrder);
     }
 
     int CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)

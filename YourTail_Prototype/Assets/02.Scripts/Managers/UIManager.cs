@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Sirenix.OdinInspector;
 
-public class UIManager : MonoBehaviour
+public class UIManager
 {
     Stack<UIBase_Popup> popupUI = new Stack<UIBase_Popup>();
     List<UIBase_Scene> sceneUI = new List<UIBase_Scene>();

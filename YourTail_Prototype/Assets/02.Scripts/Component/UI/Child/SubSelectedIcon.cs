@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SubSelectedIcon : MonoBehaviour
+public class SubSelectedIcon : MonoBehaviour, IPointerClickHandler
 {
     // BaseSelectedIcon이랑 하나로 합치고싶긴 한데 마감이 급해서 복붙한 스끄립-뜨
 
@@ -67,5 +68,13 @@ public class SubSelectedIcon : MonoBehaviour
         //    myImage.sprite = null;
         //}
         SetIcon();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (selectedMaterial != null)
+        {
+            GameManager.Input.InMaterialSelect(selectedMaterial.Id);
+        }
     }
 }
