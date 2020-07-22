@@ -7,6 +7,7 @@ using DG.Tweening;
 
 public class DataManager : MonoBehaviour
 {
+    public static ScriptableData GameData => GameManager.Resource.LoadDatabase();
     public List<Customers> CustomerList { get; private set; } = new List<Customers>();
     public Dictionary<string, Customers> CustomerNameData { get; private set; } = new Dictionary<string, Customers>();
 
@@ -22,7 +23,18 @@ public class DataManager : MonoBehaviour
     public CocktailMaterials CurrentMaterialInfo { get; set; }
     void SetMaterialInfo(CocktailMaterials material) => CurrentMaterialInfo = material;
 
-    #region 현재 정보
+    #region 현재 저장중인 정보
+
+    public List<Cocktail> Recipe { get; set; } = new List<Cocktail>();
+    public List<SubMaterials> CollectedMaterial { get; set; } = new List<SubMaterials>();
+    public int BirdCoin { get; private set; }
+    public Action<int> OnSetCoin = n => { };
+    public void SetBirdCoin(int value)
+    {
+        BirdCoin = value;
+        OnSetCoin(value); //UI 갱신
+    }
+
     [ShowInInspector] private Order _currentOrder { get; set; }
     public Action<Order> OnSetOrder = n => { };
     public Order CurrentOrder
@@ -92,7 +104,7 @@ public class DataManager : MonoBehaviour
 
     #endregion
 
-    #region 데이터베이스 세팅
+    #region 데이터 초기 세팅
     void Start() => Init();
     void Init()
     {
@@ -115,7 +127,7 @@ public class DataManager : MonoBehaviour
         if (CustomerNameData.Count > 0) CustomerNameData.Clear();
 
         AddCustomer(new Eagle());
-        AddCustomer(new Dove());
+        AddCustomer(new Goni());
     }
     void SetSpirits()
     {
@@ -188,6 +200,21 @@ public class DataManager : MonoBehaviour
         AddCocktail(new Ckt_Mojito());
         AddCocktail(new Ckt_Bacardi());
         AddCocktail(new Ckt_CubaLibre());
+        AddCocktail(new Ckt_Gimlet());
+
+        AddCocktail(new Ckt_OrangeBlossom());
+        AddCocktail(new Ckt_GinDaisy());
+        AddCocktail(new Ckt_GinBuck());
+        AddCocktail(new Ckt_GinFizz());
+        AddCocktail(new Ckt_CampariCocktail());
+
+        AddCocktail(new Ckt_KissInTheDark());
+        AddCocktail(new Ckt_WhiteLady());
+        AddCocktail(new Ckt_Ambassador());
+        AddCocktail(new Ckt_TequilaSunset());
+        AddCocktail(new Ckt_Mexicola());
+
+        AddCocktail(new Ckt_FrozenMargarita());
     }
     
     void AddCustomer(Customers item)
@@ -212,7 +239,8 @@ public class DataManager : MonoBehaviour
         CocktailList.Add(item);
     }
     #endregion
-    
+
+    #region 게임 진행 관련
     public void OnGameStateChange(GameState state)
     {
         switch (state)
@@ -351,6 +379,39 @@ public class DataManager : MonoBehaviour
         return result;
     }
 
+    #endregion
+
+    #region 저장 및 리셋
+    public void SaveCurrentToGameData()
+    {
+        foreach (Customers item in CustomerList)
+        {
+            GameData.SetLevel(item.Name, item.Level);
+        }
+        GameData.SetBirdcoin(BirdCoin);
+        foreach (Cocktail item in Recipe)
+        {
+            GameData.SetRecipe(item.Id);
+        }
+
+        GameData.Save();
+    }
+    public void LoadGameData()
+    {
+        GameData.Load();
+
+        foreach (var item in GameData.CustomerLevel)
+        {
+            CustomerNameData[item.Key].Level = item.Value;
+        }
+        BirdCoin = GameData.Birdcoin;
+        Recipe.Clear();
+        foreach (string item in GameData.CollectedRecipe)
+        {
+            Recipe.Add(CocktailData[item]);
+        }
+    }
+
     public void OnRetry()
     {
         CurrentBaseMaterials.Clear();
@@ -365,4 +426,5 @@ public class DataManager : MonoBehaviour
         CurrentBaseMaterials.Clear();
         CurrentSubMaterials.Clear();
     }
+    #endregion
 }

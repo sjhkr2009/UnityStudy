@@ -12,6 +12,8 @@ public class ResourceManager
         return loaded;
     }
 
+    public ScriptableData LoadDatabase() => Load<ScriptableData>("Data/GameData");
+
     public Sprite LoadImage(Define.ImageType type, int id)
     {
         ScriptableImages data = SelectData(type);

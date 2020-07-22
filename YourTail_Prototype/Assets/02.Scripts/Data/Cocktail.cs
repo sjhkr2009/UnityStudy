@@ -29,7 +29,19 @@ public enum CocktailName
     Daiquiri = 21,
     Mojito = 22,
     Bacardi = 23,
-    CubaLibre = 24
+    CubaLibre = 24,
+    Gimlet = 25,
+    OrangeBlossom = 26,
+    GinDaisy = 27,
+    GinBuck= 28,
+    GinFizz = 29,
+    CampariCocktail = 30,
+    KissInTheDark = 31,
+    WhiteLady = 32,
+    Ambassador = 33,
+    TequilaSunset = 34,
+    Mexicola = 35,
+    FrozenMargarita = 36
 }
 
 public class Cocktail
@@ -86,11 +98,11 @@ public class Cocktail
     }
     public int GetProofGrade()
     {
-        if (Proof <= 5) return 0;
-        else if (Proof <= 10) return 1;
-        else if (Proof <= 19) return 2;
-        else if (Proof <= 30) return 3;
-        else return 4;
+        if (Proof <= 5) return (int)Define.ProofGrade.매우약함;
+        else if (Proof <= 10) return (int)Define.ProofGrade.약함;
+        else if (Proof <= 19) return (int)Define.ProofGrade.중간;
+        else if (Proof <= 30) return (int)Define.ProofGrade.셈;
+        else return (int)Define.ProofGrade.매우셈;
     }
 
     public string Id { get; private set; }
@@ -443,5 +455,172 @@ class Ckt_CubaLibre : Cocktail
 
         Proof = 9;
         Info = "럼과 콜라의 상쾌한 만남. 한 잔 마시면 쿠바 독립 전쟁에서 잠시 목을 축이던 병사의 상쾌한 기분을 느낄 수 있다.";
+    }
+}
+class Ckt_Gimlet : Cocktail
+{
+    public Ckt_Gimlet() : base(25)
+    {
+        AddBase(new Bmt_Gin());
+        AddSub(new Smt_LimeJuice());
+
+        SetName("김렛", "Gimlet");
+
+        Proof = 33;
+        Info = "깔끔한 진에 상쾌한 라임으로 하루의 상쾌함을 전해 주는 칵테일. 주당이 아니라면 딱 한 잔만 들도록 하자.";
+    }
+}
+class Ckt_OrangeBlossom : Cocktail
+{
+    public Ckt_OrangeBlossom() : base(26)
+    {
+        AddBase(new Bmt_Gin());
+        AddSub(new Smt_OrangeJuice());
+
+        SetName("오렌지 블로섬", "Orange Blossom");
+
+        Proof = 31;
+        Info = "옛날 금주법 시행 때 몰래 술을 마시던 사람들은, 진의 냄새를 없애기 위해 오렌지를 사용했다고 한다.";
+    }
+}
+class Ckt_GinDaisy : Cocktail
+{
+    public Ckt_GinDaisy() : base(27)
+    {
+        AddBase(new Bmt_Gin());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_GrenadineSyrup());
+
+        SetName("진 데이지", "Gin Daisy");
+
+        Proof = 16;
+        Info = "데이지 꽃을 연상시키는 우아한 핑크색의 술. 은은한 과일향에 톡 쏘는 맛이 일품이다.";
+    }
+}
+class Ckt_GinBuck : Cocktail
+{
+    public Ckt_GinBuck() : base(28)
+    {
+        AddBase(new Bmt_Gin());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_GingerBeer());
+
+        SetName("진 벅", "Gin Buck");
+
+        Proof = 16;
+        Info = "탄산음료처럼 가볍고 상쾌한 맛을 자랑한며 입문자가 마시기에도 무난하다.";
+    }
+}
+class Ckt_GinFizz : Cocktail
+{
+    public Ckt_GinFizz() : base(29)
+    {
+        AddBase(new Bmt_Gin());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_SodaWater());
+        AddSub(new Smt_Sugar());
+
+        SetName("진 피즈", "Gin Fizz");
+
+        Proof = 16;
+        Info = "달면서도 톡 쏘는 청량감을 가진 술. 소다수가 첨가되어 표면에서 기포 터지는 소리가 '피즈-' 와 비슷하다고 한다.";
+    }
+}
+class Ckt_CampariCocktail : Cocktail
+{
+    public Ckt_CampariCocktail() : base(30)
+    {
+        AddBase(new Bmt_Gin());
+        AddSub(new Smt_Campari());
+
+        SetName("캄파리 칵테일", "Campari Cocktail");
+
+        Proof = 36;
+        Info = "캄파리 본연의 맛을 살린 칵테일. 다소 씁쓸한 맛이 약주를 마시는 느낌을 준다.";
+    }
+}
+class Ckt_KissInTheDark : Cocktail
+{
+    public Ckt_KissInTheDark() : base(31)
+    {
+        AddBase(new Bmt_Gin());
+        AddSub(new Smt_CherryLiqueur());
+        AddSub(new Smt_Vermouth());
+
+        SetName("키스 인 더 다크", "Kiss in the Dark");
+
+        Proof = 30;
+        Info = "진한 사랑을 담은 듯 어두운 붉은색의 칵테일. 몽환적인 단향에 농염한 맛이 난다. ";
+    }
+}
+class Ckt_WhiteLady : Cocktail
+{
+    public Ckt_WhiteLady() : base(32)
+    {
+        AddBase(new Bmt_Gin());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_OrangeLiqueur());
+
+        SetName("화이트 레이디", "White Lady");
+
+        Proof = 34;
+        Info = "흰 옷의 귀부인을 연상시키는 고급스러운 칵테일. 이름 덕분에 '핑크 레이디'와 함께 젊은 여성들 사이에서 인기가 많다.";
+    }
+}
+class Ckt_Ambassador : Cocktail
+{
+    public Ckt_Ambassador() : base(33)
+    {
+        AddBase(new Bmt_Tequilla());
+        AddSub(new Smt_OrangeJuice());
+        AddSub(new Smt_Sugar());
+
+        SetName("앰배서더", "Ambassador");
+
+        Proof = 11;
+        Info = "데킬라의 쌉쌀함을 단맛으로 중화시킨 술. 데킬라의 개성은 살리고 부담은 덜어 칵테일에 익숙하지 않은 사람도 무난하게 즐길 수 있다.";
+    }
+}
+class Ckt_TequilaSunset : Cocktail
+{
+    public Ckt_TequilaSunset() : base(34)
+    {
+        AddBase(new Bmt_Tequilla());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_GrenadineSyrup());
+
+        SetName("데킬라 선셋", "Tequila Sunset");
+
+        Proof = 5;
+        Info = "해질 무렵의 노을을 연상시키는 주홍빛의 칵테일. 레몬으로 상쾌한 맛을 더했으며 원래 레시피보다 데킬라 양을 줄여 저녁에 가볍게 한 잔 즐길 수 있도록 제조했다.";
+    }
+}
+class Ckt_Mexicola : Cocktail
+{
+    public Ckt_Mexicola() : base(35)
+    {
+        AddBase(new Bmt_Tequilla());
+        AddSub(new Smt_LimeJuice());
+        AddSub(new Smt_Cola());
+
+        SetName("멕시콜라", "Mexicola");
+
+        Proof = 12;
+        Info = "멕시코의 데킬라에 미국의 콜라를 섞어 조화로운 맛을 낸 아메리카 화합의 장.";
+    }
+}
+class Ckt_FrozenMargarita : Cocktail
+{
+    public Ckt_FrozenMargarita() : base(36)
+    {
+        AddBase(new Bmt_Tequilla());
+        AddSub(new Smt_LimeJuice());
+        AddSub(new Smt_OrangeLiqueur());
+        AddSub(new Smt_Sugar());
+
+        SetName("프로즌 마르가리타", "Frozen Margarita");
+
+        Proof = 10;
+        Info = "알코올의 양을 덜어 부담은 줄이고, 얼음과 설탕으로 시원한 맛을 더한 마가리타. 푸른색 리큐어를 사용하여 보기만 해도 청량감이 느껴진다.";
     }
 }

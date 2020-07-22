@@ -28,7 +28,7 @@ public class Define
     public enum CustomerType
     {
         Eagle,
-        Dove
+        Goni
     }
 
     public enum CocktailTag
@@ -57,6 +57,15 @@ public class Define
         설탕,
         체리,
         음료수
+    }
+
+    public enum ProofGrade
+    {
+        매우약함 = 0,
+        약함 = 1,
+        중간 = 2,
+        셈 = 3,
+        매우셈 = 4
     }
 
     public const float CocktailMaxProof = 50f;
