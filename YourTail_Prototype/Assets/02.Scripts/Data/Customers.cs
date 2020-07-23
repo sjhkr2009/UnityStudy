@@ -7,9 +7,21 @@ public class Customers
     protected Dictionary<int, List<Order>> wishlist = new Dictionary<int, List<Order>>();
     public string Name { get; protected set; }
     public string ID { get; private set; }
+    public Define.CustomerType CustomerType { get; private set; }
     public Sprite image;
     public float Satisfaction { get; set; }
-    public int Level { get; set; }
+    private int _level = 1;
+    public int MaxLevel { get; private set; }
+    protected void SetMaxLevel(int value)
+    {
+        MaxLevel = value;
+        Level = 1;
+    }
+    public int Level
+    {
+        get => _level;
+        set { _level = Mathf.Clamp(value, 1, MaxLevel); }
+    }
     private int _currentIndex;
     public int CurrentIndex
     {
@@ -25,7 +37,7 @@ public class Customers
         for (int i = 1; i <= maxLevel; i++)
             wishlist.Add(i, new List<Order>());
     }
-    public Order GetOrder() => wishlist[Level][CurrentIndex];
+    public Order GetOrder() => wishlist[Level][CurrentIndex++];
     public Order GetRandomOrder() => wishlist[Level][Random.Range(0, wishlist[Level].Count)];
     protected void SetOrder(int level, string orderContents, CocktailName? requiredCocktail = null, int? requiredProofGrade = null, List<Define.CocktailTag> requiredTags = null)
     {
@@ -41,7 +53,7 @@ public class Customers
     public Customers(int index)
     {
         CurrentIndex = 0;
-        Level = 1;
+        CustomerType = (Define.CustomerType)index;
         ID = $"CT{index}";
         image = GameManager.Resource.LoadImage(Define.ImageType.Customer, index);
     }
@@ -52,7 +64,8 @@ public class Eagle : Customers
     public Eagle() : base(1)
     {
         Name = "머머리 독수리";
-        
+        SetMaxLevel(1);
+
         SetOrder(1, "제일 독한걸로 하나 줘 보게. 요즘 술들은 술 같지가 않아.", requiredProofGrade: (int)Define.ProofGrade.매우셈);
         SetOrder(1, "알록달록한 건 됐으니께 소주 한 잔 주쇼. 왜 그 손주놈이 마트에서 토닉 뭐시기 사 와서 비스무리하게 만들더만, 그거 있잖수?", requiredCocktail: CocktailName.GinTonic);
         SetOrder(1, "마시고 취할만한 걸로 하나 주시게. 옛날 소주정도면 딱 좋겠군.", requiredProofGrade: (int)Define.ProofGrade.셈);
@@ -66,6 +79,7 @@ public class Goni : Customers
     public Goni() : base(2)
     {
         Name = "고니";
+        SetMaxLevel(1);
 
         SetOrder(1, "오렌지 블로섬 주세요.", requiredCocktail: CocktailName.OrangeBlossom);
         SetOrder(1, "드라이 마티니 주세요.", requiredCocktail: CocktailName.DryMartini);

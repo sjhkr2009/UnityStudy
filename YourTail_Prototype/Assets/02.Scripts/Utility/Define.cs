@@ -27,8 +27,10 @@ public class Define
 
     public enum CustomerType
     {
-        Eagle,
-        Goni
+        None,
+        Eagle = 1,
+        Goni = 2
+
     }
 
     public enum CocktailTag
@@ -72,6 +74,9 @@ public class Define
 
     public const float Evaluate_GoodHigherThan = 70f;
     public const float Evaluate_BadLowerThan = 30f;
+
+    public const float DoTextSpeed = 0.025f;
+    public const float DoTextSpeedFast = 0.015f;
 
     public static Vector2 baseMaterialSize => new Vector2(170f, 586f);
 }

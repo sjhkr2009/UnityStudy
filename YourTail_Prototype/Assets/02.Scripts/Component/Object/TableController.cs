@@ -26,6 +26,7 @@ public class TableController : MonoBehaviour
         EscapeOnClick clickMethod = selectUI.GetOrAddComponent<EscapeOnClick>();
         clickMethod.isUI = false;
         clickMethod.interactableOn.Add(GameState.Order);
+        clickMethod.interactableOn.Add(GameState.Idle);
         GameManager.Input.InputEscape -= CancelOrder;
         GameManager.Input.InputEscape += CancelOrder;
 

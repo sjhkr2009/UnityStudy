@@ -91,13 +91,13 @@ public class GameManager : MonoBehaviour
         Sound.Init();
 
         Input.InputStateChange -= StateChange;
-        Input.InputNextState -= InNextState;
+        //Input.InputNextState -= InNextState;
         Input.InputEscape -= OnEscape;
         Input.InputRetryCocktail -= OnRetryCocktail;
         OnGameStateChange -= Data.OnGameStateChange;
 
         Input.InputStateChange += StateChange;
-        Input.InputNextState += InNextState;
+        //Input.InputNextState += InNextState;
         Input.InputEscape += OnEscape;
         Input.InputRetryCocktail += OnRetryCocktail;
         OnGameStateChange += Data.OnGameStateChange;
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         Input.InputStateChange -= StateChange;
-        Input.InputNextState -= InNextState;
+        //Input.InputNextState -= InNextState;
         Input.InputEscape -= OnEscape;
         Input.InputRetryCocktail -= OnRetryCocktail;
         OnGameStateChange -= Data.OnGameStateChange;
@@ -127,14 +127,12 @@ public class GameManager : MonoBehaviour
 
     void MainInSelectBase()
     {
-        Debug.Log("베이스 재료 선택");
         UI.ClosePopupUI<SelectSubMaterialUI>();
         UI.OpenPopupUI<SelectBaseMaterialUI>();
     }
 
     void MainInSelectSub()
     {
-        Debug.Log("부재료 선택");
         UI.ClosePopupUI<SelectBaseMaterialUI>();
         UI.OpenPopupUI<SelectSubMaterialUI>();
     }
@@ -147,16 +145,19 @@ public class GameManager : MonoBehaviour
     {
         UI.CloseAllPopup();
         UI.OpenPopupUI<SetCocktailUI>();
+
+        //테스트용
+        if (Data.CurrentCustomer == Data.CustomerNameData[new Eagle().Name]) UI.OpenPopupUI<DialogUI>();
     }
 
     //임시 진행 버튼
-    void InNextState()
-    {
-        GameState = (GameState)(((int)GameState + 1) % 6);
-    }
+    //void InNextState()
+    //{
+    //    GameState = (GameState)(((int)GameState + 1) % 6);
+    //}
     void OnEscape()
     {
-        UI.TryClosePopupUI<MaterialInfoWindow>(); //추후 실패 시 옵션창을 띄울 것.
+        UI.TryClosePopupUI<MaterialInfoWindow>(); //추후 옵션창을 추가하게 된다면, 실패 시 옵션창을 띄울 것.
     }
     void OnRetryCocktail()
     {

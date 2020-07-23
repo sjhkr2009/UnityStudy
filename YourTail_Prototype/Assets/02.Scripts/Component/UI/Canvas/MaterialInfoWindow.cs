@@ -21,6 +21,10 @@ public class MaterialInfoWindow : UIBase_Popup
     {
         IconBackground
     }
+    enum Buttons
+    {
+        CloseButton
+    }
 
     private void Start() => Init();
     public override void Init()
@@ -31,8 +35,11 @@ public class MaterialInfoWindow : UIBase_Popup
         Bind<Text>(typeof(Texts));
         Bind<Image>(typeof(Images));
         Bind<RectTransform>(typeof(Transforms));
+        Bind<Button>(typeof(Buttons));
 
         SetInfo();
+
+        GetButton((int)Buttons.CloseButton).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<MaterialInfoWindow>(); });
     }
 
     void SetInfo()
@@ -52,5 +59,10 @@ public class MaterialInfoWindow : UIBase_Popup
         {
             GetImage((int)Images.IconBackground).enabled = true;
         }
+    }
+
+    private void OnDestroy()
+    {
+        GetButton((int)Buttons.CloseButton).onClick.RemoveAllListeners();
     }
 }

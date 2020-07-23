@@ -8,6 +8,7 @@ using DG.Tweening;
 public class DataManager : MonoBehaviour
 {
     public static ScriptableData GameData => GameManager.Resource.LoadDatabase();
+    public static ScriptableTexts DialogData => GameManager.Resource.LoadDialogData();
     public List<Customers> CustomerList { get; private set; } = new List<Customers>();
     public Dictionary<string, Customers> CustomerNameData { get; private set; } = new Dictionary<string, Customers>();
 
@@ -33,6 +34,11 @@ public class DataManager : MonoBehaviour
     {
         BirdCoin = value;
         OnSetCoin(value); //UI 갱신
+    }
+    public void AddBirdCoin(int value)
+    {
+        BirdCoin += value;
+        OnSetCoin(BirdCoin); //UI 갱신
     }
 
     [ShowInInspector] private Order _currentOrder { get; set; }
@@ -109,6 +115,7 @@ public class DataManager : MonoBehaviour
     void Init()
     {
         CurrentCustomer = null;
+        DialogData.DialogSetting();
 
         GameManager.Input.InputMaterialSelect -= SelectMaterial;
         GameManager.Input.InputMaterialInfo -= SetMaterialInfo;
@@ -259,7 +266,8 @@ public class DataManager : MonoBehaviour
                 CurrentCorrectCheck();
                 break;
             case GameState.SetCocktail:
-                //데이터 저장
+                SetReward();
+                SaveData();
                 break;
         }
     }
@@ -379,10 +387,36 @@ public class DataManager : MonoBehaviour
         return result;
     }
 
+    void SetReward()
+    {
+        switch (CurrentGrade)
+        {
+            case 1:
+                AddBirdCoin(1);
+                return;
+            default:
+                return;
+
+        }
+    }
+
     #endregion
 
     #region 저장 및 리셋
-    public void SaveCurrentToGameData()
+    public void SaveToPlayerPrefs()
+    {
+        SaveData();
+
+        GameData.Save();
+    }
+    public void LoadFromPlayerPrefs()
+    {
+        GameData.Load();
+
+        LoadData();
+    }
+    [Button]
+    public void SaveData()
     {
         foreach (Customers item in CustomerList)
         {
@@ -393,13 +427,10 @@ public class DataManager : MonoBehaviour
         {
             GameData.SetRecipe(item.Id);
         }
-
-        GameData.Save();
     }
-    public void LoadGameData()
+    [Button]
+    public void LoadData()
     {
-        GameData.Load();
-
         foreach (var item in GameData.CustomerLevel)
         {
             CustomerNameData[item.Key].Level = item.Value;

@@ -13,6 +13,7 @@ public class ResourceManager
     }
 
     public ScriptableData LoadDatabase() => Load<ScriptableData>("Data/GameData");
+    public ScriptableTexts LoadDialogData() => Load<ScriptableTexts>("Data/StoryTexts");
 
     public Sprite LoadImage(Define.ImageType type, int id)
     {
