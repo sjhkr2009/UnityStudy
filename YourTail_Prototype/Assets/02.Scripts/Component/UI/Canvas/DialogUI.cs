@@ -53,6 +53,7 @@ public class DialogUI : UIBase_Popup
         if (index >= dialogList.Count) return;
 
         string text = dialogList[index];
+        GetText((int)Texts.DialogText).text = "";
         GetText((int)Texts.DialogText).DOText(text, text.Length * Define.DoTextSpeedFast);
 
     }

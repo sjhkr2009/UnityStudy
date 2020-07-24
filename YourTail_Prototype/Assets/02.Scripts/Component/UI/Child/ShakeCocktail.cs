@@ -22,6 +22,7 @@ public class ShakeCocktail : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         originPos = transform.position;
         StartCoroutine(nameof(Making));
+        DefaultShake();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -56,8 +57,18 @@ public class ShakeCocktail : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (isEnd) return;
 
-        transform.DOMove(originPos, 1.5f);
+        transform.DOMove(originPos, 1.5f).OnComplete(() =>
+        {
+            DefaultShake();
+        });
         transform.DORotate(Vector3.zero, 0.66f);
+    }
+
+    void DefaultShake()
+    {
+        transform.DORotate(Vector3.forward * -360f, 1.5f, RotateMode.LocalAxisAdd)
+            .SetEase(Ease.OutCubic)
+            .SetLoops(-1, LoopType.Restart);
     }
 
     IEnumerator Making()
@@ -68,7 +79,7 @@ public class ShakeCocktail : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             yield return null;
 
-            process += (10f * Time.deltaTime);
+            process += (Define.CocktailMakingProcess * Time.deltaTime);
             UpdateProcessUI(process);
         }
         transform.DOKill();

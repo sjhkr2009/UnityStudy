@@ -19,10 +19,12 @@ public class SoundManager
         {
             GameObject _audio = new GameObject($"Audio_{(Define.SoundType)i}");
             audio[i] = _audio.GetOrAddComponent<AudioSource>();
+            audio[i].playOnAwake = false;
             _audio.transform.parent = root.transform;
         }
         audio[(int)Define.SoundType.BGM].loop = true;
         audio[(int)Define.SoundType.FX].loop = false;
+        audio[(int)Define.SoundType.LoopFX].loop = true;
     }
 
     public void Play(Define.SoundType type, string path, float volume = 1f)
