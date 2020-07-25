@@ -74,15 +74,18 @@ public class Eagle : Customers
     }
 }
 
-public class Goni : Customers
+public class Parrot : Customers
 {
-    public Goni() : base(2)
+    public Parrot() : base(2)
     {
-        Name = "고니";
+        Name = "앵무새";
         SetMaxLevel(1);
 
-        SetOrder(1, "오렌지 블로섬 주세요.", requiredCocktail: CocktailName.OrangeBlossom);
-        SetOrder(1, "드라이 마티니 주세요.", requiredCocktail: CocktailName.DryMartini);
+        SetOrder(1, "오렌지 나무에서 나는 향이 맡고 싶어요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.오렌지, Define.CocktailTag.주스 } );
+        SetOrder(1, "키스 인 더 다크'라는 칵테일이 있다던데. 이름이 참 예쁘지 않아요?", requiredCocktail: CocktailName.KissInTheDark);
+        SetOrder(1, "제 깃털처럼 새빨간 과일이 들어간 걸로 한 잔 주세요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.진, Define.CocktailTag.석류 });
+        SetOrder(1, "입이 좀 텁텁한데 청량감 있는 칵테일은 없을까요? 톡 쏘는 맛이라든가.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.탄산 });
+        SetOrder(1, "그 왜... 레몬이랑 비슷한 거... 갑자기 이름이 기억이 안 나네요. 그게 들어간 칵테일이 마시고 싶어요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.라임, Define.CocktailTag.주스 });
     }
 }
 

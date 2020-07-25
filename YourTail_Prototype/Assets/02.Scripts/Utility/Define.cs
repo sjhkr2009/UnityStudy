@@ -41,7 +41,7 @@ public class Define
     {
         None,
         Eagle = 1,
-        Goni = 2
+        Parrot = 2
 
     }
 

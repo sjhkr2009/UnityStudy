@@ -133,7 +133,7 @@ public class DataManager
         if (CustomerNameData.Count > 0) CustomerNameData.Clear();
 
         AddCustomer(new Eagle());
-        AddCustomer(new Goni());
+        AddCustomer(new Parrot());
     }
     void SetSpirits()
     {
