@@ -50,6 +50,11 @@ public class SelectSubMaterialUI : UIBase_Popup
         Window2,
         Window3
     }
+    enum Texts
+    {
+        OrderText
+    }
+
     List<GameObject> windows = new List<GameObject>();
 
     public override void Init()
@@ -60,11 +65,14 @@ public class SelectSubMaterialUI : UIBase_Popup
         Bind<GameObject>(typeof(SelectedUIObjects));
         Bind<Button>(typeof(Buttons));
         Bind<Transform>(typeof(Windows));
+        Bind<Text>(typeof(Texts));
 
         SetSubImage();
         SetSelectedUI();
         SetButtons();
         SetWindows();
+
+        GetText((int)Texts.OrderText).text = GameManager.Data.CurrentOrder.orderContents;
     }
     private void OnDestroy() => ResetButtons();
     private void Start() => Init();

@@ -117,6 +117,11 @@ public class Define
     public const float CocktailMakingProcess = 10f;
 
     /// <summary>
+    /// Select Base Material UI에서 표시되는 베이스 재료들의 크기 비율을 나타냅니다. 원본 이미지의 종횡비를 유지하면서 비율을 조정합니다.
+    /// </summary>
+    public const float ImageScale_BaseSelectUI = 0.8f;
+
+    /// <summary>
     /// 베이스 재료 사진의 크기를 반환합니다.
     /// </summary>
     public static Vector2 baseMaterialSize => new Vector2(170f, 586f);

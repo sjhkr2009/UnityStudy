@@ -26,21 +26,23 @@ public class GameManager : MonoBehaviour
         if (Instance != null) Destroy(gameObject);
         Instance = this;
 
-        if (Data == null)
-        {
-            Data = GetComponent<DataManager>();
-            if (Data == null) Data = gameObject.AddComponent<DataManager>();
-        }
+        //if (Data == null)
+        //{
+        //    Data = GetComponent<DataManager>();
+        //    if (Data == null) Data = gameObject.AddComponent<DataManager>();
+        //}
         //if (Input == null)
         //{
         //    Input = GetComponent<InputManager>();
         //    if (Input == null) Input = gameObject.AddComponent<InputManager>();
         //}
+        _data.Init();
     }
 
 
     // Get Manager Class
-    public static DataManager Data { get; private set; }
+    DataManager _data = new DataManager();
+    public static DataManager Data => Instance._data;
     InputManager _input = new InputManager();
     public static InputManager Input => Instance._input;
     ResourceManager _resource = new ResourceManager();

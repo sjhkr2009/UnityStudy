@@ -35,14 +35,40 @@ public class SoundManager
         {
             case Define.SoundType.BGM:
                 source = GameManager.Resource.Load<AudioClip>($"SoundSources/BGM/{path}");
+                if (source == null)
+                {
+                    Debug.Log($"'{path}' 사운드 정보를 찾을 수 없습니다. Resources/SoundSources/BGM 폴더를 확인해주세요.");
+                    return;
+                }
                 audio[(int)type].clip = source;
                 audio[(int)type].volume = volume;
                 audio[(int)type].Play();
                 break;
+
             case Define.SoundType.FX:
                 source = GameManager.Resource.Load<AudioClip>($"SoundSources/FX/{path}");
+                if (source == null)
+                {
+                    Debug.Log($"'{path}' 사운드 정보를 찾을 수 없습니다. Resources/SoundSources/FX 폴더를 확인해주세요.");
+                    return;
+                }
                 audio[(int)type].PlayOneShot(source, volume);
                 break;
+            case Define.SoundType.LoopFX:
+                source = GameManager.Resource.Load<AudioClip>($"SoundSources/FX/{path}");
+                if (source == null)
+                {
+                    Debug.Log($"'{path}' 사운드 정보를 찾을 수 없습니다. Resources/SoundSources/FX 폴더를 확인해주세요.");
+                    return;
+                }
+                audio[(int)type].clip = source;
+                audio[(int)type].volume = volume;
+                audio[(int)type].Play();
+                break;
         }
+    }
+    public void Stop(Define.SoundType type)
+    {
+        audio[(int)type].Stop();
     }
 }

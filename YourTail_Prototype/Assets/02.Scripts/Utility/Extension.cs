@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class Extension
 {
@@ -46,5 +47,11 @@ public static class Extension
             if (i != index) windowList[i].SetActive(false);
             else windowList[i].SetActive(true);
         }
+    }
+
+    public static void SetNativeSize(this Image self, float size)
+    {
+        self.SetNativeSize();
+        self.transform.localScale *= size;
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class DataManager : MonoBehaviour
+public class DataManager
 {
     public static ScriptableData GameData => GameManager.Resource.LoadDatabase();
     public static ScriptableTexts DialogData => GameManager.Resource.LoadDialogData();
@@ -111,8 +111,7 @@ public class DataManager : MonoBehaviour
     #endregion
 
     #region 데이터 초기 세팅
-    void Start() => Init();
-    void Init()
+    public void Init()
     {
         CurrentCustomer = null;
         DialogData.DialogSetting();

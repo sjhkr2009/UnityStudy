@@ -28,6 +28,11 @@ public class SelectBaseMaterialUI : UIBase_Popup
     {
         NextButton
     }
+
+    enum Texts
+    {
+        OrderText
+    }
     
     public override void Init()
     {
@@ -36,12 +41,15 @@ public class SelectBaseMaterialUI : UIBase_Popup
         Bind<Image>(typeof(MaterialImages));
         Bind<GameObject>(typeof(SelectedUIObjects));
         Bind<Button>(typeof(Buttons));
+        Bind<Text>(typeof(Texts));
 
         SetBaseImage();
 
         SetSelectedUI();
 
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.SelectSub; });
+
+        GetText((int)Texts.OrderText).text = GameManager.Data.CurrentOrder.orderContents;
     }
     private void OnDestroy()
     {
@@ -64,6 +72,8 @@ public class SelectBaseMaterialUI : UIBase_Popup
         icon.myMaterial = GameManager.Data.BaseMaterialIndexData[index + 1];
 
         _image.sprite = icon.myMaterial.image;
+        _image.SetNativeSize(Define.ImageScale_BaseSelectUI);
+        
     }
     void SetSelectedUI()
     {
