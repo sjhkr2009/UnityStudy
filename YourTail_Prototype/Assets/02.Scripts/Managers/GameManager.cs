@@ -26,16 +26,6 @@ public class GameManager : MonoBehaviour
         if (Instance != null) Destroy(gameObject);
         Instance = this;
 
-        //if (Data == null)
-        //{
-        //    Data = GetComponent<DataManager>();
-        //    if (Data == null) Data = gameObject.AddComponent<DataManager>();
-        //}
-        //if (Input == null)
-        //{
-        //    Input = GetComponent<InputManager>();
-        //    if (Input == null) Input = gameObject.AddComponent<InputManager>();
-        //}
         _data.Init();
     }
 
@@ -111,6 +101,8 @@ public class GameManager : MonoBehaviour
         Input.InputEscape -= OnEscape;
         Input.InputRetryCocktail -= OnRetryCocktail;
         OnGameStateChange -= Data.OnGameStateChange;
+
+        DOTween.Clear();
     }
 
     private void Update()
@@ -167,4 +159,5 @@ public class GameManager : MonoBehaviour
         Data.OnRetry();
         GameState = GameState.SelectBase;
     }
+    
 }

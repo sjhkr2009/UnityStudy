@@ -88,6 +88,10 @@ public class Define
         매우셈 = 4
     }
 
+    public const int MaxBaseMaterial = 1;
+    public const int MaxSubMaterial = 3;
+
+
     /// <summary>
     /// 칵테일의 최대 도수를 결정합니다. UI 출력에만 사용됩니다.
     /// </summary>

@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ public class Table : MonoBehaviour
         set
         {
             _hasCustomer = value;
+
             if (!value)
             {
                 customerImage.sprite = null;
@@ -54,8 +56,16 @@ public class Table : MonoBehaviour
         EventOnSelectCustomer(currentCustomer);
         Debug.Log(currentCustomer.GetOrder().orderContents);
     }
+    public void SetLayer(bool isSelected)
+    {
+        if(isSelected)
+            customerImage.sortingLayerName = "SelectedCustomer";
+        else
+            customerImage.sortingLayerName = "Customer";
+    }
     private void OnDisable()
     {
         transform.position = originPos;
+        customerImage.sortingLayerName = "Customer";
     }
 }

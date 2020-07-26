@@ -78,7 +78,7 @@ public class DataManager
     [ShowInInspector] public List<BaseMaterials> CurrentBaseMaterials { get; private set; } = new List<BaseMaterials>();
     [ShowInInspector] public List<SubMaterials> CurrentSubMaterials { get; private set; } = new List<SubMaterials>();
     [SerializeField, ReadOnly] int maxBase = 1;
-    [SerializeField] int maxSub = 2;
+    [SerializeField] int maxSub = 3;
 
     public void AddCurrentBase(BaseMaterials item)
     {
@@ -115,6 +115,9 @@ public class DataManager
     {
         CurrentCustomer = null;
         DialogData.DialogSetting();
+
+        maxBase = Define.MaxBaseMaterial;
+        maxSub = Define.MaxSubMaterial;
 
         GameManager.Input.InputMaterialSelect -= SelectMaterial;
         GameManager.Input.InputMaterialInfo -= SetMaterialInfo;

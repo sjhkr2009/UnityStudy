@@ -120,6 +120,10 @@ public class TableController : MonoBehaviour
     {
         GameManager.Data.SelectCustomer(customer);
         GameManager.UI.OpenPopupUI<OrderBubble>();
+        foreach (Table item in tables)
+        {
+            item.SetLayer(customer == item.currentCustomer);
+        }
         selectUI.SetActive(true);
     }
     void CancelOrder()
