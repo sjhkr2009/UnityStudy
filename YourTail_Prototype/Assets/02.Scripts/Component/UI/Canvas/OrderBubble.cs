@@ -41,4 +41,9 @@ public class OrderBubble : UIBase_Popup
         if (GameManager.Instance.GameState != GameState.Idle) return;
         GameManager.Instance.GameState = GameState.SelectBase;
     }
+
+    private void OnDestroy()
+    {
+        DOTween.Kill(GetText((int)Texts.OrderText));
+    }
 }

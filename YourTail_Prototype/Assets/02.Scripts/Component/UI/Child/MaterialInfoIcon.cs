@@ -6,14 +6,18 @@ using UnityEngine.EventSystems;
 public class MaterialInfoIcon : MonoBehaviour, IPointerClickHandler
 {
     public MaterialIcon parent;
+    public CocktailMaterials myMaterial;
 
     private void Start()
     {
-        if (parent == null) parent = transform.GetComponentInParent<MaterialIcon>();
+        parent = transform.GetComponentInParent<MaterialIcon>();
+        if (parent != null) myMaterial = transform.GetComponentInParent<MaterialIcon>().myMaterial;
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameManager.Input.InMaterialInfo(parent.myMaterial);
+        if (myMaterial == null) return;
+
+        GameManager.Input.InMaterialInfo(myMaterial);
         GameManager.UI.OpenPopupUI<MaterialInfoWindow>();
     }
 }

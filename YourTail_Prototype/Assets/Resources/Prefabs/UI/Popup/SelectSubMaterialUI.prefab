@@ -1195,6 +1195,7 @@ GameObject:
   - component: {fileID: 3911522798825067774}
   - component: {fileID: 3911522798825067775}
   - component: {fileID: 7754826539570888596}
+  - component: {fileID: 7638591716616584533}
   m_Layer: 5
   m_Name: SelectSubMaterialUI
   m_TagString: Untagged
@@ -1261,10 +1262,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1300,6 +1301,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6944e7b8fba56f244be984e9b63966db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &7638591716616584533
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3911522798825067772}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3969853058743514210
 GameObject:
   m_ObjectHideFlags: 0

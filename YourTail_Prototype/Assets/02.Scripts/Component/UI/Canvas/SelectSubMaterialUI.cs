@@ -90,7 +90,7 @@ public class SelectSubMaterialUI : UIBase_Popup
     void SetButtons()
     {
         GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.SelectBase; });
-        GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Combine; });
+        GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
 
         GetButton((int)Buttons.Window1to2).onClick.AddListener(() => { windows.OpenWindow(1); });
         GetButton((int)Buttons.Window2to3).onClick.AddListener(() => { windows.OpenWindow(2); });

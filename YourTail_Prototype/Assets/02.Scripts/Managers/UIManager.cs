@@ -90,8 +90,15 @@ public class UIManager
     {
         if (popupUI.Count == 0) return;
 
-        GameObject gameObject = popupUI.Pop().gameObject;
-        GameManager.Resource.Destroy(gameObject);
+        UIBase_Popup pop = popupUI.Pop();
+        if (!pop.hasDestroyMotion)
+        {
+            GameManager.Resource.Destroy(pop.gameObject);
+        }
+        else
+        {
+            GameManager.Resource.Destroy(pop.gameObject, pop.destroyTime);
+        }
 
         order--;
     }

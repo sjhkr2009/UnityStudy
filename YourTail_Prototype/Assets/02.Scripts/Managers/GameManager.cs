@@ -151,7 +151,10 @@ public class GameManager : MonoBehaviour
     //}
     void OnEscape()
     {
-        UI.TryClosePopupUI<MaterialInfoWindow>(); //추후 옵션창을 추가하게 된다면, 실패 시 옵션창을 띄울 것.
+        if (UI.TryClosePopupUI<MaterialInfoWindow>()) return;
+        if (UI.TryClosePopupUI<CheckBeforeShake>()) return;
+        
+        //추후 옵션창을 추가하게 된다면, 실패 시 옵션창을 띄울 것.
     }
     void OnRetryCocktail()
     {

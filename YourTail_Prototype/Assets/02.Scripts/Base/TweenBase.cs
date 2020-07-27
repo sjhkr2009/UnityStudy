@@ -106,4 +106,9 @@ public class TweenBase : MonoBehaviour
         if (changeScale) ChangeScale();
         if (changeFade) ChangeFade();
     }
+
+    private void OnDestroy()
+    {
+        transform.DOKill();
+    }
 }
