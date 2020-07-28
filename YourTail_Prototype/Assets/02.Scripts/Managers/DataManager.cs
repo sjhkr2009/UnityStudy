@@ -129,6 +129,8 @@ public class DataManager
         SetSpirits();
         SetSubMaterials();
         SetCocktails();
+
+        SetBirdCoin(GameData.Birdcoin);
     }
     void SetCustomers()
     {
@@ -437,6 +439,7 @@ public class DataManager
     {
         foreach (var item in GameData.CustomerLevel)
         {
+            
             CustomerNameData[item.Key].Level = item.Value;
         }
         BirdCoin = GameData.Birdcoin;

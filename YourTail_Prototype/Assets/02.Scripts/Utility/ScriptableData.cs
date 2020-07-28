@@ -40,6 +40,7 @@ public class ScriptableData : ScriptableObject
         {
             PlayerPrefs.SetInt(item.Key, item.Value);
             PlayerPrefs.SetString($"Customer{count}", item.Key);
+            count++;
         }
         PlayerPrefs.SetInt(nameof(CustomerCount), CustomerCount);
     }
@@ -79,6 +80,7 @@ public class ScriptableData : ScriptableObject
         for (int i = 0; i < count; i++)
         {
             string key = PlayerPrefs.GetString($"Customer{i}");
+            if (string.IsNullOrEmpty(key)) continue;
             int value = PlayerPrefs.GetInt(key);
             CustomerLevel.Add(key, value);
         }
@@ -105,4 +107,14 @@ public class ScriptableData : ScriptableObject
         }
     }
     #endregion
+
+    [Button]
+    void Reset()
+    {
+        CustomerLevel.Clear();
+        CollectedRecipe.Clear();
+        CollectedSubmaterial.Clear();
+        Birdcoin = 0;
+        PlayerPrefs.DeleteAll();
+    }
 }

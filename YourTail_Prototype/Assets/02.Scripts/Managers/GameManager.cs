@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
     {
         GameState = GameState.Idle;
         Sound.Init();
+        _data.LoadFromPlayerPrefs();
 
         Input.InputStateChange -= StateChange;
         //Input.InputNextState -= InNextState;
@@ -96,6 +97,8 @@ public class GameManager : MonoBehaviour
     }
     private void OnDestroy()
     {
+        _data.SaveToPlayerPrefs();
+        
         Input.InputStateChange -= StateChange;
         //Input.InputNextState -= InNextState;
         Input.InputEscape -= OnEscape;
