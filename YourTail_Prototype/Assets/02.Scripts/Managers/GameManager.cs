@@ -153,13 +153,14 @@ public class GameManager : MonoBehaviour
     {
         if (UI.TryClosePopupUI<MaterialInfoWindow>()) return;
         if (UI.TryClosePopupUI<CheckBeforeShake>()) return;
-        
+        if (UI.TryClosePopupUI<OrderInfoWindow>()) return;
+
         //추후 옵션창을 추가하게 된다면, 실패 시 옵션창을 띄울 것.
     }
     void OnRetryCocktail()
     {
         UI.ClosePopupUI<MakeCocktailUI>();
-        Data.OnRetry();
+        Data.Retry();
         GameState = GameState.SelectBase;
     }
     

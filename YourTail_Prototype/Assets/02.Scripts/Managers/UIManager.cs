@@ -97,6 +97,7 @@ public class UIManager
         }
         else
         {
+            pop.OnDestroyMotion();
             GameManager.Resource.Destroy(pop.gameObject, pop.destroyTime);
         }
 

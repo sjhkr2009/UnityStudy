@@ -38,6 +38,8 @@ public class SelectSubMaterialUI : UIBase_Popup
     {
         PrevButton,
         NextButton,
+        ResetButton,
+        OrderButton,
         Window1to2,
         Window2to3,
         Window2to1,
@@ -50,10 +52,6 @@ public class SelectSubMaterialUI : UIBase_Popup
         Window2,
         Window3
     }
-    enum Texts
-    {
-        OrderText
-    }
 
     List<GameObject> windows = new List<GameObject>();
 
@@ -65,16 +63,16 @@ public class SelectSubMaterialUI : UIBase_Popup
         Bind<GameObject>(typeof(SelectedUIObjects));
         Bind<Button>(typeof(Buttons));
         Bind<Transform>(typeof(Windows));
-        Bind<Text>(typeof(Texts));
 
         SetSubImage();
         SetSelectedUI();
         SetButtons();
         SetWindows();
-
-        GetText((int)Texts.OrderText).text = GameManager.Data.CurrentOrder.orderContents;
     }
-    private void OnDestroy() => ResetButtons();
+    private void OnDestroy()
+    {
+        ResetButtons();
+    }
     private void Start() => Init();
 
     void SetWindows()
@@ -91,20 +89,14 @@ public class SelectSubMaterialUI : UIBase_Popup
     {
         GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.SelectBase; });
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
+        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.Retry);
+        GetButton((int)Buttons.OrderButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<OrderInfoWindow>(); });
+
 
         GetButton((int)Buttons.Window1to2).onClick.AddListener(() => { windows.OpenWindow(1); });
         GetButton((int)Buttons.Window2to3).onClick.AddListener(() => { windows.OpenWindow(2); });
         GetButton((int)Buttons.Window2to1).onClick.AddListener(() => { windows.OpenWindow(0); });
         GetButton((int)Buttons.Window3to2).onClick.AddListener(() => { windows.OpenWindow(1); });
-    }
-    void ResetButtons()
-    {
-        GetButton((int)Buttons.PrevButton).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.Window1to2).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.Window2to1).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.Window2to3).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.Window3to2).onClick.RemoveAllListeners();
     }
     void SetSubImage()
     {

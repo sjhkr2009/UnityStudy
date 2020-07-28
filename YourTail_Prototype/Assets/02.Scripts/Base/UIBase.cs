@@ -8,7 +8,7 @@ using DG.Tweening;
 
 public class UIBase : MonoBehaviour
 {
-    Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
+    public Dictionary<Type, UnityEngine.Object[]> _objects { get; private set; } = new Dictionary<Type, UnityEngine.Object[]>();
     public bool hasDestroyMotion { get; protected set; } = false;
     public float destroyTime { get; protected set; } = 0f;
 
@@ -55,5 +55,18 @@ public class UIBase : MonoBehaviour
                 eventHandler.EventOnClick += action;
                 break;
         }
+    }
+
+    protected void ResetButtons()
+    {
+        for (int i = 0; i < _objects[typeof(Button)].Length; i++)
+        {
+            Button button = GetButton(i);
+            if(button != null) GetButton(i).onClick.RemoveAllListeners();
+        }
+    }
+    public virtual void OnDestroyMotion()
+    {
+        DOTween.KillAll();
     }
 }

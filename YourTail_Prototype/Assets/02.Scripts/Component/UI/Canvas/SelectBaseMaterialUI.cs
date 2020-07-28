@@ -26,12 +26,9 @@ public class SelectBaseMaterialUI : UIBase_Popup
 
     enum Buttons
     {
-        NextButton
-    }
-
-    enum Texts
-    {
-        OrderText
+        NextButton,
+        ResetButton,
+        OrderButton
     }
     
     public override void Init()
@@ -41,19 +38,18 @@ public class SelectBaseMaterialUI : UIBase_Popup
         Bind<Image>(typeof(MaterialImages));
         Bind<GameObject>(typeof(SelectedUIObjects));
         Bind<Button>(typeof(Buttons));
-        Bind<Text>(typeof(Texts));
 
         SetBaseImage();
 
         SetSelectedUI();
 
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.SelectSub; });
-
-        GetText((int)Texts.OrderText).text = GameManager.Data.CurrentOrder.orderContents;
+        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.Retry);
+        GetButton((int)Buttons.OrderButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<OrderInfoWindow>(); });
     }
     private void OnDestroy()
     {
-        GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
+        ResetButtons();
     }
     private void Start()
     {

@@ -264,7 +264,7 @@ public class DataManager
             case GameState.SelectSub:
                 break;
             case GameState.Combine:
-                CurrentCocktail = MakeCocktail(CurrentBaseMaterials, CurrentSubMaterials);
+                CurrentCocktail = MakeCocktail();
                 CurrentCorrectCheck();
                 break;
             case GameState.SetCocktail:
@@ -309,9 +309,11 @@ public class DataManager
             AddCurrentSub(selectedSub);
         }
     }
-    public Cocktail MakeCocktail(List<BaseMaterials> currentBases, List<SubMaterials> currentSubs)
+    public Cocktail MakeCocktail(List<BaseMaterials> currentBases = null, List<SubMaterials> currentSubs = null)
     {
         Cocktail empty = new Cocktail();
+        if (currentBases == null) currentBases = CurrentBaseMaterials;
+        if (currentSubs == null) currentSubs = CurrentSubMaterials;
 
         foreach (Cocktail cocktail in CocktailList)
         {
@@ -445,10 +447,27 @@ public class DataManager
         }
     }
 
-    public void OnRetry()
+    void ResetBaseMaterial()
     {
-        CurrentBaseMaterials.Clear();
-        CurrentSubMaterials.Clear();
+        int count = CurrentBaseMaterials.Count;
+        for (int i = 0; i < count; i++)
+        {
+            RemoveCurrentBase(CurrentBaseMaterials[0]);
+        }
+    }
+    void ResetSubMaterial()
+    {
+        int count = CurrentSubMaterials.Count;
+        for (int i = 0; i < count; i++)
+        {
+            RemoveCurrentSub(CurrentSubMaterials[0]);
+        }
+    }
+
+    public void Retry()
+    {
+        ResetBaseMaterial();
+        ResetSubMaterial();
         CurrentCocktail = null;
     }
     void CurrentReset()
