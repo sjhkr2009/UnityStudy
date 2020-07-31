@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Bolt;
 
 public class DataManager
 {
@@ -106,7 +107,13 @@ public class DataManager
     public Action<SubMaterials> OnAddSubMaterial = n => { };
     public Action<SubMaterials> OnRemoveSubMaterial = n => { };
 
-    public int CurrentGrade { get; private set; }
+    public enum Grade
+    {
+        GOOD = 1, 
+        SOSO = 0,
+        BAD = -1
+    }
+    public Grade CurrentGrade { get; private set; }
 
     #endregion
 
@@ -350,7 +357,7 @@ public class DataManager
     }
     void CurrentCorrectCheck()
     {
-        CurrentGrade = CorrectCheck(CurrentCocktail, CurrentOrder);
+        CurrentGrade = (Grade)CorrectCheck(CurrentCocktail, CurrentOrder);
     }
 
     int CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)
@@ -397,7 +404,7 @@ public class DataManager
     {
         switch (CurrentGrade)
         {
-            case 1:
+            case Grade.GOOD:
                 AddBirdCoin(1);
                 return;
             default:

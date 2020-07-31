@@ -35,15 +35,15 @@ public class SetCocktailUI : UIBase_Popup
     }
     string GradeToText()
     {
-        int grade = GameManager.Data.CurrentGrade;
+        DataManager.Grade grade = GameManager.Data.CurrentGrade;
 
         switch (grade)
         {
-            case -1:
+            case DataManager.Grade.BAD:
                 return "BAD";
-            case 0:
+            case DataManager.Grade.SOSO:
                 return "Soso";
-            case 1:
+            case DataManager.Grade.GOOD:
                 return "GOOD!";
             default:
                 return "Error";

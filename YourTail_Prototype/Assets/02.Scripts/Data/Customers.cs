@@ -12,6 +12,7 @@ public class Customers
     public float Satisfaction { get; set; }
     private int _level = 1;
     public int MaxLevel { get; private set; }
+    public bool isActive;
     protected void SetMaxLevel(int value)
     {
         MaxLevel = value;
@@ -53,6 +54,7 @@ public class Customers
     public Customers(int index)
     {
         CurrentIndex = 0;
+        isActive = true;
         CustomerType = (Define.CustomerType)index;
         ID = $"CT{index}";
         image = GameManager.Resource.LoadImage(Define.ImageType.Customer, index);

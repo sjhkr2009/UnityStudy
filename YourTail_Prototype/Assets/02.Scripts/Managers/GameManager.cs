@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
-using TMPro;
 using DG.Tweening;
+using Bolt;
 
 public enum GameState
 {
@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
 
         _data.Init();
     }
+    //_temp
+    public GameObject soundManager;
 
 
     // Get Manager Class
@@ -147,11 +149,6 @@ public class GameManager : MonoBehaviour
         if (Data.CurrentCustomer == Data.CustomerNameData[new Eagle().Name]) UI.OpenPopupUI<DialogUI>();
     }
 
-    //임시 진행 버튼
-    //void InNextState()
-    //{
-    //    GameState = (GameState)(((int)GameState + 1) % 6);
-    //}
     void OnEscape()
     {
         if (UI.TryClosePopupUI<MaterialInfoWindow>()) return;

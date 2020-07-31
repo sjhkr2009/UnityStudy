@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ludiq;
+using Bolt;
 
 public class TableController : MonoBehaviour
 {
@@ -65,11 +67,18 @@ public class TableController : MonoBehaviour
         {
             yield return null;
 
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1f);
 
             if (!HasEmptyTable()) continue;
 
             Customers newCustomer = GameManager.Data.GetRandomCustomer();
+
+            while (!newCustomer.isActive)
+            {
+                yield return null;
+
+                newCustomer = GameManager.Data.GetRandomCustomer();
+            }
 
             if (IsExistCustomer(newCustomer)) continue;
 
@@ -81,9 +90,26 @@ public class TableController : MonoBehaviour
                 {
                     tables[index].gameObject.SetActive(true);
                     tables[index].SetCustomer(newCustomer);
+
+                    //temp : 이후 Sound Manager에서 처리할 것
+
+
+                    switch (newCustomer.CustomerType)
+                    {
+                        case Define.CustomerType.Eagle:
+                            CustomEvent.Trigger(GameManager.Instance.soundManager, "Set Eagle");
+                            break;
+                        case Define.CustomerType.Parrot:
+                            CustomEvent.Trigger(GameManager.Instance.soundManager, "Set Parrot");
+                            break;
+                    }
+
+                    //
                     break;
                 }
             }
+
+            yield return new WaitForSeconds(2f);
         }
     }
 
