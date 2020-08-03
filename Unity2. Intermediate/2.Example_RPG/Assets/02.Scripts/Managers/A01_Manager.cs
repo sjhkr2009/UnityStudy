@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class A01_Manager : MonoBehaviour
 {
@@ -34,12 +35,11 @@ public class A01_Manager : MonoBehaviour
             }
             _instance = obj.GetComponent<A01_Manager>();
 
-            if(_instance == null)
-            {
-                _instance = obj.AddComponent<A01_Manager>();
-            }
-
             DontDestroyOnLoad(obj);
+
+            //Init 내에서 프로퍼티인 Instance를 호출하지 않도록 주의한다.
+            _instance._sound.Init();
+            _instance._pool.Init();
         }
     }
 
@@ -57,8 +57,26 @@ public class A01_Manager : MonoBehaviour
 
 
     C02_ResourceManager _resource = new C02_ResourceManager();
-    public static C02_ResourceManager Resource => Instance._resource;
     G10_UIManager _ui = new G10_UIManager();
+    H04_SceneManagerEx _scene = new H04_SceneManagerEx();
+    I01_SoundManager _sound = new I01_SoundManager();
+    J01_PoolManager _pool = new J01_PoolManager();
+
+    public static C02_ResourceManager Resource => Instance._resource;
     public static G10_UIManager UI => Instance._ui;
+    public static H04_SceneManagerEx Scene => Instance._scene;
+    public static I01_SoundManager Sound => Instance._sound;
+    public static J01_PoolManager Pool => Instance._pool;
+
+
+    // 저장중인 사운드나 UI정보, 이벤트 등 씬에 종속된 정보를 초기화한다. 씬 매니저에서 씬이 바뀔 때 실행한다.
+    public static void Clear()
+    {
+        Input.Clear();
+        Sound.Clear();
+        Scene.Clear();
+        UI.Clear();
+        Pool.Clear(); // 오브젝트 제거는 일반적으로 맨 마지막에 넣어준다.
+    }
 
 }

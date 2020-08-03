@@ -15,4 +15,16 @@ public static class G07_Extension
     {
         G05_UIBase.AddEvent(gameObject, action, eventType);
     }
+
+    public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
+    {
+        T component = gameObject.GetComponent<T>();
+
+        if (component == null)
+        {
+            component = gameObject.AddComponent<T>();
+        }
+
+        return component;
+    }
 }

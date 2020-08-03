@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class E02_Define
 {
-    // 카메라의 여러 모드를 저장할 스크립트. 컴포넌트로 붙일 건 아니니 MonoBehavior는 불필요하다.
-
+    // 카메라 모드를 비롯한 여러 모드 종류를 저장할 스크립트. 컴포넌트로 붙일 건 아니니 MonoBehavior는 불필요하다
     public enum CameraMode
     {
         QuarterView
@@ -25,4 +24,19 @@ public class E02_Define
         Drag
     }
 
+    public enum Scene
+    {
+        Unknown,
+        H02_Login,
+        Lobby,
+        H01_Game
+    }
+
+    public enum Sound
+    {
+        BGM,
+        Effect,
+        AtPoint,
+        Count
+    }
 }

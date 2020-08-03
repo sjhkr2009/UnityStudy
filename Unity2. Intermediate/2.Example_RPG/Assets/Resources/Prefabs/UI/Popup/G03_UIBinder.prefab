@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9169234109524083075}
   - component: {fileID: 57519256}
   m_Layer: 5
-  m_Name: G01_UI_Button
+  m_Name: G03_UIBinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

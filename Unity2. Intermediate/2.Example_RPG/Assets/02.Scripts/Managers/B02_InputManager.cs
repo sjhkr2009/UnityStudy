@@ -28,4 +28,10 @@ public class B02_InputManager
             OnMouseEvent(E02_Define.MouseEvent.Click);
         }
     }
+
+    public void Clear()
+    {
+        OnKeyAction = null;
+        OnMouseEvent = null;
+    }
 }

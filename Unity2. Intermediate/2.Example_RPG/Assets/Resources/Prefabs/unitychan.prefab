@@ -6717,6 +6717,7 @@ GameObject:
   - component: {fileID: 8731940549412726139}
   - component: {fileID: 8731940549403332613}
   - component: {fileID: 8731940549403332612}
+  - component: {fileID: 5751604081018789934}
   m_Layer: 0
   m_Name: unitychan
   m_TagString: Untagged
@@ -6787,6 +6788,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   rotateOnMove: 1
+--- !u!114 &5751604081018789934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8731940549403236349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98bfcb1d74844274e904a25ffc8921a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUsing: 0
 --- !u!1 &8731940549403236351
 GameObject:
   m_ObjectHideFlags: 0
