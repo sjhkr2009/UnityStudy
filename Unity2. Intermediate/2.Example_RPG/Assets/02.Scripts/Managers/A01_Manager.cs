@@ -50,12 +50,6 @@ public class A01_Manager : MonoBehaviour
     public static B02_InputManager Input => Instance._input;
     // Instance._input을 호출함으로써, 이 매니저를 호출하지 않았더라도 Init()이 발동될 것이다.
 
-    private void Update()
-    {
-        Input.OnUpdate();   // 매니저 클래스에서 한 번만 키 입력을 체크하면 된다.
-    }
-
-
     C02_ResourceManager _resource = new C02_ResourceManager();
     G10_UIManager _ui = new G10_UIManager();
     H04_SceneManagerEx _scene = new H04_SceneManagerEx();
@@ -68,6 +62,11 @@ public class A01_Manager : MonoBehaviour
     public static I01_SoundManager Sound => Instance._sound;
     public static J01_PoolManager Pool => Instance._pool;
 
+    private void Update()
+    {
+        Input.OnUpdate();   // 매니저 클래스에서 한 번만 키 입력을 체크하면 된다.
+    }
+
 
     // 저장중인 사운드나 UI정보, 이벤트 등 씬에 종속된 정보를 초기화한다. 씬 매니저에서 씬이 바뀔 때 실행한다.
     public static void Clear()
@@ -76,7 +75,7 @@ public class A01_Manager : MonoBehaviour
         Sound.Clear();
         Scene.Clear();
         UI.Clear();
-        Pool.Clear(); // 오브젝트 제거는 일반적으로 맨 마지막에 넣어준다.
+        //Pool.Clear(); // 오브젝트 제거는 일반적으로 맨 마지막에 넣어준다.
     }
 
 }
