@@ -98,10 +98,10 @@ public class Cocktail
     }
     public int GetProofGrade()
     {
-        if (Proof <= 5) return (int)Define.ProofGrade.매우약함;
-        else if (Proof <= 10) return (int)Define.ProofGrade.약함;
-        else if (Proof <= 19) return (int)Define.ProofGrade.중간;
-        else if (Proof <= 30) return (int)Define.ProofGrade.셈;
+        if (Proof <= Define.ProofGrade0LowerThan) return (int)Define.ProofGrade.매우약함;
+        else if (Proof <= Define.ProofGrade1LowerThan) return (int)Define.ProofGrade.약함;
+        else if (Proof <= Define.ProofGrade2LowerThan) return (int)Define.ProofGrade.중간;
+        else if (Proof <= Define.ProofGrade3LowerThan) return (int)Define.ProofGrade.셈;
         else return (int)Define.ProofGrade.매우셈;
     }
 

@@ -167,4 +167,12 @@ public class Define
         float hue = Mathf.Clamp(0.5f - (proof * 0.6f), 0f, 0.5f);
         return Color.HSVToRGB(hue, 0.5f, 1f);
     }
+
+    /// <summary>
+    /// 도수를 등급으로 변환할 때 기준점을 나타냅니다. 예를 들어, 5도보다 낮으면 도수 등급은 0을 반환합니다.
+    /// </summary>
+    public const int ProofGrade0LowerThan = 5;
+    public const int ProofGrade1LowerThan = 10;
+    public const int ProofGrade2LowerThan = 19;
+    public const int ProofGrade3LowerThan = 30;
 }
