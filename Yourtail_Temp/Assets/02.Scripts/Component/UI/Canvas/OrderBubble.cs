@@ -21,6 +21,7 @@ public class OrderBubble : UIBase_Popup
         Init();
     }
 
+    string orderText;
     public override void Init()
     {
         base.Init();
@@ -28,7 +29,7 @@ public class OrderBubble : UIBase_Popup
         Bind<Text>(typeof(Texts));
         Bind<Button>(typeof(Buttons));
 
-        string orderText = GameManager.Data.CurrentOrder.orderContents;
+        orderText = GameManager.Data.CurrentOrder.orderContents;
         GetText((int)Texts.OrderText).DOText(orderText, orderText.Length * Define.DoTextSpeed);
 
         EventHandler eventHandler = GetButton((int)Buttons.GetOrder).gameObject.GetOrAddComponent<EventHandler>();
@@ -39,6 +40,13 @@ public class OrderBubble : UIBase_Popup
     void OnClickGetOrder(PointerEventData evt)
     {
         if (GameManager.Instance.GameState != GameState.Idle) return;
+
+        Text text = GetText((int)Texts.OrderText);
+        if (text.text != orderText)
+        {
+            text.DOKill();
+            text.text = orderText;
+        }
         GameManager.Instance.GameState = GameState.SelectBase;
     }
 
