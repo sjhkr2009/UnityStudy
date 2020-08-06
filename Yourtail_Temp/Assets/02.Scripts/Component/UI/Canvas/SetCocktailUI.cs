@@ -39,6 +39,7 @@ public class SetCocktailUI : UIBase_Popup
 
         data = GameManager.Data;
         grade = data.CurrentGrade;
+        data.SetReward();
 
         GetButton((int)Buttons.NextButton).onClick.AddListener(GameManager.Instance.SetDialog);
         GetText((int)Texts.GradeText).text = GradeToText();

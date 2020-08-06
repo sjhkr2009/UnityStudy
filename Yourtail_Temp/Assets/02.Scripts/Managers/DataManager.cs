@@ -139,6 +139,9 @@ public class DataManager
 
         AddCustomer(new Eagle());
         AddCustomer(new Parrot());
+        AddCustomer(new Flamingo());
+        AddCustomer(new Goni());
+        AddCustomer(new Penguin());
     }
     void SetSpirits()
     {
@@ -268,7 +271,6 @@ public class DataManager
             case GameState.Combine:
                 CurrentCocktail = MakeCocktail();
                 CurrentCorrectCheck();
-                SetReward();
                 break;
             case GameState.SetCocktail:
                 SaveData();
@@ -276,16 +278,28 @@ public class DataManager
         }
     }
 
+    /// <summary>
+    /// 모든 새들 중에서 임의의 새를 반환합니다.
+    /// </summary>
     public Customers GetRandomCustomer()
     {
         return CustomerList[UnityEngine.Random.Range(0, CustomerList.Count)];
     }
+
+    /// <summary>
+    /// 새를 입력하면 해당 새의 주문을 받습니다. 현재 손님과 오더 정보가 세팅됩니다.
+    /// </summary>
+    /// <param name="customer">주문을 받을 새를 클래스로 입력하세요. new로 클래스를 생성하지 말고 DataManager에서 생성한 클래스여야 합니다.</param>
     public void SelectCustomer(Customers customer)
     {
         CurrentCustomer = customer;
         CurrentOrder = customer.GetOrder();
     }
 
+    /// <summary>
+    /// id를 받아서 그에 맞는 재료를 선택합니다. 이미 선택된 재료를 다시 선택하면 재료를 삭제합니다.
+    /// </summary>
+    /// <param name="id">주재료 또는 부재료의 ID</param>
     public void SelectMaterial(string id)
     {
         BaseMaterials selectedBase = null;
@@ -311,6 +325,10 @@ public class DataManager
             AddCurrentSub(selectedSub);
         }
     }
+
+    /// <summary>
+    /// 선택된 재료를 통해 칵테일을 만듭니다. 테스트용이 아니라면 선택된 재료 리스트는 입력하지 않아도 됩니다.
+    /// </summary>
     public Cocktail MakeCocktail(List<BaseMaterials> currentBases = null, List<SubMaterials> currentSubs = null)
     {
         Cocktail empty = new Cocktail();
@@ -348,11 +366,18 @@ public class DataManager
 
         return empty;
     }
+
+    /// <summary>
+    /// 현재 오더에서 요구하는 내용과 만들어진 칵테일을 비교하여 현재 점수를 CurrentGrade 변수에 기록해 둡니다.
+    /// </summary>
     void CurrentCorrectCheck()
     {
         CurrentGrade = CorrectCheck(CurrentCocktail, CurrentOrder);
     }
 
+    /// <summary>
+    /// 칵테일과 오더를 비교하여 점수를 산출하고, GOOD/SOSO/BAD의 세 가지 결과로 분류합니다. 각각의 결과는 1, 0, -1의 값으로 반환됩니다.
+    /// </summary>
     int CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)
     {
         if (customer == null) customer = CustomerNameData[order.CustomerName];
@@ -393,13 +418,16 @@ public class DataManager
         return result;
     }
 
-    void SetReward()
+    /// <summary>
+    /// 현재 기록된 점수에 따라 보상을 획득합니다. 결과에 따라 주문을 한 새의 호감도가 상승하며 코인을 획득합니다.
+    /// </summary>
+    public void SetReward()
     {
         switch (CurrentGrade)
         {
             case 1:
                 AddBirdCoin(1);
-                AddExp(15); //추후 정해진 로직에 따라 Exp 증가시키기
+                AddExp(15);
                 return;
             case 0:
                 AddExp(8);
@@ -415,17 +443,14 @@ public class DataManager
     public int beforeExp;
     public int afterExp;
     public bool levelUp;
+    /// <summary>
+    /// 현재 새의 호감도를 증가시킵니다. UI 표기를 위해 상승 전의 호감도와 상승 후의 호감도가 기록됩니다.
+    /// </summary>
     public void AddExp(int value)
     {
         beforeExp = CurrentCustomer.Exp;
         CurrentCustomer.Exp += value;
         afterExp = CurrentCustomer.Exp;
-    }
-    void ResultReset()
-    {
-        beforeExp = 0;
-        afterExp = 0;
-        levelUp = false;
     }
 
     #endregion
@@ -489,7 +514,12 @@ public class DataManager
             RemoveCurrentSub(CurrentSubMaterials[0]);
         }
     }
-
+    void ResultReset()
+    {
+        beforeExp = 0;
+        afterExp = 0;
+        levelUp = false;
+    }
     public void Retry()
     {
         ResetBaseMaterial();

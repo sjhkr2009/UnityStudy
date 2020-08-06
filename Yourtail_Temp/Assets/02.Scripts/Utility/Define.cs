@@ -42,7 +42,10 @@ public class Define
     {
         None,
         Eagle = 1,
-        Parrot = 2
+        Parrot = 2,
+        Flamingo = 3,
+        Goni = 4,
+        Penguin = 5
 
     }
 
@@ -87,6 +90,13 @@ public class Define
         중간 = 2,
         셈 = 3,
         매우셈 = 4
+    }
+
+    public enum Reaction
+    {
+        BAD = -1,
+        SOSO = 0,
+        GOOD = 1
     }
 
     /// <summary>
