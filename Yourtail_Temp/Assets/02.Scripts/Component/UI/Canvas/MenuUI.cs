@@ -95,7 +95,8 @@ public class MenuUI : UIBase_Scene
 
         if (_isOpened)
         {
-            buttonTr.DORotate(Vector3.zero, Define.OpenMenuDuration);
+            buttonTr.localScale *= 0.8f;
+            buttonTr.DOScale(1f, Define.OpenMenuDuration).SetEase(Ease.OutBack);
 
             background.DOSizeDelta(backgroundSize, Define.OpenMenuDuration * 0.8f).SetEase(Ease.Linear).OnComplete(() =>
             {
@@ -108,7 +109,8 @@ public class MenuUI : UIBase_Scene
         }
         else
         {
-            buttonTr.DORotate(Vector3.forward * 90f, Define.OpenMenuDuration);
+            buttonTr.localScale *= 1.1f;
+            buttonTr.DOScale(1f, Define.OpenMenuDuration).SetEase(Ease.OutBack);
 
             background.DOSizeDelta(backgroundSize, Define.OpenMenuDuration * 0.4f).OnComplete(() =>
             {

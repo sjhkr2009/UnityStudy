@@ -13,7 +13,6 @@ public class MakeCocktailUI : UIBase_Popup
     {
         CocktailName,
         CocktailProof,
-        CocktailTag,
         CocktailInfo
     }
     
@@ -84,7 +83,6 @@ public class MakeCocktailUI : UIBase_Popup
             });
         GetImage((int)Images.ProofSliderColor).DOColor(Define.ProofToColor(proofNormalize), 0.7f);
 
-        GetText((int)Texts.CocktailTag).text = ListToString(myCocktail.GetTagToString());
         GetText((int)Texts.CocktailInfo).text = myCocktail.Info;
     }
 
