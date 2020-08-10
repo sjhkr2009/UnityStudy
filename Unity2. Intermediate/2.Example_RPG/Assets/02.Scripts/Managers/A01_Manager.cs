@@ -16,7 +16,8 @@ public class A01_Manager : MonoBehaviour
     // 매니저가 여럿 존재하지 않도록 하면서, 매니저를 어디서든 호출할 수 있도록 하기 위해 싱글톤 패턴이 사용된다.
 
     static A01_Manager _instance; // 유일성이 보장된다.
-    public static A01_Manager Instance { get { Init(); return _instance; } } //유일한 매니저를 다른 곳에서 가져올 수 있게 한다.
+    //public static A01_Manager Instance { get { Init(); return _instance; } } //유일한 매니저를 다른 곳에서 가져올 수 있게 한다.
+    public static A01_Manager Instance => _instance;
 
     private void Awake()
     {
@@ -40,6 +41,7 @@ public class A01_Manager : MonoBehaviour
             //Init 내에서 프로퍼티인 Instance를 호출하지 않도록 주의한다.
             _instance._sound.Init();
             _instance._pool.Init();
+            _instance._data.Init();
         }
     }
 
@@ -50,12 +52,14 @@ public class A01_Manager : MonoBehaviour
     public static B02_InputManager Input => Instance._input;
     // Instance._input을 호출함으로써, 이 매니저를 호출하지 않았더라도 Init()이 발동될 것이다.
 
+    L01_DataManager _data = new L01_DataManager();
     C02_ResourceManager _resource = new C02_ResourceManager();
     G10_UIManager _ui = new G10_UIManager();
     H04_SceneManagerEx _scene = new H04_SceneManagerEx();
     I01_SoundManager _sound = new I01_SoundManager();
     J01_PoolManager _pool = new J01_PoolManager();
 
+    public static L01_DataManager Data => Instance._data;
     public static C02_ResourceManager Resource => Instance._resource;
     public static G10_UIManager UI => Instance._ui;
     public static H04_SceneManagerEx Scene => Instance._scene;
@@ -75,7 +79,7 @@ public class A01_Manager : MonoBehaviour
         Sound.Clear();
         Scene.Clear();
         UI.Clear();
-        //Pool.Clear(); // 오브젝트 제거는 일반적으로 맨 마지막에 넣어준다.
+        Pool.Clear(); // 오브젝트 제거는 일반적으로 맨 마지막에 넣어준다.
     }
 
 }

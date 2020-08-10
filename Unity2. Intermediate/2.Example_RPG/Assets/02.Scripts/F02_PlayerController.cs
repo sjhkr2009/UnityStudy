@@ -60,10 +60,6 @@ public class F02_PlayerController : MonoBehaviour
         A01_Manager.Input.OnMouseEvent -= SetDestination;
         A01_Manager.Input.OnMouseEvent += SetDestination;
     }
-    private void OnDestroy()
-    {
-        A01_Manager.Input.OnMouseEvent -= SetDestination;
-    }
 
     void SetDestination(E02_Define.MouseEvent evt)
     {

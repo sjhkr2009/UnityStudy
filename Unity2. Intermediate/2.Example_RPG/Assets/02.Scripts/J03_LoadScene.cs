@@ -6,7 +6,7 @@ public class J03_LoadScene : H01_BaseScene
 {
     public override void Clear()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     protected override void Init()
