@@ -53,7 +53,7 @@ public class D05_Tree : AlgorithmTest
     // 그래프와 달리 노드 클래스를 만들어 이를 기반으로 구현한다.
     // 그래프는 잘 변하지 않는 정적인 데이터를 바탕으로 가상의 연결관계를 표현하지만, 트리는 각 데이터의 변화가 자주 일어나고 삽입/삭제가 자주 발생하기 때문이다.
     // 따라서 가상의 정점을 가정하여 연결관계만 표기하는 것이 아닌, 실제 노드를 만들어서 연결시켜준다고 생각한다.
-
+    
     [SerializeField] bool onStartTreeClear = false;
 
     D05_TreeNode<string> root = null;
