@@ -21,6 +21,7 @@ public class A01_Manager : MonoBehaviour
 
     private void Awake()
     {
+        _instance = this;
         Init();
     }
 
@@ -35,14 +36,14 @@ public class A01_Manager : MonoBehaviour
                 obj.AddComponent<A01_Manager>();
             }
             _instance = obj.GetComponent<A01_Manager>();
-
-            DontDestroyOnLoad(obj);
-
-            //Init 내에서 프로퍼티인 Instance를 호출하지 않도록 주의한다.
-            _instance._sound.Init();
-            _instance._pool.Init();
-            _instance._data.Init();
         }
+
+        DontDestroyOnLoad(_instance.gameObject);
+
+        //Init 내에서 프로퍼티인 Instance를 호출하지 않도록 주의한다.
+        _instance._sound.Init();
+        _instance._pool.Init();
+        _instance._data.Init();
     }
 
     //----------------------------------------------------------------------------------

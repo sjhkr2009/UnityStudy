@@ -15,7 +15,7 @@ public class F02_PlayerController : MonoBehaviour
         Die
     }
 
-    PlayerState state = PlayerState.Idle;
+    [SerializeField] PlayerState state = PlayerState.Idle;
 
     // 상태에 따른 Update문을 따로 정의해두고 실행시킨다.
     private void Update()
