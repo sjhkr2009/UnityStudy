@@ -229,6 +229,15 @@ public class DataManager
         AddCocktail(new Ckt_Mexicola());
 
         AddCocktail(new Ckt_FrozenMargarita());
+        AddCocktail(new Ckt_Sidecar());
+        AddCocktail(new Ckt_AppleJack());
+        AddCocktail(new Ckt_Olympic());
+        AddCocktail(new Ckt_JackRose());
+
+        AddCocktail(new Ckt_Classic());
+        AddCocktail(new Ckt_FrenchConnection());
+        AddCocktail(new Ckt_HavardCooler());
+        AddCocktail(new Ckt_CafeRoyal());
     }
     
     void AddCustomer(Customers item)

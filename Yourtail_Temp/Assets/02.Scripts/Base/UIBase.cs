@@ -21,6 +21,8 @@ public class UIBase : MonoBehaviour
 
         for (int i = 0; i < objects.Length; i++)
         {
+            if (names[i] == "Count") continue;
+
             if (typeof(T) == typeof(GameObject)) objects[i] = gameObject.FindChild(names[i]);
             else objects[i] = gameObject.FindChild<T>(names[i]);
 

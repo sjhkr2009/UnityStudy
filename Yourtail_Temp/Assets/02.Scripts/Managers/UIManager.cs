@@ -9,6 +9,7 @@ public class UIManager
 {
     Stack<UIBase_Popup> popupUI = new Stack<UIBase_Popup>();
     List<UIBase_Scene> sceneUI = new List<UIBase_Scene>();
+    Dictionary<string, UIBase_Popup> closedUI = new Dictionary<string, UIBase_Popup>();
     int order = 10;
 
     /// <summary>
@@ -76,30 +77,38 @@ public class UIManager
     {
         if (string.IsNullOrEmpty(name)) name = typeof(T).Name;
 
-        GameObject gameObject = GameManager.Resource.Instantiate($"UI/Popup/{name}", Root);
-        T component = gameObject.GetOrAddComponent<T>();
+        T component = null;
+
+        if (closedUI.ContainsKey(name))
+        {
+            component = closedUI[name] as T;
+            component.gameObject.SetActive(true);
+        }
+        else
+        {
+            GameObject gameObject = GameManager.Resource.Instantiate($"UI/Popup/{name}", Root);
+            component = gameObject.GetOrAddComponent<T>();
+        }
 
         popupUI.Push(component);
         return component;
     }
 
     /// <summary>
-    /// 가장 나중에 띄운 팝업창을 닫습니다.
+    /// 가장 나중에 띄운 팝업창을 닫습니다. 팝업창 닫기와 관련된 모든 함수는 공통으로 이 함수를 호출하여 Destroy 처리하게 됩니다.
     /// </summary>
     public void ClosePopupUI()
     {
         if (popupUI.Count == 0) return;
 
         UIBase_Popup pop = popupUI.Pop();
-        if (!pop.hasDestroyMotion)
-        {
-            GameManager.Resource.Destroy(pop.gameObject);
-        }
-        else
-        {
+
+        if (!AllowDestroy(pop)) return;
+
+        if (pop.hasDestroyMotion)
             pop.OnDestroyMotion();
-            GameManager.Resource.Destroy(pop.gameObject, pop.destroyTime);
-        }
+
+        GameManager.Resource.Destroy(pop.gameObject, pop.destroyTime);
 
         order--;
     }
@@ -164,11 +173,35 @@ public class UIManager
     /// </summary>
     public void CloseAllPopup()
     {
-        while (popupUI.Count > 0) ClosePopupUI();
+        while (popupUI.Count > 0) 
+            ClosePopupUI();
     }
 
-    public Sprite NullImage()
+    /// <summary>
+    /// 팝업창 닫기를 실행했을 때, Destroy 처리하는 대신 비활성화시킵니다.
+    /// </summary>
+    bool AllowDestroy(UIBase_Popup popup)
     {
-        return GameManager.Resource.Load<Sprite>("Sprites/UI/NullImage");
+        if (popup.DontDestroy)
+        {
+            popup.gameObject.SetActive(false);
+
+            if (popup.hasDestroyMotion)
+                popup.OnDestroyMotion();
+
+            string name = popup.gameObject.name;
+            string key = name.Remove(name.IndexOf('('));
+
+            if (!closedUI.ContainsKey(key))
+                closedUI.Add(key, popup);
+
+            GameManager.Resource.Disable(popup.gameObject, popup.destroyTime);
+            order--;
+
+            return false;
+        }
+        return true;
     }
+
+    public Sprite NullImage => GameManager.Resource.Load<Sprite>("Sprites/UI/NullImage");
 }

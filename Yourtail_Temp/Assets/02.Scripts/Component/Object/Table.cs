@@ -1,10 +1,8 @@
 ﻿using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Table : MonoBehaviour
 {
@@ -54,9 +52,8 @@ public class Table : MonoBehaviour
     private void OnMouseUpAsButton()
     {
         if (GameManager.Instance.ignoreOnMouse == true) return;
-        
+
         EventOnSelectCustomer(currentCustomer);
-        Debug.Log(currentCustomer.GetOrder().orderContents);
     }
     public void SetLayer(bool isSelected)
     {

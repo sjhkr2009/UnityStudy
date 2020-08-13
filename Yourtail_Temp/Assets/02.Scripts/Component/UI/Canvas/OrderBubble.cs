@@ -13,7 +13,8 @@ public class OrderBubble : UIBase_Popup
     }
     enum Buttons
     {
-        GetOrder
+        GetOrder,
+        Panel
     }
     
     void Start()
@@ -21,6 +22,7 @@ public class OrderBubble : UIBase_Popup
         Init();
     }
 
+    public TableController tableController;
     string orderText;
     public override void Init()
     {
@@ -35,6 +37,8 @@ public class OrderBubble : UIBase_Popup
         EventHandler eventHandler = GetButton((int)Buttons.GetOrder).gameObject.GetOrAddComponent<EventHandler>();
         eventHandler.EventOnClick -= OnClickGetOrder;
         eventHandler.EventOnClick += OnClickGetOrder;
+
+        GetButton((int)Buttons.Panel).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<OrderBubble>(); });
     }
 
     void OnClickGetOrder(PointerEventData evt)
@@ -52,6 +56,8 @@ public class OrderBubble : UIBase_Popup
 
     private void OnDestroy()
     {
+        tableController.CancelOrder();
         DOTween.Kill(GetText((int)Texts.OrderText));
+        ResetButtons();
     }
 }

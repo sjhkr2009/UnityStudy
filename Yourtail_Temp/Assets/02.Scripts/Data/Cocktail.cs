@@ -41,7 +41,15 @@ public enum CocktailName
     Ambassador = 33,
     TequilaSunset = 34,
     Mexicola = 35,
-    FrozenMargarita = 36
+    FrozenMargarita = 36,
+    Sidecar = 37,
+    AppleJack = 38,
+    Olympic = 39,
+    JackRose = 40,
+    Classic = 41,
+    FrenchConnection = 42,
+    HavardCooler = 43,
+    CafeRoyal = 44
 }
 
 public class Cocktail
@@ -622,5 +630,119 @@ class Ckt_FrozenMargarita : Cocktail
 
         Proof = 10;
         Info = "알코올의 양을 덜어 부담은 줄이고, 얼음과 설탕으로 시원한 맛을 더한 마가리타. 푸른색 리큐어를 사용하여 보기만 해도 청량감이 느껴진다.";
+    }
+}
+
+class Ckt_Sidecar : Cocktail
+{
+    public Ckt_Sidecar() : base(37)
+    {
+        AddBase(new Bmt_Brandy());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_OrangeLiqueur());
+
+        SetName("사이드카", "Sidecar");
+
+        Proof = 30;
+        Info = "브랜디의 풍부한 과일향에 새콤한 맛을 더한 칵테일. 강한 향과 상쾌한 뒷맛으로 애주가들에게 사랑받는다.";
+    }
+}
+class Ckt_AppleJack : Cocktail
+{
+    public Ckt_AppleJack() : base(38)
+    {
+        AddBase(new Bmt_Brandy());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_GrenadineSyrup());
+
+        SetName("애플 잭", "Apple Jack");
+
+        Proof = 20;
+        Info = "300년의 역사를 가진 미국의 전통주. 당시 흔했던 사과를 이용한 원시적인 형태의 증류주이다.";
+    }
+}
+class Ckt_Olympic : Cocktail
+{
+    public Ckt_Olympic() : base(39)
+    {
+        AddBase(new Bmt_Brandy());
+        AddSub(new Smt_OrangeJuice());
+        AddSub(new Smt_OrangeLiqueur());
+
+        SetName("올림픽", "Olympic");
+
+        Proof = 20;
+        Info = "1900년 파리올림픽을 기념하여 만든 칵테일로, 브랜디의 과일향에 오렌지가 어우러진 감칠맛이 일품이다.";
+    }
+}
+class Ckt_JackRose : Cocktail
+{
+    public Ckt_JackRose() : base(40)
+    {
+        AddBase(new Bmt_Brandy());
+        AddSub(new Smt_LimeJuice());
+        AddSub(new Smt_GrenadineSyrup());
+
+        SetName("잭 로즈", "Jack Rose");
+
+        Proof = 20;
+        Info = "애플 잭에서 파생된 칵테일. 이름답게 아름다운 장미향을 띠고 있어 낭만적인 분위기를 풍긴다.";
+    }
+}
+class Ckt_Classic : Cocktail
+{
+    public Ckt_Classic() : base(41)
+    {
+        AddBase(new Bmt_Brandy());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_OrangeLiqueur());
+        AddSub(new Smt_CherryLiqueur());
+
+        SetName("클래식", "Classic");
+
+        Proof = 26;
+        Info = "고풍스러운 맛을 자랑하는 과일향 칵테일. 다양한 재료가 들어가지만 서로 잘 어우러져 조화로운 진한 맛을 보여준다.";
+    }
+}
+class Ckt_FrenchConnection : Cocktail
+{
+    public Ckt_FrenchConnection() : base(42)
+    {
+        AddBase(new Bmt_Brandy());
+        AddSub(new Smt_Amaretto());
+
+        SetName("프렌치 커넥션", "French Connection");
+
+        Proof = 32;
+        Info = "오랜 숙성을 거친 프랑스 코냑 지방의 브랜디를 사용한 칵테일. 갓 파더의 브랜디 버전으로, 무거운 스카치 위스키 대신 브랜디의 달콤하고 낭만적인 향을 살렸다.";
+    }
+}
+class Ckt_HavardCooler : Cocktail
+{
+    public Ckt_HavardCooler() : base(43)
+    {
+        AddBase(new Bmt_Brandy());
+        AddSub(new Smt_LemonJuice());
+        AddSub(new Smt_SodaWater());
+        AddSub(new Smt_Sugar());
+
+        SetName("하버드 쿨러", "Havard Cooler");
+
+        Proof = 12;
+        Info = "사과향 브랜디에 레몬과 탄산이 어우러져 새콤달콤한 과일향 음료같은 맛을 낸다.";
+    }
+}
+class Ckt_CafeRoyal : Cocktail
+{
+    public Ckt_CafeRoyal() : base(44)
+    {
+        AddBase(new Bmt_Brandy());
+        AddSub(new Smt_CoffeeLiqueur());
+        AddSub(new Smt_Sugar());
+
+        SetName("카페 로얄", "Café Royal");
+
+        Proof = 20;
+        Info = "왕족의 커피라는 이름에 걸맞은 기품을 가진 따뜻한 커피향 칵테일. 나폴레옹이 즐겨 마셨다는 설이 있다.ㅌ";
     }
 }

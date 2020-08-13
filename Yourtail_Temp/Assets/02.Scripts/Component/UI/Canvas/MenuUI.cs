@@ -11,7 +11,8 @@ public class MenuUI : UIBase_Scene
         OpenBirdList,
         OpenCockList,
         OpenMusicList,
-        MenuOpenButton
+        MenuOpenButton,
+        Panel
     }
     enum Icons
     {
@@ -33,7 +34,7 @@ public class MenuUI : UIBase_Scene
     void Start() => Init();
     public override void Init()
     {
-        GameManager.UI.SetCanvasOrder(gameObject, false, int.MaxValue);
+        GameManager.UI.SetCanvasOrder(gameObject, false, 9999);
 
         Bind<Button>(typeof(Buttons));
         Bind<Transform>(typeof(Icons));
@@ -41,12 +42,24 @@ public class MenuUI : UIBase_Scene
 
         pivot = GetButton((int)Buttons.MenuOpenButton).transform.position;
         backgroundSize = Get<RectTransform>((int)Background.MenuBarBackground).sizeDelta;
+
+        SetButton();
+
+        GetButton((int)Buttons.Panel).gameObject.SetActive(false);
+    }
+    private void OnDestroy()
+    {
+        ResetButtons();
+    }
+
+    void SetButton()
+    {
         GetButton((int)Buttons.MenuOpenButton).onClick.AddListener(() => { MenuOnOff(isOpened); });
 
-        for (int i = 0; i < (int)Icons.Count; i++)
+        GetButton((int)Buttons.Panel).onClick.AddListener(() =>
         {
-            Get<Transform>(i).gameObject.SetActive(false);
-        }
+            MenuOnOff(isOpened);
+        });
 
         //UI컬렉션 추가 시 컬렉션 UI를 여는 기능을 각 버튼에 할당할 것
         GetButton((int)Buttons.OpenCockList).onClick.AddListener(() =>
@@ -55,32 +68,18 @@ public class MenuUI : UIBase_Scene
             MenuOnOff(true);
         });
 
-        Get<RectTransform>((int)Background.MenuBarBackground).sizeDelta = Vector2.zero;
-    }
-    private void OnDestroy()
-    {
-        ResetButtons();
+        DisableIcons();
     }
 
-    void EnableIcon(int index)
+    void EnableIcons()
     {
-        Transform tr = Get<Transform>(index);
-
-        DOVirtual.DelayedCall(Define.OpenMenuDuration * 0.4f, () =>
-        {
-            if (!tr.gameObject.activeSelf) tr.gameObject.SetActive(true);
-
-            tr.position = pivot;
-            tr.DOMove(pivot + new Vector3(0, Define.MenuIconSpacing * (index + 1), 0), Define.OpenMenuDuration * 0.8f);
-        });
+        for (int i = 0; i < (int)Icons.Count; i++)
+            Get<Transform>(i).gameObject.SetActive(true);
     }
-    void DisableIcon(int index)
+    void DisableIcons()
     {
-        Transform tr = Get<Transform>(index);
-
-        tr.DOKill();
-        tr.DOMove(pivot, Define.OpenMenuDuration);
-        DOVirtual.DelayedCall(Define.OpenMenuDuration, () => { tr.gameObject.SetActive(false); });
+        for (int i = 0; i < (int)Icons.Count; i++)
+            Get<Transform>(i).gameObject.SetActive(false);
     }
     void MenuOnOff(bool _isOpened)
     {
@@ -93,34 +92,28 @@ public class MenuUI : UIBase_Scene
         buttonTr.DOKill();
         background.DOKill();
 
+        GetButton((int)Buttons.Panel).gameObject.SetActive(!_isOpened);
+
         if (_isOpened)
         {
-            buttonTr.localScale *= 0.8f;
+            buttonTr.localScale = Vector3.one * 0.8f;
             buttonTr.DOScale(1f, Define.OpenMenuDuration).SetEase(Ease.OutBack);
 
-            background.DOSizeDelta(backgroundSize, Define.OpenMenuDuration * 0.8f).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                background.DOSizeDelta(Vector2.zero, Define.OpenMenuDuration * 0.4f);
-            });
-
-            for (int i = 0; i < (int)Icons.Count; i++)
-                DisableIcon(i);
+            DisableIcons();
+            background.DOSizeDelta(new Vector2(backgroundSize.x, 0f), Define.OpenMenuDuration);
 
         }
         else
         {
-            buttonTr.localScale *= 1.1f;
+            buttonTr.localScale = Vector3.one * 1.1f;
             buttonTr.DOScale(1f, Define.OpenMenuDuration).SetEase(Ease.OutBack);
 
-            background.DOSizeDelta(backgroundSize, Define.OpenMenuDuration * 0.4f).OnComplete(() =>
-            {
-                background.DOSizeDelta(new Vector2(backgroundSize.x, (((int)Icons.Count) * Define.MenuIconSpacing * 2) + backgroundSize.y), Define.OpenMenuDuration * 0.8f);
-            });
-
-            for (int i = 0; i < (int)Icons.Count; i++)
-                EnableIcon(i);
+            background.DOSizeDelta(new Vector2(backgroundSize.x, ((int)Icons.Count + 1) * Define.MenuIconSpacing), Define.OpenMenuDuration)
+                .OnComplete(EnableIcons);
         }
+
         isOpened = !isOpened;
-        DOVirtual.DelayedCall(Define.OpenMenuDuration * 1.3f, () => { button.interactable = true; });
+        GameManager.Instance.ignoreOnMouse = isOpened;
+        DOVirtual.DelayedCall(Define.OpenMenuDuration, () => { button.interactable = true; });
     }
 }

@@ -50,7 +50,7 @@ public class BaseSelectedIcon : MonoBehaviour, IPointerClickHandler
     {
         if (GameManager.Data.CurrentBaseMaterials.Count < myCount)
         {
-            myImage.sprite = GameManager.UI.NullImage();
+            myImage.sprite = GameManager.UI.NullImage;
             return;
         }
         

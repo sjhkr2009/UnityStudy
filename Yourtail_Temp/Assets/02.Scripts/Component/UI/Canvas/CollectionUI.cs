@@ -1,4 +1,5 @@
 ﻿using CodeStage.Maintainer.Core;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,8 @@ public class CollectionUI : UIBase_Popup
         FilterGrade1,
         FilterGrade2,
         FilterGrade3,
-        FilterGrade4
+        FilterGrade4,
+        Count
     }
 
     RectTransform contents;
@@ -34,11 +36,14 @@ public class CollectionUI : UIBase_Popup
     List<Cocktail> filteringList = new List<Cocktail>();
     List<CocktailInfoCard> cocktailInfo = new List<CocktailInfoCard>();
 
+    bool inited = false;
+
     void Start() => Init();
     public override void Init()
     {
         base.Init();
 
+        DontDestroy = true;
         GameManager.Instance.ignoreOnMouse = true;
 
         Bind<GameObject>(typeof(Windows));
@@ -52,7 +57,24 @@ public class CollectionUI : UIBase_Popup
         SetAllRecipes();
         SetButtons();
         SetToggles();
+
+        inited = true;
     }
+    private void OnEnable()
+    {
+        if (!inited) return;
+
+        GameManager.UI.SetCanvasOrder(gameObject);
+        GameManager.Instance.ignoreOnMouse = true;
+
+        for (int i = 0; i < (int)Toggles.Count; i++)
+            Get<Toggle>(i).isOn = false;
+    }
+    private void OnDisable()
+    {
+        GameManager.Instance.ignoreOnMouse = false;
+    }
+
     private void OnDestroy()
     {
         ResetButtons();

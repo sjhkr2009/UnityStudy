@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,5 +61,10 @@ public class ResourceManager
     public void Destroy(GameObject gameObject, float delay = 0f)
     {
         Object.Destroy(gameObject, delay);
+    }
+
+    public void Disable(GameObject gameObject, float delay = 0f)
+    {
+        DOVirtual.DelayedCall(delay, () => { gameObject.SetActive(false); });
     }
 }

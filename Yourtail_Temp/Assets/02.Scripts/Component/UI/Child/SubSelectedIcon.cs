@@ -52,7 +52,7 @@ public class SubSelectedIcon : MonoBehaviour, IPointerClickHandler
     {
         if (GameManager.Data.CurrentSubMaterials.Count < myCount)
         {
-            myImage.sprite = GameManager.UI.NullImage();
+            myImage.sprite = GameManager.UI.NullImage;
             return;
         }
 

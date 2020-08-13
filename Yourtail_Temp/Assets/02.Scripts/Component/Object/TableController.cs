@@ -23,12 +23,10 @@ public class TableController : MonoBehaviour
         if (selectUI.activeSelf)
             selectUI.SetActive(false);
 
-        EscapeOnClick clickMethod = selectUI.GetOrAddComponent<EscapeOnClick>();
-        clickMethod.isUI = false;
-        clickMethod.interactableOn.Add(GameState.Order);
-        clickMethod.interactableOn.Add(GameState.Idle);
-        GameManager.Input.InputEscape -= CancelOrder;
-        GameManager.Input.InputEscape += CancelOrder;
+        //EscapeOnClick clickMethod = selectUI.GetOrAddComponent<EscapeOnClick>();
+        //clickMethod.isUI = false;
+        //clickMethod.interactableOn.Add(GameState.Order);
+        //clickMethod.interactableOn.Add(GameState.Idle);
 
         GameManager.Instance.OnGameStateChange -= OnGameStateChange;
         GameManager.Instance.OnGameStateChange += OnGameStateChange;
@@ -37,7 +35,6 @@ public class TableController : MonoBehaviour
     private void OnDestroy()
     {
         foreach (Table item in tables) item.EventOnSelectCustomer -= GetOrder;
-        GameManager.Input.InputEscape -= CancelOrder;
         GameManager.Instance.OnGameStateChange -= OnGameStateChange;
     }
 
@@ -134,18 +131,19 @@ public class TableController : MonoBehaviour
 
     void GetOrder(Customers customer)
     {
+        if (selectUI.activeSelf || GameManager.Instance.GameState != GameState.Idle) return;
+
         GameManager.Data.SelectCustomer(customer);
-        GameManager.UI.OpenPopupUI<OrderBubble>();
+        GameManager.UI.OpenPopupUI<OrderBubble>().tableController = this;
         foreach (Table item in tables)
         {
             item.SetLayer(customer == item.currentCustomer);
         }
         selectUI.SetActive(true);
     }
-    void CancelOrder()
+    public void CancelOrder()
     {
         if (!selectUI.activeSelf || GameManager.Instance.GameState != GameState.Idle) return;
-        GameManager.UI.ClosePopupUI();
         selectUI.SetActive(false);
     }
     void DeleteCustomer(Customers customer)
