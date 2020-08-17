@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 
 [CreateAssetMenu(fileName = "Scripts", menuName = "CustomDatabase/Texts", order = int.MinValue + 1)]
-public class ScriptableTexts : ScriptableObject
+public class BirdStories : ScriptableObject
 {
     [ShowInInspector] public Dictionary<int, List<string>> eagleScripts { get; private set; } = new Dictionary<int, List<string>>();
 
@@ -32,10 +32,30 @@ public class ScriptableTexts : ScriptableObject
 
     void SetEagelScript()
     {
-        eagleScripts.Add(1, new List<string>()
+        if (!eagleScripts.ContainsKey(1))
         {
-            "허허~ 분위기 좋구만~!! 여기 쐬주 한잔에,,,,",
-            "읍,,따고~? 요즘 메뉴는,, 알아먹기도 힘들구만!!"
-        });
+            eagleScripts.Add(1, new List<string>()
+            {
+                "(독수리 스토리 1단계 - 1)",
+                "(독수리 스토리 1단계 - 2)",
+                "(독수리 스토리 1단계 - 3)"
+            });
+        }
+        if (!eagleScripts.ContainsKey(2))
+        {
+            eagleScripts.Add(2, new List<string>()
+            {
+                "(독수리 스토리 2단계 - 1)",
+                "(독수리 스토리 2단계 - 2)"
+            });
+        }
+        if (!eagleScripts.ContainsKey(3))
+        {
+            eagleScripts.Add(3, new List<string>()
+            {
+                "(독수리 스토리 3단계 - 1)",
+                "(독수리 스토리 3단계 - 2)"
+            });
+        }
     }
 }

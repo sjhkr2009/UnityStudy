@@ -65,6 +65,9 @@ class Smt_GrenadineSyrup : SubMaterials
     }
 }
 
+/// <summary>
+/// [사용되지 않음] 소다수로 대체 (Smt_SodaWater)
+/// </summary>
 class Smt_TonicWater : SubMaterials
 {
     public Smt_TonicWater() : base(5)

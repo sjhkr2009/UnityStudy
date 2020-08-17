@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public enum CocktailName
 {
@@ -104,13 +103,14 @@ public class Cocktail
 
         return tagList;
     }
-    public int GetProofGrade()
+    public int GetProofGradeToInt() => (int)GetProofGrade();
+    public Define.ProofGrade GetProofGrade()
     {
-        if (Proof <= Define.ProofGrade0LowerThan) return (int)Define.ProofGrade.매우약함;
-        else if (Proof <= Define.ProofGrade1LowerThan) return (int)Define.ProofGrade.약함;
-        else if (Proof <= Define.ProofGrade2LowerThan) return (int)Define.ProofGrade.중간;
-        else if (Proof <= Define.ProofGrade3LowerThan) return (int)Define.ProofGrade.셈;
-        else return (int)Define.ProofGrade.매우셈;
+        if (Proof <= Define.ProofGrade0LowerThan) return Define.ProofGrade.매우약함;
+        else if (Proof <= Define.ProofGrade1LowerThan) return Define.ProofGrade.약함;
+        else if (Proof <= Define.ProofGrade2LowerThan) return Define.ProofGrade.중간;
+        else if (Proof <= Define.ProofGrade3LowerThan) return Define.ProofGrade.셈;
+        else return Define.ProofGrade.매우셈;
     }
 
     public string Id { get; private set; }
@@ -158,7 +158,7 @@ class Ckt_TequillaTonic : Cocktail
     public Ckt_TequillaTonic() : base(2)
     {
         AddBase(new Bmt_Tequilla());
-        AddSub(new Smt_TonicWater());
+        AddSub(new Smt_SodaWater());
 
         SetName("데킬라 토닉", "Tequilla Tonic");
 
@@ -227,7 +227,7 @@ class Ckt_VodkaTonic : Cocktail
     public Ckt_VodkaTonic() : base(7)
     {
         AddBase(new Bmt_Vodka());
-        AddSub(new Smt_TonicWater());
+        AddSub(new Smt_SodaWater());
 
         SetName("보드카 토닉", "Vodka Tonic");
 
@@ -334,7 +334,7 @@ class Ckt_HighBall : Cocktail
     public Ckt_HighBall() : base(15)
     {
         AddBase(new Bmt_Whisky());
-        AddSub(new Smt_TonicWater());
+        AddSub(new Smt_SodaWater());
 
         SetName("하이 볼", "High Ball");
 
@@ -388,7 +388,7 @@ class Ckt_GinTonic : Cocktail
     public Ckt_GinTonic() : base(19)
     {
         AddBase(new Bmt_Gin());
-        AddSub(new Smt_TonicWater());
+        AddSub(new Smt_SodaWater());
 
         SetName("진 토닉", "Gin Tonic");
 
@@ -689,6 +689,10 @@ class Ckt_JackRose : Cocktail
         Info = "애플 잭에서 파생된 칵테일. 이름답게 아름다운 장미향을 띠고 있어 낭만적인 분위기를 풍긴다.";
     }
 }
+
+/// <summary>
+/// [사용되지 않음]
+/// </summary>
 class Ckt_Classic : Cocktail
 {
     public Ckt_Classic() : base(41)

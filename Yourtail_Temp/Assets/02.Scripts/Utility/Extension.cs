@@ -54,4 +54,30 @@ public static class Extension
         self.SetNativeSize();
         self.transform.localScale *= size;
     }
+
+    public static int RandomInWeighted(this float[] rateList)
+    {
+        if (rateList == null || rateList.Length <= 1)
+            return 0;
+
+        float total = rateList[0];
+        for (int i = 1; i < rateList.Length; i++)
+        {
+            total += rateList[i];
+            rateList[i] += rateList[1 - 1];
+        }
+        float rate = Random.Range(0f, total);
+        int target = rateList.Length - 1;
+
+        for (int i = 0; i < rateList.Length; i++)
+        {
+            if (rate < rateList[i])
+            {
+                target = i;
+                break;
+            }
+        }
+
+        return target;
+    }
 }

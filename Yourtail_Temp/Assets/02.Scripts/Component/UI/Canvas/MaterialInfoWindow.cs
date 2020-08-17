@@ -49,16 +49,18 @@ public class MaterialInfoWindow : UIBase_Popup
 
         GetImage((int)Images.MaterialImage).sprite = myMaterial.image;
 
+        GetImage((int)Images.IconBackground).enabled = false;
+        Get<RectTransform>((int)Transforms.IconBackground).sizeDelta = Define.MaterialSize;
 
-        if (myMaterial.materialType == CocktailMaterials.MaterialType.Base)
-        {
-            GetImage((int)Images.IconBackground).enabled = false;
-            Get<RectTransform>((int)Transforms.IconBackground).sizeDelta = Define.baseMaterialSize;
-        }
-        else
-        {
-            GetImage((int)Images.IconBackground).enabled = true;
-        }
+        //if (myMaterial.materialType == CocktailMaterials.MaterialType.Base)
+        //{
+        //    GetImage((int)Images.IconBackground).enabled = false;
+        //    Get<RectTransform>((int)Transforms.IconBackground).sizeDelta = Define.baseMaterialSize;
+        //}
+        //else
+        //{
+        //    GetImage((int)Images.IconBackground).enabled = true;
+        //}
     }
 
     private void OnDestroy()

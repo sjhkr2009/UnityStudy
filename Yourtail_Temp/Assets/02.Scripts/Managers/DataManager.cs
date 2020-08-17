@@ -8,7 +8,7 @@ using DG.Tweening;
 public class DataManager
 {
     public static ScriptableData GameData => GameManager.Resource.LoadDatabase();
-    public static ScriptableTexts DialogData => GameManager.Resource.LoadDialogData();
+    public static BirdStories DialogData => GameManager.Resource.LoadDialogData();
     public List<Customers> CustomerList { get; private set; } = new List<Customers>();
     public Dictionary<string, Customers> CustomerNameData { get; private set; } = new Dictionary<string, Customers>();
 
@@ -16,6 +16,7 @@ public class DataManager
     public Dictionary<int, BaseMaterials> BaseMaterialIndexData { get; private set; } = new Dictionary<int, BaseMaterials>();
     public Dictionary<string, SubMaterials> SubMaterialIdData { get; private set; } = new Dictionary<string, SubMaterials>();
     public Dictionary<int, SubMaterials> SubMaterialIndexData { get; private set; } = new Dictionary<int, SubMaterials>();
+    public List<SubMaterials> SubMaterialList { get; private set; } = new List<SubMaterials>();
     public Dictionary<string, Cocktail> CocktailData { get; private set; } = new Dictionary<string, Cocktail>();
     public List<Cocktail> CocktailList { get; private set; } = new List<Cocktail>();
 
@@ -165,7 +166,7 @@ public class DataManager
         AddSub(new Smt_LimeJuice());
         AddSub(new Smt_LemonJuice());
         AddSub(new Smt_GrenadineSyrup());
-        AddSub(new Smt_TonicWater());
+        //AddSub(new Smt_TonicWater());
 
         AddSub(new Smt_OrangeLiqueur());
         AddSub(new Smt_SodaWater());
@@ -234,7 +235,7 @@ public class DataManager
         AddCocktail(new Ckt_Olympic());
         AddCocktail(new Ckt_JackRose());
 
-        AddCocktail(new Ckt_Classic());
+        //AddCocktail(new Ckt_Classic());
         AddCocktail(new Ckt_FrenchConnection());
         AddCocktail(new Ckt_HavardCooler());
         AddCocktail(new Ckt_CafeRoyal());
@@ -254,6 +255,7 @@ public class DataManager
     {
         SubMaterialIdData.Add(item.Id, item);
         SubMaterialIndexData.Add(item.Index, item);
+        SubMaterialList.Add(item);
     }
     void AddCocktail(Cocktail item)
     {
@@ -387,44 +389,66 @@ public class DataManager
     /// <summary>
     /// 칵테일과 오더를 비교하여 점수를 산출하고, GOOD/SOSO/BAD의 세 가지 결과로 분류합니다. 각각의 결과는 1, 0, -1의 값으로 반환됩니다.
     /// </summary>
-    int CorrectCheck(Cocktail cocktail, Order order, Customers customer = null)
+    int CorrectCheck(Cocktail cocktail, Order order)
     {
-        if (customer == null) customer = CustomerNameData[order.CustomerName];
-
         float score = 0f;
         int checkpoint = 0;
 
         if(order.requiredCocktail != null)
         {
             checkpoint++;
-            if (order.requiredCocktail == cocktail.cocktailName) score += 100f;
+            if (order.requiredCocktail == cocktail.cocktailName)
+                score += 100f;
         }
-
-        if(order.requiredProofGrade != null)
+        if (order.requiredProofGrade != null && order.requiredProofGrade.Count > 0)
         {
             checkpoint++;
-            int difference = Mathf.Abs((int)order.requiredProofGrade - cocktail.GetProofGrade());
-            score += Mathf.Clamp((100f - 10 * (difference * difference)), 0f, 100f);
+            score += order.requiredProofGrade.Contains(cocktail.GetProofGrade()) ? 100f : 0f;
         }
-
-        if(order.requiredTag != null && order.requiredTag.Count > 0)
+        if (order.requiredTag != null && order.requiredTag.Count > 0)
         {
             checkpoint++;
-            float _score = 0;
-            foreach (Define.CocktailTag tag in order.requiredTag)
-            {
-                if (cocktail.Tags.Contains(tag)) _score += 100f;
-            }
-            score += _score / order.requiredTag.Count;
+            score += ListMatchingRate(cocktail.Tags, order.requiredTag);
+        }
+        if(order.avoidProofGrade != null && order.avoidProofGrade.Count > 0)
+        {
+            checkpoint++;
+            score += order.avoidProofGrade.Contains(cocktail.GetProofGrade()) ? 0f : 100f;
+        }
+        if (order.avoidTag != null && order.avoidTag.Count > 0)
+        {
+            checkpoint++;
+            score += 100f - ListMatchingRate(cocktail.Tags, order.avoidTag);
         }
 
-        float finalScore = Mathf.Clamp(score / (float)checkpoint, 0f, 100f);
+        float finalScore = Mathf.Clamp(score / checkpoint, 0f, 100f);
 
-        int result = 0;
-        if (finalScore > Define.Evaluate_GoodHigherThan) result = 1;
-        else if (finalScore < Define.Evaluate_BadLowerThan) result = -1;
+        Debug.Log($"결과 점수: {finalScore}");
+        return Define.CocktailScoreToGrage(finalScore);
+    }
 
-        return result;
+    /// <summary>
+    /// 칵테일이 가진 리스트와 오더에서 요구하는 리스트의 일치율을 0~100의 퍼센트로 반환합니다.
+    /// * 만약 리스트 일치율 확인 로직이 다른 동작에서 추가로 요구될 경우, 별도의 스크립트로 옮길 것이 권장됩니다.
+    /// </summary>
+    float ListMatchingRate<T>(List<T> cocktail, List<T> order)
+    {
+        if(order == null || order.Count == 0)
+        {
+            Debug.Log("빈 칵테일의 일치율 확인을 시도했습니다.");
+            return -1f;
+        }
+
+        int equalCount = 0;
+
+        foreach (T item in order)
+        {
+            if (cocktail.Contains(item))
+                equalCount++;
+        }
+
+        float rate = (float)equalCount / order.Count;
+        return rate * 100f;
     }
 
     /// <summary>
@@ -495,10 +519,11 @@ public class DataManager
     public void LoadData()
     {
         foreach (var item in GameData.CustomerLevel)
-        {
-            
             CustomerNameData[item.Key].Level = item.Value;
-        }
+
+        foreach (var item in GameData.CustomerExp)
+            CustomerNameData[item.Key].Exp = item.Value;
+
         BirdCoin = GameData.Birdcoin;
         Recipe.Clear();
         foreach (string item in GameData.CollectedRecipe)
@@ -537,6 +562,7 @@ public class DataManager
     }
     void CurrentReset()
     {
+        CurrentCustomer.ResetOrder();
         CurrentCustomer = null;
         CurrentOrder = null;
         CurrentCocktail = null;

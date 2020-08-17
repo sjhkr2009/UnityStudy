@@ -113,7 +113,6 @@ public class MenuUI : UIBase_Scene
         }
 
         isOpened = !isOpened;
-        GameManager.Instance.ignoreOnMouse = isOpened;
         DOVirtual.DelayedCall(Define.OpenMenuDuration, () => { button.interactable = true; });
     }
 }

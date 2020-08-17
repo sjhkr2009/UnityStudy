@@ -56,7 +56,7 @@ public class OrderBubble : UIBase_Popup
 
     private void OnDestroy()
     {
-        tableController.CancelOrder();
+        if (tableController != null) tableController.CancelOrder();
         DOTween.Kill(GetText((int)Texts.OrderText));
         ResetButtons();
     }

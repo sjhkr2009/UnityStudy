@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Define
@@ -126,6 +124,17 @@ public class Define
     /// 칵테일 평가 시 내부적으로 0~100점으로 산출된 점수를, 어디를 기준으로 GOOD / SOSO / BAD로 분류할 지 결정합니다. 이 수치보다 낮으면 BAD 결과를 얻습니다.
     /// </summary>
     public const float Evaluate_BadLowerThan = 30f;
+    /// <summary>
+    /// 만들어진 칵테일에 대한 점수(0~100)를 GOOD/SOSO/BAD의 세 가지 결과로 분류하여, 1 / 0 / -1 의 정수로 반환합니다.
+    /// </summary>
+    /// <param name="score">DataManager 에서 계산되어 있는 칵테일 점수 입력</param>
+    /// <returns></returns>
+    public static int CocktailScoreToGrage(float score)
+    {
+        if (score > Evaluate_GoodHigherThan) return 1;
+        if (score < Evaluate_BadLowerThan) return -1;
+        return 0;
+    }
 
     /// <summary>
     /// 대화창에 텍스트 출력 시, 한 글자 당 몇 초에 걸쳐 출력할 지 결정합니다. 빠른 모드(DoTextSpeedFast)는 대화내용이 길 때 사용됩니다.
@@ -147,9 +156,9 @@ public class Define
     public const float ImageScale_BaseSelectUI = 1f;
 
     /// <summary>
-    /// 베이스 재료 사진의 크기를 반환합니다.
+    /// 재료 사진의 크기를 반환합니다.
     /// </summary>
-    public static Vector2 baseMaterialSize => new Vector2(170f, 586f);
+    public static Vector2 MaterialSize => new Vector2(170f, 586f);
 
     /// <summary>
     /// 호감도 단계별로 필요한 호감도의 양입니다. 호감도 단계가 3 → 4단계로 상승하기 위해서는 RequiredEXP[3] 만큼의 호감도가 필요합니다.

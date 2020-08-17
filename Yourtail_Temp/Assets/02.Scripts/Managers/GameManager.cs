@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
-using TMPro;
 using DG.Tweening;
 
 public enum GameState
@@ -79,18 +78,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        GameState = GameState.Idle;
-        Sound.Init();
         _data.LoadFromPlayerPrefs();
 
+        GameState = GameState.Idle;
+        Sound.Init();
+
         Input.InputStateChange -= StateChange;
-        //Input.InputNextState -= InNextState;
         Input.InputEscape -= OnEscape;
         Input.InputRetryCocktail -= OnRetryCocktail;
         OnGameStateChange -= Data.OnGameStateChange;
 
         Input.InputStateChange += StateChange;
-        //Input.InputNextState += InNextState;
         Input.InputEscape += OnEscape;
         Input.InputRetryCocktail += OnRetryCocktail;
         OnGameStateChange += Data.OnGameStateChange;
