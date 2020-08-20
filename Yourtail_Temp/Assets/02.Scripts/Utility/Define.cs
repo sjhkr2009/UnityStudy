@@ -188,10 +188,12 @@ public class Define
     }
 
     /// <summary>
-    /// 도수를 등급으로 변환할 때 기준점을 나타냅니다. 예를 들어, 5도보다 낮으면 도수 등급은 0을 반환합니다.
+    /// 도수를 등급으로 변환할 때 기준점을 나타냅니다. 인덱스 n의 도수 이하인 칵테일은 n등급을 갖게 됩니다. 예를 들어, 5도 칵테일의 도수 등급은 0 입니다.
     /// </summary>
-    public const int ProofGrade0LowerThan = 5;
-    public const int ProofGrade1LowerThan = 10;
-    public const int ProofGrade2LowerThan = 19;
-    public const int ProofGrade3LowerThan = 30;
+    public static int[] ProofGradeCriterion { get; private set; } = { 5, 10, 19, 30, 40 };
+
+    /// <summary>
+    /// 새 컬렉션의 슬라이더 길이입니다. 하트 아이콘을 슬라이더 위에 일정 간격으로 배치하기 위해 사용됩니다.
+    /// </summary>
+    public const int BirdLevelSliderWidth = 1000;
 }

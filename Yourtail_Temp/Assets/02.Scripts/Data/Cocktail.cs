@@ -106,11 +106,12 @@ public class Cocktail
     public int GetProofGradeToInt() => (int)GetProofGrade();
     public Define.ProofGrade GetProofGrade()
     {
-        if (Proof <= Define.ProofGrade0LowerThan) return Define.ProofGrade.매우약함;
-        else if (Proof <= Define.ProofGrade1LowerThan) return Define.ProofGrade.약함;
-        else if (Proof <= Define.ProofGrade2LowerThan) return Define.ProofGrade.중간;
-        else if (Proof <= Define.ProofGrade3LowerThan) return Define.ProofGrade.셈;
-        else return Define.ProofGrade.매우셈;
+        for (int i = 0; i < Define.ProofGradeCriterion.Length; i++)
+        {
+            if (Proof <= Define.ProofGradeCriterion[i])
+                return (Define.ProofGrade)i;
+        }
+        return (Define.ProofGrade)(Define.ProofGradeCriterion.Length - 1);
     }
 
     public string Id { get; private set; }
