@@ -175,6 +175,11 @@ public class Define
     public const float MenuIconSpacing = 120f;
 
     /// <summary>
+    /// Bird Info Window에서 스토리를 열람하는 버튼이 나열된 간격을 나타냅니다.
+    /// </summary>
+    public const int StoryButtonsSpacing = 125;
+
+    /// <summary>
     /// 칵테일의 도수를 시각적으로 표시할 때, 도수에 맞는 색상으로 변환시킵니다. (낮을수록 청록색, 높을수록 빨강색 계열을 갖게 됩니다)
     /// </summary>
     /// <param name="proof">도수를 입력하세요. 퍼센트를 그대로 입력해도 되지만, 최대 도수와 비교하여 0과 1 사이의 숫자로 입력하는 것이 권장됩니다.</param>

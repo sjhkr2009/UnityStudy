@@ -35,14 +35,12 @@ public class CollectionUI : UIBase_Popup
     List<Cocktail> filteringList = new List<Cocktail>();
     List<CocktailInfoCard> cocktailInfo = new List<CocktailInfoCard>();
 
-    bool inited = false;
 
     void Start() => Init();
     public override void Init()
     {
         base.Init();
 
-        DontDestroy = true;
         GameManager.Instance.ignoreOnMouse = true;
 
         Bind<GameObject>(typeof(Windows));
@@ -57,11 +55,12 @@ public class CollectionUI : UIBase_Popup
         SetButtons();
         SetToggles();
 
-        inited = true;
+        SetPooling();
     }
-    private void OnEnable()
+    void OnEnable()
     {
-        if (!inited) return;
+        if (!Inited || !DontDestroy)
+            return;
 
         GameManager.UI.SetCanvasOrder(gameObject);
         GameManager.Instance.ignoreOnMouse = true;

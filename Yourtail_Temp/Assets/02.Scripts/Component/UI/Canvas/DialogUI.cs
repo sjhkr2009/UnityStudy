@@ -53,7 +53,7 @@ public class DialogUI : UIBase_Popup
         GetButton((int)Buttons.NextButton).onClick.AddListener(SetNextText);
 
         Image charImage = GetImage((int)Images.CharacterImage);
-        charImage.sprite = GameManager.Data.CurrentCustomer.image;
+        charImage.sprite = GameManager.Data.CurrentCustomer.Image;
         charImage.SetNativeSize();
     }
 

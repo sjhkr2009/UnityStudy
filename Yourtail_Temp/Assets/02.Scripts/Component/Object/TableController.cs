@@ -70,7 +70,7 @@ public class TableController : MonoBehaviour
 
             Customers newCustomer = GameManager.Data.GetRandomCustomer();
 
-            while (!newCustomer.isActive)
+            while (!newCustomer.IsActive)
             {
                 yield return null;
 

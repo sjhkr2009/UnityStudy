@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Customers
 {
-    protected Dictionary<int, List<Order>> wishlist = new Dictionary<int, List<Order>>();
-    public Dictionary<Define.Reaction, string> reactionSctipt { get; private set; } = new Dictionary<Define.Reaction, string>();
+    #region 기본 정보
     public string Name { get; protected set; }
     public string ID { get; private set; }
     public Define.CustomerType CustomerType { get; private set; }
-    public Sprite image;
-    public float Satisfaction { get; set; }
+    public Sprite Image { get; set; }
+    public bool IsActive { get; set; }
+    #endregion
+
+    #region 호감도
     private int _level = 1;
     public int Level
     {
@@ -24,7 +26,6 @@ public class Customers
         Level = 1;
         Exp = 0;
     }
-    public bool isActive;
     private int _exp;
     public int Exp
     {
@@ -43,6 +44,10 @@ public class Customers
             }
         }
     }
+    #endregion
+
+    #region 오더 관련
+    protected Dictionary<int, List<Order>> wishlist = new Dictionary<int, List<Order>>();
     private int _currentOrderIndex;
     public int CurrentOrderIndex
     {
@@ -98,19 +103,29 @@ public class Customers
         if (!wishlist.ContainsKey(level)) wishlist.Add(level, new List<Order>());
         wishlist[level].Add(order);
     }
+    #endregion
+
+    #region 기타 스크립트
+    public Dictionary<Define.Reaction, string> reactionSctipt { get; private set; } = new Dictionary<Define.Reaction, string>();
     protected void SetReactionSctipt(string good, string soso, string bad)
     {
         reactionSctipt.Add(Define.Reaction.GOOD, good);
         reactionSctipt.Add(Define.Reaction.SOSO, soso);
         reactionSctipt.Add(Define.Reaction.BAD, bad);
     }
+    public string Liking { get; protected set; }
+
+    #endregion
+
     public Customers(int index)
     {
         CurrentOrderIndex = 0;
-        isActive = true;
+        IsActive = true;
         CustomerType = (Define.CustomerType)index;
         ID = $"CT{index}";
-        image = GameManager.Resource.LoadImage(Define.ImageType.Customer, index);
+        Image = GameManager.Resource.LoadImage(Define.ImageType.Customer, index);
+        Level = 1;
+        Exp = 0;
     }
 }
 
@@ -119,6 +134,7 @@ public class Eagle : Customers
     public Eagle() : base(1)
     {
         Name = "머머리 독수리";
+        Liking = "(임시) 꼰-머";
         SetMaxLevel(3);
 
         SetOrder(1, "제일 독한걸로 하나 줘 보게. 요즘 술들은 술 같지가 않아.", requiredProofGrade: new List<Define.ProofGrade>() { Define.ProofGrade.매우셈 });
@@ -136,7 +152,8 @@ public class Parrot : Customers
     public Parrot() : base(2)
     {
         Name = "앵무새";
-        SetMaxLevel(1);
+        Liking = "(임시) 추상적 표현";
+        SetMaxLevel(2);
 
         SetOrder(1, "오렌지 나무에서 나는 향이 맡고 싶어요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.오렌지, Define.CocktailTag.주스 } );
         SetOrder(1, "키스 인 더 다크'라는 칵테일이 있다던데. 이름이 참 예쁘지 않아요?", requiredCocktail: CocktailName.KissInTheDark);
@@ -153,10 +170,11 @@ public class Flamingo : Customers
     public Flamingo() : base(3)
     {
         Name = "홍학";
-        SetMaxLevel(1);
+        Liking = "(임시) 반말함";
+        SetMaxLevel(2);
 
         SetOrder(1, "아직 기획이 안 되었으니 오렌지나 내놓으세요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.오렌지 });
-        SetOrder(1, "아직 기획이 안 되었으니 오렌지나 내놓으라니까요?.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.오렌지 });
+        SetOrder(2, "아직 기획이 안 되었으니 오렌지나 내놓으라니까요?.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.오렌지 });
 
         SetReactionSctipt("우왕 너무 맛있다 ㅎㅎ", "나쁘지 않은걸~?!", "흐음..이건 뭐지?");
     }
@@ -167,10 +185,11 @@ public class Goni : Customers
     public Goni() : base(4)
     {
         Name = "고니";
-        SetMaxLevel(1);
+        Liking = "(임시) 고상함";
+        SetMaxLevel(2);
 
         SetOrder(1, "아직 기획이 안 되었으니 레몬이나 내놓으세요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.레몬 });
-        SetOrder(1, "아직 기획이 안 되었으니 레몬이나 내놓으라니까요?", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.레몬 });
+        SetOrder(2, "아직 기획이 안 되었으니 레몬이나 내놓으라니까요?", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.레몬 });
 
         SetReactionSctipt("맛이 좋은걸요~!^^", "이것도 나름 괜찮네요~!", "다시 만들어 주면 좋겠어요..ㅠ");
     }
@@ -181,7 +200,8 @@ public class Penguin : Customers
     public Penguin() : base(5)
     {
         Name = "펭귄";
-        SetMaxLevel(1);
+        Liking = "(임시) 민증검사 필수";
+        SetMaxLevel(2);
 
         SetOrder(1, "댁길라'라는 술이 들어간 칵테일이 맛있다고 들었는데... 그게 먹어보고 싶어요오. 약하게 해주세요오.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.데킬라 }, requiredProofGrade: new List<Define.ProofGrade>() { Define.ProofGrade.약함 });
         SetOrder(1, "과일 들어간거면 아무거나 괜찮을거 같아요오.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.과일 });

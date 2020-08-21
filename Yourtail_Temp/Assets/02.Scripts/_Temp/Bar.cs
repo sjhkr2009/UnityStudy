@@ -35,6 +35,6 @@ public class Bar : UIBase_Scene
     {
         GetImage((int)CustomerType.Customer3).gameObject.SetActive(false);
         GetImage((int)CustomerType.Customer3).gameObject.SetActive(true);
-        GetImage((int)CustomerType.Customer3).sprite = value.image;
+        GetImage((int)CustomerType.Customer3).sprite = value.Image;
     }
 }

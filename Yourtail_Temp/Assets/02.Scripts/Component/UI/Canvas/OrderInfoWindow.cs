@@ -31,7 +31,7 @@ public class OrderInfoWindow : UIBase_Popup
         Bind<Text>(typeof(Texts));
         Bind<Image>(typeof(Images));
 
-        GetImage((int)Images.CustomerImage).sprite = GameManager.Data.CurrentCustomer.image;
+        GetImage((int)Images.CustomerImage).sprite = GameManager.Data.CurrentCustomer.Image;
         GetText((int)Texts.OrderText).text = GameManager.Data.CurrentOrder.orderContents;
 
         hasDestroyMotion = true;

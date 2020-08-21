@@ -21,9 +21,6 @@ public class DataManager
     public List<Cocktail> CocktailList { get; private set; } = new List<Cocktail>();
 
 
-    // 현재 정보를 요청하는 재료의 클래스. 재료 선택 화면에서 ? 버튼을 눌러 정보를 확인할 때 사용한다.
-    public CocktailMaterials CurrentMaterialInfo { get; set; }
-    void SetMaterialInfo(CocktailMaterials material) => CurrentMaterialInfo = material;
 
     #region 현재 저장중인 정보
 
@@ -121,10 +118,12 @@ public class DataManager
         maxSub = Define.MaxSubMaterial;
 
         GameManager.Input.InputMaterialSelect -= SelectMaterial;
-        GameManager.Input.InputMaterialInfo -= SetMaterialInfo;
+        GameManager.Input.InputMaterialInfo -= GameManager.UI.SetMaterialInfo;
+        GameManager.Input.InputBirdInfo -= GameManager.UI.SetBirdInfo;
 
         GameManager.Input.InputMaterialSelect += SelectMaterial;
-        GameManager.Input.InputMaterialInfo += SetMaterialInfo;
+        GameManager.Input.InputMaterialInfo += GameManager.UI.SetMaterialInfo;
+        GameManager.Input.InputBirdInfo += GameManager.UI.SetBirdInfo;
 
         SetCustomers();
         SetSpirits();

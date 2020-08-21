@@ -30,7 +30,7 @@ public class MaterialInfoWindow : UIBase_Popup
     public override void Init()
     {
         base.Init();
-        myMaterial = GameManager.Data.CurrentMaterialInfo;
+        myMaterial = GameManager.UI.CurrentMaterialInfo;
 
         Bind<Text>(typeof(Texts));
         Bind<Image>(typeof(Images));

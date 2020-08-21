@@ -46,7 +46,7 @@ public class SetCocktailUI : UIBase_Popup
         if (grade == 1) GetText((int)Texts.CoinText).text = "코인 획득!";
         else GetText((int)Texts.CoinText).text = "";
 
-        GetImage((int)Images.CustomerImage).sprite = data.CurrentCustomer.image;
+        GetImage((int)Images.CustomerImage).sprite = data.CurrentCustomer.Image;
         GetImage((int)Images.CustomerImage).SetNativeSize();
 
         FillExpBar(data.beforeExp, data.afterExp, data.levelUp);

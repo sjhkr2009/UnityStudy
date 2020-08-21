@@ -5,12 +5,19 @@ using UnityEngine.UI;
 
 public class HeartIcon : MonoBehaviour
 {
-    Image fillImage;
+    [SerializeField] RectTransform tr;
+    [SerializeField] Image fillImage;
 
     void Start()
     {
-        if (fillImage == null) 
+        ComponentCheck();
+    }
+    void ComponentCheck()
+    {
+        if (fillImage == null)
             fillImage = transform.GetChild(0).GetComponent<Image>();
+        if (tr == null)
+            tr = GetComponent<RectTransform>();
     }
 
     public void SetIcon(float posRate, bool isFill)
@@ -21,7 +28,11 @@ public class HeartIcon : MonoBehaviour
 
     public void SetTransform(float posRate)
     {
-        transform.position = new Vector2(transform.position.x, Define.BirdLevelSliderWidth * posRate);
+        if (tr == null)
+            tr = GetComponent<RectTransform>();
+
+        tr.anchorMin = new Vector2(posRate, 0f);
+        tr.anchorMax = new Vector2(posRate, 0f);
     }
     public void SetFill(bool isFill)
     {

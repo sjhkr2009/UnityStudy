@@ -45,7 +45,7 @@ public class Table : MonoBehaviour
 
         HasCustomer = true;
         currentCustomer = customer;
-        customerImage.sprite = customer.image;
+        customerImage.sprite = customer.Image;
     }
     public void DeleteCustomer() { HasCustomer = false; }
 

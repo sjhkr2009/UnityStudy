@@ -100,6 +100,7 @@ public class ScriptableData : ScriptableObject
         {
             string key = PlayerPrefs.GetString($"Customer{i}Level");
             if (string.IsNullOrEmpty(key)) continue;
+
             int value = PlayerPrefs.GetInt(key);
             CustomerLevel.Add(key, value);
         }

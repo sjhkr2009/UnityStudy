@@ -10,6 +10,18 @@ public class UIManager
     Dictionary<string, UIBase_Popup> closedUI = new Dictionary<string, UIBase_Popup>();
     int order = 10;
 
+    #region 현재 확인중인 정보
+
+    // 현재 정보를 요청하는 재료의 클래스. 재료 선택 화면에서 ? 버튼을 눌러 정보를 확인할 때 사용한다.
+    public CocktailMaterials CurrentMaterialInfo { get; set; }
+    public void SetMaterialInfo(CocktailMaterials material) => CurrentMaterialInfo = material;
+
+    // 현재 확인하려는 새의 정보. Bird Collection에서 특정 새의 정보를 확인하고자 할 때 사용한다.
+    public Customers CurrentBirdInfo { get; set; }
+    public void SetBirdInfo(Customers bird) => CurrentBirdInfo = bird;
+
+    #endregion
+
     /// <summary>
     /// UI를 담을 빈 오브젝트 @UI 를 찾아서 반환합니다. 없으면 새로 생성합니다.
     /// </summary>
@@ -50,7 +62,7 @@ public class UIManager
     }
 
     /// <summary>
-    /// 팝업창이 아닌 UI를 화면상에 불러옵니다. 게임 씬이 처음 로드될 때 사용합니다.
+    /// 팝업창이 아닌 UI를 화면상에 불러옵니다.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="name"></param>

@@ -21,7 +21,7 @@ public class MenuUI : UIBase_Scene
         OpenBirdList,
         Count
     }
-    enum Background
+    enum RectTransforms
     {
         MenuBarBackground,
         MenuOpenButton
@@ -38,12 +38,12 @@ public class MenuUI : UIBase_Scene
 
         Bind<Button>(typeof(Buttons));
         Bind<Transform>(typeof(Icons));
-        Bind<RectTransform>(typeof(Background));
+        Bind<RectTransform>(typeof(RectTransforms));
 
         pivot = GetButton((int)Buttons.MenuOpenButton).transform.position;
-        backgroundSize = Get<RectTransform>((int)Background.MenuBarBackground).sizeDelta;
+        backgroundSize = Get<RectTransform>((int)RectTransforms.MenuBarBackground).sizeDelta;
 
-        SetButton();
+        SetButtons();
 
         GetButton((int)Buttons.Panel).gameObject.SetActive(false);
     }
@@ -52,7 +52,7 @@ public class MenuUI : UIBase_Scene
         ResetButtons();
     }
 
-    void SetButton()
+    void SetButtons()
     {
         GetButton((int)Buttons.MenuOpenButton).onClick.AddListener(() => { MenuOnOff(isOpened); });
 
@@ -65,6 +65,11 @@ public class MenuUI : UIBase_Scene
         GetButton((int)Buttons.OpenCockList).onClick.AddListener(() =>
         {
             GameManager.UI.OpenPopupUI<CollectionUI>();
+            MenuOnOff(true);
+        });
+        GetButton((int)Buttons.OpenBirdList).onClick.AddListener(() =>
+        {
+            GameManager.UI.OpenPopupUI<BirdCollectionUI>();
             MenuOnOff(true);
         });
 
@@ -86,8 +91,8 @@ public class MenuUI : UIBase_Scene
         Button button = GetButton((int)Buttons.MenuOpenButton);
         button.interactable = false;
 
-        RectTransform buttonTr = Get<RectTransform>((int)Background.MenuOpenButton);
-        RectTransform background = Get<RectTransform>((int)Background.MenuBarBackground);
+        RectTransform buttonTr = Get<RectTransform>((int)RectTransforms.MenuOpenButton);
+        RectTransform background = Get<RectTransform>((int)RectTransforms.MenuBarBackground);
 
         buttonTr.DOKill();
         background.DOKill();
