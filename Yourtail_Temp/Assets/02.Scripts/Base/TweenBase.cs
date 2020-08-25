@@ -46,15 +46,16 @@ public class TweenBase : MonoBehaviour
     [SerializeField, ShowIf(nameof(changeRotation)), BoxGroup("설정"), PropertyOrder(4)] RotateMode rotationRotateMode = RotateMode.Fast;
     #endregion
 
-    Vector3 originScale;
-    Vector3 originPos;
-    Vector3 originRot;
-    float originAlpha;
+    [SerializeField] Vector3 originScale;
+    [SerializeField] Vector3 originPos;
+    [SerializeField] Vector3 originRot;
+    [SerializeField] float originAlpha;
 
     private void Awake()
     {
         if (isUI && image == null) image = GetComponent<Graphic>();
         if (!isUI && sprite == null) sprite = GetComponent<SpriteRenderer>();
+        SetOrigin();
     }
 
     protected void ChangeRotation()
@@ -154,7 +155,7 @@ public class TweenBase : MonoBehaviour
     {
         transform.DOKill();
     }
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         transform.DOKill();
     }

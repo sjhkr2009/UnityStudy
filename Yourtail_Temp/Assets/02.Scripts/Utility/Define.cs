@@ -34,6 +34,14 @@ public class Define
     }
 
     /// <summary>
+    /// Warning UI 팝업창에서 매개변수로 받아서, 현재 표시해야 할 경고의 종류에 따라 UI의 안내 텍스트와 버튼의 동작을 세팅합니다.
+    /// </summary>
+    public enum WarningType
+    {
+        QuitApp
+    }
+
+    /// <summary>
     /// 각 캐릭터의 정보를 통해 매치되는 대사를 찾기 위해 사용됩니다. Resource 폴더의 Data/StoryTexts 에서 사용합니다.
     /// </summary>
     public enum CustomerType

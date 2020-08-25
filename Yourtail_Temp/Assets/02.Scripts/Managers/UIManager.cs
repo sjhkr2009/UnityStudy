@@ -20,6 +20,9 @@ public class UIManager
     public Customers CurrentBirdInfo { get; set; }
     public void SetBirdInfo(Customers bird) => CurrentBirdInfo = bird;
 
+    // 현재 표시할 경고창의 타입. 이 값을 참조하여 경고창의 텍스트와 버튼 동작이 세팅된다.
+    public Define.WarningType CurrentWarningType { get; set; } = Define.WarningType.QuitApp;
+
     #endregion
 
     /// <summary>
@@ -145,7 +148,8 @@ public class UIManager
     }
 
     /// <summary>
-    /// 특정 팝업창을 지정하여 닫습니다. 매개변수가 없는 ClosePopupUI()에 비해 부하율이 높습니다. 필요한 상황에서만 사용하세요.
+    /// 특정 팝업창을 지정하여 닫습니다. 지정된 팝업창이 가장 나중에 띄운 팝업창이라면 즉시 닫고, 그렇지 않을 경우 팝업창을 하나씩 탐색하여 지정된 창을 찾습니다.
+    /// 매개변수가 없는 ClosePopupUI()에 비해 부하율이 높습니다. 먼저 연 팝업창을 닫는 동작은 필요한 상황에서만 사용하고, 팝업창이 열려있는지 알 수 없을 경우 TryClosePopupUI를 이용하세요.
     /// </summary>
     public void ClosePopupUI<T>(string name = null)
     {

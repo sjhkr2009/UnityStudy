@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Table : MonoBehaviour
 {
-    [SerializeField] Vector3 originPos;
+    //[SerializeField] Vector3 originPos;
     
     bool _hasCustomer = false;
     public bool HasCustomer
@@ -30,7 +30,7 @@ public class Table : MonoBehaviour
 
     private void Awake()
     {
-        originPos = transform.position;
+        //originPos = transform.position;
     }
     void Start()
     {
@@ -64,7 +64,7 @@ public class Table : MonoBehaviour
     }
     private void OnDisable()
     {
-        transform.position = originPos;
+        //transform.position = originPos;
         customerImage.sortingLayerName = "Customer";
     }
 }

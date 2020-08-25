@@ -13,4 +13,9 @@ public class TweenOnStart : TweenBase
     {
         if (onEnable) DoChange();
     }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        DoOrigin();
+    }
 }

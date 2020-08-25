@@ -26,6 +26,8 @@ public class SetCocktailUI : UIBase_Popup
     int grade;
     DataManager data = GameManager.Data;
 
+    Image customerImage;
+
     void Start() => Init();
 
     public override void Init()
@@ -37,23 +39,42 @@ public class SetCocktailUI : UIBase_Popup
         Bind<Image>(typeof(Images));
 
         data = GameManager.Data;
-        grade = data.CurrentGrade;
-        data.SetReward();
+        customerImage = GetImage((int)Images.CustomerImage);
 
-        GetButton((int)Buttons.NextButton).onClick.AddListener(GameManager.Instance.SetDialog);
-        GetText((int)Texts.GradeText).text = GradeToText();
+        SetReward();
+        SetCustomer();
+        FillExpBar(data.beforeExp, data.afterExp, data.levelUp);
 
-        if (grade == 1) GetText((int)Texts.CoinText).text = "코인 획득!";
-        else GetText((int)Texts.CoinText).text = "";
+        SetPooling();
+    }
+    private void OnEnable()
+    {
+        if (!Inited) return;
 
-        GetImage((int)Images.CustomerImage).sprite = data.CurrentCustomer.Image;
-        GetImage((int)Images.CustomerImage).SetNativeSize();
-
+        SetReward();
+        SetCustomer();
         FillExpBar(data.beforeExp, data.afterExp, data.levelUp);
     }
     private void OnDestroy()
     {
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
+    }
+    void SetReward()
+    {
+        data.SetReward();
+
+        grade = data.CurrentGrade;
+        GetText((int)Texts.GradeText).text = GradeToText();
+
+        GetButton((int)Buttons.NextButton).onClick.AddListener(GameManager.Instance.SetDialog);
+
+        if (grade == 1) GetText((int)Texts.CoinText).text = "코인 획득!";
+        else GetText((int)Texts.CoinText).text = "";
+    }
+    void SetCustomer()
+    {
+        customerImage.sprite = data.CurrentCustomer.Image;
+        customerImage.SetNativeSize();
     }
     string GradeToText()
     {

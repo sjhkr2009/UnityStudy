@@ -106,6 +106,8 @@ public class GameManager : MonoBehaviour
         Input.InputRetryCocktail -= OnRetryCocktail;
         OnGameStateChange -= Data.OnGameStateChange;
 
+        Input.Clear();
+
         DOTween.Clear();
     }
 
@@ -155,13 +157,15 @@ public class GameManager : MonoBehaviour
 
     void OnEscape()
     {
+        if (UI.TryClosePopupUI<WarningUI>()) return;
         if (UI.TryClosePopupUI<BirdInfoWindow>()) return;
         if (UI.TryClosePopupUI<MaterialInfoWindow>()) return;
         if (UI.TryClosePopupUI<CheckBeforeShake>()) return;
         if (UI.TryClosePopupUI<OrderInfoWindow>()) return;
         if (UI.TryClosePopupUI<OrderBubble>()) return;
 
-        //추후 옵션창을 추가하게 된다면, 실패 시 옵션창을 띄울 것.
+        UI.CurrentWarningType = Define.WarningType.QuitApp;
+        UI.OpenPopupUI<WarningUI>();
     }
     void OnRetryCocktail()
     {
@@ -170,4 +174,12 @@ public class GameManager : MonoBehaviour
         GameState = GameState.SelectBase;
     }
     
+    public void QuitApp()
+    {
+        if(!Application.isEditor)
+            _input.Clear();
+
+        _data.SaveToPlayerPrefs();
+        Application.Quit();
+    }
 }
