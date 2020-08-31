@@ -8,4 +8,10 @@ public class UIBase_Scene : UIBase
     {
         GameManager.UI.SetCanvasOrder(gameObject, false);
     }
+    protected void Init(int orderLayer)
+    {
+        GameManager.UI.SetCanvasOrder(gameObject, false, orderLayer);
+    }
+
+    public bool Inited { get; protected set; } = false;
 }

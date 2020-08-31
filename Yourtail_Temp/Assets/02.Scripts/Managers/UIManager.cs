@@ -95,7 +95,11 @@ public class UIManager
         if (closedUI.ContainsKey(name))
         {
             component = closedUI[name] as T;
-            component.gameObject.SetActive(true);
+
+            if(component.gameObject.activeSelf)
+                SetCanvasOrder(component.gameObject);
+            else
+                component.gameObject.SetActive(true);
         }
         else
         {
