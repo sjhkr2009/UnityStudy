@@ -22,7 +22,7 @@ public class OrderBubble : UIBase_Popup
         Init();
     }
 
-    public TableController tableController;
+    public TablesUI tablesUI;
     string orderText;
     public override void Init()
     {
@@ -51,12 +51,12 @@ public class OrderBubble : UIBase_Popup
             text.DOKill();
             text.text = orderText;
         }
-        GameManager.Instance.GameState = GameState.SelectBase;
+        GameManager.Instance.GameState = GameState.Select;
     }
 
     private void OnDestroy()
     {
-        if (tableController != null) tableController.CancelOrder();
+        if (tablesUI != null) tablesUI.CancelOrder();
         DOTween.Kill(GetText((int)Texts.OrderText));
         ResetButtons();
     }

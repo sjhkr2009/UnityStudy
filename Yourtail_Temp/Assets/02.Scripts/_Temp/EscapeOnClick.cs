@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EscapeOnClick : MonoBehaviour, IPointerClickHandler
+public class EscapeOnClick : IPointerClickHandler //임시삭제로 인해 MonoBehavior 제거
 {
     public bool isUI = true;
     public List<GameState> interactableOn = new List<GameState>();

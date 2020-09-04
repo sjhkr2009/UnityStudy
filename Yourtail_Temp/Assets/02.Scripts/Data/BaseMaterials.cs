@@ -50,7 +50,7 @@ class Bmt_Gin : BaseMaterials
     public Bmt_Gin() : base(4)
     {
         Name = "진";
-        Info = "곡물 원료의 증류주에서 주니퍼베리로 향을 낸 술. 네덜란드에서 탄생했으며 미국에 금주법이 시행될 당시 숨어 마시던 칵테일의 주 재료이기도 했다.";
+        Info = "곡물 원료의 증류주에서 주니퍼베리로 향을 낸 술. 네덜란드에서 탄생했으며, 미국에 금주법이 시행될 당시 숨어 마시던 칵테일의 주 재료이기도 했다.";
         Tags.Add(Define.CocktailTag.진);
     }
 }

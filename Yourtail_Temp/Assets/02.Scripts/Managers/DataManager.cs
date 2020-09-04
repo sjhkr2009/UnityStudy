@@ -14,6 +14,7 @@ public class DataManager
 
     public Dictionary<string, BaseMaterials> BaseMaterialIdData { get; private set; } = new Dictionary<string, BaseMaterials>();
     public Dictionary<int, BaseMaterials> BaseMaterialIndexData { get; private set; } = new Dictionary<int, BaseMaterials>();
+    public List<BaseMaterials> BaseMaterialList { get; private set; } = new List<BaseMaterials>();
     public Dictionary<string, SubMaterials> SubMaterialIdData { get; private set; } = new Dictionary<string, SubMaterials>();
     public Dictionary<int, SubMaterials> SubMaterialIndexData { get; private set; } = new Dictionary<int, SubMaterials>();
     public List<SubMaterials> SubMaterialList { get; private set; } = new List<SubMaterials>();
@@ -249,6 +250,7 @@ public class DataManager
     {
         BaseMaterialIdData.Add(item.Id, item);
         BaseMaterialIndexData.Add(item.Index, item);
+        BaseMaterialList.Add(item);
     }
     void AddSub(SubMaterials item)
     {
@@ -272,17 +274,15 @@ public class DataManager
             case GameState.Idle:
                 CurrentReset();
                 break;
-            case GameState.Order:
-                break;
-            case GameState.SelectBase:
-                break;
-            case GameState.SelectSub:
+            case GameState.Select:
+                CurrentCocktail = new Cocktail();
                 break;
             case GameState.Combine:
                 CurrentCocktail = MakeCocktail();
                 CurrentCorrectCheck();
                 break;
             case GameState.SetCocktail:
+                CurrentCustomer.ResetOrder();
                 SaveData();
                 break;
         }
@@ -553,7 +553,7 @@ public class DataManager
         afterExp = 0;
         levelUp = false;
     }
-    public void Retry()
+    public void ResetSelected()
     {
         ResetBaseMaterial();
         ResetSubMaterial();
@@ -561,7 +561,6 @@ public class DataManager
     }
     void CurrentReset()
     {
-        CurrentCustomer.ResetOrder();
         CurrentCustomer = null;
         CurrentOrder = null;
         CurrentCocktail = null;

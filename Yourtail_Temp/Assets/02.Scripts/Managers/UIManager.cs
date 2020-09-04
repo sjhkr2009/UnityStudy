@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIManager
 {
     Stack<UIBase_Popup> popupUI = new Stack<UIBase_Popup>();
-    List<UIBase_Scene> sceneUI = new List<UIBase_Scene>();
+    Dictionary<string, UIBase_Scene> sceneUI = new Dictionary<string, UIBase_Scene>();
     Dictionary<string, UIBase_Popup> closedUI = new Dictionary<string, UIBase_Popup>();
     int order = 10;
 
@@ -74,10 +74,38 @@ public class UIManager
     {
         if (string.IsNullOrEmpty(name)) name = typeof(T).Name;
 
-        GameObject gameObject = GameManager.Resource.Instantiate($"UI/Scene/{name}", Root);
-        T component = gameObject.GetOrAddComponent<T>();
-        sceneUI.Add(component);
+        T component = null;
+        if (sceneUI.ContainsKey(name))
+		{
+            component = sceneUI[name] as T;
+            component.gameObject.SetActive(true);
+		}
+		else
+		{
+            GameObject gameObject = GameManager.Resource.Instantiate($"UI/Scene/{name}", Root);
+            component = gameObject.GetOrAddComponent<T>();
+        }
 
+        return component;
+    }
+    public T CloseSceneUI<T>(string name = null) where T : UIBase_Scene
+	{
+        if (string.IsNullOrEmpty(name)) name = typeof(T).Name;
+
+        T component = null;
+        if (sceneUI.ContainsKey(name))
+		{
+            component = sceneUI[name] as T;
+            if(component.gameObject.activeSelf) 
+                component.gameObject.SetActive(false);
+        }
+		else
+		{
+            component = Object.FindObjectOfType<T>();
+            sceneUI.Add(name, component);
+        }
+
+        component.gameObject.SetActive(false);
         return component;
     }
 
@@ -134,7 +162,6 @@ public class UIManager
     /// 특정 팝업창을 지정하여, 해당 팝업이 가장 위에 있다면 닫습니다. 아니라면 아무 동작도 실행하지 않습니다.
     /// 게임 진행과 무관한 도움말 등이 열려 있을 때 Escape로 닫는 용도로 사용됩니다. 아무 동작도 실행하지 않으면 false, 성공적으로 창을 닫았으면 true를 반환합니다.
     /// </summary>
-    /// <param name="targetPopUp"></param>
     public bool TryClosePopupUI<T>(string name = null)
     {
         if (popupUI.Count == 0) return false;
@@ -153,7 +180,7 @@ public class UIManager
 
     /// <summary>
     /// 특정 팝업창을 지정하여 닫습니다. 지정된 팝업창이 가장 나중에 띄운 팝업창이라면 즉시 닫고, 그렇지 않을 경우 팝업창을 하나씩 탐색하여 지정된 창을 찾습니다.
-    /// 매개변수가 없는 ClosePopupUI()에 비해 부하율이 높습니다. 먼저 연 팝업창을 닫는 동작은 필요한 상황에서만 사용하고, 팝업창이 열려있는지 알 수 없을 경우 TryClosePopupUI를 이용하세요.
+    /// 매개변수가 없는 ClosePopupUI()에 비해 부하율이 높지만 더 안전합니다. 해당 팝업창이 맨 위에 있을 때만 닫아야 한다면 TryClosePopupUI를 이용하세요.
     /// </summary>
     public void ClosePopupUI<T>(string name = null)
     {
@@ -163,6 +190,7 @@ public class UIManager
         if (string.IsNullOrEmpty(name)) name = typeof(T).Name;
 
         bool isFound = false;
+        int targetOrder = int.MaxValue;
 
         Stack<UIBase_Popup> tempStack = new Stack<UIBase_Popup>();
 
@@ -173,6 +201,7 @@ public class UIManager
                 tempStack.Push(popupUI.Pop());
             else
             {
+                targetOrder = lastPopup.gameObject.GetComponent<Canvas>().sortingOrder;
                 ClosePopupUI();
                 isFound = true;
                 break;
@@ -181,7 +210,13 @@ public class UIManager
         while (tempStack.Count > 0)
         {
             UIBase_Popup tempPopup = tempStack.Pop();
-            if (isFound) tempPopup.gameObject.GetOrAddComponent<Canvas>().sortingOrder--;
+            if (isFound)
+			{
+                Canvas canvas = tempPopup.gameObject.GetComponent<Canvas>();
+                if (targetOrder < canvas.sortingOrder)
+                    canvas.sortingOrder--;
+            }
+            
             popupUI.Push(tempPopup);
         }
     }
@@ -196,7 +231,8 @@ public class UIManager
     }
 
     /// <summary>
-    /// 팝업창 닫기를 실행했을 때, Destroy 처리하는 대신 비활성화시킵니다.
+    /// 팝업창 닫기를 실행했을 때, 오브젝트 풀링이 필요한 UI라면 파괴하는 대신 비활성화시키고 true를 반환합니다.
+    /// DontDestroy 변수가 false일 경우에는 아무 동작도 하지 않고 false를 반환합니다.
     /// </summary>
     bool AllowDestroy(UIBase_Popup popup)
     {

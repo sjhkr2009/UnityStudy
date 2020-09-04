@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Sirenix.OdinInspector;
 
 public class BaseSelectedIcon : MonoBehaviour, IPointerClickHandler
 {
-    BaseMaterials selectedMaterial = null;
-    Image myImage;
+    [SerializeField, ReadOnly] BaseMaterials selectedMaterial = null;
+    [SerializeField] Image myImage;
     [SerializeField] int myCount = 1;
     public int MyCount
     {
@@ -65,6 +66,14 @@ public class BaseSelectedIcon : MonoBehaviour, IPointerClickHandler
         //selectedMaterial = null;
         //myImage.sprite = null;
         SetIcon();
+    }
+    public void ResetIcon()
+	{
+        if(myImage == null)
+            myImage = gameObject.GetOrAddComponent<Image>();
+
+        selectedMaterial = null;
+        myImage.sprite = GameManager.UI.NullImage;
     }
 
     public void OnPointerClick(PointerEventData eventData)

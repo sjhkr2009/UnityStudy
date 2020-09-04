@@ -133,7 +133,7 @@ public class TableController : MonoBehaviour
         if (selectUI.activeSelf || GameManager.Instance.GameState != GameState.Idle) return;
 
         GameManager.Data.SelectCustomer(customer);
-        GameManager.UI.OpenPopupUI<OrderBubble>().tableController = this;
+        //GameManager.UI.OpenPopupUI<OrderBubble>().tablesUI = this;
         foreach (Table item in tables)
         {
             item.SetLayer(customer == item.currentCustomer);

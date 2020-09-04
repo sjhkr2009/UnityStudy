@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,8 +9,8 @@ public class SubSelectedIcon : MonoBehaviour, IPointerClickHandler
 {
     // BaseSelectedIcon이랑 하나로 합치고싶긴 한데 마감이 급해서 복붙한 스끄립-뜨
 
-    SubMaterials selectedMaterial = null;
-    Image myImage;
+    [SerializeField, ReadOnly] SubMaterials selectedMaterial = null;
+    [SerializeField] Image myImage;
     [SerializeField] int myCount = 1;
     public int MyCount
     {
@@ -68,6 +69,14 @@ public class SubSelectedIcon : MonoBehaviour, IPointerClickHandler
         //    myImage.sprite = null;
         //}
         SetIcon();
+    }
+    public void ResetIcon()
+    {
+        if (myImage == null)
+            myImage = gameObject.GetOrAddComponent<Image>();
+
+        selectedMaterial = null;
+        myImage.sprite = GameManager.UI.NullImage;
     }
 
     public void OnPointerClick(PointerEventData eventData)

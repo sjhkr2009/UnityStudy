@@ -20,6 +20,10 @@ public class OrderInfoWindow : UIBase_Popup
         CustomerImage,
         background
     }
+	enum Buttons
+	{
+        background
+    }
 
     void Start() => Init();
 
@@ -30,9 +34,11 @@ public class OrderInfoWindow : UIBase_Popup
         Bind<RectTransform>(typeof(Transforms));
         Bind<Text>(typeof(Texts));
         Bind<Image>(typeof(Images));
+        Bind<Button>(typeof(Buttons));
 
         GetImage((int)Images.CustomerImage).sprite = GameManager.Data.CurrentCustomer.Image;
         GetText((int)Texts.OrderText).text = GameManager.Data.CurrentOrder.orderContents;
+        GetButton((int)Buttons.background).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<OrderInfoWindow>(); });
 
         hasDestroyMotion = true;
         destroyTime = 0.33f;
@@ -46,11 +52,13 @@ public class OrderInfoWindow : UIBase_Popup
         GetImage((int)Images.background).DOFade(0f, 0.3f);
         Get<RectTransform>((int)Transforms.OrderTextBG).DOScale(0f, 0.2f);
         DOVirtual.DelayedCall(0.1f, () => { Get<RectTransform>((int)Transforms.CustomerImageBG).DOScale(0f, 0.2f); });
-
+        ResetButtons();
     }
 
     private void OnDestroy()
     {
-        DOTween.KillAll();
+        GetImage((int)Images.background).DOKill();
+        Get<RectTransform>((int)Transforms.OrderTextBG).DOKill();
+        Get<RectTransform>((int)Transforms.CustomerImageBG).DOKill();
     }
 }

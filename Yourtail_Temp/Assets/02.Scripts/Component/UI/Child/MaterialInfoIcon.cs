@@ -11,11 +11,16 @@ public class MaterialInfoIcon : MonoBehaviour, IPointerClickHandler
     private void Start()
     {
         parent = transform.GetComponentInParent<MaterialIcon>();
-        if (parent != null) myMaterial = transform.GetComponentInParent<MaterialIcon>().myMaterial;
+        if (parent != null) 
+            myMaterial = transform.GetComponentInParent<MaterialIcon>().MyMaterial;
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (myMaterial == null) return;
+        if (parent != null)
+            myMaterial = transform.GetComponentInParent<MaterialIcon>().MyMaterial;
+
+        if (myMaterial == null)
+            return;
 
         GameManager.Input.InMaterialInfo(myMaterial);
         GameManager.UI.OpenPopupUI<MaterialInfoWindow>();

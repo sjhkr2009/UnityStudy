@@ -209,4 +209,11 @@ public class Define
     /// 새 컬렉션의 슬라이더 길이입니다. 하트 아이콘을 슬라이더 위에 일정 간격으로 배치하기 위해 사용됩니다.
     /// </summary>
     public const int BirdLevelSliderWidth = 1000;
+
+    /// <summary>
+    /// 베이스 재료(스피릿)의 개수를 나타냅니다.
+    /// </summary>
+    public const int SpiritCount = 6;
+
+    public static Vector2 UIRefSize => new Vector2(1920, 1080);
 }

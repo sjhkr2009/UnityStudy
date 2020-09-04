@@ -33,6 +33,11 @@ public class BirdInfoWindow : UIBase_Popup
         Count
     }
 
+    enum Buttons
+	{
+        CloseButton
+    }
+
     enum Sliders
     {
         LevelBar
@@ -63,7 +68,10 @@ public class BirdInfoWindow : UIBase_Popup
         Bind<Slider>(typeof(Sliders));
         Bind<Text>(typeof(Texts));
         Bind<RectTransform>(typeof(RectTransforms));
-        
+        Bind<Button>(typeof(Buttons));
+
+        GetButton((int)Buttons.CloseButton).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<BirdInfoWindow>(); });
+
         // + 스토리 팝업창 띄우는 동작 추가 필요 -> StoryButton에서 관리
 
         SetInfo();
@@ -134,6 +142,7 @@ public class BirdInfoWindow : UIBase_Popup
     private void OnDestroy()
     {
         Get<Slider>((int)Sliders.LevelBar).DOKill();
+        GetButton((int)Buttons.CloseButton).onClick.RemoveAllListeners();
     }
     private void OnDisable()
     {

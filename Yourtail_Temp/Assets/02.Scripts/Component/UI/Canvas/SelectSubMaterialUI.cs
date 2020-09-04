@@ -86,9 +86,9 @@ public class SelectSubMaterialUI : UIBase_Popup
     }
     void SetButtons()
     {
-        GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.SelectBase; });
+        GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Select; });
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
-        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.Retry);
+        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.ResetSelected);
         GetButton((int)Buttons.OrderButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<OrderInfoWindow>(); });
 
 
@@ -107,9 +107,9 @@ public class SelectSubMaterialUI : UIBase_Popup
     {
         Image _image = GetImage(index);
         MaterialIcon icon = _image.gameObject.GetOrAddComponent<MaterialIcon>();
-        icon.myMaterial = GameManager.Data.SubMaterialList[index];
+        icon.MyMaterial = GameManager.Data.SubMaterialList[index];
 
-        _image.sprite = icon.myMaterial.image;
+        _image.sprite = icon.MyMaterial.image;
     }
     void SetSelectedUI()
     {

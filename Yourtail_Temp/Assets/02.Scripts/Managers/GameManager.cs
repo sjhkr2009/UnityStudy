@@ -8,9 +8,7 @@ using DG.Tweening;
 public enum GameState
 {
     Idle,
-    Order,
-    SelectBase,
-    SelectSub,
+    Select,
     Combine,
     SetCocktail
 }
@@ -54,14 +52,8 @@ public class GameManager : MonoBehaviour
                 case GameState.Idle:
                     MainInIdle();
                     break;
-                case GameState.Order:
-                    MainInOrder();
-                    break;
-                case GameState.SelectBase:
-                    MainInSelectBase();
-                    break;
-                case GameState.SelectSub:
-                    MainInSelectSub();
+                case GameState.Select:
+                    MainInSelect();
                     break;
                 case GameState.Combine:
                     MainInCombine();
@@ -94,7 +86,7 @@ public class GameManager : MonoBehaviour
         OnGameStateChange += Data.OnGameStateChange;
 
         //temp
-        Sound.Play(Define.SoundType.BGM, "jazz_bar", 0.7f);
+        Sound.Play(Define.SoundType.BGM, "jazz_bar", 0.07f);
     }
     private void OnDestroy()
     {
@@ -120,25 +112,16 @@ public class GameManager : MonoBehaviour
     {
         UI.CloseAllPopup();
     }
-    void MainInOrder()
-    {
-        Data.CurrentCocktail = new Cocktail();
-    }
 
-    void MainInSelectBase()
+    void MainInSelect()
     {
-        UI.ClosePopupUI<SelectSubMaterialUI>();
-        UI.OpenPopupUI<SelectBaseMaterialUI>();
-    }
-
-    void MainInSelectSub()
-    {
-        UI.ClosePopupUI<SelectBaseMaterialUI>();
-        UI.OpenPopupUI<SelectSubMaterialUI>();
+        UI.CloseAllPopup();
+        UI.OpenSceneUI<SelectMaterialUI>();
     }
     void MainInCombine()
     {
-        UI.ClosePopupUI();
+        UI.CloseAllPopup();
+        UI.CloseSceneUI<SelectMaterialUI>();
         UI.OpenPopupUI<MakeCocktailUI>();
     }
     void MainInSetCocktail()
@@ -158,11 +141,6 @@ public class GameManager : MonoBehaviour
     void OnEscape()
     {
         if (UI.TryClosePopupUI<WarningUI>()) return;
-        if (UI.TryClosePopupUI<BirdInfoWindow>()) return;
-        if (UI.TryClosePopupUI<MaterialInfoWindow>()) return;
-        if (UI.TryClosePopupUI<CheckBeforeShake>()) return;
-        if (UI.TryClosePopupUI<OrderInfoWindow>()) return;
-        if (UI.TryClosePopupUI<OrderBubble>()) return;
 
         UI.CurrentWarningType = Define.WarningType.QuitApp;
         UI.OpenPopupUI<WarningUI>();
@@ -170,8 +148,8 @@ public class GameManager : MonoBehaviour
     void OnRetryCocktail()
     {
         UI.ClosePopupUI<MakeCocktailUI>();
-        Data.Retry();
-        GameState = GameState.SelectBase;
+        Data.ResetSelected();
+        GameState = GameState.Select;
     }
     
     public void QuitApp()

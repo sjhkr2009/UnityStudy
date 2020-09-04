@@ -112,8 +112,8 @@ class Smt_GingerBeer : SubMaterials
 {
     public Smt_GingerBeer() : base(9)
     {
-        Name = "진저 비어";
-        Info = "생강과 설탕 등을 섞어 캐러멜 색을 첨가한 저알콜 음료";
+        Name = "진저 에일";
+        Info = "생강과 매콤한 향의 재료들을 섞어 캐러멜 색으로 착색한 무알콜 음료";
         SetTag(Define.CocktailTag.생강, Define.CocktailTag.탄산, Define.CocktailTag.주류);
     }
 }
