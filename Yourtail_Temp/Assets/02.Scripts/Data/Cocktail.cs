@@ -53,22 +53,38 @@ public enum CocktailName
 
 public class Cocktail
 {
-    public List<BaseMaterials> BaseMaterials { get; private set; } = new List<BaseMaterials>();
+	#region Stats
+
+	public List<BaseMaterials> BaseMaterials { get; private set; } = new List<BaseMaterials>();
     public List<SubMaterials> SubMaterials { get; private set; } = new List<SubMaterials>();
     public List<string> BaseIDList { get; private set; } = new List<string>();
     public List<string> SubIDList { get; private set; } = new List<string>();
     public CocktailName cocktailName = CocktailName.None;
     public string Name_kr { get; private set; }
     public string Name_en { get; private set; }
+    public Sprite image;
 
+    public int Proof { get; protected set; }
+    public List<Define.CocktailTag> Tags { get; private set; } = new List<Define.CocktailTag>();
+    public string Info { get; protected set; }
+    public string Id { get; private set; }
+
+    #endregion
+    #region Derived Class Setting
+    void SetID(int code)
+    {
+        Id = "C" + code.ToString();
+    }
     protected void SetName(string koreanName, string englishName)
     {
         Name_kr = koreanName;
         Name_en = englishName;
     }
-
-    public Sprite image;
-
+    protected void AddTag(List<Define.CocktailTag> tags)
+    {
+        foreach (Define.CocktailTag tag in tags)
+            AddTag(tag);
+    }
     protected void AddBase(BaseMaterials material)
     {
         BaseMaterials.Add(material);
@@ -82,18 +98,13 @@ public class Cocktail
         AddTag(material.Tags);
     }
 
-    public int Proof { get; protected set; }
-    public List<Define.CocktailTag> Tags { get; private set; } = new List<Define.CocktailTag>();
-    public string Info { get; protected set; }
-
-    protected void AddTag(Define.CocktailTag tag) { if(!Tags.Contains(tag)) Tags.Add(tag); }
-    protected void AddTag(List<Define.CocktailTag> tags)
+    protected void AddTag(Define.CocktailTag tag) 
     {
-        foreach (Define.CocktailTag tag in tags)
-        {
-            AddTag(tag);
-        }
+        if(!Tags.Contains(tag)) 
+            Tags.Add(tag); 
     }
+	#endregion
+	#region Utility
     public List<string> GetTagToString()
     {
         List<string> tagList = new List<string>();
@@ -113,13 +124,9 @@ public class Cocktail
         }
         return (Define.ProofGrade)(Define.ProofGradeCriterion.Length - 1);
     }
-
-    public string Id { get; private set; }
-    public void SetID(int code)
-    {
-        Id = "C" + code.ToString();
-    }
-    public Cocktail(int id)
+	#endregion
+	#region Constructor
+	public Cocktail(int id)
     {
         SetID(id);
         image = GameManager.Resource.LoadImage(Define.ImageType.Cocktail, id);
@@ -136,6 +143,7 @@ public class Cocktail
         Proof = Random.Range(0, (int)Define.CocktailMaxProof);
         Info = "뭔가 잘못된 것 같다.";
     }
+	#endregion
 }
 
 class Ckt_TequillaSunrise : Cocktail

@@ -179,7 +179,10 @@ public class SelectMaterialUI : UIBase_Scene
         windows.OpenWindow(0);
         moveArea.anchoredPosition = new Vector2(screenWidth, 0);
 
-		for (int i = 0; i < (int)BaseSelectedIcons.Count; i++)
+        GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
+        GetButton((int)Buttons.PrevButton).interactable = false;
+
+        for (int i = 0; i < (int)BaseSelectedIcons.Count; i++)
             Get<BaseSelectedIcon>(i).ResetIcon();
 
         for (int i = 0; i < (int)SubSelectedIcons.Count; i++)
