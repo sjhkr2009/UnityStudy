@@ -46,10 +46,10 @@ public class TweenBase : MonoBehaviour
     [SerializeField, ShowIf(nameof(changeRotation)), BoxGroup("설정"), PropertyOrder(4)] RotateMode rotationRotateMode = RotateMode.Fast;
     #endregion
 
-    [SerializeField] Vector3 originScale;
-    [SerializeField] Vector3 originPos;
-    [SerializeField] Vector3 originRot;
-    [SerializeField] float originAlpha;
+    [SerializeField, ReadOnly] Vector3 originScale;
+    [SerializeField, ReadOnly] Vector3 originPos;
+    [SerializeField, ReadOnly] Vector3 originRot;
+    [SerializeField, ReadOnly] float originAlpha;
 
     private void Awake()
     {
@@ -123,14 +123,19 @@ public class TweenBase : MonoBehaviour
 
     public void DoOrigin()
     {
-        if (changeScale) transform.localScale = originScale;
-        if (changePosition) transform.position = originPos;
+        if (changeScale)
+            transform.localScale = originScale;
+        if (changePosition)
+            transform.position = originPos;
         if (changeFade && (sprite != null || image != null))
         {
-            if (isUI) image.DOFade(originAlpha, 0f);
-            else sprite.DOFade(originAlpha, 0f);
+            if (isUI)
+                image.color = new Color(image.color.r, image.color.g, image.color.b, originAlpha);
+            else
+                sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, originAlpha);
         }
-        if (changeRotation) transform.rotation = Quaternion.Euler(originRot);
+        if (changeRotation)
+            transform.rotation = Quaternion.Euler(originRot);
     }
 
     public void DoChange()

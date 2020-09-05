@@ -179,6 +179,7 @@ public class SelectMaterialUI : UIBase_Scene
         windows.OpenWindow(0);
         moveArea.anchoredPosition = new Vector2(screenWidth, 0);
 
+        GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
         GetButton((int)Buttons.PrevButton).interactable = false;
 

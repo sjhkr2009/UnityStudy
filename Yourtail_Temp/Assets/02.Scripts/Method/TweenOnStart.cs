@@ -11,7 +11,10 @@ public class TweenOnStart : TweenBase
     }
     private void OnEnable()
     {
-        if (onEnable) DoChange();
+        if (onEnable)
+        {
+            DoChange();
+        }
     }
     protected override void OnDisable()
     {
