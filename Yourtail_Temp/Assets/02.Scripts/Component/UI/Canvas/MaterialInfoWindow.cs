@@ -24,6 +24,7 @@ public class MaterialInfoWindow : UIBase_Popup
     enum Buttons
     {
         CloseButton,
+        CloseButton2,
         BlockRaycast
     }
 
@@ -41,6 +42,7 @@ public class MaterialInfoWindow : UIBase_Popup
         SetInfo();
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<MaterialInfoWindow>(); });
+        GetButton((int)Buttons.CloseButton2).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<MaterialInfoWindow>(); });
         GetButton((int)Buttons.BlockRaycast).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<MaterialInfoWindow>(); });
     }
 
