@@ -125,6 +125,7 @@ public class Customers
         ID = $"CT{index}";
         Image = GameManager.Resource.LoadImage(Define.ImageType.Customer, index);
         Level = 1;
+        SetMaxLevel(Define.BirdMaxLevel[index]);
         Exp = 0;
     }
 }
@@ -135,7 +136,6 @@ public class Eagle : Customers
     {
         Name = "머머리 독수리";
         Liking = "(임시) 꼰-머";
-        SetMaxLevel(3);
 
         SetOrder(1, "제일 독한걸로 하나 줘 보게. 요즘 술들은 술 같지가 않아.", requiredProofGrade: new List<Define.ProofGrade>() { Define.ProofGrade.매우셈 });
         SetOrder(1, "알록달록한 건 됐으니께 소주 한 잔 주쇼. 왜 그 손주놈이 마트에서 토닉 뭐시기 사 와서 비스무리하게 만들더만, 그거 있잖수?", requiredCocktail: CocktailName.GinTonic);
@@ -153,7 +153,6 @@ public class Parrot : Customers
     {
         Name = "앵무새";
         Liking = "(임시) 추상적 표현";
-        SetMaxLevel(2);
 
         SetOrder(1, "오렌지 나무에서 나는 향이 맡고 싶어요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.오렌지, Define.CocktailTag.주스 } );
         SetOrder(1, "키스 인 더 다크'라는 칵테일이 있다던데. 이름이 참 예쁘지 않아요?", requiredCocktail: CocktailName.KissInTheDark);
@@ -171,7 +170,6 @@ public class Flamingo : Customers
     {
         Name = "홍학";
         Liking = "(임시) 반말함";
-        SetMaxLevel(2);
 
         SetOrder(1, "아직 기획이 안 되었으니 오렌지나 내놓으세요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.오렌지 });
         SetOrder(2, "아직 기획이 안 되었으니 오렌지나 내놓으라니까요?.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.오렌지 });
@@ -180,13 +178,12 @@ public class Flamingo : Customers
     }
 }
 
-public class Goni : Customers
+public class Swan : Customers
 {
-    public Goni() : base(4)
+    public Swan() : base(4)
     {
         Name = "고니";
         Liking = "(임시) 고상함";
-        SetMaxLevel(2);
 
         SetOrder(1, "아직 기획이 안 되었으니 레몬이나 내놓으세요.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.레몬 });
         SetOrder(2, "아직 기획이 안 되었으니 레몬이나 내놓으라니까요?", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.레몬 });
@@ -201,7 +198,6 @@ public class Penguin : Customers
     {
         Name = "펭귄";
         Liking = "(임시) 민증검사 필수";
-        SetMaxLevel(2);
 
         SetOrder(1, "댁길라'라는 술이 들어간 칵테일이 맛있다고 들었는데... 그게 먹어보고 싶어요오. 약하게 해주세요오.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.데킬라 }, requiredProofGrade: new List<Define.ProofGrade>() { Define.ProofGrade.약함 });
         SetOrder(1, "과일 들어간거면 아무거나 괜찮을거 같아요오.", requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.과일 });

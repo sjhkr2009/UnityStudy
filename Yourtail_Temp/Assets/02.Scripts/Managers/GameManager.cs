@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
 
     public void SetDialog()
     {
-        if (Data.CurrentCustomer == Data.CustomerNameData[new Eagle().Name])
+        if (Data.levelUp)
             UI.OpenPopupUI<DialogUI>();
         else
             GameState = GameState.Idle;

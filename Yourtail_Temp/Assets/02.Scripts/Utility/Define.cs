@@ -50,7 +50,7 @@ public class Define
         Eagle = 1,
         Parrot = 2,
         Flamingo = 3,
-        Goni = 4,
+        Swan = 4,
         Penguin = 5
 
     }
@@ -105,6 +105,12 @@ public class Define
         GOOD = 1
     }
 
+    #region 최대치 및 개수 관련
+
+    /// <summary>
+    /// 베이스 재료(스피릿)의 총 개수를 나타냅니다.
+    /// </summary>
+    public const int SpiritCount = 6;
     /// <summary>
     /// 베이스 재료의 최대 개수를 지정합니다.
     /// </summary>
@@ -117,12 +123,64 @@ public class Define
     /// 캐릭터가 가질 수 있는 최대 레벨을 지정합니다.
     /// </summary>
     public const int MaxLevel = 5;
-
-
+    /// <summary>
+    /// 새들의 최대 레벨입니다. 해당 새의 ID를 인덱스로 사용하며, 인덱스 0에는 최소값인 1이 할당되어 있습니다.
+    /// </summary>
+    public static int[] BirdMaxLevel { get; private set; } = { 1, 6, 6, 4, 5, 5 };
     /// <summary>
     /// 칵테일의 최대 도수를 결정합니다. UI 출력에만 사용됩니다.
     /// </summary>
     public const float CocktailMaxProof = 40f;
+
+    #endregion
+
+    #region 속도 제어 관련
+
+    /// <summary>
+    /// 대화창에 텍스트 출력 시, 한 글자 당 몇 초에 걸쳐 출력할 지 결정합니다. 빠른 모드(DoTextSpeedFast)는 대화내용이 길 때 사용됩니다.
+    /// </summary>
+    public const float DoTextSpeed = 0.025f;
+    /// <summary>
+    /// 대화창에 텍스트 출력 시, 한 글자 당 몇 초에 걸쳐 출력할 지 결정합니다. 대화내용이 길 때 사용됩니다.
+    /// </summary>
+    public const float DoTextSpeedFast = 0.015f;
+    /// <summary>
+    /// 초당 칵테일 제조가 자동으로 진행되는 정도 (%) : 10이면 초당 10%씩 자동으로 진행됩니다.
+    /// </summary>
+    public const float CocktailMakingProcess = 10f;
+
+    #endregion
+
+    #region 크기 및 해상도 관련
+
+    /// <summary>
+    /// UI 캔버스들의 레퍼런스 해상도를 나타냅니다.
+    /// </summary>
+    public static Vector2 UIRefResolution => new Vector2(1920, 1080);
+    /// <summary>
+    /// [사용되지 않음] Select Base Material UI에서 표시되는 베이스 재료들의 크기 비율을 나타냅니다. 원본 이미지의 종횡비를 유지하면서 비율을 조정합니다.
+    /// </summary>
+    public const float ImageScale_BaseSelectUI = 1f;
+    /// <summary>
+    /// 게임 좌측 하단 메뉴 아이콘의 간격을 나타냅니다.
+    /// </summary>
+    public const float MenuIconSpacing = 120f;
+    /// <summary>
+    /// Bird Info Window에서 스토리를 열람하는 버튼이 나열된 간격을 나타냅니다.
+    /// </summary>
+    public const int StoryButtonsSpacing = 125;
+    /// <summary>
+    /// 재료 사진의 크기를 반환합니다.
+    /// </summary>
+    public static Vector2 MaterialSize => new Vector2(170f, 586f);
+    /// <summary>
+    /// 새 컬렉션의 슬라이더 길이입니다. 하트 아이콘을 슬라이더 위에 일정 간격으로 배치하기 위해 사용됩니다.
+    /// </summary>
+    public const int BirdLevelSliderWidth = 1000;
+
+    #endregion
+
+    #region 데이터 변환 및 기준치 관련
 
     /// <summary>
     /// 칵테일 평가 시 내부적으로 0~100점으로 산출된 점수를, 어디를 기준으로 GOOD / SOSO / BAD로 분류할 지 결정합니다. 이 수치보다 높으면 GOOD 결과를 얻습니다.
@@ -145,30 +203,6 @@ public class Define
     }
 
     /// <summary>
-    /// 대화창에 텍스트 출력 시, 한 글자 당 몇 초에 걸쳐 출력할 지 결정합니다. 빠른 모드(DoTextSpeedFast)는 대화내용이 길 때 사용됩니다.
-    /// </summary>
-    public const float DoTextSpeed = 0.025f;
-    /// <summary>
-    /// 대화창에 텍스트 출력 시, 한 글자 당 몇 초에 걸쳐 출력할 지 결정합니다. 대화내용이 길 때 사용됩니다.
-    /// </summary>
-    public const float DoTextSpeedFast = 0.015f;
-
-    /// <summary>
-    /// 초당 칵테일 제조가 자동으로 진행되는 정도 (%) : 10이면 초당 10%씩 자동으로 진행됩니다.
-    /// </summary>
-    public const float CocktailMakingProcess = 10f;
-
-    /// <summary>
-    /// Select Base Material UI에서 표시되는 베이스 재료들의 크기 비율을 나타냅니다. 원본 이미지의 종횡비를 유지하면서 비율을 조정합니다.
-    /// </summary>
-    public const float ImageScale_BaseSelectUI = 1f;
-
-    /// <summary>
-    /// 재료 사진의 크기를 반환합니다.
-    /// </summary>
-    public static Vector2 MaterialSize => new Vector2(170f, 586f);
-
-    /// <summary>
     /// 호감도 단계별로 필요한 호감도의 양입니다. 호감도 단계가 3 → 4단계로 상승하기 위해서는 RequiredEXP[3] 만큼의 호감도가 필요합니다.
     /// </summary>
     public static int[] RequiredEXP => new int[MaxLevel] { 1, 10, 15, 20, 25 };
@@ -177,15 +211,6 @@ public class Define
     /// 게임 좌측 하단의 메뉴 아이콘 클릭 시, 메뉴 아이콘들이 나오는 시간을 설정합니다.
     /// </summary>
     public const float OpenMenuDuration = 0.25f;
-    /// <summary>
-    /// 게임 좌측 하단 메뉴 아이콘의 간격을 나타냅니다.
-    /// </summary>
-    public const float MenuIconSpacing = 120f;
-
-    /// <summary>
-    /// Bird Info Window에서 스토리를 열람하는 버튼이 나열된 간격을 나타냅니다.
-    /// </summary>
-    public const int StoryButtonsSpacing = 125;
 
     /// <summary>
     /// 칵테일의 도수를 시각적으로 표시할 때, 도수에 맞는 색상으로 변환시킵니다. (낮을수록 청록색, 높을수록 빨강색 계열을 갖게 됩니다)
@@ -195,7 +220,7 @@ public class Define
     public static Color ProofToColor(float proof)
     {
         if (proof > 1f) proof = proof / CocktailMaxProof;
-        
+
         float hue = Mathf.Clamp(0.5f - (proof * 0.6f), 0f, 0.5f);
         return Color.HSVToRGB(hue, 0.5f, 1f);
     }
@@ -205,15 +230,7 @@ public class Define
     /// </summary>
     public static int[] ProofGradeCriterion { get; private set; } = { 5, 10, 19, 30, 40 };
 
-    /// <summary>
-    /// 새 컬렉션의 슬라이더 길이입니다. 하트 아이콘을 슬라이더 위에 일정 간격으로 배치하기 위해 사용됩니다.
-    /// </summary>
-    public const int BirdLevelSliderWidth = 1000;
+    #endregion
 
-    /// <summary>
-    /// 베이스 재료(스피릿)의 개수를 나타냅니다.
-    /// </summary>
-    public const int SpiritCount = 6;
 
-    public static Vector2 UIRefSize => new Vector2(1920, 1080);
 }

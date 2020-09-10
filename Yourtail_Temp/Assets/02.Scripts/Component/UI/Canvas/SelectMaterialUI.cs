@@ -117,7 +117,7 @@ public class SelectMaterialUI : UIBase_Scene
         Bind<BaseSelectedIcon>(typeof(BaseSelectedIcons));
         Bind<SubSelectedIcon>(typeof(SubSelectedIcons));
 
-        screenWidth = Define.UIRefSize.x;
+        screenWidth = Define.UIRefResolution.x;
         moveArea = Get<RectTransform>((int)RectTransforms.MaterialMoveArea);
         moveArea.anchoredPosition = new Vector2(screenWidth, 0);
 

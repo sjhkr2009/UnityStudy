@@ -113,7 +113,6 @@ public class DataManager
     public void Init()
     {
         CurrentCustomer = null;
-        DialogData.DialogSetting();
 
         maxBase = Define.MaxBaseMaterial;
         maxSub = Define.MaxSubMaterial;
@@ -132,6 +131,7 @@ public class DataManager
         SetCocktails();
 
         SetBirdCoin(GameData.Birdcoin);
+        DialogData.DialogSetting();
     }
     void SetCustomers()
     {
@@ -141,7 +141,7 @@ public class DataManager
         AddCustomer(new Eagle());
         AddCustomer(new Parrot());
         AddCustomer(new Flamingo());
-        AddCustomer(new Goni());
+        AddCustomer(new Swan());
         AddCustomer(new Penguin());
     }
     void SetSpirits()
@@ -474,7 +474,7 @@ public class DataManager
     }
     public int beforeExp;
     public int afterExp;
-    public bool levelUp;
+    public bool levelUp { get; set; }
     /// <summary>
     /// 현재 새의 호감도를 증가시킵니다. UI 표기를 위해 상승 전의 호감도와 상승 후의 호감도가 기록됩니다.
     /// </summary>

@@ -42,7 +42,7 @@ public class DialogUI : UIBase_Popup
         dialogList = DataManager.DialogData.GetDialog(GameManager.Data.CurrentCustomer);
         if(dialogList == null)
         {
-            Debug.Log("대사 탐색 실패");
+            Debug.Log($"대사 탐색 실패 : {GameManager.Data.CurrentCustomer.Name}의 레벨 {GameManager.Data.CurrentCustomer.Level - 1}에 해당하는 대사가 없습니다.");
             GameManager.UI.ClosePopupUI<DialogUI>();
             return;
         }
@@ -85,9 +85,5 @@ public class DialogUI : UIBase_Popup
 
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
-    }
-    private void OnDestroy()
-    {
-        GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
     }
 }

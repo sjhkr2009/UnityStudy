@@ -66,7 +66,7 @@ public class SelectBaseMaterialUI : UIBase_Popup
         icon.MyMaterial = GameManager.Data.BaseMaterialIndexData[index + 1];
 
         _image.sprite = icon.MyMaterial.image;
-        _image.SetNativeSize(Define.ImageScale_BaseSelectUI);
+        _image.SetNativeSize();
         
     }
     void SetSelectedUI()
