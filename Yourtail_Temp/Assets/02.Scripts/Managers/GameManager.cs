@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
 
         GameState = GameState.Idle;
         Sound.Init();
+        UI.Init();
 
         Input.InputStateChange -= StateChange;
         Input.InputEscape -= OnEscape;

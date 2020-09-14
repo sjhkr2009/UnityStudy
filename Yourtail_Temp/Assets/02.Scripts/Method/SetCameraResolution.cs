@@ -9,9 +9,7 @@ public class SetCameraResolution : MonoBehaviour
 
     private void Awake()
     {
-        //Screen.SetResolution(1920, 1080, true);
         SetResolution();
-        //OnPreCull();
     }
 
     public void SetResolution()
@@ -37,16 +35,14 @@ public class SetCameraResolution : MonoBehaviour
         Camera.main.rect = rect;
     }
 
-    void OnPreCull()
-    {
-        //if (Application.isEditor) return;
-        Rect wp = Camera.main.rect;
-        Rect nr = new Rect(0, 0, 1, 1);
+    //void OnPreCull()
+    //{
+    //    Rect wp = Camera.main.rect;
+    //    Rect nr = new Rect(0, 0, 1, 1);
 
-        Camera.main.rect = nr;
-        GL.Clear(true, true, Color.black);
+    //    Camera.main.rect = nr;
+    //    GL.Clear(true, true, Color.black);
 
-        Camera.main.rect = wp;
-
-    }
+    //    Camera.main.rect = wp;
+    //}
 }

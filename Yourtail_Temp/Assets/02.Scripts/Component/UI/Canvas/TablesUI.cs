@@ -99,7 +99,7 @@ public class TablesUI : UIBase_Scene
 	{
 		for (int i = 0; i < (int)Tables.Count; i++)
 		{
-			if (!Get<CustomerTable>(i).IsEmpty && Get<CustomerTable>(i).currentCustomer == target)
+			if (!Get<CustomerTable>(i).IsEmpty && Get<CustomerTable>(i).currentCustomer.Name == target.Name)
 				return true;
 		}
 		return false;

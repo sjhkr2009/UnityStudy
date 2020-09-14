@@ -10,6 +10,12 @@ public class UIManager
     Dictionary<string, UIBase_Popup> closedUI = new Dictionary<string, UIBase_Popup>();
     int order = 10;
 
+    public void Init()
+	{
+        _root = new GameObject("@UI").transform;
+        OpenPopupUI<CollectionUI>();
+    }
+
     #region 현재 확인중인 정보
 
     // 현재 정보를 요청하는 재료의 클래스. 재료 선택 화면에서 ? 버튼을 눌러 정보를 확인할 때 사용한다.
@@ -28,13 +34,21 @@ public class UIManager
     /// <summary>
     /// UI를 담을 빈 오브젝트 @UI 를 찾아서 반환합니다. 없으면 새로 생성합니다.
     /// </summary>
+    private Transform _root;
     public Transform Root
     {
         get
         {
-            GameObject gameObject = GameObject.Find("@UI");
-            if (gameObject == null) gameObject = new GameObject("@UI");
-            return gameObject.transform;
+            if (_root == null)
+			{
+                GameObject gameObject = GameObject.Find("@UI");
+                if (gameObject == null)
+                    gameObject = new GameObject("@UI");
+
+                _root = gameObject.transform;
+            }
+                
+            return _root;
         }
     }
 
@@ -131,8 +145,16 @@ public class UIManager
         }
         else
         {
-            GameObject gameObject = GameManager.Resource.Instantiate($"UI/Popup/{name}", Root);
-            component = gameObject.GetOrAddComponent<T>();
+            component = Object.FindObjectOfType<T>();
+            if(component != null)
+			{
+                SetCanvasOrder(component.gameObject);
+			}
+			else
+			{
+                GameObject gameObject = GameManager.Resource.Instantiate($"UI/Popup/{name}", Root);
+                component = gameObject.GetOrAddComponent<T>();
+            }
         }
 
         popupUI.Push(component);

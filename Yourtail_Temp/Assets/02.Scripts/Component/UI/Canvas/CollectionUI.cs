@@ -56,6 +56,8 @@ public class CollectionUI : UIBase_Popup
         SetToggles();
 
         SetPooling();
+
+        GameManager.UI.ClosePopupUI<CollectionUI>();
     }
     void OnEnable()
     {
