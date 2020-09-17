@@ -70,6 +70,11 @@ public class SelectMaterialUI : UIBase_Scene
         Window2,
         Window3
     }
+    enum Images
+	{
+        ArrowImage,
+        ShakerImage
+    }
 
     Mode windowMode = Mode.SelectBase;
     public Mode WindowMode
@@ -86,12 +91,14 @@ public class SelectMaterialUI : UIBase_Scene
                     moveArea.DOAnchorPos(new Vector2(screenWidth, 0), 0.3f);
                     GetButton((int)Buttons.PrevButton).interactable = false;
                     GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
+                    SetNextBtnSprite(true);
                     break;
 
                 case Mode.SelectSub:
                     moveArea.DOAnchorPos(new Vector2(0, 0), 0.3f);
                     GetButton((int)Buttons.PrevButton).interactable = true;
                     GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
+                    SetNextBtnSprite(false);
                     break;
 
                 default:
@@ -116,6 +123,7 @@ public class SelectMaterialUI : UIBase_Scene
         Bind<RectTransform>(typeof(RectTransforms));
         Bind<BaseSelectedIcon>(typeof(BaseSelectedIcons));
         Bind<SubSelectedIcon>(typeof(SubSelectedIcons));
+        Bind<Image>(typeof(Images));
 
         screenWidth = Define.UIRefResolution.x;
         moveArea = Get<RectTransform>((int)RectTransforms.MaterialMoveArea);
@@ -162,6 +170,8 @@ public class SelectMaterialUI : UIBase_Scene
         GetButton((int)Buttons.Window2to3).onClick.AddListener(() => { windows.OpenWindow(2); });
         GetButton((int)Buttons.Window2to1).onClick.AddListener(() => { windows.OpenWindow(0); });
         GetButton((int)Buttons.Window3to2).onClick.AddListener(() => { windows.OpenWindow(1); });
+
+        SetNextBtnSprite(true);
     }
 
     void SetWindows()
@@ -174,6 +184,12 @@ public class SelectMaterialUI : UIBase_Scene
         windows.OpenWindow(0);
     }
 
+    void SetNextBtnSprite(bool isArrow)
+	{
+        GetImage((int)Images.ArrowImage).gameObject.SetActive(isArrow);
+        GetImage((int)Images.ShakerImage).gameObject.SetActive(!isArrow);
+    }
+
     void UIReset()
 	{
         windows.OpenWindow(0);
@@ -182,6 +198,7 @@ public class SelectMaterialUI : UIBase_Scene
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
         GetButton((int)Buttons.PrevButton).interactable = false;
+        SetNextBtnSprite(true);
 
         for (int i = 0; i < (int)BaseSelectedIcons.Count; i++)
             Get<BaseSelectedIcon>(i).ResetIcon();

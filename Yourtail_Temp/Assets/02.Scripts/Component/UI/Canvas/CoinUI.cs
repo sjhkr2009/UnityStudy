@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BasicUI : UIBase_Scene
+public class CoinUI : UIBase_Scene
 {
 
     enum Texts
