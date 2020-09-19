@@ -99,8 +99,8 @@ public class SetCocktailUI : UIBase_Popup
         if (!levelUp)
         {
             int required = Define.RequiredEXP[data.CurrentCustomer.Level];
-            float beforePercent = (float)before / required;
-            float afterPercent = (float)after / required;
+            float beforePercent = ((float)before / required) * 100f;
+            float afterPercent = ((float)after / required) * 100f;
             fill.fillAmount = beforePercent;
             fill.DOFillAmount(afterPercent, 1f).OnComplete(() =>
             {

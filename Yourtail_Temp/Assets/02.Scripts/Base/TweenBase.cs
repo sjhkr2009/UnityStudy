@@ -156,10 +156,6 @@ public class TweenBase : MonoBehaviour
         if (changeRotation) rotationTarget = originRot;
     }
 
-    private void OnDestroy()
-    {
-        transform.DOKill();
-    }
     protected virtual void OnDisable()
     {
         transform.DOKill();

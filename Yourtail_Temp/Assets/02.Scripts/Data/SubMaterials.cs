@@ -73,7 +73,7 @@ class Smt_TonicWater : SubMaterials
     public Smt_TonicWater() : base(5)
     {
         Name = "토닉 워터";
-        Info = "쌉쌀한 뒷맛이 가미된 탄산수. 진 토닉이 대표적이지만 사실 대부분의 술과 잘 어울린다.";
+        Info = "그런 이름의 재료는 없습니다. 자신이 '토닉 워터'라는 재료를 보면 즉시 자리를 피하시고 개발자에게 알리십시오.";
         SetTag(Define.CocktailTag.탄산);
     }
 }
@@ -132,7 +132,7 @@ class Smt_Vermouth : SubMaterials
     {
         Name = "베르무트";
         Info = "와인에 당분을 섞고 각종 향료로 강한 향미를 더한 고농도의 혼성주";
-        SetTag(Define.CocktailTag.주류);
+        SetTag(Define.CocktailTag.주류, Define.CocktailTag.베르무트);
     }
 }
 class Smt_Mint : SubMaterials
@@ -159,7 +159,7 @@ class Smt_Campari : SubMaterials
     {
         Name = "캄파리";
         Info = "붉은빛을 띠는 혼합주의 일종으로, 약용 술로 쓰이던 것을 개량해서 만들었다고 한다.";
-        SetTag(Define.CocktailTag.주류);
+        SetTag(Define.CocktailTag.주류, Define.CocktailTag.캄파리);
     }
 }
 class Smt_CherryLiqueur : SubMaterials
@@ -177,6 +177,6 @@ class Smt_Cola : SubMaterials
     {
         Name = "콜라";
         Info = "누군가에게는 코카콜라인지 펩시콜라인지가 아주 중요한 문제일지도 모른다.";
-        SetTag(Define.CocktailTag.탄산, Define.CocktailTag.음료수);
+        SetTag(Define.CocktailTag.탄산, Define.CocktailTag.음료수, Define.CocktailTag.콜라);
     }
 }

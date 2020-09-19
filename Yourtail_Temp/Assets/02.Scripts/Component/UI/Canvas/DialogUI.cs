@@ -79,11 +79,15 @@ public class DialogUI : UIBase_Popup
     void NextButtonToCancel()
     {
         if(endButtonImage == null)
-            GetText((int)Texts.ButtonText).text = "닫기";
+            GetText((int)Texts.ButtonText).text = "X";
         else
             GetImage((int)Images.NextButton).sprite = endButtonImage;
 
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
+        GetButton((int)Buttons.NextButton).onClick.AddListener(() => 
+        {
+            dialogText.DOKill();
+            GameManager.Instance.GameState = GameState.Idle;
+        });
     }
 }

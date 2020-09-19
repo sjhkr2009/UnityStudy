@@ -393,11 +393,10 @@ public class DataManager
         float score = 0f;
         int checkpoint = 0;
 
-        if(order.requiredCocktail != null)
+        if(order.requiredCocktail != null && order.requiredCocktail.Count > 0)
         {
             checkpoint++;
-            if (order.requiredCocktail == cocktail.cocktailName)
-                score += 100f;
+            score += order.requiredCocktail.Contains(cocktail.cocktailName) ? 100f : 0f;
         }
         if (order.requiredProofGrade != null && order.requiredProofGrade.Count > 0)
         {

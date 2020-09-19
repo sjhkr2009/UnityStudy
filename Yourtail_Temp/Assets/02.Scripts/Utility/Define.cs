@@ -83,7 +83,10 @@ public class Define
         민트,
         설탕,
         체리,
-        음료수
+        음료수,
+        캄파리,
+        베르무트,
+        콜라
     }
 
     /// <summary>
