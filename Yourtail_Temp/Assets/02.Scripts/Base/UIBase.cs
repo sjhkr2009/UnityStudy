@@ -61,6 +61,12 @@ public class UIBase : MonoBehaviour
 
     protected void ResetButtons()
     {
+        if(!_objects.ContainsKey(typeof(Button)))
+		{
+            Debug.Log($"{gameObject.name} 에 버튼이 할당되지 않았습니다.");
+            return;
+		}
+
         for (int i = 0; i < _objects[typeof(Button)].Length; i++)
         {
             Button button = GetButton(i);

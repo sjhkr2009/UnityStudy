@@ -78,9 +78,15 @@ public class Customers
 
         return currentOrder;
     }
+    /// <summary>
+    /// 현재 레벨 이하의 주문들을 랜덤으로 가져옵니다. n번째 인자는 현재 레벨보다 n - 1 만큼 낮은 티어의 주문을 받을 확률을 의미합니다. 최대/최소티어를 초과하지 않습니다.
+    /// 예를 들어, 내 레벨이 3일 때 70, 50, 30, 10을 입력할 경우, 3, 2, 1, 0티어 주문을 7:5:3:1의 확률로 랜덤하게 가져옵니다. 단, 0티어 주문은 없으므로 1티어에 합산되어 최종적으로 7:5:4의 확률을 갖습니다.
+    /// </summary>
+    /// <param name="rateToCurrent"></param>
+    /// <returns></returns>
     public Order GetOrderInLow(params float[] rateToCurrent)
     {
-        int targetLevel = Mathf.Max(1, Level - rateToCurrent.RandomInWeighted());
+        int targetLevel = Mathf.Clamp(Level - rateToCurrent.RandomInWeighted(), 1, 4);
         return GetRandomOrder(targetLevel);
     }
     public void ResetOrder()
@@ -278,7 +284,7 @@ public class Flamingo : Customers
             requiredProofGrade: new List<Define.ProofGrade>() { Define.ProofGrade.셈, Define.ProofGrade.매우셈 });
         SetOrder(1, "향이 강한 칵테일 없을까? 알싸한 느낌으로다가~",
             requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.생강 });
-        SetOrder(1, "아이셔~아이셔~아이셔~ 신맛에 중독됐나봐 >.<",
+        SetOrder(1, "아이셔~아이셔~아이셔~ 신맛에 중독됐나봐 >.< ",
             requiredTags: new List<Define.CocktailTag>() { Define.CocktailTag.레몬 });
         #endregion
         #region 2단계 주문

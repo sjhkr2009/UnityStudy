@@ -160,4 +160,8 @@ public class TweenBase : MonoBehaviour
     {
         transform.DOKill();
     }
+	private void OnDestroy()
+	{
+        transform.DOKill();
+	}
 }

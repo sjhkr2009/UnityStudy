@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _gameState = value;
+            UI.CloseAllPopup();
             switch (value)
             {
                 case GameState.Idle:
@@ -72,7 +73,6 @@ public class GameManager : MonoBehaviour
     {
         _data.LoadFromPlayerPrefs();
 
-        GameState = GameState.Idle;
         Sound.Init();
         UI.Init();
 
@@ -88,6 +88,9 @@ public class GameManager : MonoBehaviour
 
         //temp
         Sound.Play(Define.SoundType.BGM, "jazz_bar", 0.07f);
+
+        if (GameState != GameState.Idle)
+            DOVirtual.DelayedCall(0.1f, () => { GameState = GameState.Idle; });
     }
     private void OnDestroy()
     {
@@ -111,23 +114,20 @@ public class GameManager : MonoBehaviour
 
     void MainInIdle()
     {
-        UI.CloseAllPopup();
+        
     }
 
     void MainInSelect()
     {
-        UI.CloseAllPopup();
         UI.OpenSceneUI<SelectMaterialUI>();
     }
     void MainInCombine()
     {
-        UI.CloseAllPopup();
-        UI.CloseSceneUI<SelectMaterialUI>();
         UI.OpenPopupUI<MakeCocktailUI>();
     }
     void MainInSetCocktail()
     {
-        UI.CloseAllPopup();
+        UI.CloseSceneUI<SelectMaterialUI>();
         UI.OpenPopupUI<SetCocktailUI>();
     }
 

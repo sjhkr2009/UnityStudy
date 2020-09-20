@@ -303,7 +303,7 @@ public class DataManager
     public void SelectCustomer(Customers customer)
     {
         CurrentCustomer = customer;
-        CurrentOrder = customer.GetOrder();
+        CurrentOrder = customer.GetOrderInLow(40f, 30f, 20f, 10f);
     }
 
     /// <summary>
@@ -556,6 +556,7 @@ public class DataManager
     {
         ResetBaseMaterial();
         ResetSubMaterial();
+        ResultReset();
         CurrentCocktail = null;
     }
     void CurrentReset()

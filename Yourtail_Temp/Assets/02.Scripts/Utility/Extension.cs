@@ -55,6 +55,12 @@ public static class Extension
         self.transform.localScale *= size;
     }
 
+    /// <summary>
+    /// 여러 개의 값을 받아서 임의의 인덱스를 반환합니다. 각 값에는 가중치를 부여할 수 있습니다.
+    /// 4개의 값을 10, 10, 10, 50 으로 입력하면 인덱스 3이 반환될 확률이 다른 값보다 5배 높습니다.
+    /// </summary>
+    /// <param name="rateList">각 인덱스에 할당될 가중치를 입력하세요. 합계는 어떻게 되든 상관 없으나 모든 값은 양수여야 합니다.</param>
+    /// <returns></returns>
     public static int RandomInWeighted(this float[] rateList)
     {
         if (rateList == null || rateList.Length <= 1)

@@ -33,7 +33,7 @@ public class BirdStories : ScriptableObject
             case Define.CustomerType.Penguin:
                 return penguinStory.TryGetValue(storyIndex, out result) ? result : null;
             default:
-                Debug.Log("해당 캐릭터의 스토리 텍스트가 없습니다.");
+                Debug.Log($"{customer.Name} 캐릭터의 {storyIndex} 번째 스토리 텍스트가 없습니다.");
                 return null;
         }
     }
@@ -41,9 +41,6 @@ public class BirdStories : ScriptableObject
     [Button]
     public void DialogSetting()
     {
-        if (StorySettingDone)
-            return;
-
         SetEagelStory();
         SetParrotStory();
         SetFlamingoStory();

@@ -51,11 +51,17 @@ public class SetCocktailUI : UIBase_Popup
     {
         if (!Inited) return;
 
+        GetText((int)Texts.LevelText).text = "";
         SetReward();
         SetCustomer();
         FillExpBar(data.beforeExp, data.afterExp, data.levelUp);
     }
-    private void OnDestroy()
+	private void OnDisable()
+	{
+        GetImage((int)Images.ExpImage).DOKill();
+
+    }
+	private void OnDestroy()
     {
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
     }
@@ -113,7 +119,7 @@ public class SetCocktailUI : UIBase_Popup
             float beforePercent = (float)before / Define.RequiredEXP[data.CurrentCustomer.Level - 1];
 
             fill.fillAmount = (float)before / Define.RequiredEXP[data.CurrentCustomer.Level - 1];
-            fill.DOFillAmount(0.75f, 1f).OnComplete(() =>
+            fill.DOFillAmount(1f, 1f).OnComplete(() =>
             {
                 fill.fillAmount = 0f;
                 fill.DOFillAmount((float)after / Define.RequiredEXP[data.CurrentCustomer.Level], 1f).OnComplete(() =>
