@@ -55,8 +55,6 @@ public class Cocktail
 {
 	#region Stats
 
-	public List<BaseMaterials> BaseMaterials { get; private set; } = new List<BaseMaterials>();
-    public List<SubMaterials> SubMaterials { get; private set; } = new List<SubMaterials>();
     public List<string> BaseIDList { get; private set; } = new List<string>();
     public List<string> SubIDList { get; private set; } = new List<string>();
     public CocktailName cocktailName = CocktailName.None;
@@ -87,13 +85,11 @@ public class Cocktail
     }
     protected void AddBase(BaseMaterials material)
     {
-        BaseMaterials.Add(material);
         BaseIDList.Add(material.Id);
         AddTag(material.Tags);
     }
     protected void AddSub(SubMaterials material)
     {
-        SubMaterials.Add(material);
         SubIDList.Add(material.Id);
         AddTag(material.Tags);
     }

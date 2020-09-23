@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
 public class MaterialIcon : MonoBehaviour, IPointerClickHandler
 {
@@ -28,9 +29,44 @@ public class MaterialIcon : MonoBehaviour, IPointerClickHandler
             }
         }
     }
+    private bool _isActive = true;
+    [ShowInInspector] public bool IsActive
+	{
+        get => _isActive;
+		set
+		{
+            _isActive = value;
 
-    public void OnPointerClick(PointerEventData eventData)
+            float alpha = value ? 1f : 0.5f;
+            _myImage.color = new Color(1f, 1f, 1f, alpha);
+        }
+	}
+
+	private void Start()
+	{
+        GameManager.Data.OnValidUpdate -= SetValid;
+        GameManager.Data.OnValidUpdate += SetValid;
+    }
+
+	public void OnPointerClick(PointerEventData eventData)
     {
+        if (!IsActive)
+            return;
+        
         GameManager.Input.InMaterialSelect(_myMaterial.Id);
+    }
+
+    void SetValid()
+	{
+        if (_myMaterial.materialType == CocktailMaterials.MaterialType.Base)
+            return;
+
+        if (GameManager.Data.CurrentSubMaterials.Count == 0 && GameManager.Data.CurrentBaseMaterials.Count == 0)
+		{
+            IsActive = true;
+            return;
+		}
+
+        IsActive = GameManager.Data.ValidMaterials.Contains(_myMaterial.Id);
     }
 }

@@ -83,29 +83,37 @@ public class DataManager
     {
         CurrentBaseMaterials.Add(item);
         OnAddBaseMaterial(item);
+        SetValidMaterials();
     }
     public void RemoveCurrentBase(BaseMaterials item)
     {
         CurrentBaseMaterials.Remove(item);
         OnRemoveBaseMaterial(item);
+        SetValidMaterials();
     }
 
     public void AddCurrentSub(SubMaterials item)
     {
         CurrentSubMaterials.Add(item);
         OnAddSubMaterial(item);
+        SetValidMaterials();
     }
     public void RemoveCurrentSub(SubMaterials item)
     {
         CurrentSubMaterials.Remove(item);
         OnRemoveSubMaterial(item);
+        SetValidMaterials();
     }
     public Action<BaseMaterials> OnAddBaseMaterial = n => { };
     public Action<BaseMaterials> OnRemoveBaseMaterial = n => { };
     public Action<SubMaterials> OnAddSubMaterial = n => { };
     public Action<SubMaterials> OnRemoveSubMaterial = n => { };
+    public Action OnValidUpdate = () => { };
 
     public int CurrentGrade { get; private set; }
+
+    public List<string> ValidMaterials { get; private set; } = new List<string>();
+    List<Cocktail> ValidCocktails = new List<Cocktail>();
 
     #endregion
 
@@ -263,7 +271,27 @@ public class DataManager
         string id = item.Id;
         CocktailData.Add(id, item);
         CocktailList.Add(item);
+        SetParentCocktail(item);
     }
+    void SetParentCocktail(Cocktail parent)
+	{
+		foreach (string baseId in parent.BaseIDList)
+		{
+            if (!BaseMaterialIdData[baseId].ParentCocktails.Contains(parent))
+			{
+                BaseMaterialIdData[baseId].ParentCocktails.Add(parent);
+            }
+		}
+
+        foreach (string subId in parent.SubIDList)
+		{
+            if (!SubMaterialIdData[subId].ParentCocktails.Contains(parent))
+			{
+                SubMaterialIdData[subId].ParentCocktails.Add(parent);
+            }
+		}
+    }
+
     #endregion
 
     #region 게임 진행 관련
@@ -348,8 +376,8 @@ public class DataManager
         foreach (Cocktail cocktail in CocktailList)
         {
             bool isCorrect = true;
-            if (currentBases.Count != cocktail.BaseMaterials.Count) continue;
-            if (currentSubs.Count != cocktail.SubMaterials.Count) continue;
+            if (currentBases.Count != cocktail.BaseIDList.Count) continue;
+            if (currentSubs.Count != cocktail.SubIDList.Count) continue;
 
             foreach (BaseMaterials _base in currentBases)
             {
@@ -484,6 +512,57 @@ public class DataManager
         afterExp = CurrentCustomer.Exp;
     }
 
+    void SetValidMaterials()
+	{
+        ValidCocktails.Clear();
+        ValidMaterials.Clear();
+
+        Dictionary<Cocktail, int> temp = new Dictionary<Cocktail, int>();
+        int validCount = CurrentBaseMaterials.Count + CurrentSubMaterials.Count;
+
+        if (validCount == 0)
+            return;
+        
+        foreach (var spirit in CurrentBaseMaterials)
+		{
+			foreach (var cock in spirit.ParentCocktails)
+			{
+                if (temp.ContainsKey(cock))
+                    temp[cock]++;
+                else
+                    temp.Add(cock, 1);
+            }
+		}
+
+		foreach (var sub in CurrentSubMaterials)
+		{
+			foreach (var cock in sub.ParentCocktails)
+			{
+                if (temp.ContainsKey(cock))
+                    temp[cock]++;
+                else
+                    temp.Add(cock, 1);
+            }
+		}
+
+		foreach (var item in temp)
+		{
+            if (item.Value >= validCount)
+                ValidCocktails.Add(item.Key);
+		}
+
+		foreach (var cock in ValidCocktails)
+		{
+			foreach (var Id in cock.SubIDList)
+			{
+                if (!ValidMaterials.Contains(Id))
+                    ValidMaterials.Add(Id);
+            }
+		}
+
+        OnValidUpdate();
+    }
+
     #endregion
 
     #region 저장 및 리셋
@@ -568,5 +647,18 @@ public class DataManager
         CurrentSubMaterials.Clear();
         ResultReset();
     }
+
+    public void Clear()
+	{
+        OnAddBaseMaterial = null;
+        OnAddSubMaterial = null;
+        OnRemoveBaseMaterial = null;
+        OnRemoveSubMaterial = null;
+        OnSetCocktail = null;
+        OnSetCoin = null;
+        OnSetCustomer = null;
+        OnSetOrder = null;
+        OnValidUpdate = null;
+	}
     #endregion
 }
