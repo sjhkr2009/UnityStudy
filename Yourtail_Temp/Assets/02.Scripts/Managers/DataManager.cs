@@ -271,25 +271,6 @@ public class DataManager
         string id = item.Id;
         CocktailData.Add(id, item);
         CocktailList.Add(item);
-        SetParentCocktail(item);
-    }
-    void SetParentCocktail(Cocktail parent)
-	{
-		foreach (string baseId in parent.BaseIDList)
-		{
-            if (!BaseMaterialIdData[baseId].ParentCocktails.Contains(parent))
-			{
-                BaseMaterialIdData[baseId].ParentCocktails.Add(parent);
-            }
-		}
-
-        foreach (string subId in parent.SubIDList)
-		{
-            if (!SubMaterialIdData[subId].ParentCocktails.Contains(parent))
-			{
-                SubMaterialIdData[subId].ParentCocktails.Add(parent);
-            }
-		}
     }
 
     #endregion
@@ -517,39 +498,35 @@ public class DataManager
         ValidCocktails.Clear();
         ValidMaterials.Clear();
 
-        Dictionary<Cocktail, int> temp = new Dictionary<Cocktail, int>();
-        int validCount = CurrentBaseMaterials.Count + CurrentSubMaterials.Count;
-
-        if (validCount == 0)
+        if ((CurrentBaseMaterials.Count + CurrentSubMaterials.Count) == 0)
+        {
+            OnValidUpdate();
             return;
-        
-        foreach (var spirit in CurrentBaseMaterials)
-		{
-			foreach (var cock in spirit.ParentCocktails)
-			{
-                if (temp.ContainsKey(cock))
-                    temp[cock]++;
-                else
-                    temp.Add(cock, 1);
-            }
-		}
+        }
 
-		foreach (var sub in CurrentSubMaterials)
-		{
-			foreach (var cock in sub.ParentCocktails)
-			{
-                if (temp.ContainsKey(cock))
-                    temp[cock]++;
-                else
-                    temp.Add(cock, 1);
-            }
-		}
+        List<CocktailMaterials> currentList = new List<CocktailMaterials>();
 
-		foreach (var item in temp)
-		{
-            if (item.Value >= validCount)
-                ValidCocktails.Add(item.Key);
-		}
+        foreach (var item in CurrentBaseMaterials)
+            currentList.Add(item);
+
+        foreach (var item in CurrentSubMaterials)
+            currentList.Add(item);
+
+        foreach (var cock in CocktailList)
+        {
+            bool isValid = true;
+            foreach (var material in currentList)
+            {
+                if (((material.materialType == CocktailMaterials.MaterialType.Base) && !cock.BaseIDList.Contains(material.Id)) ||
+                    ((material.materialType == CocktailMaterials.MaterialType.Sub) && !cock.SubIDList.Contains(material.Id)))
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid)
+                ValidCocktails.Add(cock);
+        }
 
 		foreach (var cock in ValidCocktails)
 		{

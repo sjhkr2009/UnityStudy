@@ -36,12 +36,6 @@ public class SubSelectedIcon : MonoBehaviour, IPointerClickHandler
         SetIcon();
     }
 
-    void OnDestroy()
-    {
-        GameManager.Data.OnAddSubMaterial -= SetIcon;
-        GameManager.Data.OnRemoveSubMaterial -= DeleteIcon;
-    }
-
     void SetIcon(SubMaterials selected)
     {
         if (GameManager.Data.CurrentSubMaterials.Count != myCount) return;

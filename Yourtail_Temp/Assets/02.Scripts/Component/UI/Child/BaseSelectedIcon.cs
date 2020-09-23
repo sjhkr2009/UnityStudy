@@ -34,12 +34,6 @@ public class BaseSelectedIcon : MonoBehaviour, IPointerClickHandler
         SetIcon();
     }
 
-    void OnDestroy()
-    {
-        GameManager.Data.OnAddBaseMaterial -= SetIcon;
-        GameManager.Data.OnRemoveBaseMaterial -= DeleteIcon;
-    }
-
     void SetIcon(BaseMaterials selected)
     {
         if (GameManager.Data.CurrentBaseMaterials.Count != myCount) return;

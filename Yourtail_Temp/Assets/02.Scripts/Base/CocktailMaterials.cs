@@ -9,7 +9,6 @@ public class CocktailMaterials
     public string Id { get; private set; }
     public string Info { get; protected set; }
     public int Index { get; private set; }
-    public List<Cocktail> ParentCocktails { get; set; } = new List<Cocktail>();
     public void SetID(int code)
     {
         Index = code;
