@@ -35,7 +35,8 @@ public class BirdInfoWindow : UIBase_Popup
 
     enum Buttons
 	{
-        CloseButton
+        CloseButton,
+        blockRaycast
     }
 
     enum Sliders
@@ -71,6 +72,7 @@ public class BirdInfoWindow : UIBase_Popup
         Bind<Button>(typeof(Buttons));
 
         GetButton((int)Buttons.CloseButton).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<BirdInfoWindow>(); });
+        GetButton((int)Buttons.blockRaycast).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<BirdInfoWindow>(); });
 
         // + 스토리 팝업창 띄우는 동작 추가 필요 -> StoryButton에서 관리
 

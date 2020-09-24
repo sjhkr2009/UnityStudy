@@ -9,7 +9,8 @@ public class WarningUI : UIBase_Popup
     enum Buttons
     {
         YesButton,
-        NoButton
+        NoButton,
+        blockRaycast
     }
 
     enum Texts
@@ -69,6 +70,7 @@ public class WarningUI : UIBase_Popup
         warningText = GetText((int)Texts.WarningText);
 
         no.onClick.AddListener(() => { GameManager.UI.ClosePopupUI<WarningUI>(); });
+        GetButton((int)Buttons.blockRaycast).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<WarningUI>(); });
     }
 
     void SetButtons()
