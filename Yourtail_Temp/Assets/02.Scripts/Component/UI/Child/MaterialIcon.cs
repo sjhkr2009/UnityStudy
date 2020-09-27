@@ -38,7 +38,7 @@ public class MaterialIcon : MonoBehaviour, IPointerClickHandler
             _isActive = value;
 
             float alpha = value ? 1f : 0.5f;
-            _myImage.color = new Color(1f, 1f, 1f, alpha);
+            _myImage.color = new Color(alpha, alpha, alpha, alpha);
         }
 	}
 

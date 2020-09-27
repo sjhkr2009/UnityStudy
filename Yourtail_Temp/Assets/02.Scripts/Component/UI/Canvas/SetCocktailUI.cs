@@ -105,12 +105,12 @@ public class SetCocktailUI : UIBase_Popup
         if (!levelUp)
         {
             int required = Define.RequiredEXP[data.CurrentCustomer.Level];
-            float beforePercent = ((float)before / required) * 100f;
-            float afterPercent = ((float)after / required) * 100f;
+            float beforePercent = ((float)before / required);
+            float afterPercent = ((float)after / required);
             fill.fillAmount = beforePercent;
             fill.DOFillAmount(afterPercent, 1f).OnComplete(() =>
             {
-                GetText((int)Texts.LevelText).text = $"호감도 변화: {(int)beforePercent}% → {(int)afterPercent}%";
+                GetText((int)Texts.LevelText).text = $"호감도 변화: {(int)(beforePercent * 100)}% → {(int)(afterPercent * 100)}%";
                 button.interactable = true;
             });
         }

@@ -25,6 +25,7 @@ public class CocktailMaking : UIBase_Popup
     {
         shake.OnMakingEnd -= OnEnd;
         OnEndMaking();
+        OnEndMaking = null;
         GameManager.UI.ClosePopupUI<CocktailMaking>();
     }
 }

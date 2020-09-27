@@ -32,11 +32,9 @@ public class MakeCocktailUI : UIBase_Popup
     {
         ProofSlider
     }
-    
-    void Start()
-    {
-        Init();
-    }
+    Canvas myCanvas;
+    int originOrder;
+    void Start() => Init();
     private void OnDestroy()
     {
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
@@ -47,6 +45,10 @@ public class MakeCocktailUI : UIBase_Popup
     public override void Init()
     {
         base.Init();
+
+        myCanvas = gameObject.GetComponent<Canvas>();
+        originOrder = myCanvas.sortingOrder;
+        myCanvas.sortingOrder = -1;
 
         makingUI = GameManager.UI.OpenPopupUI<CocktailMaking>();
         makingUI.OnEndMaking -= SetResult;
@@ -69,6 +71,9 @@ public class MakeCocktailUI : UIBase_Popup
 
     void SetResult()
     {
+        myCanvas.sortingOrder = originOrder;
+        GameManager.UI.TryClosePopupUI<CocktailMaking>();
+
         myCocktail = GameManager.Data.CurrentCocktail;
         if (myCocktail == null) return;
 
