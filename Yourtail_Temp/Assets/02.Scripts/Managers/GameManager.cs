@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
     void MainInSetCocktail()
     {
         UI.CloseSceneUI<SelectMaterialUI>();
-        UI.OpenPopupUI<SetCocktailUI>();
+        UI.OpenPopupUI<CocktailReactionUI>();
     }
 
     public void SetDialog()

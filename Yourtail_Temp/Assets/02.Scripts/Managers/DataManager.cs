@@ -110,6 +110,7 @@ public class DataManager
     public Action<SubMaterials> OnRemoveSubMaterial = n => { };
     public Action OnValidUpdate = () => { };
 
+    // 칵테일 완성 후 평가 점수. GOOD/SOSO/BAD 중 하나의 결과를 각각 1, 0, -1의 정수로 가지고 있습니다.
     public int CurrentGrade { get; private set; }
 
     public List<string> ValidMaterials { get; private set; } = new List<string>();

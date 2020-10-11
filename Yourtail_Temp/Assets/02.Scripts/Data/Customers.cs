@@ -112,12 +112,14 @@ public class Customers
     #endregion
 
     #region 기타 스크립트
-    public Dictionary<Define.Reaction, string> reactionSctipt { get; private set; } = new Dictionary<Define.Reaction, string>();
+    
+    // 칵테일을 제공했을 때 새가 반응하는 대사가 들어 있습니다. Key값 -1, 0, 1에 각각 BAD, SOSO, GOOD일 경우의 대사가 있습니다.
+    public Dictionary<Define.Reaction, string> ReactionSctipt { get; private set; } = new Dictionary<Define.Reaction, string>();
     protected void SetReactionSctipt(string good, string soso, string bad)
     {
-        reactionSctipt.Add(Define.Reaction.GOOD, good);
-        reactionSctipt.Add(Define.Reaction.SOSO, soso);
-        reactionSctipt.Add(Define.Reaction.BAD, bad);
+        ReactionSctipt.Add(Define.Reaction.BAD, bad);
+        ReactionSctipt.Add(Define.Reaction.SOSO, soso);
+        ReactionSctipt.Add(Define.Reaction.GOOD, good);
     }
     public string Liking { get; protected set; }
 
