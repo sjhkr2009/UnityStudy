@@ -59,10 +59,8 @@ public class SelectMaterialUI : UIBase_Scene
         NextButton,
         ResetButton,
         OrderButton,
-        Window1to2,
-        Window2to3,
-        Window2to1,
-        Window3to2
+        WindowNext,
+        WindowPrev
     }
     enum WindowObjects
     {
@@ -77,6 +75,32 @@ public class SelectMaterialUI : UIBase_Scene
     }
 
     Mode windowMode = Mode.SelectBase;
+    int _currentWindow;
+    int CurrentWindow
+    {
+        get => _currentWindow;
+        set
+        {
+            _currentWindow = value;
+            switch (value)
+            {
+                case 0:
+                    GetButton((int)Buttons.WindowPrev).interactable = false;
+                    break;
+                case 1:
+                    GetButton((int)Buttons.WindowPrev).interactable = true;
+                    GetButton((int)Buttons.WindowNext).interactable = true;
+                    break;
+                case 2:
+                    GetButton((int)Buttons.WindowNext).interactable = false;
+                    break;
+                default:
+                    Debug.Log("[SelectMaterialUI] 재료 선택창 버튼 할당에 오류가 있습니다. 개발자에게 얘기해 주세요.");
+                    break;
+            }
+        }
+    }
+
     public Mode WindowMode
     {
         get => windowMode;
@@ -166,12 +190,20 @@ public class SelectMaterialUI : UIBase_Scene
         GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.ResetSelected);
         GetButton((int)Buttons.OrderButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<OrderInfoWindow>(); });
 
-        GetButton((int)Buttons.Window1to2).onClick.AddListener(() => { windows.OpenWindow(1); });
-        GetButton((int)Buttons.Window2to3).onClick.AddListener(() => { windows.OpenWindow(2); });
-        GetButton((int)Buttons.Window2to1).onClick.AddListener(() => { windows.OpenWindow(0); });
-        GetButton((int)Buttons.Window3to2).onClick.AddListener(() => { windows.OpenWindow(1); });
+        GetButton((int)Buttons.WindowNext).onClick.AddListener(() => { MoveWindow(true); });
+        GetButton((int)Buttons.WindowPrev).onClick.AddListener(() => { MoveWindow(false); });
 
         SetNextBtnSprite(true);
+    }
+
+    void MoveWindow(bool toNext)
+    {
+        if (toNext)
+            windows[CurrentWindow].SwipeWindow(windows[CurrentWindow + 1], true);
+        else
+            windows[CurrentWindow].SwipeWindow(windows[CurrentWindow - 1], false);
+
+        CurrentWindow = toNext ? CurrentWindow + 1 : CurrentWindow - 1;
     }
 
     void SetWindows()
