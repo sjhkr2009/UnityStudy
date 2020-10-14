@@ -108,19 +108,20 @@ public class SelectMaterialUI : UIBase_Scene
         {
             windowMode = value;
             moveArea.DOKill();
+            GetButton((int)Buttons.PrevButton).onClick.RemoveAllListeners();
             GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
             switch (value)
             {
                 case Mode.SelectBase:
                     moveArea.DOAnchorPos(new Vector2(screenWidth, 0), 0.3f);
-                    GetButton((int)Buttons.PrevButton).interactable = false;
+                    GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
                     GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
                     SetNextBtnSprite(true);
                     break;
 
                 case Mode.SelectSub:
                     moveArea.DOAnchorPos(new Vector2(0, 0), 0.3f);
-                    GetButton((int)Buttons.PrevButton).interactable = true;
+                    GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { WindowMode = Mode.SelectBase; });
                     GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
                     SetNextBtnSprite(false);
                     break;
@@ -135,6 +136,7 @@ public class SelectMaterialUI : UIBase_Scene
     RectTransform moveArea;
     List<GameObject> windows = new List<GameObject>();
     float screenWidth;
+    OnSwipe onSwipe;
 
     void Start() => Init();
     public override void Init()
@@ -148,6 +150,10 @@ public class SelectMaterialUI : UIBase_Scene
         Bind<BaseSelectedIcon>(typeof(BaseSelectedIcons));
         Bind<SubSelectedIcon>(typeof(SubSelectedIcons));
         Bind<Image>(typeof(Images));
+
+        onSwipe = gameObject.GetOrAddComponent<OnSwipe>();
+        onSwipe.EventOnSwipe -= MoveWindow;
+        onSwipe.EventOnSwipe += MoveWindow;
 
         screenWidth = Define.UIRefResolution.x;
         moveArea = Get<RectTransform>((int)RectTransforms.MaterialMoveArea);
@@ -183,9 +189,9 @@ public class SelectMaterialUI : UIBase_Scene
     }
     void SetButtons()
     {
-        GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { WindowMode = Mode.SelectBase; });
+        GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
-        GetButton((int)Buttons.PrevButton).interactable = false;
+        //GetButton((int)Buttons.PrevButton).interactable = false;
 
         GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.ResetSelected);
         GetButton((int)Buttons.OrderButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<OrderInfoWindow>(); });
@@ -198,6 +204,13 @@ public class SelectMaterialUI : UIBase_Scene
 
     void MoveWindow(bool toNext)
     {
+        if (WindowMode == Mode.SelectBase)
+            return;
+        if (CurrentWindow <= 0 && !toNext)
+            return;
+        if (CurrentWindow >= 2 && toNext)
+            return;
+        
         if (toNext)
             windows[CurrentWindow].SwipeWindow(windows[CurrentWindow + 1], true);
         else
@@ -228,8 +241,11 @@ public class SelectMaterialUI : UIBase_Scene
         moveArea.anchoredPosition = new Vector2(screenWidth, 0);
 
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
+        GetButton((int)Buttons.PrevButton).onClick.RemoveAllListeners();
+        GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
-        GetButton((int)Buttons.PrevButton).interactable = false;
+        //GetButton((int)Buttons.PrevButton).interactable = false;
+
         SetNextBtnSprite(true);
 
         for (int i = 0; i < (int)BaseSelectedIcons.Count; i++)

@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 
     void MainInIdle()
     {
-        
+        UI.CloseSceneUI<SelectMaterialUI>();
     }
 
     void MainInSelect()

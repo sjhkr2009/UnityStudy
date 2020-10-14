@@ -148,9 +148,9 @@ public class Define
     /// </summary>
     public const float DoTextSpeedFast = 0.015f;
     /// <summary>
-    /// 초당 칵테일 제조가 자동으로 진행되는 정도 (%) : 10이면 초당 10%씩 자동으로 진행됩니다.
+    /// 초당 칵테일 제조가 자동으로 진행되는 정도 (%) : 20이면 초당 20%씩 자동으로 진행됩니다.
     /// </summary>
-    public const float CocktailMakingProcess = 10f;
+    public const float CocktailMakingProcess = 15f;
 
     #endregion
 
