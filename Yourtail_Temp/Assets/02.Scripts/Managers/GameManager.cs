@@ -97,7 +97,6 @@ public class GameManager : MonoBehaviour
         _data.SaveToPlayerPrefs();
         
         Input.InputStateChange -= StateChange;
-        //Input.InputNextState -= InNextState;
         Input.InputEscape -= OnEscape;
         Input.InputRetryCocktail -= OnRetryCocktail;
         OnGameStateChange -= Data.OnGameStateChange;
@@ -130,9 +129,11 @@ public class GameManager : MonoBehaviour
         UI.CloseSceneUI<SelectMaterialUI>();
         UI.OpenPopupUI<CocktailReactionUI>();
     }
-
+    
     public void SetDialog()
     {
+        Data.DeleteCustomer();
+
         if (Data.levelUp)
             UI.OpenPopupUI<DialogUI>();
         else

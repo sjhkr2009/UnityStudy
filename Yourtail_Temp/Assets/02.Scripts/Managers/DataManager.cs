@@ -28,20 +28,20 @@ public class DataManager
     public List<Cocktail> Recipe { get; set; } = new List<Cocktail>();
     public List<SubMaterials> CollectedMaterial { get; set; } = new List<SubMaterials>();
     public int BirdCoin { get; private set; }
-    public Action<int> OnSetCoin = n => { };
+    public event Action<int> OnSetCoin = n => { };
     public void SetBirdCoin(int value)
     {
         BirdCoin = value;
-        OnSetCoin(value); //UI 갱신
+        OnSetCoin(value);
     }
     public void AddBirdCoin(int value)
     {
         BirdCoin += value;
-        OnSetCoin(BirdCoin); //UI 갱신
+        OnSetCoin(BirdCoin);
     }
 
     [ShowInInspector] private Order _currentOrder { get; set; }
-    public Action<Order> OnSetOrder = n => { };
+    public event Action<Order> OnSetOrder = n => { };
     public Order CurrentOrder
     {
         get => _currentOrder;
@@ -51,8 +51,10 @@ public class DataManager
             OnSetOrder(value);
         }
     }
+    [ShowInInspector, ReadOnly] public int CurrentTableIndex { get; set; }
     [ShowInInspector] private Customers _currentCustomer { get; set; }
-    public Action<Customers> OnSetCustomer = n => { };
+    public event Action<Customers> OnSetCustomer = n => { };
+    public Action DeleteCustomer = () => { };
     public Customers CurrentCustomer
     {
         get => _currentCustomer;
@@ -63,7 +65,7 @@ public class DataManager
         }
     }
     [ShowInInspector] private Cocktail _currentCocktail { get; set; }
-    public Action<Cocktail> OnSetCocktail = n => { };
+    public event Action<Cocktail> OnSetCocktail = n => { };
     public Cocktail CurrentCocktail
     {
         get => _currentCocktail;
@@ -104,11 +106,11 @@ public class DataManager
         OnRemoveSubMaterial(item);
         SetValidMaterials();
     }
-    public Action<BaseMaterials> OnAddBaseMaterial = n => { };
-    public Action<BaseMaterials> OnRemoveBaseMaterial = n => { };
-    public Action<SubMaterials> OnAddSubMaterial = n => { };
-    public Action<SubMaterials> OnRemoveSubMaterial = n => { };
-    public Action OnValidUpdate = () => { };
+    public event Action<BaseMaterials> OnAddBaseMaterial = n => { };
+    public event Action<BaseMaterials> OnRemoveBaseMaterial = n => { };
+    public event Action<SubMaterials> OnAddSubMaterial = n => { };
+    public event Action<SubMaterials> OnRemoveSubMaterial = n => { };
+    public event Action OnValidUpdate = () => { };
 
     // 칵테일 완성 후 평가 점수. GOOD/SOSO/BAD 중 하나의 결과를 각각 1, 0, -1의 정수로 가지고 있습니다.
     public int CurrentGrade { get; private set; }
@@ -548,11 +550,11 @@ public class DataManager
     {
         SaveData();
 
-        GameData.Save();
+        //GameData.Save();
     }
     public void LoadFromPlayerPrefs()
     {
-        GameData.Load();
+        //GameData.Load();
 
         LoadData();
     }

@@ -150,7 +150,8 @@ public class Define
     /// <summary>
     /// 초당 칵테일 제조가 자동으로 진행되는 정도 (%) : 20이면 초당 20%씩 자동으로 진행됩니다.
     /// </summary>
-    public const float CocktailMakingProcess = 15f;
+    public const float CocktailMakingProcess_Default = 10f;
+    public const float CocktailMakingProcess_Max = 75f;
 
     #endregion
 

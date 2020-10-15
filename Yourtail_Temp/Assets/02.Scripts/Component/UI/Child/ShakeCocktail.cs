@@ -55,7 +55,7 @@ public class ShakeCocktail : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         transform.position = eventData.position;
         moveDist = Vector2.Distance(eventData.position, prevPos);
-        processPerSecond = Mathf.Clamp(moveDist, 0f, 100f);
+        processPerSecond = Mathf.Clamp(moveDist, 0f, Define.CocktailMakingProcess_Max);
 
         process += processPerSecond * Time.deltaTime;
         prevPos = eventData.position;
@@ -87,7 +87,7 @@ public class ShakeCocktail : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             yield return null;
 
-            process += (Define.CocktailMakingProcess * Time.deltaTime);
+            process += (Define.CocktailMakingProcess_Default * Time.deltaTime);
             UpdateProcessUI(process);
         }
         transform.DOKill();

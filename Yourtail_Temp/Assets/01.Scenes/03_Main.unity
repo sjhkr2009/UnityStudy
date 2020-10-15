@@ -1011,7 +1011,6 @@ GameObject:
   - component: {fileID: 324949334}
   - component: {fileID: 324949333}
   - component: {fileID: 324949332}
-  - component: {fileID: 324949335}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1037,7 +1036,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BackGroundColor: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1084,20 +1083,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &324949335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 324949331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 727c858eac915944eb0392468c7f521c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  horizontal: 16
-  vertical: 9
 --- !u!1 &346423399
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,6 +1257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee1c62d3acb23e458e71d453923f7c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myIndex: 0
   myImage: {fileID: 0}
 --- !u!1 &370359202
 GameObject:
@@ -1779,7 +1765,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 24accf26ac767a4429dae1447be467a2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b1a72716d7bcb2f4db13c4a690363e89, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4334,6 +4320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee1c62d3acb23e458e71d453923f7c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myIndex: 0
   myImage: {fileID: 0}
 --- !u!1 &1182676396
 GameObject:
@@ -5704,6 +5691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee1c62d3acb23e458e71d453923f7c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myIndex: 0
   myImage: {fileID: 0}
 --- !u!1001 &1515644811
 PrefabInstance:
@@ -6252,7 +6240,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 24accf26ac767a4429dae1447be467a2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b1a72716d7bcb2f4db13c4a690363e89, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6508,7 +6496,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ad37fcc5d8e58d34d8992b80b2096f98, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9c74f6e3796d5844a980a3a081bc2ec0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

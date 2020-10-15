@@ -8,7 +8,6 @@ public class CocktailReactionUI : UIBase_Popup
 {
     enum Images
 	{
-		CustomerImage,
 		CocktailImage,
 		HeartIcon
 	}
@@ -25,10 +24,15 @@ public class CocktailReactionUI : UIBase_Popup
 	}
 	enum RectTransforms
 	{
-		HeartIcon
+		HeartIcon,
+		Pos1,
+		Pos2,
+		Pos3,
+		VariableImage
 	}
 
 	DataManager data = GameManager.Data;
+	float space;
 	
 	void Start() => Init();
 
@@ -42,6 +46,9 @@ public class CocktailReactionUI : UIBase_Popup
 		Bind<RectTransform>(typeof(RectTransforms));
 
 		GetButton((int)Buttons.NextButton).onClick.AddListener(GameManager.Instance.SetDialog);
+		space = Get<RectTransform>((int)RectTransforms.Pos2).position.x - Get<RectTransform>((int)RectTransforms.Pos1).position.x;
+
+		data.SetReward();
 
 		SetDialog();
 		SetImage();
@@ -75,7 +82,16 @@ public class CocktailReactionUI : UIBase_Popup
 	void SetImage()
 	{
 		GetImage((int)Images.CocktailImage).sprite = data.CurrentCocktail.image;
-		GetImage((int)Images.CustomerImage).sprite = data.CurrentCustomer.Image;
+
+		RectTransform images = Get<RectTransform>((int)RectTransforms.VariableImage);
+		if (data.CurrentTableIndex == 0)
+		{
+			images.DOMoveX(images.position.x - space, 0f);
+		}
+		else if(data.CurrentTableIndex == 2)
+		{
+			images.DOMoveX(images.position.x + space, 0f);
+		}
 	}
 
 	void SetExpText()

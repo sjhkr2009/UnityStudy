@@ -73,8 +73,11 @@ public class Customers
     }
     public Order GetRandomOrder(int level = int.MaxValue)
     {
+        if (level == int.MaxValue)
+            level = Level;
+        
         if (currentOrder == null)
-            currentOrder = wishlist[Mathf.Min(level, Level)][Random.Range(0, wishlist[Level].Count)];
+            currentOrder = wishlist[Mathf.Clamp(level, 1, 4)][Random.Range(0, wishlist[Level].Count)];
 
         return currentOrder;
     }

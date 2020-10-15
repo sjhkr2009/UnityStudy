@@ -47,7 +47,7 @@ public class OnSwipe : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
 
         moveDist = Vector2.Distance(startPos, endPos);
         moveSpeed = moveDist / moveTime;
-        Debug.Log($"총 이동거리: {moveDist} / 이동 시간: {moveTime} / 이동 속도: {moveSpeed}");
+        //Debug.Log($"총 이동거리: {moveDist} / 이동 시간: {moveTime} / 이동 속도: {moveSpeed}");
 
         SwipeCheck();
     }
@@ -56,7 +56,6 @@ public class OnSwipe : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         if (moveSpeed > 350f || moveDist > 300f)
         {
-            Debug.Log("스와이프");
             EventOnSwipe(dragLeft);
         }
     }
