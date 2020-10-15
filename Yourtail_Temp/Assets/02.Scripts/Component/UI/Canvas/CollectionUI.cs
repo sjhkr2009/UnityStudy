@@ -64,7 +64,7 @@ public class CollectionUI : UIBase_Popup
         if (!Inited || !DontDestroy)
             return;
 
-        GameManager.UI.SetCanvasOrder(gameObject);
+        gameObject.SetCanvasOrder();
         GameManager.Instance.ignoreOnMouse = true;
 
         for (int i = 0; i < (int)Toggles.Count; i++)

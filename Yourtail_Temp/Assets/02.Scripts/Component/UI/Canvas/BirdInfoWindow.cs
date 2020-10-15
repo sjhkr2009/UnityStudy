@@ -86,6 +86,7 @@ public class BirdInfoWindow : UIBase_Popup
         if (!Inited || !DontDestroy)
             return;
 
+        gameObject.SetCanvasOrder();
         SetInfo();
     }
 

@@ -109,4 +109,8 @@ public static class Extension
         return target;
     }
 
+    public static void SetCanvasOrder(this GameObject gameObject, bool isPopup = true, int customOrder = int.MinValue)
+	{
+        GameManager.UI.SetCanvasOrder(gameObject, isPopup, customOrder);
+	}
 }

@@ -54,6 +54,7 @@ public class WarningUI : UIBase_Popup
             SetDefault();
 
         SetButtons();
+        gameObject.SetCanvasOrder();
         GameManager.Instance.ignoreOnMouse = true;
     }
 

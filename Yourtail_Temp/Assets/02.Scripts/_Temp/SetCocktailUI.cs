@@ -51,6 +51,7 @@ public class SetCocktailUI : UIBase_Popup
     {
         if (!Inited) return;
 
+        gameObject.SetCanvasOrder();
         GetText((int)Texts.LevelText).text = "";
         SetReward();
         SetCustomer();
