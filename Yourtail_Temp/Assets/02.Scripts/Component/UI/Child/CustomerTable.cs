@@ -22,9 +22,6 @@ public class CustomerTable : MonoBehaviour, IPointerClickHandler
 
         currentCustomer = null;
         myImage.sprite = GameManager.UI.NullImage;
-
-        GameManager.Data.DeleteCustomer -= DeleteCustomer;
-        GameManager.Data.DeleteCustomer += DeleteCustomer;
     }
 
 	public void OnPointerClick(PointerEventData eventData)

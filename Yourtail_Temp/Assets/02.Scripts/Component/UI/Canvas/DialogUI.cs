@@ -39,7 +39,7 @@ public class DialogUI : UIBase_Popup
         Bind<Button>(typeof(Buttons));
 
         currentIndex = 0;
-        dialogList = DataManager.DialogData.GetDialog(GameManager.Data.CurrentCustomer);
+        dialogList = GameManager.Dialog.GetDialog(GameManager.Data.CurrentCustomer);
         if(dialogList == null)
         {
             Debug.Log($"대사 탐색 실패 : {GameManager.Data.CurrentCustomer.Name}의 레벨 {GameManager.Data.CurrentCustomer.Level - 1}에 해당하는 대사가 없습니다.");

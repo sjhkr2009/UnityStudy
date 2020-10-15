@@ -24,7 +24,8 @@ public class TablesUI : UIBase_Scene
 			Get<CustomerTable>(i).EventOnSelectCustomer += GetOrder;
 			Get<CustomerTable>(i).myIndex = i;
 		}
-
+		GameManager.Data.DeleteCustomer -= DeleteCustomer;
+		GameManager.Data.DeleteCustomer += DeleteCustomer;
 		GameManager.Instance.OnGameStateChange -= OnGameStateChange;
 		GameManager.Instance.OnGameStateChange += OnGameStateChange;
 		StopAllCoroutines();

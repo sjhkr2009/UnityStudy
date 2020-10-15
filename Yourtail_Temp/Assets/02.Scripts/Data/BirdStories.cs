@@ -4,8 +4,8 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEditor;
 
-[CreateAssetMenu(fileName = "Scripts", menuName = "CustomDatabase/Texts", order = int.MinValue + 1)]
-public class BirdStories : ScriptableObject
+//[CreateAssetMenu(fileName = "Scripts", menuName = "CustomDatabase/Texts", order = int.MinValue + 1)]
+public class BirdStories
 {
     [ShowInInspector, ReadOnly] public bool StorySettingDone { get; private set; }
     [ShowInInspector, ReadOnly] public Dictionary<int, List<string>> eagleStory { get; private set; } = new Dictionary<int, List<string>>();

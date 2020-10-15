@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,11 +12,11 @@ public class OnSwipe : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     float moveDist;
     float moveTime;
     float moveSpeed;
-    bool isSwiping = false;
 
     Vector2 prevPos;
+    float startTime;
     int deltaCount;
-    bool dragLeft;
+    [ReadOnly] public bool dragLeft;
 
     // 화면 스와이프 시 동작을 실행합니다. 매개변수가 true면 왼쪽으로, false면 오른쪽으로 스와이프했음을 의미합니다.
     public Action<bool> EventOnSwipe = b => { };
@@ -24,8 +25,8 @@ public class OnSwipe : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         moveDist = 0f;
         moveTime = 0f;
+        startTime = GameManager.Instance.PlayTime;
         deltaCount = 0;
-        isSwiping = true;
 
         startPos = p.position;
         prevPos = p.position;
@@ -43,7 +44,9 @@ public class OnSwipe : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         endPos = p.position;
         dragLeft = (prevPos.x - endPos.x) > 0;
-        isSwiping = false;
+
+        float endTime = GameManager.Instance.PlayTime;
+        moveTime = endTime - startTime;
 
         moveDist = Vector2.Distance(startPos, endPos);
         moveSpeed = moveDist / moveTime;
@@ -56,14 +59,13 @@ public class OnSwipe : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         if (moveSpeed > 350f || moveDist > 300f)
         {
-            EventOnSwipe(dragLeft);
+            Swipe();
         }
     }
 
-    private void Update()
+    virtual protected void Swipe()
     {
-        if (isSwiping)
-            moveTime += Time.deltaTime;
+        EventOnSwipe(dragLeft);
     }
 
     private void OnDestroy()

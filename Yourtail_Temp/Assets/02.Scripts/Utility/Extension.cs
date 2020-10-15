@@ -52,7 +52,7 @@ public static class Extension
         float horizontalSize = Define.UIRefResolution.x;
         int rightDirection = toRight ? 1 : -1;
 
-        fromPos.DOAnchorPosX(-rightDirection * horizontalSize, 0.25f).OnComplete(() =>
+        fromPos.DOAnchorPosX(-rightDirection * horizontalSize, 0.2f).OnComplete(() =>
         {
             fromPos.anchoredPosition = Vector2.zero;
             from.SetActive(false);

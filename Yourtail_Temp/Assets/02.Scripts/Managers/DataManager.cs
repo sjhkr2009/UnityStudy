@@ -8,7 +8,7 @@ using DG.Tweening;
 public class DataManager
 {
     public static ScriptableData GameData => GameManager.Resource.LoadDatabase();
-    public static BirdStories DialogData => GameManager.Resource.LoadDialogData();
+    
     public List<Customers> CustomerList { get; private set; } = new List<Customers>();
     public Dictionary<string, Customers> CustomerNameData { get; private set; } = new Dictionary<string, Customers>();
 
@@ -142,7 +142,6 @@ public class DataManager
         SetCocktails();
 
         SetBirdCoin(GameData.Birdcoin);
-        DialogData.DialogSetting();
     }
     void SetCustomers()
     {

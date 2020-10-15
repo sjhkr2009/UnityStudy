@@ -51,7 +51,10 @@ public class SelectMaterialUI : UIBase_Scene
 	}
 	enum RectTransforms
     {
-        MaterialMoveArea
+        MaterialMoveArea,
+        PageIcon1,
+        PageIcon2,
+        PageIcon3
     }
     enum Buttons
     {
@@ -82,6 +85,7 @@ public class SelectMaterialUI : UIBase_Scene
         set
         {
             _currentWindow = value;
+            SetDotIcon(value);
             switch (value)
             {
                 case 0:
@@ -135,6 +139,7 @@ public class SelectMaterialUI : UIBase_Scene
 
     RectTransform moveArea;
     List<GameObject> windows = new List<GameObject>();
+    List<RectTransform> dotIcons = new List<RectTransform>();
     float screenWidth;
     OnSwipe onSwipe;
 
@@ -151,9 +156,9 @@ public class SelectMaterialUI : UIBase_Scene
         Bind<SubSelectedIcon>(typeof(SubSelectedIcons));
         Bind<Image>(typeof(Images));
 
-        onSwipe = gameObject.GetOrAddComponent<OnSwipe>();
-        onSwipe.EventOnSwipe -= MoveWindow;
-        onSwipe.EventOnSwipe += MoveWindow;
+        //onSwipe = gameObject.GetOrAddComponent<OnSwipe>();
+        //onSwipe.EventOnSwipe -= MoveWindow;
+        //onSwipe.EventOnSwipe += MoveWindow;
 
         screenWidth = Define.UIRefResolution.x;
         moveArea = Get<RectTransform>((int)RectTransforms.MaterialMoveArea);
@@ -202,7 +207,7 @@ public class SelectMaterialUI : UIBase_Scene
         SetNextBtnSprite(true);
     }
 
-    void MoveWindow(bool toNext)
+    public void MoveWindow(bool toNext)
     {
         if (WindowMode == Mode.SelectBase)
             return;
@@ -221,12 +226,35 @@ public class SelectMaterialUI : UIBase_Scene
 
     void SetWindows()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = (int)WindowObjects.Window1; i <= (int)WindowObjects.Window3; i++)
 		{
             windows.Add(Get<GameObject>(i));
             windows[i].SetActive(false);
         }
         windows.OpenWindow(0);
+
+        for (int i = (int)RectTransforms.PageIcon1; i <= (int)RectTransforms.PageIcon3; i++)
+        {
+            dotIcons.Add(Get<RectTransform>(i));
+        }
+        dotIcons[0].localScale = Vector3.one * Define.SelectedDotIconScale;
+    }
+
+    void SetDotIcon(int index)
+    {
+        for (int i = 0; i < dotIcons.Count; i++)
+        {
+            dotIcons[i].DOKill();
+
+            if(i == index)
+            {
+                dotIcons[i].DOScale(Define.SelectedDotIconScale, 0.3f);
+            }
+            else if(dotIcons[i].localScale.x != 1f)
+            {
+                dotIcons[i].DOScale(1f, 0.3f);
+            }
+        }
     }
 
     void SetNextBtnSprite(bool isArrow)
