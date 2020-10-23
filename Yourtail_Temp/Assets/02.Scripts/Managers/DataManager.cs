@@ -284,6 +284,7 @@ public class DataManager
         {
             case GameState.Idle:
                 CurrentReset();
+                OnValidUpdate();
                 break;
             case GameState.Select:
                 CurrentCocktail = new Cocktail();

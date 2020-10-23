@@ -160,7 +160,7 @@ public class Define
     /// <summary>
     /// UI 캔버스들의 레퍼런스 해상도를 나타냅니다.
     /// </summary>
-    public static Vector2 UIRefResolution => new Vector2(1920, 1080);
+    public static Vector2 UIRefResolution => new Vector2(Screen.width, Screen.height);
     /// <summary>
     /// [사용되지 않음] Select Base Material UI에서 표시되는 베이스 재료들의 크기 비율을 나타냅니다. 원본 이미지의 종횡비를 유지하면서 비율을 조정합니다.
     /// </summary>

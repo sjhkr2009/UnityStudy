@@ -59,7 +59,10 @@ public class OnSwipe : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         if (moveSpeed > 350f || moveDist > 300f)
         {
-            Swipe();
+            if(Mathf.Abs(endPos.y - startPos.y) < Mathf.Abs(endPos.x - startPos.x))
+			{
+                Swipe();
+            }
         }
     }
 

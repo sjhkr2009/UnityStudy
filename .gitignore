@@ -26,8 +26,6 @@
 */*/[Ll]ogs/
 */*/[Mm]emoryCaptures/
 
-StarPlanet/[Ll]ibrary/
-
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
 !*/[Aa]ssets/**/*.meta
