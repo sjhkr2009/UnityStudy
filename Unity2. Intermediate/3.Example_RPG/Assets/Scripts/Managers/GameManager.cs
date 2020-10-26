@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour
 
 	InputManager _input = new InputManager();
 	public static InputManager Input => Instance._input;
+	ResourceManager _resource = new ResourceManager();
+	public static ResourceManager Resource => Instance._resource;	
 
 	private void Start() => Init();
 	static void Init()
@@ -27,7 +30,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void Update()
+	public void Update()
 	{
 		Input.OnUpdate();
 	}
