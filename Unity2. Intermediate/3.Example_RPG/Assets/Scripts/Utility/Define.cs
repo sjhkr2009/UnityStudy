@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Define
+namespace Define
 {
-    public enum UiEvent
+	public enum UiEvent
 	{
 		Click,
 		Drag
 	}
-	
+
 	public enum CameraMode
 	{
 		QuarterView
@@ -19,5 +19,16 @@ public class Define
 	{
 		Press,
 		Click
+	}
+
+	abstract class DefaultSetting
+	{
+		public const int UiOrder = 10;
+	}
+	abstract class ResourcesPath
+	{
+		public const string PopupUi = "UI/Popup/";
+		public const string SceneUi = "UI/Scene/";
+		public const string Prefab = "Prefabs/";
 	}
 }

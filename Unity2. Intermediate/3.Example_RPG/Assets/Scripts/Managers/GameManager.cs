@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
 	InputManager _input = new InputManager();
 	public static InputManager Input => Instance._input;
 	ResourceManager _resource = new ResourceManager();
-	public static ResourceManager Resource => Instance._resource;	
+	public static ResourceManager Resource => Instance._resource;
+	UiManager _ui = new UiManager();
+	public static UiManager UI => Instance._ui;
 
 	private void Start() => Init();
 	static void Init()

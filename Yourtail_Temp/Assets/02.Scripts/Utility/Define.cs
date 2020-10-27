@@ -185,7 +185,7 @@ public class Define
     /// 가로로 스크롤되는 여러 개의 창이 있을 때, 전체 창의 개수와 현재 창이 몇 번째인지가 점으로 표기됩니다. 강조된 점의 크기를 얼마나 키울지 결정합니다.
     /// 값이 1.5일 경우, 첫 번째 페이지를 보고 있을 때 첫 번째 점이 다른 점보다 1.5배 커집니다. (현재 SelectMaterialUI 부재로 선택창에서 사용)
     /// </summary>
-    public const float SelectedDotIconScale = 1.4f;
+    public const float SelectedDotIconScale = 2.2f;
 
     #endregion
 

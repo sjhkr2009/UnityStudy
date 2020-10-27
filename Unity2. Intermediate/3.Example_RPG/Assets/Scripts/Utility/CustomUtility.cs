@@ -44,7 +44,7 @@ public class CustomUtility
 
 		return tr.gameObject;
 	}
-	public static void AddUiEvent(GameObject go, Action<PointerEventData> action, Define.UiEvent type = Define.UiEvent.Click)
+	public static GameObject AddUiEvent(GameObject go, Action<PointerEventData> action, Define.UiEvent type = Define.UiEvent.Click)
 	{
 		UiEventHandler evt = go.GetOrAddComponent<UiEventHandler>();
 
@@ -61,6 +61,8 @@ public class CustomUtility
 			default:
 				break;
 		}
+
+		return go;
 	}
 	public static T GetOrAddComponent<T>(GameObject obj) where T : Component
 	{
