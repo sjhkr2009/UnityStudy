@@ -25,7 +25,8 @@ public class UI_Inventory : UiSceneBase
 
 		for (int i = 0; i < 8; i++)
 		{
-			GameObject item = GameManager.Resource.Instantiate("UI/Scene/UI_InvenItem", bg);
+			GameManager.UI.MakeSubItem<UI_Inventory_Item>(bg)
+				.SetInfo($"집판검 {i}번");
 		}
 	}
 }

@@ -27,9 +27,12 @@ namespace Define
 	}
 	abstract class ResourcesPath
 	{
+		public const string Prefab = "Prefabs/";
+		
 		public const string PopupUi = "UI/Popup/";
 		public const string SceneUi = "UI/Scene/";
-		public const string Prefab = "Prefabs/";
+		public const string SubItemUi = "UI/SubItem/";
+		
 	}
 	abstract class DefaultName
 	{

@@ -70,6 +70,15 @@ public class UiManager
         return popup;
 	}
 
+    public T MakeSubItem<T>(Transform parent, string name = null) where T : UiBase
+	{
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
+
+        GameObject go = GameManager.Resource.Instantiate($"{Define.ResourcesPath.SubItemUi}{name}", parent);
+        return go.GetOrAddComponent<T>();
+	}
+
     public bool ClosePopupUI()
 	{
         if (_popupStack.Count == 0)

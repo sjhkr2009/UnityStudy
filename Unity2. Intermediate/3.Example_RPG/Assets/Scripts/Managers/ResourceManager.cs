@@ -9,7 +9,7 @@ public class ResourceManager
 		return Resources.Load<T>(path);
 	}
 
-	public GameObject Instantiate(string path, Transform parent = null)
+	public GameObject Instantiate(string path, Transform parent = null, bool setOriginName = true)
 	{
 		GameObject prefab = Load<GameObject>($"{Define.ResourcesPath.Prefab}{path}");
 		if(prefab == null)
@@ -18,7 +18,16 @@ public class ResourceManager
 			return null;
 		}
 
-		return Object.Instantiate(prefab, parent);
+		GameObject go = Object.Instantiate(prefab, parent);
+
+		if (setOriginName)
+		{
+			int index = go.name.IndexOf("(Clone)");
+			if (index > 0)
+				go.name = go.name.Substring(0, index);
+		}
+
+		return go;
 	}
 
 	public void Destroy(GameObject target, float delay = 0f)

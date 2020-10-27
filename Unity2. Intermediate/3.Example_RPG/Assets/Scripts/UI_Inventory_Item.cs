@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UI_Inventory_Item : UiBase
 {
@@ -14,6 +15,8 @@ public class UI_Inventory_Item : UiBase
 	{
 		itemImage
 	}
+
+	string _name;
 	
 	void Start() => Init();
 
@@ -22,6 +25,16 @@ public class UI_Inventory_Item : UiBase
 		Bind<Image>(typeof(Images));
 		Bind<Text>(typeof(Texts));
 
-		GetText((int)Texts.itemName).text = "집판검";
+		GetText((int)Texts.itemName).text = _name;
+		GetImage((int)Images.itemImage).gameObject.BindEvent((PointerEventData evt) => 
+			{
+				Debug.Log($"{_name} 아이템 클릭!");
+			});
+	}
+
+	public UI_Inventory_Item SetInfo(string name)
+	{
+		_name = name;
+		return this;
 	}
 }

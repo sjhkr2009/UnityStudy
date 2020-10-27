@@ -21,8 +21,8 @@ public static class CustomExtension
 		return CustomUtility.GetOrAddComponent<T>(obj);
 	}
 
-	public static GameObject AddUiEvent(this GameObject go, Action<PointerEventData> action, Define.UiEvent type = Define.UiEvent.Click)
+	public static GameObject BindEvent(this GameObject go, Action<PointerEventData> action, Define.UiEvent type = Define.UiEvent.Click)
 	{
-		return CustomUtility.AddUiEvent(go, action, type);
+		return CustomUtility.BindEvent(go, action, type);
 	}
 }

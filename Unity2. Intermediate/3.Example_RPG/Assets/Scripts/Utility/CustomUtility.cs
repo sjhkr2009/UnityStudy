@@ -44,7 +44,7 @@ public class CustomUtility
 
 		return tr.gameObject;
 	}
-	public static GameObject AddUiEvent(GameObject go, Action<PointerEventData> action, Define.UiEvent type = Define.UiEvent.Click)
+	public static GameObject BindEvent(GameObject go, Action<PointerEventData> action, Define.UiEvent type = Define.UiEvent.Click)
 	{
 		UiEventHandler evt = go.GetOrAddComponent<UiEventHandler>();
 
