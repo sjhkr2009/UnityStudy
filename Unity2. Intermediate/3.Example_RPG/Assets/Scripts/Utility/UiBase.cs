@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UiBase : MonoBehaviour
+public abstract class UiBase : MonoBehaviour
 {
 	Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
+
+	protected abstract void Init();
 
     protected void Bind<T>(Type type, bool findAllChild = true) where T : UnityEngine.Object
 	{
@@ -40,4 +42,5 @@ public class UiBase : MonoBehaviour
 	protected Image GetImage(int index) => Get<Image>(index);
 	protected Button GetButton(int index) => Get<Button>(index);
 	protected RectTransform GetRectTransform(int index) => Get<RectTransform>(index);
+	protected GameObject GetGameObject(int index) => Get<GameObject>(index);
 }

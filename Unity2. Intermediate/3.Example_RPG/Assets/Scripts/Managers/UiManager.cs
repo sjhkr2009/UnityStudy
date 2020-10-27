@@ -15,9 +15,9 @@ public class UiManager
 		{
             if (_root == null)
 			{
-                GameObject go = GameObject.Find("@UI");
+                GameObject go = GameObject.Find(Define.DefaultName.UiRoot);
                 if (go == null)
-                    go = new GameObject("@UI");
+                    go = new GameObject(Define.DefaultName.UiRoot);
 
                 _root = go.transform;
             }

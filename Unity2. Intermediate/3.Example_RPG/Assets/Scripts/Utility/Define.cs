@@ -31,4 +31,9 @@ namespace Define
 		public const string SceneUi = "UI/Scene/";
 		public const string Prefab = "Prefabs/";
 	}
+	abstract class DefaultName
+	{
+		public const string GameManager = "@GameManager";
+		public const string UiRoot = "@UI";
+	}
 }

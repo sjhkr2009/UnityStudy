@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 public class UiSceneBase : UiBase
 {
 	[SerializeField] private int myOrder = 0;
-	protected virtual void Init()
+	protected override void Init()
 	{
 		myOrder = GameManager.UI.SetSceneCanvas(gameObject, myOrder);
 	}

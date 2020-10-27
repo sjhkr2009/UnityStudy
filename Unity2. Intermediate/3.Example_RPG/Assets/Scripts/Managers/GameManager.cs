@@ -20,10 +20,10 @@ public class GameManager : MonoBehaviour
 	{
 		if (_instance == null)
 		{
-			GameObject go = GameObject.Find("@GameManager");
+			GameObject go = GameObject.Find(Define.DefaultName.GameManager);
 			if (go == null)
 			{
-				go = new GameObject("@GameManager");
+				go = new GameObject(Define.DefaultName.GameManager);
 				go.AddComponent<GameManager>();
 			}
 

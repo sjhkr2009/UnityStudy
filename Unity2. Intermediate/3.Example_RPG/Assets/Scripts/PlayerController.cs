@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour
 
         GameManager.Input.MouseAction -= OnMouseClick;
         GameManager.Input.MouseAction += OnMouseClick;
+
+        // 임시 코드
+        GameManager.UI.ShowSceneUI<UI_Inventory>();
     }
 
 	private void Update()

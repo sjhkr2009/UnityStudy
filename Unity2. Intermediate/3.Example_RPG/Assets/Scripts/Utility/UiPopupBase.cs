@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 public class UiPopupBase : UiBase
 {
 	[SerializeField, ReadOnly] private int myOrder;
-	protected virtual void Init()
+	protected override void Init()
 	{
 		myOrder = GameManager.UI.SetPopupCanvas(gameObject);
 	}
