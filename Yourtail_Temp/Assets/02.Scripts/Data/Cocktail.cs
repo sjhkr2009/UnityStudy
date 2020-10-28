@@ -83,6 +83,11 @@ public class Cocktail
         foreach (Define.CocktailTag tag in tags)
             AddTag(tag);
     }
+    protected void AddTag(Define.CocktailTag tag)
+    {
+        if (!Tags.Contains(tag))
+            Tags.Add(tag);
+    }
     protected void AddBase(BaseMaterials material)
     {
         BaseIDList.Add(material.Id);
@@ -92,12 +97,6 @@ public class Cocktail
     {
         SubIDList.Add(material.Id);
         AddTag(material.Tags);
-    }
-
-    protected void AddTag(Define.CocktailTag tag) 
-    {
-        if(!Tags.Contains(tag)) 
-            Tags.Add(tag); 
     }
 	#endregion
 	#region Utility
@@ -150,6 +149,8 @@ class Ckt_TequillaSunrise : Cocktail
         AddSub(new Smt_OrangeJuice());
         AddSub(new Smt_GrenadineSyrup());
 
+        AddTag(Define.CocktailTag.주황);
+
         cocktailName = CocktailName.TequillaSunrise;
         SetName("데킬라 선라이즈", "Tequilla Sunrise");
 
@@ -194,6 +195,8 @@ class Ckt_Paloma : Cocktail
         AddSub(new Smt_LimeJuice());
         AddSub(new Smt_SodaWater());
 
+        AddTag(Define.CocktailTag.주황);
+
         SetName("팔로마", "Paloma");
 
         Proof = 7;
@@ -206,6 +209,8 @@ class Ckt_GodMother : Cocktail
     {
         AddBase(new Bmt_Vodka());
         AddSub(new Smt_Amaretto());
+
+        AddTag(Define.CocktailTag.주황);
 
         SetName("갓 마더", "God Mother");
 
@@ -220,6 +225,8 @@ class Ckt_MoscowMule : Cocktail
         AddBase(new Bmt_Vodka());
         AddSub(new Smt_LimeJuice());
         AddSub(new Smt_GingerBeer());
+
+        AddTag(Define.CocktailTag.주황);
 
         SetName("모스코 뮬", "Moscow Mule");
 
@@ -260,6 +267,8 @@ class Ckt_Screwdriver : Cocktail
         AddBase(new Bmt_Vodka());
         AddSub(new Smt_OrangeJuice());
 
+        AddTag(Define.CocktailTag.주황);
+
         SetName("스크루드라이버", "Screwdriver");
 
         Proof = 10;
@@ -272,6 +281,8 @@ class Ckt_Cosmopolitan : Cocktail
     {
         AddBase(new Bmt_Vodka());
         AddSub(new Smt_OrangeLiqueur());
+
+        AddTag(Define.CocktailTag.빨강);
 
         SetName("코스모폴리탄", "Cosmopolitan");
 
@@ -286,6 +297,8 @@ class Ckt_GodFather : Cocktail
         AddBase(new Bmt_Whisky());
         AddSub(new Smt_Amaretto());
 
+        AddTag(Define.CocktailTag.주황);
+
         SetName("갓 파더", "God Father");
 
         Proof = 32;
@@ -298,6 +311,8 @@ class Ckt_Manhattan : Cocktail
     {
         AddBase(new Bmt_Whisky());
         AddSub(new Smt_Vermouth());
+
+        AddTag(Define.CocktailTag.빨강);
 
         SetName("맨해튼", "Manhattan");
 
@@ -312,6 +327,8 @@ class Ckt_MintJulep : Cocktail
         AddBase(new Bmt_Whisky());
         AddSub(new Smt_Mint());
         AddSub(new Smt_Sugar());
+
+        AddTag(Define.CocktailTag.주황);
 
         SetName("민트 줄렙", "Mint Julep");
 
@@ -328,6 +345,8 @@ class Ckt_WhiskeySour : Cocktail
         AddSub(new Smt_SodaWater());
         AddSub(new Smt_Sugar());
 
+        AddTag(Define.CocktailTag.주황);
+
         SetName("위스키 사워", "Whiskey Sour");
 
         Proof = 15;
@@ -340,6 +359,8 @@ class Ckt_HighBall : Cocktail
     {
         AddBase(new Bmt_Whisky());
         AddSub(new Smt_SodaWater());
+
+        AddTag(Define.CocktailTag.주황);
 
         SetName("하이 볼", "High Ball");
 
@@ -354,6 +375,8 @@ class Ckt_Negroni : Cocktail
         AddBase(new Bmt_Gin());
         AddSub(new Smt_Vermouth());
         AddSub(new Smt_Campari());
+
+        AddTag(Define.CocktailTag.빨강);
 
         SetName("네그로니", "Negroni");
 
@@ -408,6 +431,8 @@ class Ckt_PinkLady : Cocktail
         AddBase(new Bmt_Gin());
         AddSub(new Smt_GrenadineSyrup());
 
+        AddTag(Define.CocktailTag.분홍);
+
         SetName("핑크 레이디", "Pink Lady");
 
         Proof = 30;
@@ -450,6 +475,8 @@ class Ckt_Bacardi : Cocktail
         AddSub(new Smt_LimeJuice());
         AddSub(new Smt_GrenadineSyrup());
 
+        AddTag(Define.CocktailTag.빨강);
+
         SetName("바카디", "Bacardi");
 
         Proof = 20;
@@ -490,6 +517,8 @@ class Ckt_OrangeBlossom : Cocktail
         AddBase(new Bmt_Gin());
         AddSub(new Smt_OrangeJuice());
 
+        AddTag(Define.CocktailTag.주황);
+
         SetName("오렌지 블로섬", "Orange Blossom");
 
         Proof = 31;
@@ -503,6 +532,8 @@ class Ckt_GinDaisy : Cocktail
         AddBase(new Bmt_Gin());
         AddSub(new Smt_LemonJuice());
         AddSub(new Smt_GrenadineSyrup());
+
+        AddTag(Define.CocktailTag.분홍);
 
         SetName("진 데이지", "Gin Daisy");
 
@@ -546,6 +577,8 @@ class Ckt_CampariCocktail : Cocktail
         AddBase(new Bmt_Gin());
         AddSub(new Smt_Campari());
 
+        AddTag(Define.CocktailTag.빨강);
+
         SetName("캄파리 칵테일", "Campari Cocktail");
 
         Proof = 36;
@@ -559,6 +592,8 @@ class Ckt_KissInTheDark : Cocktail
         AddBase(new Bmt_Gin());
         AddSub(new Smt_CherryLiqueur());
         AddSub(new Smt_Vermouth());
+
+        AddTag(Define.CocktailTag.빨강);
 
         SetName("키스 인 더 다크", "Kiss in the Dark");
 
@@ -588,6 +623,8 @@ class Ckt_Ambassador : Cocktail
         AddSub(new Smt_OrangeJuice());
         AddSub(new Smt_Sugar());
 
+        AddTag(Define.CocktailTag.주황);
+
         SetName("앰배서더", "Ambassador");
 
         Proof = 11;
@@ -601,6 +638,8 @@ class Ckt_TequilaSunset : Cocktail
         AddBase(new Bmt_Tequilla());
         AddSub(new Smt_LemonJuice());
         AddSub(new Smt_GrenadineSyrup());
+
+        AddTag(Define.CocktailTag.주황);
 
         SetName("데킬라 선셋", "Tequila Sunset");
 
@@ -646,6 +685,8 @@ class Ckt_Sidecar : Cocktail
         AddSub(new Smt_LemonJuice());
         AddSub(new Smt_OrangeLiqueur());
 
+        AddTag(Define.CocktailTag.주황);
+
         SetName("사이드카", "Sidecar");
 
         Proof = 30;
@@ -659,6 +700,8 @@ class Ckt_AppleJack : Cocktail
         AddBase(new Bmt_Brandy());
         AddSub(new Smt_LemonJuice());
         AddSub(new Smt_GrenadineSyrup());
+
+        AddTag(Define.CocktailTag.빨강);
 
         SetName("애플 잭", "Apple Jack");
 
@@ -674,6 +717,8 @@ class Ckt_Olympic : Cocktail
         AddSub(new Smt_OrangeJuice());
         AddSub(new Smt_OrangeLiqueur());
 
+        AddTag(Define.CocktailTag.주황);
+
         SetName("올림픽", "Olympic");
 
         Proof = 20;
@@ -687,6 +732,8 @@ class Ckt_JackRose : Cocktail
         AddBase(new Bmt_Brandy());
         AddSub(new Smt_LimeJuice());
         AddSub(new Smt_GrenadineSyrup());
+
+        AddTag(Define.CocktailTag.빨강);
 
         SetName("잭 로즈", "Jack Rose");
 

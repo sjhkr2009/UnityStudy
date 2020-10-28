@@ -30,7 +30,7 @@ class Smt_OrangeJuice : SubMaterials
     {
         Name = "오렌지 주스";
         Info = "달콤한 향과 풍부한 과즙으로 전세계에서 사랑받는 과일로 만든 주스";
-        SetTag(Define.CocktailTag.오렌지, Define.CocktailTag.주스, Define.CocktailTag.과일);
+        SetTag(Define.CocktailTag.오렌지, Define.CocktailTag.주스, Define.CocktailTag.과일, Define.CocktailTag.단맛);
     }
 
 }
@@ -41,7 +41,7 @@ class Smt_LimeJuice : SubMaterials
     {
         Name = "라임 주스";
         Info = "강한 신맛에 더해 레몬보다 씁쓸한 뒷맛이 느껴진다.";
-        SetTag(Define.CocktailTag.라임, Define.CocktailTag.주스, Define.CocktailTag.과일);
+        SetTag(Define.CocktailTag.라임, Define.CocktailTag.주스, Define.CocktailTag.과일, Define.CocktailTag.신맛);
     }
 }
 
@@ -51,7 +51,7 @@ class Smt_LemonJuice : SubMaterials
     {
         Name = "레몬 주스";
         Info = "미각이 마비된 사람들은 가끔 레몬을 액체로만 접하는 것이 아쉬워 생레몬 먹기 대회를 연다고 한다.";
-        SetTag(Define.CocktailTag.레몬, Define.CocktailTag.주스, Define.CocktailTag.과일);
+        SetTag(Define.CocktailTag.레몬, Define.CocktailTag.주스, Define.CocktailTag.과일, Define.CocktailTag.신맛);
     }
 }
 
@@ -61,7 +61,7 @@ class Smt_GrenadineSyrup : SubMaterials
     {
         Name = "그레나딘 시럽";
         Info = "강한 붉은빛을 띠는 석류 시럽. 다량의 당분이 들어가 무겁기 때문에 칵테일 바닥에 가라앉아 붉은 층을 이룬다.";
-        SetTag(Define.CocktailTag.석류, Define.CocktailTag.시럽, Define.CocktailTag.과일);
+        SetTag(Define.CocktailTag.석류, Define.CocktailTag.시럽, Define.CocktailTag.과일, Define.CocktailTag.신맛);
     }
 }
 
@@ -73,7 +73,8 @@ class Smt_TonicWater : SubMaterials
     public Smt_TonicWater() : base(5)
     {
         Name = "토닉 워터";
-        Info = "그런 이름의 재료는 없습니다. 자신이 '토닉 워터'라는 재료를 보면 즉시 자리를 피하시고 개발자에게 알리십시오.";
+        Info = "그런 이름의 재료는 없습니다. 자신이 '토닉 워터'라고 주장하는 재료를 보면 즉시 자리를 피하시고 개발자에게 알리십시오.";
+        Debug.LogError(Info);
         SetTag(Define.CocktailTag.탄산);
     }
 }
@@ -84,7 +85,7 @@ class Smt_OrangeLiqueur : SubMaterials
     {
         Name = "오렌지 리큐어";
         Info = "오렌지 특유의 단맛과 주홍빛이 가미된 혼합주";
-        SetTag(Define.CocktailTag.오렌지, Define.CocktailTag.과일, Define.CocktailTag.리큐어);
+        SetTag(Define.CocktailTag.오렌지, Define.CocktailTag.과일, Define.CocktailTag.리큐어, Define.CocktailTag.단맛);
     }
 }
 
@@ -149,8 +150,8 @@ class Smt_Sugar : SubMaterials
     public Smt_Sugar() : base(13)
     {
         Name = "설탕";
-        Info = "단맛을 가진 대표적인 감미료. 백종원이 별로 좋아하지는 않는다고 말하면서 자주 사용한다.";
-        SetTag(Define.CocktailTag.설탕);
+        Info = "단맛을 가진 대표적인 감미료. 백종원이 별로 좋아하지는 않는다고 말하면서 자주 사용할 만큼 요리에서는 매우 중요한 조미료이다.";
+        SetTag(Define.CocktailTag.설탕, Define.CocktailTag.단맛);
     }
 }
 class Smt_Campari : SubMaterials
@@ -168,7 +169,7 @@ class Smt_CherryLiqueur : SubMaterials
     {
         Name = "체리 리큐어";
         Info = "체리에 설탕시럽을 첨가하여 강한 단맛이 나는 과일 혼합주";
-        SetTag(Define.CocktailTag.체리, Define.CocktailTag.리큐어, Define.CocktailTag.과일);
+        SetTag(Define.CocktailTag.체리, Define.CocktailTag.리큐어, Define.CocktailTag.과일, Define.CocktailTag.단맛);
     }
 }
 class Smt_Cola : SubMaterials
@@ -177,6 +178,6 @@ class Smt_Cola : SubMaterials
     {
         Name = "콜라";
         Info = "누군가에게는 코카콜라인지 펩시콜라인지가 아주 중요한 문제일지도 모른다.";
-        SetTag(Define.CocktailTag.탄산, Define.CocktailTag.음료수, Define.CocktailTag.콜라);
+        SetTag(Define.CocktailTag.탄산, Define.CocktailTag.음료수, Define.CocktailTag.콜라, Define.CocktailTag.단맛);
     }
 }

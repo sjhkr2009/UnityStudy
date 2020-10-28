@@ -57,6 +57,7 @@ public class Define
 
     /// <summary>
     /// 칵테일의 태그를 정리한 자료입니다. 각 재료가 가지고 있으며 완성된 칵테일은 하위 재료의 태그를 모두 갖게 됩니다.
+    /// 태그는 추가될 수 있습니다.
     /// </summary>
     public enum CocktailTag
     {
@@ -86,7 +87,12 @@ public class Define
         음료수,
         캄파리,
         베르무트,
-        콜라
+        콜라,
+        단맛,
+        신맛,
+        빨강,
+        분홍,
+        주황
     }
 
     /// <summary>
@@ -185,7 +191,7 @@ public class Define
     /// 가로로 스크롤되는 여러 개의 창이 있을 때, 전체 창의 개수와 현재 창이 몇 번째인지가 점으로 표기됩니다. 강조된 점의 크기를 얼마나 키울지 결정합니다.
     /// 값이 1.5일 경우, 첫 번째 페이지를 보고 있을 때 첫 번째 점이 다른 점보다 1.5배 커집니다. (현재 SelectMaterialUI 부재로 선택창에서 사용)
     /// </summary>
-    public const float SelectedDotIconScale = 2.2f;
+    public const float SelectedDotIconScale = 2.33f;
 
     #endregion
 
