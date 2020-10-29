@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_Inventory : UiSceneBase
+public class UI_Inventory : BaseUIScene
 {
 	enum Transforms
 	{

@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace Define
 {
+	public enum Scene
+	{
+		Unknown,
+		Login,
+		Lobby,
+		Game
+	}
+	
 	public enum UiEvent
 	{
 		Click,
@@ -21,22 +29,25 @@ namespace Define
 		Click
 	}
 
-	abstract class DefaultSetting
+	public abstract class DefaultSetting
 	{
 		public const int UiOrder = 10;
 	}
-	abstract class ResourcesPath
+	public abstract class ResourcesPath
 	{
 		public const string Prefab = "Prefabs/";
-		
+
+		public const string EventSystem = "UI/EventSystem";
 		public const string PopupUi = "UI/Popup/";
 		public const string SceneUi = "UI/Scene/";
 		public const string SubItemUi = "UI/SubItem/";
 		
 	}
-	abstract class DefaultName
+	public abstract class DefaultName
 	{
 		public const string GameManager = "@GameManager";
+		public const string EventSystem = "@EventSystem";
+		public const string Scene = "@Scene";
 		public const string UiRoot = "@UI";
 	}
 }

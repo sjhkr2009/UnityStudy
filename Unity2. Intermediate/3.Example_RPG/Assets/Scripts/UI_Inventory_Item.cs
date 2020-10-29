@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UI_Inventory_Item : UiBase
+public class UI_Inventory_Item : BaseUI
 {
     enum Texts
 	{

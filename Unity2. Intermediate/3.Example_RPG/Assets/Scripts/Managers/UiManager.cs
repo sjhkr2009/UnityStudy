@@ -5,8 +5,8 @@ using UnityEngine;
 public class UiManager
 {
     private int _order = Define.DefaultSetting.UiOrder;
-    private Stack<UiPopupBase> _popupStack = new Stack<UiPopupBase>();
-    private List<UiSceneBase> _sceneUI = new List<UiSceneBase>();
+    private Stack<BaseUIPopup> _popupStack = new Stack<BaseUIPopup>();
+    private List<BaseUIScene> _sceneUI = new List<BaseUIScene>();
 
     private Transform _root = null;
     public Transform Root
@@ -46,7 +46,7 @@ public class UiManager
     public int SetPopupCanvas(GameObject obj) => SetCanvas(obj, true, 0);
     public int SetSceneCanvas(GameObject obj, int order = 0) => SetCanvas(obj, false, order);
 
-    public T ShowSceneUI<T>(string name = null) where T : UiSceneBase
+    public T ShowSceneUI<T>(string name = null) where T : BaseUIScene
     {
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
@@ -58,7 +58,7 @@ public class UiManager
         return sceneUI;
     }
 
-    public T ShowPopupUI<T>(string name = null) where T : UiPopupBase
+    public T ShowPopupUI<T>(string name = null) where T : BaseUIPopup
 	{
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
@@ -70,7 +70,7 @@ public class UiManager
         return popup;
 	}
 
-    public T MakeSubItem<T>(Transform parent, string name = null) where T : UiBase
+    public T MakeSubItem<T>(Transform parent, string name = null) where T : BaseUI
 	{
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
@@ -84,7 +84,7 @@ public class UiManager
         if (_popupStack.Count == 0)
             return false;
 
-        UiPopupBase target = _popupStack.Pop();
+        BaseUIPopup target = _popupStack.Pop();
         GameManager.Resource.Destroy(target.gameObject);
         target = null;
 
@@ -98,7 +98,7 @@ public class UiManager
             ClosePopupUI();
 	}
 
-    public bool ClosePopupUI(UiPopupBase target, bool findAllPopup = false)
+    public bool ClosePopupUI(BaseUIPopup target, bool findAllPopup = false)
 	{
         if (_popupStack.Count == 0)
             return false;
@@ -112,12 +112,12 @@ public class UiManager
             if (findAllPopup)
 			{
                 bool closed = false;
-                Stack<UiPopupBase> tempStack = new Stack<UiPopupBase>();
+                Stack<BaseUIPopup> tempStack = new Stack<BaseUIPopup>();
                 while (_popupStack.Count > 1)
 				{
                     tempStack.Push(_popupStack.Pop());
 
-                    UiPopupBase now = _popupStack.Peek();
+                    BaseUIPopup now = _popupStack.Peek();
                     if (now == target)
 					{
                         closed = ClosePopupUI();
@@ -126,7 +126,7 @@ public class UiManager
 				}
                 while (tempStack.Count > 0)
 				{
-                    UiPopupBase now = tempStack.Pop();
+                    BaseUIPopup now = tempStack.Pop();
                     if (closed)
                         now.GetComponent<Canvas>().sortingOrder--;
 
