@@ -75,7 +75,8 @@ public class SelectMaterialUI : UIBase_Scene
     enum Images
 	{
         ArrowImage,
-        ShakerImage
+        ShakerImage,
+        Background
     }
 
     Mode windowMode = Mode.SelectBase;
@@ -109,33 +110,7 @@ public class SelectMaterialUI : UIBase_Scene
     public Mode WindowMode
     {
         get => windowMode;
-        set
-        {
-            windowMode = value;
-            moveArea.DOKill();
-            GetButton((int)Buttons.PrevButton).onClick.RemoveAllListeners();
-            GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
-            switch (value)
-            {
-                case Mode.SelectBase:
-                    moveArea.DOAnchorPos(new Vector2(0, 0), 0.3f);
-                    GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
-                    GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
-                    SetNextBtnSprite(true);
-                    break;
-
-                case Mode.SelectSub:
-                    moveArea.DOAnchorPos(new Vector2(0, Define.UIRefResolution.y), 0.3f);
-                    GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { WindowMode = Mode.SelectBase; });
-                    GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
-                    SetNextBtnSprite(false);
-                    break;
-
-                default:
-                    Debug.Log("[SelectMaterialUI] 유효하지 않은 모드입니다.");
-                    break;
-            }
-        }
+        set => OnChangeSelectMode(value);
     }
 
     RectTransform moveArea;
@@ -219,6 +194,41 @@ public class SelectMaterialUI : UIBase_Scene
             subRect.DOAnchorPosX(-Define.UIRefResolution.x * (--CurrentWindow), 0.2f);
     }
 
+    void OnChangeSelectMode(Mode mode)
+    {
+        windowMode = mode;
+        Image bg = GetImage((int)Images.Background);
+
+        moveArea.DOKill();
+        bg.DOKill();
+
+        GetButton((int)Buttons.PrevButton).onClick.RemoveAllListeners();
+        GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
+
+        switch (mode)
+        {
+            case Mode.SelectBase:
+                moveArea.DOAnchorPos(new Vector2(0, 0), 0.3f);
+                GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
+                GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
+                bg.DOColor(Color.white, 0.3f);
+                SetNextBtnSprite(true);
+                break;
+
+            case Mode.SelectSub:
+                moveArea.DOAnchorPos(new Vector2(0, Define.UIRefResolution.y), 0.3f);
+                GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { WindowMode = Mode.SelectBase; });
+                GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
+                bg.DOColor(Color.yellow, 0.3f);
+                SetNextBtnSprite(false);
+                break;
+
+            default:
+                Debug.Log("[SelectMaterialUI] 유효하지 않은 모드입니다.");
+                break;
+        }
+    }
+
     void SetWindows()
     {
         /*for (int i = (int)WindowObjects.Window1; i <= (int)WindowObjects.Window3; i++)
@@ -264,6 +274,8 @@ public class SelectMaterialUI : UIBase_Scene
         CurrentWindow = 0;
         moveArea.anchoredPosition = Vector2.zero;
         Get<RectTransform>((int)RectTransforms.Windows).anchoredPosition = Vector2.zero;
+
+        GetImage((int)Images.Background).color = Color.white;
 
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
         GetButton((int)Buttons.PrevButton).onClick.RemoveAllListeners();
