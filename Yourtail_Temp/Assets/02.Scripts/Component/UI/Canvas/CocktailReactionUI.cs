@@ -72,11 +72,24 @@ public class CocktailReactionUI : UIBase_Popup
 		Image icon = GetImage((int)Images.HeartIcon);
 		Vector3 iconPos = icon.transform.position;
 
-		icon.DOFade(1f, 0.5f);
-		icon.transform.DOMoveY(iconPos.y * 1.1f, 0.5f).OnComplete(() =>
-		{
-			SetExpText();
-		});
+		float startPoint = (float)data.beforeExp / Define.RequiredEXP[data.CurrentCustomer.Level];
+		icon.fillAmount = startPoint;
+
+		if (data.levelUp)
+        {
+			icon.DOFillAmount(1f, 1f).OnComplete(() =>
+			{
+				SetExpText();
+			});
+		}
+		else
+        {
+			float endPoint = (float)data.afterExp / Define.RequiredEXP[data.CurrentCustomer.Level];
+			icon.DOFillAmount(endPoint, 1f).OnComplete(() =>
+			{
+				SetExpText();
+			});
+		}
 	}
 
 	void SetImage()
@@ -118,6 +131,5 @@ public class CocktailReactionUI : UIBase_Popup
 	{
 		GetText((int)Texts.HeartText).transform.DOKill();
 		GetImage((int)Images.HeartIcon).DOKill();
-		GetImage((int)Images.HeartIcon).transform.DOKill();
 	}
 }

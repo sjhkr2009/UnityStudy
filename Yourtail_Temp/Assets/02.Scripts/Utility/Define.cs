@@ -165,8 +165,19 @@ public class Define
 
     /// <summary>
     /// UI 캔버스들의 레퍼런스 해상도를 나타냅니다.
+    /// UI의 position을 조작할 때, 다양한 해상도에 대응하기 위해서는 이 값을 화면의 가로/세로 크기로 간주하여 조작해야 합니다.
     /// </summary>
-    public static Vector2 UIRefResolution => new Vector2(1920f, 1080f);
+    public static Vector2 UIRefResolution => new Vector2(1920f * RatioHorizontalRevision, 1080f * RatioVerticalRevision);
+    /// <summary>
+    /// UI 캔버스들의 레퍼런스 종횡비를 나타냅니다.
+    /// </summary>
+    public static float UIRefAspectRatio => 1920f / 1080f;
+    /// <summary>
+    /// 현재 화면의 종횡비를 나타냅니다.
+    /// </summary>
+    public static float CurrentAspectRatio => (float)Screen.width / Screen.height;
+    static float RatioVerticalRevision => UIRefAspectRatio / CurrentAspectRatio;
+    static float RatioHorizontalRevision => CurrentAspectRatio / UIRefAspectRatio;
     /// <summary>
     /// [사용되지 않음] Select Base Material UI에서 표시되는 베이스 재료들의 크기 비율을 나타냅니다. 원본 이미지의 종횡비를 유지하면서 비율을 조정합니다.
     /// </summary>
