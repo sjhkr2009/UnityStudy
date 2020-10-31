@@ -12,6 +12,13 @@ namespace Define
 		Game
 	}
 	
+	public enum Sound
+	{
+		Bgm,
+		Effect,
+		Count
+	}
+
 	public enum UiEvent
 	{
 		Click,
@@ -35,19 +42,28 @@ namespace Define
 	}
 	public abstract class ResourcesPath
 	{
+		public const string EventSystem = "UI/EventSystem";
+
+		public static string ToPrefab(string path) => $"{Prefab}{path}";
 		public const string Prefab = "Prefabs/";
 
-		public const string EventSystem = "UI/EventSystem";
+		public static string ToPopupUI(string path) => $"{PopupUi}{path}";
+		public static string ToSceneUI(string path) => $"{SceneUi}{path}";
+		public static string ToSubItemUI(string path) => $"{SubItemUi}{path}";
 		public const string PopupUi = "UI/Popup/";
 		public const string SceneUi = "UI/Scene/";
 		public const string SubItemUi = "UI/SubItem/";
+
+		public static string ToAudio(string path) => $"{AudioClip}{path}";
+		public const string AudioClip = "Sounds/";
 		
 	}
 	public abstract class DefaultName
 	{
 		public const string GameManager = "@GameManager";
 		public const string EventSystem = "@EventSystem";
-		public const string Scene = "@Scene";
+		public const string SceneManager = "@Scene";
 		public const string UiRoot = "@UI";
+		public const string SoundRoot = "@Sound";
 	}
 }

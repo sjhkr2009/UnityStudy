@@ -51,7 +51,7 @@ public class UiManager
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        GameObject go = GameManager.Resource.Instantiate($"{Define.ResourcesPath.SceneUi}{name}", Root);
+        GameObject go = GameManager.Resource.Instantiate(Define.ResourcesPath.ToSceneUI(name), Root);
         T sceneUI = go.GetOrAddComponent<T>();
         _sceneUI.Add(sceneUI);
 
@@ -63,7 +63,7 @@ public class UiManager
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        GameObject go = GameManager.Resource.Instantiate($"{Define.ResourcesPath.PopupUi}{name}", Root);
+        GameObject go = GameManager.Resource.Instantiate(Define.ResourcesPath.ToPopupUI(name), Root);
         T popup = go.GetOrAddComponent<T>();
         _popupStack.Push(popup);
 
@@ -75,7 +75,7 @@ public class UiManager
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        GameObject go = GameManager.Resource.Instantiate($"{Define.ResourcesPath.SubItemUi}{name}", parent);
+        GameObject go = GameManager.Resource.Instantiate(Define.ResourcesPath.ToSubItemUI(name), parent);
         return go.GetOrAddComponent<T>();
 	}
 
@@ -141,5 +141,11 @@ public class UiManager
                 return false;
 			}
 		}
+	}
+
+    public void Clear()
+	{
+        CloseAllPopupUI();
+        _sceneUI.Clear();
 	}
 }
