@@ -42,13 +42,16 @@ namespace Define
 	public enum MouseEvent
 	{
 		Press,
+		PointerDown,
+		PointerUp,
 		Click
 	}
 
 	public abstract class DefaultSetting
 	{
-		public const int UiOrder = 10;
-		public const int PoolCount = 20;
+		public static int UiOrder => 10;
+		public static int PoolCount => 20;
+		public static float ClickSensitivity => 0.33f;
 	}
 	public abstract class ResourcesPath
 	{

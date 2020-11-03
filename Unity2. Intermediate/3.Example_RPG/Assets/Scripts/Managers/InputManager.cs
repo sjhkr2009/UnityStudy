@@ -10,6 +10,7 @@ public class InputManager
 	public event Action<Define.MouseEvent> MouseAction = null;
 
 	bool _pressed = false;
+	float _pressedTime = 0f;
 
     public void OnUpdate()
 	{
@@ -28,12 +29,24 @@ public class InputManager
 	{
 		if (Input.GetMouseButton(0))
 		{
+			if (!_pressed)
+			{
+				MouseAction(Define.MouseEvent.PointerDown);
+				_pressedTime = Time.time;
+			}
 			MouseAction(Define.MouseEvent.Press);
 			_pressed = true;
 		}
 		else if (_pressed)
 		{
-			MouseAction(Define.MouseEvent.Click);
+			if (Time.time < _pressedTime + Define.DefaultSetting.ClickSensitivity)
+			{
+				MouseAction(Define.MouseEvent.Click);
+			}
+
+			MouseAction(Define.MouseEvent.PointerUp);
+
+			_pressedTime = 0f;
 			_pressed = false;
 		}
 	}

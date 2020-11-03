@@ -92,8 +92,11 @@ public class PoolManager
 		return pool.Pop(parent);
 	}
 
-	Pool CreatePool(GameObject origin, int count = Define.DefaultSetting.PoolCount)
+	Pool CreatePool(GameObject origin, int count = -1)
 	{
+		if (count <= 0)
+			count = Define.DefaultSetting.PoolCount;
+
 		Pool pool = new Pool();
 		pool.Init(origin, count);
 		pool.Parent.parent = _root;
