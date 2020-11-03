@@ -8,13 +8,17 @@ public class GameManager : MonoBehaviour
 	static GameManager _instance;
 	public static GameManager Instance { get { Init(); return _instance; } }
 
+	DataManager _data = new DataManager();
 	InputManager _input = new InputManager();
+	PoolManager _pool = new PoolManager();
 	ResourceManager _resource = new ResourceManager();
 	UiManager _ui = new UiManager();
 	SceneManagerEx _scene = new SceneManagerEx();
 	SoundManager _sound = new SoundManager();
 
+	public static DataManager Data => Instance._data;
 	public static InputManager Input => Instance._input;
+	public static PoolManager Pool => Instance._pool;
 	public static ResourceManager Resource => Instance._resource;
 	public static UiManager UI => Instance._ui;
 	public static SceneManagerEx Scene => Instance._scene;
@@ -36,6 +40,8 @@ public class GameManager : MonoBehaviour
 		DontDestroyOnLoad(go);
 		_instance = go.GetComponent<GameManager>();
 
+		_instance._data.Init(); // First Order
+		_instance._pool.Init();
 		_instance._sound.Init();
 	}
 
@@ -45,6 +51,9 @@ public class GameManager : MonoBehaviour
 		Input.Clear();
 		Scene.Clear();
 		UI.Clear();
+
+		// Last Order
+		Pool.Clear();
 	}
 
 	public void Update()

@@ -4,23 +4,24 @@ using UnityEngine;
 
 public class SoundManager
 {
+	Transform _root;
 	AudioSource[] _audioSources = new AudioSource[(int)Define.Sound.Count];
 	Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
 
 	public void Init()
 	{
-		GameObject sound = GameObject.Find(Define.DefaultName.SoundRoot);
-		if (sound == null)
+		//GameObject _root = GameObject.Find(Define.DefaultName.SoundRoot);
+		if (_root == null)
 		{
-			sound = new GameObject(Define.DefaultName.SoundRoot);
-			Object.DontDestroyOnLoad(sound);
+			_root = new GameObject(Define.DefaultName.SoundRoot).transform;
+			Object.DontDestroyOnLoad(_root);
 		}
 
 		string[] soundTypes = System.Enum.GetNames(typeof(Define.Sound));
 		for (int i = 0; i < (int)Define.Sound.Count; i++)
 		{
 			GameObject audio = new GameObject(soundTypes[i]);
-			audio.transform.parent = sound.transform;
+			audio.transform.parent = _root;
 			_audioSources[i] = audio.AddComponent<AudioSource>();
 			_audioSources[i].playOnAwake = false;
 		}

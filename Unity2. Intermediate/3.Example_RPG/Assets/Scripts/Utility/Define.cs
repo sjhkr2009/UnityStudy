@@ -39,10 +39,13 @@ namespace Define
 	public abstract class DefaultSetting
 	{
 		public const int UiOrder = 10;
+		public const int PoolCount = 20;
 	}
 	public abstract class ResourcesPath
 	{
 		public const string EventSystem = "UI/EventSystem";
+
+		public const string Data = "Data/";
 
 		public static string ToPrefab(string path) => $"{Prefab}{path}";
 		public const string Prefab = "Prefabs/";
@@ -65,5 +68,8 @@ namespace Define
 		public const string SceneManager = "@Scene";
 		public const string UiRoot = "@UI";
 		public const string SoundRoot = "@Sound";
+		public const string PoolRoot = "@Pool_Root";
+
+		public static string ToPoolable(string origin) => $"Root: {origin}";
 	}
 }
