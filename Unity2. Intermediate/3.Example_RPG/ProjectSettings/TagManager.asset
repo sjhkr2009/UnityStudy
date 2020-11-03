@@ -15,9 +15,9 @@ TagManager:
   - 
   - IgnoreRaycast
   - Wall
-  - Plane
-  - 
-  - 
+  - Ground
+  - Block
+  - Monster
   - 
   - 
   - 

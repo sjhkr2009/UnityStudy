@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour
 	void QuarterViewAction()
 	{
 		RaycastHit hit;
-		if (Physics.Raycast(player.position, _delta, out hit, _delta.magnitude, LayerMask.GetMask("Wall")))
+		if (Physics.Raycast(player.position, _delta, out hit, _delta.magnitude, LayerMask.GetMask("Plane")))
 		{
 			float dist = (hit.point - player.position).magnitude * 0.8f;
 			transform.position = (player.position + Vector3.up) + _delta.normalized * dist;

@@ -4,6 +4,15 @@ using UnityEngine;
 
 namespace Define
 {
+	public enum Layer
+	{
+		IgnoreRaycast = 8,
+		Wall = 9,
+		Ground = 10,
+		Block = 11,
+		Monster = 12
+	}
+	
 	public enum Scene
 	{
 		Unknown,
