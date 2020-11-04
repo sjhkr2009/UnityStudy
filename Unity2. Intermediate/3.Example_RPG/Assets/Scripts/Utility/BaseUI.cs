@@ -7,7 +7,15 @@ using UnityEngine.UI;
 public abstract class BaseUI : MonoBehaviour
 {
 	Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
-
+	public bool Inited { get; protected set; } = false;
+	private void Start()
+	{
+		if (!Inited)
+		{
+			Init();
+			Inited = true;
+		}
+	}
 	protected abstract void Init();
 
     protected void Bind<T>(Type type, bool findAllChild = true) where T : UnityEngine.Object

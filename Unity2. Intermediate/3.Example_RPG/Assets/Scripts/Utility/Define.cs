@@ -47,6 +47,14 @@ namespace Define
 		Click
 	}
 
+	public enum CreatureState
+	{
+		Die,
+		Idle,
+		Moving,
+		Skill
+	}
+
 	public abstract class DefaultSetting
 	{
 		public static int UiOrder => 10;
@@ -65,9 +73,11 @@ namespace Define
 		public static string ToPopupUI(string path) => $"{PopupUi}{path}";
 		public static string ToSceneUI(string path) => $"{SceneUi}{path}";
 		public static string ToSubItemUI(string path) => $"{SubItemUi}{path}";
+		public static string ToWorldSpaceUI(string path) => $"{WorldSpaceUI}{path}";
 		public const string PopupUi = "UI/Popup/";
 		public const string SceneUi = "UI/Scene/";
 		public const string SubItemUi = "UI/SubItem/";
+		public const string WorldSpaceUI = "UI/WorldSpace/";
 
 		public static string ToAudio(string path) => $"{AudioClip}{path}";
 		public const string AudioClip = "Sounds/";

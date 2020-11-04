@@ -78,6 +78,19 @@ public class UiManager
         GameObject go = GameManager.Resource.Instantiate(Define.ResourcesPath.ToSubItemUI(name), parent);
         return go.GetOrAddComponent<T>();
 	}
+    public T MakeWorldSpace<T>(Transform parent, string name = null) where T : BaseUI
+    {
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
+
+        GameObject go = GameManager.Resource.Instantiate(Define.ResourcesPath.ToWorldSpaceUI(name), parent);
+
+        Canvas canvas = go.GetOrAddComponent<Canvas>();
+        canvas.renderMode = RenderMode.WorldSpace;
+        canvas.worldCamera = Camera.main;
+
+        return go.GetOrAddComponent<T>();
+    }
 
     public bool ClosePopupUI()
 	{

@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 7476786093058980382}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -213,7 +213,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7476786093058980357}
-  m_LocalRotation: {x: -0, y: 2.1802558e-12, z: 1.6088825e-11, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -283,8 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38d778c1a30069b42bda342966db0350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSpeed: 0
   _lockOnTarget: {fileID: 0}
+  currentSpeed: 0
 --- !u!195 &7476786093058980383
 NavMeshAgent:
   m_ObjectHideFlags: 0

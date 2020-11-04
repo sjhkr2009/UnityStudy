@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 public class CameraController : MonoBehaviour
 {
@@ -10,8 +11,7 @@ public class CameraController : MonoBehaviour
 
 	private void Start()
 	{
-		if (player == null)
-			player = FindObjectOfType<PlayerController>().transform;
+		SetCameraPos();
 	}
 
 	void LateUpdate()
@@ -28,15 +28,21 @@ public class CameraController : MonoBehaviour
 	void QuarterViewAction()
 	{
 		RaycastHit hit;
-		if (Physics.Raycast(player.position, _delta, out hit, _delta.magnitude, LayerMask.GetMask("Plane")))
-		{
-			float dist = (hit.point - player.position).magnitude * 0.8f;
-			transform.position = (player.position + Vector3.up) + _delta.normalized * dist;
-		}
-		else
-		{
-			transform.position = (player.position + Vector3.up) + _delta;
-			transform.LookAt(player);
-		}
+		bool raycastHit = Physics.Raycast(player.position, _delta, out hit, _delta.magnitude, LayerMask.GetMask("Wall"));
+		transform.position = raycastHit ?
+			(player.position + Vector3.up) + (_delta.normalized * (hit.point - player.position).magnitude * 0.8f) :
+			(player.position + Vector3.up) + _delta;
+
+		transform.LookAt(player);
+	}
+
+	[Button]
+	void SetCameraPos()
+	{
+		if (player == null)
+			player = FindObjectOfType<PlayerController>().transform;
+
+		transform.position = (player.position + Vector3.up) + _delta;
+		transform.LookAt(player);
 	}
 }

@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
 	public static SceneManagerEx Scene => Instance._scene;
 	public static SoundManager Sound => Instance._sound;
 
+
+
 	private void Start() => Init();
 	static void Init()
 	{

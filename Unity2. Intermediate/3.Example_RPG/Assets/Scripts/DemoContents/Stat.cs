@@ -18,8 +18,9 @@ public class Stat : MonoBehaviour
     [ShowInInspector, BoxGroup("Basic")] public int Attack { get; set; }
     [ShowInInspector, BoxGroup("Basic")] public int Defense { get; set; }
     [ShowInInspector, BoxGroup("Basic")] public float MoveSpeed { get; set; }
+    [ShowInInspector, BoxGroup("Basic")] public float AttackRange { get; set; }
 
-	protected virtual void Start()
+    protected virtual void Start()
 	{
 		if (Level <= 0)
 		{
@@ -28,7 +29,8 @@ public class Stat : MonoBehaviour
             Attack = 10;
             Defense = 5;
             MoveSpeed = 5f;
-		}
+            AttackRange = 1.5f;
+        }
         Hp = MaxHp;
 
     }
