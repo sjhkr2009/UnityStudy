@@ -3,17 +3,20 @@
     {
       "level": "1",
       "hp": "100",
-      "attack": "10"
+      "attack": "10",
+      "totalExp": "5"
     },
     {
       "level": "2",
       "hp": "150",
-      "attack": "15"
+      "attack": "15",
+      "totalExp": "10"
     },
     {
       "level": "3",
       "hp": "200",
-      "attack": "20"
+      "attack": "20",
+      "totalExp": "20"
     }
   ]
 }

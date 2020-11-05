@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Poolable : MonoBehaviour
 {
+	public int PoolCount = -1;
 	public bool IsOn { get; private set; }
 
 	private void OnEnable()

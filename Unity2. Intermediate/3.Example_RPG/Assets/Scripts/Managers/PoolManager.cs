@@ -92,8 +92,9 @@ public class PoolManager
 		return pool.Pop(parent);
 	}
 
-	Pool CreatePool(GameObject origin, int count = -1)
+	Pool CreatePool(GameObject origin)
 	{
+		int count = GetPoolCount(origin);
 		if (count <= 0)
 			count = Define.DefaultSetting.PoolCount;
 
@@ -104,6 +105,15 @@ public class PoolManager
 		_pool.Add(origin.name, pool);
 
 		return pool;
+	}
+
+	int GetPoolCount(GameObject origin)
+	{
+		Poolable poolable = origin.GetComponent<Poolable>();
+		if (poolable == null)
+			return -1;
+
+		return poolable.PoolCount;
 	}
 
 	public GameObject GetOrigin(string name)

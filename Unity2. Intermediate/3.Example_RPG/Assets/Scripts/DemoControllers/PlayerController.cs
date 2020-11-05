@@ -15,6 +15,7 @@ public class PlayerController : BaseUnitController
     protected override void Init()
     {
         base.Init();
+        ObjectType = ObjectType.Player;
 
         _stat = (PlayerStat)MyStat;
 
@@ -143,8 +144,26 @@ public class PlayerController : BaseUnitController
         }
 
         Stat targetStat = _lockOnTarget.GetComponent<Stat>();
-        int damage = Mathf.Max(0, _stat.Attack - targetStat.Defense);
+        targetStat.OnDamaged(MyStat);
 
-        targetStat.Hp -= damage;
+        if (targetStat.Hp <= 0)
+            GameManager.Game.Despawn(targetStat.gameObject);
+    }
+
+    // temp
+	private void OnDisable()
+	{
+        Invoke(nameof(ReSpawn), 3f);
+        State = CreatureState.Die;
+    }
+    void ReSpawn()
+	{
+        if (gameObject.activeSelf)
+            return;
+
+        GameManager.Pool.Pop(gameObject);
+        transform.position = Vector3.zero;
+        _stat.Hp = _stat.MaxHp;
+        State = CreatureState.Idle;
     }
 }

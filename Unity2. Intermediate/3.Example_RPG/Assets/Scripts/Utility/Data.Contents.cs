@@ -30,6 +30,7 @@ namespace Data
         public int level;
         public int hp;
         public int attack;
+        public int totalExp;
     }
     #endregion
 }

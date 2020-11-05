@@ -8,6 +8,7 @@ using Define;
 public abstract class BaseUnitController : MonoBehaviour
 {
     protected float Delta(float value) => (value * Time.deltaTime);
+    public ObjectType ObjectType { get; protected set; } = ObjectType.Unknown;
     public float MoveTime { get; private set; }
 
     public Stat MyStat { get; protected set; }
@@ -82,6 +83,12 @@ public abstract class BaseUnitController : MonoBehaviour
     }
     protected virtual void UpdateOnSkill()
 	{
+        if (_lockOnTarget == null || !_lockOnTarget.IsValid())
+        {
+            State = CreatureState.Idle;
+            return;
+        }
+
         Quaternion lookDir = Quaternion.LookRotation(_lockOnTarget.transform.position - transform.position);
         transform.rotation = Quaternion.Lerp(transform.rotation, lookDir, Time.deltaTime * 20f);
     }

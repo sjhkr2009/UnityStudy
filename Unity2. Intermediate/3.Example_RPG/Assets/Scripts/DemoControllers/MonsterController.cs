@@ -14,11 +14,12 @@ public class MonsterController : BaseUnitController
 	protected override void Init()
 	{
 		base.Init();
+		ObjectType = ObjectType.Monster;
 
 		if (GetComponentInChildren<UI_HPBar>() == null)
 			GameManager.UI.MakeWorldSpace<UI_HPBar>(transform);
 
-		player = GameObject.FindGameObjectWithTag("Player");
+		player = GameManager.Game.Player;
 		nav = gameObject.GetOrAddComponent<NavMeshAgent>();
 
 		originPos = transform.position;
@@ -43,8 +44,9 @@ public class MonsterController : BaseUnitController
 	protected override void UpdateOnMoving()
 	{
 		base.UpdateOnMoving();
+		nav.isStopped = false;
 
-		if (_lockOnTarget != null)
+		if (_lockOnTarget != null && _lockOnTarget.IsValid())
 		{
 			_destPos = _lockOnTarget.transform.position;
 			float dist = Vector3.Magnitude(_destPos - transform.position);
@@ -58,6 +60,7 @@ public class MonsterController : BaseUnitController
 			{
 				nav.SetDestination(transform.position);
 				State = CreatureState.Idle;
+				StartCoroutine(ReturnOriginPos());
 				return;
 			}
 		}
@@ -69,7 +72,7 @@ public class MonsterController : BaseUnitController
 
 		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 13f);
 
-		if ((dir.magnitude < 0.01f) ||
+		if ((dir.magnitude < 0.1f) ||
 			(Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1f, LayerMask.GetMask("Block")) && !Input.GetMouseButton(0)))
 		{
 			nav.SetDestination(transform.position);
@@ -81,6 +84,13 @@ public class MonsterController : BaseUnitController
 	protected override void UpdateOnSkill()
 	{
 		base.UpdateOnSkill();
+
+		if(_lockOnTarget == null || !_lockOnTarget.IsValid())
+		{
+			nav.isStopped = true;
+			StartCoroutine(ReturnOriginPos());
+			State = CreatureState.Idle;
+		}
 	}
 
 	protected override void UpdateOnDie()
@@ -92,16 +102,14 @@ public class MonsterController : BaseUnitController
 	{
 		StartCoroutine(StateSkillToIdle(0.5f));
 
-		if (_lockOnTarget == null)
+		if (_lockOnTarget == null || !_lockOnTarget.IsValid())
 		{
 			State = CreatureState.Idle;
 			return;
 		}
 
 		Stat targetStat = _lockOnTarget.GetComponent<Stat>();
-		int damage = Mathf.Max(0, MyStat.Attack - targetStat.Defense);
-
-		targetStat.Hp -= damage;
+		targetStat.OnDamaged(MyStat);
 
 		if (targetStat.Hp > 0)
 		{
@@ -110,7 +118,28 @@ public class MonsterController : BaseUnitController
 		}
 		else
 		{
-			State = CreatureState.Idle;
+			GameManager.Game.Despawn(targetStat.gameObject);
 		}
+	}
+
+	IEnumerator ReturnOriginPos()
+	{
+		float delay = 0f;
+
+		yield return new WaitForSeconds(0.5f);
+
+		while (State == CreatureState.Idle && delay < 2f)
+		{
+			yield return null;
+			delay += Time.deltaTime;
+		}
+
+		if(State == CreatureState.Idle)
+		{
+			_lockOnTarget = null;
+			_destPos = originPos;
+			State = CreatureState.Moving;
+		}
+
 	}
 }

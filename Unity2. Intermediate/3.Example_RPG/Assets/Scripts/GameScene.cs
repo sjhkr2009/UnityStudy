@@ -12,6 +12,11 @@ public class GameScene : BaseScene
 
 		//GameManager.UI.ShowSceneUI<UI_Inventory>();
 		gameObject.GetOrAddComponent<CursorController>();
+
+		GameManager.Game.Spawn(Define.ObjectType.Player, "UnityChan");
+		GameManager.Game.Spawn(Define.ObjectType.Monster, "Knight");
+
+		Camera.main.gameObject.GetOrAddComponent<CameraController>().SetCameraPos();
 	}
 
 	public override void Clear()

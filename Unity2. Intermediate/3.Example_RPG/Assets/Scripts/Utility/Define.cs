@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace Define
 {
+	public enum ObjectType
+	{
+		Unknown,
+		Player,
+		Monster
+	}
+
 	public enum Layer
 	{
 		IgnoreRaycast = 8,
@@ -58,7 +65,7 @@ namespace Define
 	public abstract class DefaultSetting
 	{
 		public static int UiOrder => 10;
-		public static int PoolCount => 20;
+		public static int PoolCount => 10;
 		public static float ClickSensitivity => 0.33f;
 	}
 	public abstract class ResourcesPath
