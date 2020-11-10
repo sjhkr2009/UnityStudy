@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour
 
 	void LateUpdate()
 	{
-		if (!player.gameObject.IsValid())
+		if (player == null || !player.gameObject.IsValid())
 			return;
 		
 		if (cameraMode == Define.CameraMode.QuarterView)

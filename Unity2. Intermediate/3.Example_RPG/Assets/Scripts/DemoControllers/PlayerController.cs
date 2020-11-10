@@ -49,6 +49,7 @@ public class PlayerController : BaseUnitController
         }
 
         Vector3 dir = _destPos - transform.position;
+        dir.y = 0;
 
         float moveDist = Mathf.Clamp(Delta(_stat.MoveSpeed), 0f, dir.magnitude);
         transform.position += dir.normalized * moveDist;

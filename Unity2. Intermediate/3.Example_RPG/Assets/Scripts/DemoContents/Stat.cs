@@ -27,7 +27,7 @@ public class Stat : MonoBehaviour
             Level = 1;
             MaxHp = 100;
             Attack = 10;
-            Defense = 5;
+            Defense = 0;
             MoveSpeed = 5f;
             AttackRange = 1.5f;
         }

@@ -17,6 +17,8 @@ public class GameScene : BaseScene
 		GameManager.Game.Spawn(Define.ObjectType.Monster, "Knight");
 
 		Camera.main.gameObject.GetOrAddComponent<CameraController>().SetCameraPos();
+		SpawningPool pool = gameObject.GetOrAddComponent<SpawningPool>();
+		pool.SetMaxCount(5);
 	}
 
 	public override void Clear()

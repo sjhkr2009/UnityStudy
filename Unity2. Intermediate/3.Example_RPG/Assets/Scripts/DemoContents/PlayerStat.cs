@@ -38,8 +38,8 @@ public class PlayerStat : Stat
 
             SetStat(Level);
 
-            Defense = 5;
-            MoveSpeed = 5f;
+            Defense = 9;
+            MoveSpeed = 8f;
             AttackRange = 1.5f;
         }
         Hp = MaxHp;
