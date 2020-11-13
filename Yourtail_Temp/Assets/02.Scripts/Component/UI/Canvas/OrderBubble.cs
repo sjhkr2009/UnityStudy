@@ -31,7 +31,7 @@ public class OrderBubble : UIBase_Popup
         Bind<Text>(typeof(Texts));
         Bind<Button>(typeof(Buttons));
 
-        orderText = GameManager.Data.CurrentOrder.orderContents;
+        orderText = GameManager.Game.CurrentOrder.orderContents;
         GetText((int)Texts.OrderText).DOText(orderText, orderText.Length * Define.DoTextSpeed);
 
         EventHandler eventHandler = GetButton((int)Buttons.GetOrder).gameObject.GetOrAddComponent<EventHandler>();

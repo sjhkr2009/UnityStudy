@@ -17,14 +17,14 @@ public class CoinUI : UIBase_Scene
 
         Bind<Text>(typeof(Texts));
 
-        SetCoin(GameManager.Data.BirdCoin);
+        SetCoin(GameManager.Game.BirdCoin);
 
-        GameManager.Data.OnSetCoin -= SetCoin;
-        GameManager.Data.OnSetCoin += SetCoin;
+        GameManager.Game.OnSetCoin -= SetCoin;
+        GameManager.Game.OnSetCoin += SetCoin;
     }
     private void OnDestroy()
     {
-        GameManager.Data.OnSetCoin -= SetCoin;
+        GameManager.Game.OnSetCoin -= SetCoin;
     }
 
     void SetCoin(int value)

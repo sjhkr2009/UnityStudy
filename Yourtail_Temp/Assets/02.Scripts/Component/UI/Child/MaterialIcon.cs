@@ -44,8 +44,8 @@ public class MaterialIcon : MonoBehaviour, IPointerClickHandler
 
 	private void Start()
 	{
-        GameManager.Data.OnValidUpdate -= SetValid;
-        GameManager.Data.OnValidUpdate += SetValid;
+        GameManager.Game.OnValidUpdate -= SetValid;
+        GameManager.Game.OnValidUpdate += SetValid;
     }
 
 	public void OnPointerClick(PointerEventData eventData)
@@ -61,12 +61,12 @@ public class MaterialIcon : MonoBehaviour, IPointerClickHandler
         if (_myMaterial.materialType == CocktailMaterials.MaterialType.Base)
             return;
 
-        if (GameManager.Data.CurrentSubMaterials.Count == 0 && GameManager.Data.CurrentBaseMaterials.Count == 0)
+        if (GameManager.Game.CurrentSubMaterials.Count == 0 && GameManager.Game.CurrentBaseMaterials.Count == 0)
 		{
             IsActive = true;
             return;
 		}
 
-        IsActive = GameManager.Data.ValidMaterials.Contains(_myMaterial.Id);
+        IsActive = GameManager.Game.ValidMaterials.Contains(_myMaterial.Id);
     }
 }

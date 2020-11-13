@@ -22,6 +22,12 @@ public class SubMaterials : CocktailMaterials
         else return;
         if (tag4 != Define.CocktailTag.Null) Tags.Add(tag4);
     }
+
+    public sbyte[] color { get; private set; } = new sbyte[4];
+    protected void SetColor(sbyte black = 0, sbyte red = 0, sbyte orange = 0, sbyte green = 0)
+	{
+        color = new sbyte[4] { black, red, orange, green };
+	}
 }
 
 class Smt_OrangeJuice : SubMaterials
@@ -31,6 +37,7 @@ class Smt_OrangeJuice : SubMaterials
         Name = "오렌지 주스";
         Info = "달콤한 향과 풍부한 과즙으로 전세계에서 사랑받는 과일로 만든 주스";
         SetTag(Define.CocktailTag.오렌지, Define.CocktailTag.주스, Define.CocktailTag.과일, Define.CocktailTag.단맛);
+        SetColor(orange: 1);
     }
 
 }
@@ -42,6 +49,7 @@ class Smt_LimeJuice : SubMaterials
         Name = "라임 주스";
         Info = "강한 신맛에 더해 레몬보다 씁쓸한 뒷맛이 느껴진다.";
         SetTag(Define.CocktailTag.라임, Define.CocktailTag.주스, Define.CocktailTag.과일, Define.CocktailTag.신맛);
+        SetColor(green: 1);
     }
 }
 
@@ -52,6 +60,7 @@ class Smt_LemonJuice : SubMaterials
         Name = "레몬 주스";
         Info = "미각이 마비된 사람들은 가끔 레몬을 액체로만 접하는 것이 아쉬워 생레몬 먹기 대회를 연다고 한다.";
         SetTag(Define.CocktailTag.레몬, Define.CocktailTag.주스, Define.CocktailTag.과일, Define.CocktailTag.신맛);
+        SetColor(orange: 1);
     }
 }
 
@@ -125,6 +134,7 @@ class Smt_CoffeeLiqueur : SubMaterials
         Name = "커피 리큐어";
         Info = "당분과 커피향으로 부드러운 맛을 낸 혼합주";
         SetTag(Define.CocktailTag.커피, Define.CocktailTag.리큐어);
+        SetColor(black: 1);
     }
 }
 class Smt_Vermouth : SubMaterials
@@ -170,6 +180,7 @@ class Smt_CherryLiqueur : SubMaterials
         Name = "체리 리큐어";
         Info = "체리에 설탕시럽을 첨가하여 강한 단맛이 나는 과일 혼합주";
         SetTag(Define.CocktailTag.체리, Define.CocktailTag.리큐어, Define.CocktailTag.과일, Define.CocktailTag.단맛);
+        SetColor(red: 1);
     }
 }
 class Smt_Cola : SubMaterials
@@ -179,5 +190,6 @@ class Smt_Cola : SubMaterials
         Name = "콜라";
         Info = "누군가에게는 코카콜라인지 펩시콜라인지가 아주 중요한 문제일지도 모른다.";
         SetTag(Define.CocktailTag.탄산, Define.CocktailTag.음료수, Define.CocktailTag.콜라, Define.CocktailTag.단맛);
+        SetColor(black: 1);
     }
 }

@@ -24,7 +24,7 @@ public class SetCocktailUI : UIBase_Popup
         ExpImage
     }
     int grade;
-    DataManager data = GameManager.Data;
+    GameManagerEx data = GameManager.Game;
 
     Image customerImage;
 
@@ -38,7 +38,7 @@ public class SetCocktailUI : UIBase_Popup
         Bind<Text>(typeof(Texts));
         Bind<Image>(typeof(Images));
 
-        data = GameManager.Data;
+        data = GameManager.Game;
         customerImage = GetImage((int)Images.CustomerImage);
 
         SetReward();

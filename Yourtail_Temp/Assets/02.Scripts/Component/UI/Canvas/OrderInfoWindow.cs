@@ -36,8 +36,8 @@ public class OrderInfoWindow : UIBase_Popup
         Bind<Image>(typeof(Images));
         Bind<Button>(typeof(Buttons));
 
-        GetImage((int)Images.CustomerImage).sprite = GameManager.Data.CurrentCustomer.Image;
-        GetText((int)Texts.OrderText).text = GameManager.Data.CurrentOrder.orderContents;
+        GetImage((int)Images.CustomerImage).sprite = GameManager.Game.CurrentCustomer.Image;
+        GetText((int)Texts.OrderText).text = GameManager.Game.CurrentOrder.orderContents;
         GetButton((int)Buttons.background).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<OrderInfoWindow>(); });
 
         hasDestroyMotion = true;

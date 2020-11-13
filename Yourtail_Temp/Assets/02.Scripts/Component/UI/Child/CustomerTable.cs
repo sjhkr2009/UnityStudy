@@ -29,7 +29,7 @@ public class CustomerTable : MonoBehaviour, IPointerClickHandler
         if (IsEmpty || currentCustomer == null)
             return;
 
-        GameManager.Data.CurrentTableIndex = myIndex;
+        GameManager.Game.CurrentTableIndex = myIndex;
         EventOnSelectCustomer(currentCustomer);
     }
 

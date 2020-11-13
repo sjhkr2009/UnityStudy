@@ -74,7 +74,7 @@ public class MakeCocktailUI : UIBase_Popup
         myCanvas.sortingOrder = originOrder;
         GameManager.UI.TryClosePopupUI<CocktailMaking>();
 
-        myCocktail = GameManager.Data.CurrentCocktail;
+        myCocktail = GameManager.Game.CurrentCocktail;
         if (myCocktail == null) return;
 
         GetImage((int)Images.CocktailImage).sprite = myCocktail.image;

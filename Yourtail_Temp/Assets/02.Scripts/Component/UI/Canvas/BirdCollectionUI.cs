@@ -39,7 +39,7 @@ public class BirdCollectionUI : UIBase_Popup
     {
         for (int i = 0; i < (int)BirdInfoCards.Count; i++)
         {
-            Get<BirdInfoCard>(i).SetInfo(GameManager.Data.CustomerList[i]);
+            Get<BirdInfoCard>(i).SetInfo(GameManager.Game.CustomerList[i]);
         }
     }
     private void OnEnable()

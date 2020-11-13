@@ -27,14 +27,14 @@ public class TableController : MonoBehaviour
         //clickMethod.interactableOn.Add(GameState.Order);
         //clickMethod.interactableOn.Add(GameState.Idle);
 
-        GameManager.Instance.OnGameStateChange -= OnGameStateChange;
-        GameManager.Instance.OnGameStateChange += OnGameStateChange;
+        GameManager.Instance.OnGameStateEnter -= OnGameStateChange;
+        GameManager.Instance.OnGameStateEnter += OnGameStateChange;
         StartCoroutine(nameof(SetTable));
     }
     private void OnDestroy()
     {
         foreach (Table item in tables) item.EventOnSelectCustomer -= GetOrder;
-        GameManager.Instance.OnGameStateChange -= OnGameStateChange;
+        GameManager.Instance.OnGameStateEnter -= OnGameStateChange;
     }
 
     void OnGameStateChange(GameState gameState)
@@ -46,7 +46,7 @@ public class TableController : MonoBehaviour
                 StartCoroutine(nameof(SetTable));
                 break;
             case GameState.SetCocktail:
-                DeleteCustomer(GameManager.Data.CurrentCustomer);
+                DeleteCustomer(GameManager.Game.CurrentCustomer);
                 StopAllCoroutines();
                 break;
             default:
@@ -68,13 +68,13 @@ public class TableController : MonoBehaviour
                 continue;
             }
 
-            Customers newCustomer = GameManager.Data.GetRandomCustomer();
+            Customers newCustomer = GameManager.Game.GetRandomCustomer();
 
             while (!newCustomer.IsActive)
             {
                 yield return null;
 
-                newCustomer = GameManager.Data.GetRandomCustomer();
+                newCustomer = GameManager.Game.GetRandomCustomer();
             }
 
             if (IsExistCustomer(newCustomer))
@@ -132,7 +132,7 @@ public class TableController : MonoBehaviour
     {
         if (selectUI.activeSelf || GameManager.Instance.GameState != GameState.Idle) return;
 
-        GameManager.Data.SelectCustomer(customer);
+        GameManager.Game.SelectCustomer(customer);
         //GameManager.UI.OpenPopupUI<OrderBubble>().tablesUI = this;
         foreach (Table item in tables)
         {
@@ -149,7 +149,7 @@ public class TableController : MonoBehaviour
     {
         foreach (Table table in tables)
         {
-            if (table.currentCustomer == GameManager.Data.CurrentCustomer)
+            if (table.currentCustomer == GameManager.Game.CurrentCustomer)
                 table.DeleteCustomer();
         }
     }

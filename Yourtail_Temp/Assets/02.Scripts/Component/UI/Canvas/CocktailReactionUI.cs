@@ -31,7 +31,7 @@ public class CocktailReactionUI : UIBase_Popup
 		VariableImage
 	}
 
-	DataManager data = GameManager.Data;
+	GameManagerEx data = GameManager.Game;
 	float space;
 	
 	void Start() => Init();

@@ -59,8 +59,9 @@ public class SelectMaterialUI : UIBase_Scene
     }
     enum Buttons
     {
-        PrevButton,
-        NextButton,
+        ModeChangeButton,
+        BackButton,
+        DoButton,
         ResetButton,
         OrderButton,
         WindowNext,
@@ -74,8 +75,8 @@ public class SelectMaterialUI : UIBase_Scene
     }
     enum Images
 	{
-        ArrowImage,
-        ShakerImage,
+        NextImage,
+        PrevImage,
         Background
     }
 
@@ -156,18 +157,18 @@ public class SelectMaterialUI : UIBase_Scene
         for (int i = 0; i < (int)MaterialIcons.Count; i++)
         {
             if(i < Define.SpiritCount)
-                Get<MaterialIcon>(i).MyMaterial = GameManager.Data.BaseMaterialList[i];
+                Get<MaterialIcon>(i).MyMaterial = GameManager.Game.BaseMaterialList[i];
             else
-                Get<MaterialIcon>(i).MyMaterial = GameManager.Data.SubMaterialList[i - Define.SpiritCount];
+                Get<MaterialIcon>(i).MyMaterial = GameManager.Game.SubMaterialList[i - Define.SpiritCount];
         }
     }
     void SetButtons()
     {
-        GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
-        GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
-        //GetButton((int)Buttons.PrevButton).interactable = false;
+        GetButton((int)Buttons.ModeChangeButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
 
-        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.ResetSelected);
+        GetButton((int)Buttons.DoButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
+        GetButton((int)Buttons.BackButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
+        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Game.ResetSelected);
         GetButton((int)Buttons.OrderButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<OrderInfoWindow>(); });
 
         GetButton((int)Buttons.WindowNext).onClick.AddListener(() => { MoveWindow(true); });
@@ -202,23 +203,20 @@ public class SelectMaterialUI : UIBase_Scene
         moveArea.DOKill();
         bg.DOKill();
 
-        GetButton((int)Buttons.PrevButton).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
+        GetButton((int)Buttons.ModeChangeButton).onClick.RemoveAllListeners();
 
         switch (mode)
         {
             case Mode.SelectBase:
                 moveArea.DOAnchorPos(new Vector2(0, 0), 0.3f);
-                GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
-                GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
+                GetButton((int)Buttons.ModeChangeButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
                 bg.DOColor(Color.white, 0.3f);
                 SetNextBtnSprite(true);
                 break;
 
             case Mode.SelectSub:
                 moveArea.DOAnchorPos(new Vector2(0, Define.UIRefResolution.y), 0.3f);
-                GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { WindowMode = Mode.SelectBase; });
-                GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
+                GetButton((int)Buttons.ModeChangeButton).onClick.AddListener(() => { WindowMode = Mode.SelectBase; });
                 bg.DOColor(Color.yellow, 0.3f);
                 SetNextBtnSprite(false);
                 break;
@@ -262,26 +260,22 @@ public class SelectMaterialUI : UIBase_Scene
         }
     }
 
-    void SetNextBtnSprite(bool isArrow)
+    void SetNextBtnSprite(bool isNext)
 	{
-        GetImage((int)Images.ArrowImage).gameObject.SetActive(isArrow);
-        GetImage((int)Images.ShakerImage).gameObject.SetActive(!isArrow);
+        GetImage((int)Images.NextImage).gameObject.SetActive(isNext);
+        GetImage((int)Images.PrevImage).gameObject.SetActive(!isNext);
     }
 
     void UIReset()
 	{
-        //windows.OpenWindow(0);
         CurrentWindow = 0;
         moveArea.anchoredPosition = Vector2.zero;
         Get<RectTransform>((int)RectTransforms.Windows).anchoredPosition = Vector2.zero;
 
         GetImage((int)Images.Background).color = Color.white;
 
-        GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.PrevButton).onClick.RemoveAllListeners();
-        GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Idle; });
-        GetButton((int)Buttons.NextButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
-        //GetButton((int)Buttons.PrevButton).interactable = false;
+        GetButton((int)Buttons.ModeChangeButton).onClick.RemoveAllListeners();
+        GetButton((int)Buttons.ModeChangeButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
 
         SetNextBtnSprite(true);
         windowMode = Mode.SelectBase;

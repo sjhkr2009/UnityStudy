@@ -53,7 +53,7 @@ public enum CocktailName
 
 public class Cocktail
 {
-	#region Stats
+    #region Stats
 
     public List<string> BaseIDList { get; private set; } = new List<string>();
     public List<string> SubIDList { get; private set; } = new List<string>();
@@ -66,6 +66,8 @@ public class Cocktail
     public List<Define.CocktailTag> Tags { get; private set; } = new List<Define.CocktailTag>();
     public string Info { get; protected set; }
     public string Id { get; private set; }
+    sbyte[] _colorVector = new sbyte[4];
+    public Define.DefaultCockColor Color => (Define.DefaultCockColor)_colorVector.GetMaxIndex();
 
     #endregion
     #region Derived Class Setting
@@ -93,10 +95,12 @@ public class Cocktail
         BaseIDList.Add(material.Id);
         AddTag(material.Tags);
     }
-    protected void AddSub(SubMaterials material)
+    public void AddSub(SubMaterials material)
     {
         SubIDList.Add(material.Id);
         AddTag(material.Tags);
+		for (int i = 0; i < _colorVector.Length; i++)
+            _colorVector[i] += material.color[i];
     }
 	#endregion
 	#region Utility
@@ -133,7 +137,7 @@ public class Cocktail
         image = GameManager.Resource.LoadImage(Define.ImageType.Cocktail, 0);
         cocktailName = CocktailName.None;
 
-        SetName("괴상한 음료", "Food Waste");
+        SetName("디폴트 칵테일", "???");
 
         Proof = Random.Range(0, (int)Define.CocktailMaxProof);
         Info = "뭔가 잘못된 것 같다.";

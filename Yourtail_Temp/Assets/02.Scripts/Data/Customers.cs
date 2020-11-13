@@ -35,7 +35,7 @@ public class Customers
             if(value > Define.RequiredEXP[_level])
             {
                 Level++;
-                GameManager.Data.levelUp = true;
+                GameManager.Game.levelUp = true;
                 Exp = (value - Define.RequiredEXP[_level]);
             }
             else

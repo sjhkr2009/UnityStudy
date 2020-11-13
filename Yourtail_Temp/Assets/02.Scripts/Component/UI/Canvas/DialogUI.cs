@@ -39,10 +39,10 @@ public class DialogUI : UIBase_Popup
         Bind<Button>(typeof(Buttons));
 
         currentIndex = 0;
-        dialogList = GameManager.Dialog.GetDialog(GameManager.Data.CurrentCustomer);
+        dialogList = GameManager.Dialog.GetDialog(GameManager.Game.CurrentCustomer);
         if(dialogList == null)
         {
-            Debug.Log($"대사 탐색 실패 : {GameManager.Data.CurrentCustomer.Name}의 레벨 {GameManager.Data.CurrentCustomer.Level - 1}에 해당하는 대사가 없습니다.");
+            Debug.Log($"대사 탐색 실패 : {GameManager.Game.CurrentCustomer.Name}의 레벨 {GameManager.Game.CurrentCustomer.Level - 1}에 해당하는 대사가 없습니다.");
             GameManager.UI.ClosePopupUI<DialogUI>();
             return;
         }
@@ -53,7 +53,7 @@ public class DialogUI : UIBase_Popup
         GetButton((int)Buttons.NextButton).onClick.AddListener(SetNextText);
 
         Image charImage = GetImage((int)Images.CharacterImage);
-        charImage.sprite = GameManager.Data.CurrentCustomer.Image;
+        charImage.sprite = GameManager.Game.CurrentCustomer.Image;
         charImage.SetNativeSize();
     }
 

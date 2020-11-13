@@ -70,7 +70,7 @@ public class CheckBeforeShake : UIBase_Popup
         GetButton((int)Buttons.CancelButton).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<CheckBeforeShake>(); });
         GetButton((int)Buttons.DoButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Combine; });
 
-        Cocktail temp = GameManager.Data.MakeCocktail();
+        Cocktail temp = GameManager.Game.MakeCocktail();
         GetText((int)Texts.CocktailName).text = $"예상: {temp.Name_kr}";
     }
     void AllSetActiveFalse()
@@ -83,7 +83,7 @@ public class CheckBeforeShake : UIBase_Popup
 
     void SetSubMaterial(int index, Images image, Texts name, InfoIcons icon, Objects iconObject)
     {
-        SubMaterials myMaterial = GameManager.Data.CurrentSubMaterials.Count > index ? GameManager.Data.CurrentSubMaterials[index] : null;
+        SubMaterials myMaterial = GameManager.Game.CurrentSubMaterials.Count > index ? GameManager.Game.CurrentSubMaterials[index] : null;
 
         if (myMaterial == null)
         {
@@ -102,7 +102,7 @@ public class CheckBeforeShake : UIBase_Popup
     }
     void SetSpirit(int index = 0, Images image = Images.SpiritImage, Texts name = Texts.SpiritName, InfoIcons icon = InfoIcons.SpiritInfoIcon, Objects iconObject = Objects.SpiritInfoIcon)
     {
-        BaseMaterials myMaterial = GameManager.Data.CurrentBaseMaterials.Count > index ? GameManager.Data.CurrentBaseMaterials[index] : null;
+        BaseMaterials myMaterial = GameManager.Game.CurrentBaseMaterials.Count > index ? GameManager.Game.CurrentBaseMaterials[index] : null;
 
         if (myMaterial == null)
         {

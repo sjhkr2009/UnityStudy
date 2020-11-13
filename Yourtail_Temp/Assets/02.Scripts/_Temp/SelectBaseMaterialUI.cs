@@ -42,7 +42,7 @@ public class SelectBaseMaterialUI : UIBase_Popup
         SetSelectedUI();
 
         //GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.SelectSub; });
-        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.ResetSelected);
+        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Game.ResetSelected);
         GetButton((int)Buttons.OrderButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<OrderInfoWindow>(); });
     }
     private void OnDestroy()
@@ -55,7 +55,7 @@ public class SelectBaseMaterialUI : UIBase_Popup
     }
     void SetBaseImage()
     {
-        for (int i = 0; i < GameManager.Data.BaseMaterialIndexData.Count; i++)
+        for (int i = 0; i < GameManager.Game.BaseMaterialIndexData.Count; i++)
             SetIcon(i);
     }
 
@@ -63,7 +63,7 @@ public class SelectBaseMaterialUI : UIBase_Popup
     {
         Image _image = GetImage(index);
         MaterialIcon icon = _image.gameObject.GetOrAddComponent<MaterialIcon>();
-        icon.MyMaterial = GameManager.Data.BaseMaterialIndexData[index + 1];
+        icon.MyMaterial = GameManager.Game.BaseMaterialIndexData[index + 1];
 
         _image.sprite = icon.MyMaterial.image;
         _image.SetNativeSize();

@@ -62,12 +62,12 @@ public class CocktailInfoCard : UIBase
         GetImage((int)Images.ProofSliderColor).color = Define.ProofToColor(proof);
         GetText((int)Texts.ProofText).text = $"{cocktail.Proof}%";
 
-        GetText((int)Texts.Spirit).text = GameManager.Data.BaseMaterialIdData[cocktail.BaseIDList[0]].Name;
+        GetText((int)Texts.Spirit).text = GameManager.Game.BaseMaterialIdData[cocktail.BaseIDList[0]].Name;
         
         int subIndex = (int)Texts.Sub1;
         foreach (string id in cocktail.SubIDList)
         {
-            GetText(subIndex).text = GameManager.Data.SubMaterialIdData[id].Name;
+            GetText(subIndex).text = GameManager.Game.SubMaterialIdData[id].Name;
             subIndex++;
         }
     }

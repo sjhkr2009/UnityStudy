@@ -65,7 +65,7 @@ public class SelectSubMaterialUI : UIBase_Popup
 
         SetSubImage();
         SetSelectedUI();
-        SetButtons();
+        //SetButtons();
         SetWindows();
     }
     private void OnDestroy()
@@ -82,13 +82,14 @@ public class SelectSubMaterialUI : UIBase_Popup
 
         foreach (GameObject window in windows) window.SetActive(false);
 
-        windows.OpenWindow(0);
+        //windows.OpenWindow(0);
     }
+    /*
     void SetButtons()
     {
         GetButton((int)Buttons.PrevButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Select; });
         GetButton((int)Buttons.NextButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<CheckBeforeShake>(); });
-        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Data.ResetSelected);
+        GetButton((int)Buttons.ResetButton).onClick.AddListener(GameManager.Game.ResetSelected);
         GetButton((int)Buttons.OrderButton).onClick.AddListener(() => { GameManager.UI.OpenPopupUI<OrderInfoWindow>(); });
 
 
@@ -97,9 +98,10 @@ public class SelectSubMaterialUI : UIBase_Popup
         GetButton((int)Buttons.Window2to1).onClick.AddListener(() => { windows.OpenWindow(0); });
         GetButton((int)Buttons.Window3to2).onClick.AddListener(() => { windows.OpenWindow(1); });
     }
+    */
     void SetSubImage()
     {
-        for (int i = 0; i < GameManager.Data.SubMaterialIndexData.Count; i++)
+        for (int i = 0; i < GameManager.Game.SubMaterialIndexData.Count; i++)
             SetIcon(i);
     }
 
@@ -107,7 +109,7 @@ public class SelectSubMaterialUI : UIBase_Popup
     {
         Image _image = GetImage(index);
         MaterialIcon icon = _image.gameObject.GetOrAddComponent<MaterialIcon>();
-        icon.MyMaterial = GameManager.Data.SubMaterialList[index];
+        icon.MyMaterial = GameManager.Game.SubMaterialList[index];
 
         _image.sprite = icon.MyMaterial.image;
     }

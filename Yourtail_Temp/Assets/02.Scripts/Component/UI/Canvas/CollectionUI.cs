@@ -49,7 +49,7 @@ public class CollectionUI : UIBase_Popup
         Bind<Toggle>(typeof(Toggles));
 
         contents = Get<RectTransform>((int)Contents.CocktailRecipes);
-        cockList = GameManager.Data.CocktailList;
+        cockList = GameManager.Game.CocktailList;
 
         SetAllRecipes();
         SetButtons();
@@ -92,7 +92,7 @@ public class CollectionUI : UIBase_Popup
     
     void SetAllRecipes()
     {
-        cockList = GameManager.Data.CocktailList;
+        cockList = GameManager.Game.CocktailList;
         for (int i = 0; i < cockList.Count; i++)
         {
             GameObject gameObject = GameManager.Resource.Instantiate("UI/Others/CocktailInfoCard", contents);

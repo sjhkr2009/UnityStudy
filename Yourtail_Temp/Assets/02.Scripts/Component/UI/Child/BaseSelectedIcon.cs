@@ -25,31 +25,31 @@ public class BaseSelectedIcon : MonoBehaviour, IPointerClickHandler
     {
         myImage = gameObject.GetOrAddComponent<Image>();
 
-        GameManager.Data.OnAddBaseMaterial -= SetIcon;
-        GameManager.Data.OnRemoveBaseMaterial -= DeleteIcon;
+        GameManager.Game.OnAddBaseMaterial -= SetIcon;
+        GameManager.Game.OnRemoveBaseMaterial -= DeleteIcon;
 
-        GameManager.Data.OnAddBaseMaterial += SetIcon;
-        GameManager.Data.OnRemoveBaseMaterial += DeleteIcon;
+        GameManager.Game.OnAddBaseMaterial += SetIcon;
+        GameManager.Game.OnRemoveBaseMaterial += DeleteIcon;
 
         SetIcon();
     }
 
     void SetIcon(BaseMaterials selected)
     {
-        if (GameManager.Data.CurrentBaseMaterials.Count != myCount) return;
+        if (GameManager.Game.CurrentBaseMaterials.Count != myCount) return;
 
         selectedMaterial = selected;
         myImage.sprite = selectedMaterial.image;
     }
     public void SetIcon()
     {
-        if (GameManager.Data.CurrentBaseMaterials.Count < myCount)
+        if (GameManager.Game.CurrentBaseMaterials.Count < myCount)
         {
             myImage.sprite = GameManager.UI.NullImage;
             return;
         }
         
-        selectedMaterial = GameManager.Data.CurrentBaseMaterials[MyIndex];
+        selectedMaterial = GameManager.Game.CurrentBaseMaterials[MyIndex];
         if (selectedMaterial != null)
             myImage.sprite = selectedMaterial.image;
     }

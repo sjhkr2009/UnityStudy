@@ -107,6 +107,15 @@ public class Define
         매우셈 = 4
     }
 
+    public enum DefaultCockColor
+	{
+        검정,
+        빨강,
+        주황,
+        연두,
+        Count
+	}
+
     public enum Reaction
     {
         BAD = -1,

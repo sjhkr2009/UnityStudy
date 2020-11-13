@@ -16,6 +16,28 @@ public class ResourceManager
     public ScriptableData LoadDatabase() => Load<ScriptableData>("Data/GameData");
     //public BirdStories LoadDialogData() => Load<BirdStories>("Data/StoryTexts");
 
+    public Sprite LoadImage(Define.DefaultCockColor color)
+	{
+        Sprite sprite = null;
+		switch (color)
+		{
+			case Define.DefaultCockColor.검정:
+                sprite = Load<Sprite>("Sprites/cocktail/default/CC_black");
+                break;
+			case Define.DefaultCockColor.빨강:
+                sprite = Load<Sprite>("Sprites/cocktail/default/CC_red");
+                break;
+			case Define.DefaultCockColor.주황:
+                sprite = Load<Sprite>("Sprites/cocktail/default/CC_orange");
+                break;
+			case Define.DefaultCockColor.연두:
+                sprite = Load<Sprite>("Sprites/cocktail/default/CC_transparent");
+                break;
+			default:
+				break;
+		}
+        return sprite;
+	}
     public Sprite LoadImage(Define.ImageType type, int id)
     {
         ScriptableImages data = SelectData(type);
@@ -40,6 +62,7 @@ public class ResourceManager
                 return Load<ScriptableImages>("Data/Cocktail");
             case Define.ImageType.Customer:
                 return Load<ScriptableImages>("Data/Customers");
+
             default:
                 return null;
         }

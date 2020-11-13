@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class DataManager
+public class GameManagerEx
 {
     public static ScriptableData GameData => GameManager.Resource.LoadDatabase();
     
@@ -128,13 +128,8 @@ public class DataManager
         maxBase = Define.MaxBaseMaterial;
         maxSub = Define.MaxSubMaterial;
 
-        GameManager.Input.InputMaterialSelect -= SelectMaterial;
-        GameManager.Input.InputMaterialInfo -= GameManager.UI.SetMaterialInfo;
-        GameManager.Input.InputBirdInfo -= GameManager.UI.SetBirdInfo;
-
-        GameManager.Input.InputMaterialSelect += SelectMaterial;
-        GameManager.Input.InputMaterialInfo += GameManager.UI.SetMaterialInfo;
-        GameManager.Input.InputBirdInfo += GameManager.UI.SetBirdInfo;
+        RemoveEvent();
+        AddEvent();
 
         SetCustomers();
         SetSpirits();
@@ -142,6 +137,22 @@ public class DataManager
         SetCocktails();
 
         SetBirdCoin(GameData.Birdcoin);
+    }
+    void RemoveEvent()
+	{
+        GameManager.Input.InputMaterialSelect -= SelectMaterial;
+        GameManager.Input.InputMaterialInfo -= GameManager.UI.SetMaterialInfo;
+        GameManager.Input.InputBirdInfo -= GameManager.UI.SetBirdInfo;
+        GameManager.Instance.OnGameStateEnter -= OnGameStateEnter;
+        GameManager.Instance.OnGameStateQuit -= OnGameStateQuit;
+    }
+    void AddEvent()
+	{
+        GameManager.Input.InputMaterialSelect += SelectMaterial;
+        GameManager.Input.InputMaterialInfo += GameManager.UI.SetMaterialInfo;
+        GameManager.Input.InputBirdInfo += GameManager.UI.SetBirdInfo;
+        GameManager.Instance.OnGameStateEnter += OnGameStateEnter;
+        GameManager.Instance.OnGameStateQuit += OnGameStateQuit;
     }
     void SetCustomers()
     {
@@ -278,13 +289,14 @@ public class DataManager
     #endregion
 
     #region 게임 진행 관련
-    public void OnGameStateChange(GameState state)
+    void OnGameStateEnter(GameState state)
     {
         switch (state)
         {
             case GameState.Idle:
-                CurrentReset();
-                OnValidUpdate();
+                //CurrentReset();
+                //OnValidUpdate();
+                GameManager.UI.CloseSceneUI<SelectMaterialUI>();
                 break;
             case GameState.Select:
                 CurrentCocktail = new Cocktail();
@@ -299,6 +311,23 @@ public class DataManager
                 break;
         }
     }
+    void OnGameStateQuit(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Idle:
+                break;
+            case GameState.Select:
+                OnValidUpdate();
+                break;
+            case GameState.Combine:
+                break;
+            case GameState.SetCocktail:
+                CurrentReset();
+                break;
+        }
+    }
+
 
     /// <summary>
     /// 모든 새들 중에서 임의의 새를 반환합니다.
@@ -353,7 +382,7 @@ public class DataManager
     /// </summary>
     public Cocktail MakeCocktail(List<BaseMaterials> currentBases = null, List<SubMaterials> currentSubs = null)
     {
-        Cocktail empty = new Cocktail();
+        Cocktail newCocktail = new Cocktail();
         if (currentBases == null) currentBases = CurrentBaseMaterials;
         if (currentSubs == null) currentSubs = CurrentSubMaterials;
 
@@ -386,8 +415,21 @@ public class DataManager
             if (isCorrect) return cocktail;
         }
 
-        return empty;
+        return SetDefault(currentBases, currentSubs, newCocktail);
     }
+    Cocktail SetDefault(List<BaseMaterials> currentBases = null, List<SubMaterials> currentSubs = null, Cocktail cocktail = null)
+	{
+        if (cocktail == null) cocktail = new Cocktail();
+        if (currentBases == null) currentBases = CurrentBaseMaterials;
+        if (currentSubs == null) currentSubs = CurrentSubMaterials;
+
+		foreach (SubMaterials sub in currentSubs)
+            cocktail.AddSub(sub);
+
+        cocktail.image = GameManager.Resource.LoadImage(cocktail.Color);
+
+        return cocktail;
+	}
 
     /// <summary>
     /// 현재 오더에서 요구하는 내용과 만들어진 칵테일을 비교하여 현재 점수를 CurrentGrade 변수에 기록해 둡니다.

@@ -25,13 +25,13 @@ public class GameManager : MonoBehaviour
         if (Instance != null) Destroy(gameObject);
         Instance = this;
 
-        _data.Init();
+        _game.Init();
     }
 
 
     // Get Manager Class
-    DataManager _data = new DataManager();
-    public static DataManager Data => Instance._data;
+    GameManagerEx _game = new GameManagerEx();
+    public static GameManagerEx Game => Instance._game;
     InputManager _input = new InputManager();
     public static InputManager Input => Instance._input;
     ResourceManager _resource = new ResourceManager();
@@ -44,13 +44,15 @@ public class GameManager : MonoBehaviour
     BirdStories _dialog = new BirdStories();
     public static BirdStories Dialog => Instance._dialog;
 
-    public Action<GameState> OnGameStateChange = n => { };
+    public Action<GameState> OnGameStateEnter = n => { };
+    public Action<GameState> OnGameStateQuit = n => { };
     [SerializeField, ReadOnly] private GameState _gameState = GameState.Idle;
     public GameState GameState
     {
         get => _gameState;
         set
         {
+            OnGameStateQuit(_gameState);
             _gameState = value;
             UI.CloseAllPopup();
             switch (value)
@@ -68,7 +70,7 @@ public class GameManager : MonoBehaviour
                     MainInSetCocktail();
                     break;
             }
-            OnGameStateChange(value);
+            OnGameStateEnter(value);
         }
     }
     void StateChange(GameState state) { GameState = state; }
@@ -76,7 +78,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        _data.LoadFromPlayerPrefs();
+        _game.LoadFromPlayerPrefs();
         _dialog.DialogSetting();
 
         Sound.Init();
@@ -85,12 +87,10 @@ public class GameManager : MonoBehaviour
         Input.InputStateChange -= StateChange;
         Input.InputEscape -= OnEscape;
         Input.InputRetryCocktail -= OnRetryCocktail;
-        OnGameStateChange -= Data.OnGameStateChange;
 
         Input.InputStateChange += StateChange;
         Input.InputEscape += OnEscape;
         Input.InputRetryCocktail += OnRetryCocktail;
-        OnGameStateChange += Data.OnGameStateChange;
 
         PlayTime = 0f;
 
@@ -102,12 +102,11 @@ public class GameManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        _data.SaveToPlayerPrefs();
+        _game.SaveToPlayerPrefs();
         
         Input.InputStateChange -= StateChange;
         Input.InputEscape -= OnEscape;
         Input.InputRetryCocktail -= OnRetryCocktail;
-        OnGameStateChange -= Data.OnGameStateChange;
 
         Input.Clear();
 
@@ -141,9 +140,9 @@ public class GameManager : MonoBehaviour
     
     public void SetDialog()
     {
-        Data.DeleteCustomer();
+        Game.DeleteCustomer();
 
-        if (Data.levelUp)
+        if (Game.levelUp)
             UI.OpenPopupUI<DialogUI>();
         else
             GameState = GameState.Idle;
@@ -159,7 +158,7 @@ public class GameManager : MonoBehaviour
     void OnRetryCocktail()
     {
         UI.ClosePopupUI<MakeCocktailUI>();
-        Data.ResetSelected();
+        Game.ResetSelected();
         GameState = GameState.Select;
     }
     
@@ -168,7 +167,7 @@ public class GameManager : MonoBehaviour
         if(!Application.isEditor)
             _input.Clear();
 
-        _data.SaveToPlayerPrefs();
+        _game.SaveToPlayerPrefs();
         Application.Quit();
     }
 }

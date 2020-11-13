@@ -40,7 +40,7 @@ public static class Extension
 
         return null;
     }
-
+    /*
     public static void SwipeWindow(this GameObject from, GameObject to, bool toRight)
     {
         RectTransform fromPos = from.GetComponent<RectTransform>();
@@ -76,7 +76,7 @@ public static class Extension
         self.SetNativeSize();
         self.transform.localScale *= size;
     }
-
+    */
     /// <summary>
     /// 여러 개의 값을 받아서 임의의 인덱스를 반환합니다. 각 값에는 가중치를 부여할 수 있습니다.
     /// 4개의 값을 10, 10, 10, 50 으로 입력하면 인덱스 3이 반환될 확률이 다른 값보다 5배 높습니다.
@@ -112,5 +112,23 @@ public static class Extension
     public static void SetCanvasOrder(this GameObject gameObject, bool isPopup = true, int customOrder = int.MinValue)
 	{
         GameManager.UI.SetCanvasOrder(gameObject, isPopup, customOrder);
+	}
+
+    /// <summary>
+    /// 배열에서 가장 큰 원소가 들어있는 인덱스를 반환합니다. 최대값이 여러 개 있다면 첫 번째 최대값의 인덱스가 반환됩니다.
+    /// </summary>
+    public static int GetMaxIndex(this sbyte[] array)
+	{
+        if (array.Length <= 1)
+            return 0;
+
+        int maxIndex = 0;
+        for (int i = 1; i < array.Length; i++)
+		{
+            if (array[i] > array[maxIndex])
+                maxIndex = i;
+		}
+
+        return maxIndex;
 	}
 }

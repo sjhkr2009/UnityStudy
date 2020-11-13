@@ -27,31 +27,31 @@ public class SubSelectedIcon : MonoBehaviour, IPointerClickHandler
     {
         myImage = gameObject.GetOrAddComponent<Image>();
 
-        GameManager.Data.OnAddSubMaterial -= SetIcon;
-        GameManager.Data.OnRemoveSubMaterial -= DeleteIcon;
+        GameManager.Game.OnAddSubMaterial -= SetIcon;
+        GameManager.Game.OnRemoveSubMaterial -= DeleteIcon;
 
-        GameManager.Data.OnAddSubMaterial += SetIcon;
-        GameManager.Data.OnRemoveSubMaterial += DeleteIcon;
+        GameManager.Game.OnAddSubMaterial += SetIcon;
+        GameManager.Game.OnRemoveSubMaterial += DeleteIcon;
 
         SetIcon();
     }
 
     void SetIcon(SubMaterials selected)
     {
-        if (GameManager.Data.CurrentSubMaterials.Count != myCount) return;
+        if (GameManager.Game.CurrentSubMaterials.Count != myCount) return;
 
         selectedMaterial = selected;
         myImage.sprite = selectedMaterial.image;
     }
     public void SetIcon()
     {
-        if (GameManager.Data.CurrentSubMaterials.Count < myCount)
+        if (GameManager.Game.CurrentSubMaterials.Count < myCount)
         {
             myImage.sprite = GameManager.UI.NullImage;
             return;
         }
 
-        selectedMaterial = GameManager.Data.CurrentSubMaterials[MyIndex];
+        selectedMaterial = GameManager.Game.CurrentSubMaterials[MyIndex];
         if (selectedMaterial != null)
             myImage.sprite = selectedMaterial.image;
     }
