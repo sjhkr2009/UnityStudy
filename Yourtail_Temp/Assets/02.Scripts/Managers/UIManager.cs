@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.UI;
 
 public class UIManager
@@ -13,7 +14,7 @@ public class UIManager
     public void Init()
 	{
         _root = new GameObject("@UI").transform;
-        OpenPopupUI<CollectionUI>();
+        OpenPopupUI<CocktailCollectionUI>();
     }
 
     #region 현재 확인중인 정보
@@ -277,6 +278,19 @@ public class UIManager
             return false;
         }
         return true;
+    }
+
+    bool canToastMsg = true;
+    public void ToastMessage(string msg)
+	{
+        if (!canToastMsg)
+            return;
+
+        canToastMsg = false;
+        ToastMessageUI toastMsg = GameManager.Resource.Instantiate($"UI/Popup/ToastMessageUI", Root).GetOrAddComponent<ToastMessageUI>();
+        toastMsg.SetMessage(msg);
+
+        DOVirtual.DelayedCall(0.5f, () => { canToastMsg = true; });
     }
 
     public Sprite NullImage => GameManager.Resource.Load<Sprite>("Sprites/UI/NullImage");

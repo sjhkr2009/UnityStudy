@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TablesUI : UIBase_Scene
 {
@@ -11,6 +12,10 @@ public class TablesUI : UIBase_Scene
 		Customer3,
 		Count
 	}
+	enum Buttons
+	{
+		MakeButton
+	}
 	
 	void Start() => Init();
 	public override void Init()
@@ -18,6 +23,10 @@ public class TablesUI : UIBase_Scene
 		Init(0);
 
 		Bind<CustomerTable>(typeof(Tables));
+		Bind<Button>(typeof(Buttons));
+
+		GetButton((int)Buttons.MakeButton).onClick.AddListener(OnMakeButtonClick);
+
 		for (int i = 0; i < (int)Tables.Count; i++)
 		{
 			Get<CustomerTable>(i).EventOnSelectCustomer -= GetOrder;
@@ -32,6 +41,17 @@ public class TablesUI : UIBase_Scene
 		StartCoroutine(nameof(SetTable));
 
 		Inited = true;
+	}
+
+	void OnMakeButtonClick()
+	{
+		if (GameManager.Game.CurrentOrder == null)
+		{
+			GameManager.UI.ToastMessage("주문을 받아야 칵테일 제조를 시작할 수 있습니다.");
+			return;
+		}
+
+		GameManager.Instance.GameState = GameState.Select;
 	}
 
 	void OnGameStateChange(GameState gameState)

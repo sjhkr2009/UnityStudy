@@ -137,6 +137,13 @@ public class GameManagerEx
         SetCocktails();
 
         SetBirdCoin(GameData.Birdcoin);
+
+        //temp
+        GameManager.Data.AddRecipe(CocktailList[0]);
+        GameManager.Data.AddRecipe(CocktailList[1]);
+        GameManager.Data.AddRecipe(CocktailList[2]);
+        GameManager.Data.AddRecipe(CocktailList[3]);
+        GameManager.Data.AddRecipe(CocktailList[4]);
     }
     void RemoveEvent()
 	{

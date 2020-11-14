@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class CollectionUI : UIBase_Popup
+public class CocktailCollectionUI : UIBase_Popup
 {
     enum Windows
     {
@@ -57,7 +57,7 @@ public class CollectionUI : UIBase_Popup
 
         SetPooling();
 
-        GameManager.UI.ClosePopupUI<CollectionUI>();
+        GameManager.UI.ClosePopupUI<CocktailCollectionUI>();
     }
     void OnEnable()
     {
@@ -69,6 +69,8 @@ public class CollectionUI : UIBase_Popup
 
         for (int i = 0; i < (int)Toggles.Count; i++)
             Get<Toggle>(i).isOn = false;
+
+        SetFilteredRecipes();
     }
     private void OnDisable()
     {
@@ -98,19 +100,33 @@ public class CollectionUI : UIBase_Popup
             GameObject gameObject = GameManager.Resource.Instantiate("UI/Others/CocktailInfoCard", contents);
             CocktailInfoCard component = gameObject.GetOrAddComponent<CocktailInfoCard>();
             component.MyCocktail = cockList[i];
+            filteringList.Add(cockList[i]);
             cocktailInfo.Add(component);
         }
 
-        int height = cockList.Count / 4;
-        if ((cockList.Count % 4) != 0) height++;
-        contents.sizeDelta = new Vector2(0f, (520f * height) + 20f);
+        SetFilteredRecipes();
+    }
+    void FilteringInvalid()
+	{
+        List<Cocktail> removeList = new List<Cocktail>();
+        foreach (Cocktail cocktail in filteringList)
+        {
+            if (!cocktail.IsValid)
+                removeList.Add(cocktail);
+        }
+        for (int i = 0; i < removeList.Count; i++)
+        {
+            filteringList.Remove(removeList[i]);
+        }
     }
     void SetButtons()
     {
-        GetButton((int)Buttons.CloseButton).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<CollectionUI>(); });
+        GetButton((int)Buttons.CloseButton).onClick.AddListener(() => { GameManager.UI.ClosePopupUI<CocktailCollectionUI>(); });
     }
     void SetFilteredRecipes()
     {
+        FilteringInvalid();
+
         foreach (CocktailInfoCard item in cocktailInfo)
         {
             if (filteringList.Contains(item.MyCocktail))
@@ -138,18 +154,29 @@ public class CollectionUI : UIBase_Popup
     }
     void AddFilterByProof(int grade)
     {
-        if (filteringList.Count == cockList.Count)
+        if (_filterCount++ <= 0)
             filteringList.Clear();
 
         foreach (Cocktail item in cockList)
         {
-            if (item.GetProofGradeToInt() == grade)
-                AddFiltering(item);
+            if ((item.GetProofGradeToInt() == grade) && !filteringList.Contains(item))
+                filteringList.Add(item);
         }
         SetFilteredRecipes();
     }
     void RemoveFilterByProof(int grade)
     {
+        if(--_filterCount <= 0)
+		{
+            filteringList.Clear();
+            foreach (var item in cockList)
+			{
+                filteringList.Add(item);
+			}
+            SetFilteredRecipes();
+            return;
+		}
+
         List<Cocktail> _deleteList = new List<Cocktail>();
         foreach (Cocktail item in filteringList)
         {
@@ -161,22 +188,9 @@ public class CollectionUI : UIBase_Popup
             filteringList.Remove(item);
         }
 
-        if(filteringList.Count > 0)
-        {
-            SetFilteredRecipes();
-        }
-        else
-        {
-            foreach (CocktailInfoCard item in cocktailInfo)
-            {
-                if (!item.gameObject.activeSelf) 
-                    item.gameObject.SetActive(true);
-            }
-            int height = cockList.Count / 4;
-            if ((cockList.Count % 4) != 0) height++;
-            contents.sizeDelta = new Vector2(0f, (520f * height) + 20f);
-        }
+        SetFilteredRecipes();
     }
+    int _filterCount = 0;
     void Filter0(bool isChecking)
     {
         if (isChecking) AddFilterByProof(0);

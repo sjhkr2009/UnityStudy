@@ -68,6 +68,7 @@ public class Cocktail
     public string Id { get; private set; }
     sbyte[] _colorVector = new sbyte[4];
     public Define.DefaultCockColor Color => (Define.DefaultCockColor)_colorVector.GetMaxIndex();
+    public bool IsValid => GameManager.Data.RecipeCollection.ContainsKey(Id);
 
     #endregion
     #region Derived Class Setting

@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     // Get Manager Class
     GameManagerEx _game = new GameManagerEx();
     public static GameManagerEx Game => Instance._game;
+    DataManager _data = new DataManager();
+    public static DataManager Data => Instance._data;
     InputManager _input = new InputManager();
     public static InputManager Input => Instance._input;
     ResourceManager _resource = new ResourceManager();
