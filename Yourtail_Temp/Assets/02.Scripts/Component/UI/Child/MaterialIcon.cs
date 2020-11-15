@@ -50,8 +50,8 @@ public class MaterialIcon : MonoBehaviour, IPointerClickHandler
 
 	public void OnPointerClick(PointerEventData eventData)
     {
-        if (!IsActive)
-            return;
+        // Temp: 비활성화된 재료도 선택 가능하게 변경
+        // if (!IsActive) return;
         
         GameManager.Input.InMaterialSelect(_myMaterial.Id);
     }

@@ -40,6 +40,8 @@ public class MakeCocktailUI : UIBase_Popup
         GetButton((int)Buttons.NextButton).onClick.RemoveAllListeners();
         GetButton((int)Buttons.RetryButton).onClick.RemoveAllListeners();
 
+        Get<Slider>((int)Sliders.ProofSlider).DOKill();
+
         makingUI.OnEndMaking -= SetResult;
     }
     public override void Init()
