@@ -68,7 +68,9 @@ public class Cocktail
     public string Id { get; private set; }
     sbyte[] _colorVector = new sbyte[4];
     public Define.DefaultCockColor Color => (Define.DefaultCockColor)_colorVector.GetMaxIndex();
-    public bool IsValid => GameManager.Data.RecipeCollection.ContainsKey(Id);
+    public Define.DefaultCockGlass GlassType => Define.DefaultCockGlass.CampCoupe;
+    public bool IsCollected => GameManager.Data.RecipeCollection.Contains(Id);
+    public bool IsDefault { get; private set; }
 
     #endregion
     #region Derived Class Setting
@@ -129,19 +131,21 @@ public class Cocktail
 	public Cocktail(int id)
     {
         SetID(id);
-        image = GameManager.Resource.LoadImage(Define.ImageType.Cocktail, id);
+        image = GameManager.Resource.LoadImageFromData(Define.ImageType.Cocktail, id);
         cocktailName = (CocktailName)id;
+        IsDefault = false;
     }
     public Cocktail()
     {
         SetID(0);
-        image = GameManager.Resource.LoadImage(Define.ImageType.Cocktail, 0);
+        image = GameManager.Resource.LoadImageFromData(Define.ImageType.Cocktail, 0);
         cocktailName = CocktailName.None;
 
         SetName("디폴트 칵테일", "???");
 
         Proof = Random.Range(0, (int)Define.CocktailMaxProof);
-        Info = "뭔가 잘못된 것 같다.";
+        Info = "디폴트 칵테일이다.";
+        IsDefault = true;
     }
 	#endregion
 }

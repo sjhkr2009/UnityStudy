@@ -71,7 +71,8 @@ public class CheckBeforeShake : UIBase_Popup
         GetButton((int)Buttons.DoButton).onClick.AddListener(() => { GameManager.Instance.GameState = GameState.Combine; });
 
         Cocktail temp = GameManager.Game.MakeCocktail();
-        GetText((int)Texts.CocktailName).text = $"예상: {temp.Name_kr}";
+        string cockName = temp.IsCollected ? temp.Name_kr : "???";
+        GetText((int)Texts.CocktailName).text = $"예상: {cockName}";
     }
     void AllSetActiveFalse()
     {

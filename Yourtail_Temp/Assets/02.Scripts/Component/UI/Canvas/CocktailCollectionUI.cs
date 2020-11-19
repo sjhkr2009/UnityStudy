@@ -70,6 +70,12 @@ public class CocktailCollectionUI : UIBase_Popup
         for (int i = 0; i < (int)Toggles.Count; i++)
             Get<Toggle>(i).isOn = false;
 
+		foreach (Cocktail cock in cockList)
+		{
+            if (cock.IsCollected && !filteringList.Contains(cock))
+                filteringList.Add(cock);
+		}
+
         SetFilteredRecipes();
     }
     private void OnDisable()
@@ -111,7 +117,7 @@ public class CocktailCollectionUI : UIBase_Popup
         List<Cocktail> removeList = new List<Cocktail>();
         foreach (Cocktail cocktail in filteringList)
         {
-            if (!cocktail.IsValid)
+            if (!cocktail.IsCollected)
                 removeList.Add(cocktail);
         }
         for (int i = 0; i < removeList.Count; i++)
@@ -141,16 +147,6 @@ public class CocktailCollectionUI : UIBase_Popup
         int height = filteringList.Count / 4;
         if ((filteringList.Count % 4) != 0) height++;
         contents.sizeDelta = new Vector2(0f, (520f * height) + 20f);
-    }
-    void AddFiltering(Cocktail cocktail)
-    {
-        if (!filteringList.Contains(cocktail))
-            filteringList.Add(cocktail);
-    }
-    void RemoveFiltering(Cocktail cocktail)
-    {
-        if (!filteringList.Contains(cocktail))
-            filteringList.Remove(cocktail);
     }
     void AddFilterByProof(int grade)
     {

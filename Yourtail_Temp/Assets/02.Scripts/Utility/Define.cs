@@ -107,15 +107,6 @@ public class Define
         매우셈 = 4
     }
 
-    public enum DefaultCockColor
-	{
-        검정,
-        빨강,
-        주황,
-        연두,
-        Count
-	}
-
     public enum Reaction
     {
         BAD = -1,
@@ -267,5 +258,66 @@ public class Define
 
     #endregion
 
+    #region 디폴트 칵테일
+
+    public enum DefaultCockColor
+    {
+        Black,
+        Red,
+        Orange,
+        Green,
+        Count
+    }
+    public enum DefaultCockGlass
+    {
+        Martini,
+        Collins,
+        Collins_Soda,
+        CampCoupe,
+        OldFashioned,
+        Count
+    }
+
+    static string GetDefaultCockGlass(DefaultCockGlass type)
+	{
+		switch (type)
+		{
+            case DefaultCockGlass.Martini:
+                return "MT";
+            case DefaultCockGlass.Collins:
+                return "CO";
+			case DefaultCockGlass.Collins_Soda:
+                return "COS";
+			case DefaultCockGlass.CampCoupe:
+                return "CC";
+			case DefaultCockGlass.OldFashioned:
+                return "OF";
+			default:
+                Debug.Log("Define.GetDefaultCockGlass() : 디폴트 칵테일의 잔 정보가 잘못되었습니다.");
+				return null;
+		}
+	}
+    static string GetDefaultCockColor(DefaultCockColor color)
+	{
+		switch (color)
+		{
+			case DefaultCockColor.Black:
+                return "black";
+            case DefaultCockColor.Red:
+                return "red";
+            case DefaultCockColor.Orange:
+                return "orange";
+            case DefaultCockColor.Green:
+                return "green";
+            default:
+                Debug.Log("Define.GetDefaultCockGlass() : 디폴트 칵테일의 색상 정보가 잘못되었습니다.");
+                return null;
+        }
+	}
+
+    public static Sprite GetDefaultCocktailImage(DefaultCockGlass glassType, DefaultCockColor color)
+        => GameManager.Resource.LoadImage($"cocktail/default/{GetDefaultCockGlass(glassType)}_{GetDefaultCockColor(color)}");
+
+	#endregion
 
 }

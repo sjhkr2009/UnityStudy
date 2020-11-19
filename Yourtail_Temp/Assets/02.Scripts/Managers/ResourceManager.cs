@@ -10,35 +10,26 @@ public class ResourceManager
         T loaded = Resources.Load<T>(path);
         if (loaded == null)
             Debug.Log($"로드에 실패했습니다. 주소를 다시 확인해주세요. {path}");
+
         return loaded;
     }
 
     public ScriptableData LoadDatabase() => Load<ScriptableData>("Data/GameData");
     //public BirdStories LoadDialogData() => Load<BirdStories>("Data/StoryTexts");
 
-    public Sprite LoadImage(Define.DefaultCockColor color)
+    public Sprite LoadImage(string path)
 	{
-        Sprite sprite = null;
-		switch (color)
+        Sprite sprite =  Load<Sprite>($"Sprites/{path}");
+
+        if(sprite == null)
 		{
-			case Define.DefaultCockColor.검정:
-                sprite = Load<Sprite>("Sprites/cocktail/default/CC_black");
-                break;
-			case Define.DefaultCockColor.빨강:
-                sprite = Load<Sprite>("Sprites/cocktail/default/CC_red");
-                break;
-			case Define.DefaultCockColor.주황:
-                sprite = Load<Sprite>("Sprites/cocktail/default/CC_orange");
-                break;
-			case Define.DefaultCockColor.연두:
-                sprite = Load<Sprite>("Sprites/cocktail/default/CC_transparent");
-                break;
-			default:
-				break;
-		}
+            Debug.Log($"이미지 정보를 불러오는 데 실패했습니다.");
+            return null;
+        }
+
         return sprite;
 	}
-    public Sprite LoadImage(Define.ImageType type, int id)
+    public Sprite LoadImageFromData(Define.ImageType type, int id)
     {
         ScriptableImages data = SelectData(type);
         int index = id;

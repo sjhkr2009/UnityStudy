@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class DataManager
 {
-    public Dictionary<string, Cocktail> RecipeCollection { get; private set; } = new Dictionary<string, Cocktail>();
+    public List<string> RecipeCollection { get; private set; } = new List<string>();
 
-    public void AddRecipe(Cocktail cocktail)
+    public bool AddRecipe(Cocktail cocktail)
 	{
-		string key = cocktail.Id;
+		string id = cocktail.Id;
 
-		if (RecipeCollection.ContainsKey(key))
-			return;
+		if (cocktail.IsDefault || RecipeCollection.Contains(id))
+			return false;
 
-		RecipeCollection.Add(key, cocktail);
+		RecipeCollection.Add(id);
+		return true;
 	}
 }

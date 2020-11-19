@@ -65,7 +65,7 @@ public class MakeCocktailUI : UIBase_Popup
         GetButton((int)Buttons.RetryButton).onClick.AddListener(() => { GameManager.Input.InRetryCocktail(); });
 
         if (makingImage == null)
-            makingImage = GameManager.Resource.LoadImage(Define.ImageType.Cocktail, 0);
+            makingImage = GameManager.Resource.LoadImageFromData(Define.ImageType.Cocktail, 0);
 
         Image cocktailImage = GetImage((int)Images.CocktailImage);
         cocktailImage.sprite = makingImage;

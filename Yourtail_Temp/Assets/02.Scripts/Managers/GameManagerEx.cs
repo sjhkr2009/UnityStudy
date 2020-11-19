@@ -328,6 +328,8 @@ public class GameManagerEx
                 OnValidUpdate();
                 break;
             case GameState.Combine:
+                if(!CurrentCocktail.IsDefault)
+                    GameManager.Data.AddRecipe(CurrentCocktail);
                 break;
             case GameState.SetCocktail:
                 CurrentReset();
@@ -419,7 +421,8 @@ public class GameManagerEx
                 }
             }
 
-            if (isCorrect) return cocktail;
+            if (isCorrect)
+                return cocktail;
         }
 
         return SetDefault(currentBases, currentSubs, newCocktail);
@@ -433,7 +436,7 @@ public class GameManagerEx
 		foreach (SubMaterials sub in currentSubs)
             cocktail.AddSub(sub);
 
-        cocktail.image = GameManager.Resource.LoadImage(cocktail.Color);
+        cocktail.image = Define.GetDefaultCocktailImage(cocktail.GlassType, cocktail.Color);
 
         return cocktail;
 	}

@@ -11,7 +11,7 @@ public class BaseMaterials : CocktailMaterials
     public BaseMaterials(int id) : base(MaterialType.Base)
     {
         SetID(id);
-        image = GameManager.Resource.LoadImage(Define.ImageType.Base, id);
+        image = GameManager.Resource.LoadImageFromData(Define.ImageType.Base, id);
     }
 }
 

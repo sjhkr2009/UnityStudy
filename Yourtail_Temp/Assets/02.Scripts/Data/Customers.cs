@@ -134,7 +134,7 @@ public class Customers
         IsActive = true;
         CustomerType = (Define.CustomerType)index;
         ID = $"CT{index}";
-        Image = GameManager.Resource.LoadImage(Define.ImageType.Customer, index);
+        Image = GameManager.Resource.LoadImageFromData(Define.ImageType.Customer, index);
         Level = 1;
         SetMaxLevel(Define.BirdMaxLevel[index]);
         Exp = 0;
