@@ -146,7 +146,7 @@ public class CocktailCollectionUI : UIBase_Popup
         }
         int height = filteringList.Count / 4;
         if ((filteringList.Count % 4) != 0) height++;
-        contents.sizeDelta = new Vector2(0f, (520f * height) + 20f);
+        contents.sizeDelta = new Vector2(0f, (500f * height));
     }
     void AddFilterByProof(int grade)
     {

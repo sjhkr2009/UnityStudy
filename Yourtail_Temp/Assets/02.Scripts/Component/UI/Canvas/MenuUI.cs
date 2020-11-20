@@ -34,7 +34,7 @@ public class MenuUI : UIBase_Scene
     void Start() => Init();
     public override void Init()
     {
-        GameManager.UI.SetCanvasOrder(gameObject, false, 9999);
+        //GameManager.UI.SetCanvasOrder(gameObject, false, 9999);
 
         Bind<Button>(typeof(Buttons));
         Bind<Transform>(typeof(Icons));
