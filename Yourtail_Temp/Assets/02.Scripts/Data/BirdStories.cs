@@ -14,6 +14,8 @@ public class BirdStories
     [ShowInInspector, ReadOnly] public Dictionary<int, List<string>> swanStory { get; private set; } = new Dictionary<int, List<string>>();
     [ShowInInspector, ReadOnly] public Dictionary<int, List<string>> penguinStory { get; private set; } = new Dictionary<int, List<string>>();
 
+    [ShowInInspector, ReadOnly] public Dictionary<int, List<string>> branchDialogs { get; private set; } = new Dictionary<int, List<string>>();
+
 
     public List<string> GetDialog(Customers customer, int storyIndex = -1)
     {
@@ -38,6 +40,18 @@ public class BirdStories
         }
     }
 
+    public List<string> GetBranchDialog(int code)
+	{
+        if (!branchDialogs.ContainsKey(code))
+		{
+            Debug.Log($"{code} 코드에 해당하는 분기점 대사가 없습니다.");
+            return new List<string>();
+        }
+
+        return branchDialogs[code];
+    }
+
+
     [Button]
     public void DialogSetting()
     {
@@ -48,6 +62,14 @@ public class BirdStories
         SetPenguinStory();
 
         StorySettingDone = true;
+    }
+
+    void SetBranchDialogs()
+	{
+        if (branchDialogs.Count > 0)
+            branchDialogs.Clear();
+
+        // TODO: 분기점에 따른 대사 추가
     }
 
     void SetEagelStory()

@@ -318,6 +318,14 @@ public class Define
     public static Sprite GetDefaultCocktailImage(DefaultCockGlass glassType, DefaultCockColor color)
         => GameManager.Resource.LoadImage($"cocktail/default/{GetDefaultCockGlass(glassType)}_{GetDefaultCockColor(color)}");
 
-	#endregion
+    #endregion
 
+    #region 대사 스크립트 예약어
+
+    public static string BranchCommend => "##";
+    public static char SplitCommend => '_';
+
+    public static string BrCmd_Dialog => "DIALOG";
+
+    #endregion
 }
