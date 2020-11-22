@@ -44,13 +44,13 @@ public class DialogUI : UIBase_Popup
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(GameObjects));
 
-        if(!SetDialog(GameManager.Dialog.GetDialog(GameManager.Game.CurrentCustomer)))
+        dialogText = GetText((int)Texts.DialogText);
+
+        if (!SetDialog(GameManager.Dialog.GetDialog(GameManager.Game.CurrentCustomer)))
 		{
             GameManager.UI.ClosePopupUI<DialogUI>();
             return;
         }
-
-        dialogText = GetText((int)Texts.DialogText);
 
         Image charImage = GetImage((int)Images.CharacterImage);
         charImage.sprite = GameManager.Game.CurrentCustomer.Image;
