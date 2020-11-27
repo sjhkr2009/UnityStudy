@@ -16,7 +16,15 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public float PlayTime { get; private set; }
-    
+    public event Action<bool> EventOnDebugModeChange;
+    public bool IsDebuggingMode { get; private set; }
+    public void ChangeDebugMode(bool isOn)
+    {
+        IsDebuggingMode = isOn;
+        Debug.Log($"디버그 모드 변경: {isOn}");
+        EventOnDebugModeChange?.Invoke(isOn);
+    }
+
     //Singleton
     public static GameManager Instance { get; private set; }
 
