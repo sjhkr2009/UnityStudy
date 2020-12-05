@@ -328,7 +328,7 @@ public class GameManagerEx
                 OnValidUpdate();
                 break;
             case GameState.Combine:
-                if(!CurrentCocktail.IsDefault)
+                if(CurrentCocktail != null && !CurrentCocktail.IsDefault)
                     GameManager.Data.AddRecipe(CurrentCocktail);
                 break;
             case GameState.SetCocktail:
@@ -435,6 +435,9 @@ public class GameManagerEx
 
 		foreach (SubMaterials sub in currentSubs)
             cocktail.AddSub(sub);
+
+        foreach (BaseMaterials spirit in currentBases)
+            cocktail.AddBase(spirit);
 
         cocktail.image = Define.GetDefaultCocktailImage(cocktail.GlassType, cocktail.Color);
 

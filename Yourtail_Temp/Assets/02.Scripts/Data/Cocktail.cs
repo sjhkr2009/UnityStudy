@@ -68,7 +68,7 @@ public class Cocktail
     public string Id { get; private set; }
     sbyte[] _colorVector = new sbyte[4];
     public Define.DefaultCockColor Color => (Define.DefaultCockColor)_colorVector.GetMaxIndex();
-    public Define.DefaultCockGlass GlassType => Define.DefaultCockGlass.CampCoupe;
+    public Define.DefaultCockGlass GlassType => GetDefaultGlassType();
     public bool IsCollected => GameManager.Data.RecipeCollection.Contains(Id);
     public bool IsDefault { get; private set; }
 
@@ -93,7 +93,7 @@ public class Cocktail
         if (!Tags.Contains(tag))
             Tags.Add(tag);
     }
-    protected void AddBase(BaseMaterials material)
+    public void AddBase(BaseMaterials material)
     {
         BaseIDList.Add(material.Id);
         AddTag(material.Tags);
@@ -126,9 +126,21 @@ public class Cocktail
         }
         return (Define.ProofGrade)(Define.ProofGradeCriterion.Length - 1);
     }
-	#endregion
-	#region Constructor
-	public Cocktail(int id)
+    private Define.DefaultCockGlass GetDefaultGlassType()
+    {
+        Define.DefaultCockGlass result = Define.DefaultCockGlass.Martini;
+
+        if (Tags.Contains(Define.CocktailTag.위스키))
+            result = Define.DefaultCockGlass.OldFashioned;
+
+        if (Tags.Contains(Define.CocktailTag.탄산))
+            result = Define.DefaultCockGlass.Collins_Soda;
+
+        return result;
+    }
+    #endregion
+    #region Constructor
+    public Cocktail(int id)
     {
         SetID(id);
         image = GameManager.Resource.LoadImageFromData(Define.ImageType.Cocktail, id);
