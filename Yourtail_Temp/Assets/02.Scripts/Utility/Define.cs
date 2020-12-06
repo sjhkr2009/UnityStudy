@@ -168,6 +168,7 @@ public class Define
     /// UI의 position을 조작할 때, 다양한 해상도에 대응하기 위해서는 이 값을 화면의 가로/세로 크기로 간주하여 조작해야 합니다.
     /// </summary>
     public static Vector2 UIRefResolution => new Vector2(1920f * RatioHorizontalRevision, 1080f * RatioVerticalRevision);
+    public static Vector2 UIRefSize => new Vector2(1920f, 1080f);
     /// <summary>
     /// UI 캔버스들의 레퍼런스 종횡비를 나타냅니다.
     /// </summary>

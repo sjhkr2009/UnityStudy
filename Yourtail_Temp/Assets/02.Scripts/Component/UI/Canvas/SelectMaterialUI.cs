@@ -134,9 +134,9 @@ public class SelectMaterialUI : UIBase_Scene
         moveArea = Get<RectTransform>((int)RectTransforms.MaterialMoveArea);
         moveArea.anchoredPosition = new Vector2(0, 0);
 
-        SetImages();
-        SetButtons();
-        SetWindows();
+        InitImages();
+        InitButtons();
+        InitWindows();
 
         Inited = true;
         GameManager.UI.CloseSceneUI<SelectMaterialUI>();
@@ -152,7 +152,7 @@ public class SelectMaterialUI : UIBase_Scene
 	{
         moveArea.DOKill();
     }
-	void SetImages()
+	void InitImages()
     {
         for (int i = 0; i < (int)MaterialIcons.Count; i++)
         {
@@ -162,7 +162,7 @@ public class SelectMaterialUI : UIBase_Scene
                 Get<MaterialIcon>(i).MyMaterial = GameManager.Game.SubMaterialList[i - Define.SpiritCount];
         }
     }
-    void SetButtons()
+    void InitButtons()
     {
         GetButton((int)Buttons.ModeChangeButton).onClick.AddListener(() => { WindowMode = Mode.SelectSub; });
 
@@ -190,9 +190,9 @@ public class SelectMaterialUI : UIBase_Scene
         subRect.DOKill();
 
         if (toNext)
-            subRect.DOAnchorPosX(-Define.UIRefResolution.x * (++CurrentWindow), 0.2f);
+            subRect.DOAnchorPosX(-Define.UIRefSize.x * (++CurrentWindow), 0.2f);
         else
-            subRect.DOAnchorPosX(-Define.UIRefResolution.x * (--CurrentWindow), 0.2f);
+            subRect.DOAnchorPosX(-Define.UIRefSize.x * (--CurrentWindow), 0.2f);
     }
 
     void OnChangeSelectMode(Mode mode)
@@ -227,15 +227,8 @@ public class SelectMaterialUI : UIBase_Scene
         }
     }
 
-    void SetWindows()
+    void InitWindows()
     {
-        /*for (int i = (int)WindowObjects.Window1; i <= (int)WindowObjects.Window3; i++)
-		{
-            windows.Add(Get<GameObject>(i));
-            windows[i].SetActive(false);
-        }
-        windows.OpenWindow(0);*/
-
         for (int i = (int)RectTransforms.PageIcon1; i <= (int)RectTransforms.PageIcon3; i++)
         {
             dotIcons.Add(Get<RectTransform>(i));
