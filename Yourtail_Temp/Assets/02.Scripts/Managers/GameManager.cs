@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     SoundManager _sound = new SoundManager();
     public static SoundManager Sound => Instance._sound;
 
-    BirdStories _dialog = new BirdStories();
+    BirdStories _dialog = new BirdStories(); // DataManager로 옮기기
     public static BirdStories Dialog => Instance._dialog;
 
     public Action<GameState> OnGameStateEnter = n => { };
