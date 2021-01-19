@@ -7,7 +7,9 @@ public class BoardInput : MonoBehaviour
 	public Board board;
 	private void OnMouseDown()
 	{
-		Vector2 mousePos = GameManager.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
+		Vector2 mousePos = GameManager.Camera.ToWorldPos(Input.mousePosition);
 		Debug.Log($"Pos: {mousePos} / Index: {board.ToIndex(mousePos)}");
 	}
+
+
 }

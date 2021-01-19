@@ -8,21 +8,15 @@ public class GameManager : MonoBehaviour
 	static GameManager _instance;
 	public static GameManager Instance { get { Init(); return _instance; } }
 
-	ResourceManager _resource = new ResourceManager();
+	private ResourceManager _resource = new ResourceManager();
+	private InputManager _input = new InputManager();
+	private CameraManager _camera = new CameraManager();
 	public static ResourceManager Resource => Instance._resource;
+	public static InputManager Input => Instance._input;
+	public static CameraManager Camera => Instance._camera;
 
 
-	private Camera _camera;
-	public Camera Camera
-	{
-		get
-		{
-			if (_camera == null)
-				_camera = Camera.main;
-
-			return _camera;
-		}
-	}
+	
 
 	static void Init()
 	{
@@ -53,4 +47,9 @@ public class GameManager : MonoBehaviour
 			DestroyImmediate(gameObject);
 		}
 	}
+
+    private void Update()
+    {
+        Input.OnUpdate();
+    }
 }

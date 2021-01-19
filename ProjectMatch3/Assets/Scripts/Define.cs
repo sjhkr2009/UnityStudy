@@ -11,6 +11,14 @@ namespace Define
 		Play
 	}
 
+	public enum InputType
+    {
+		None,
+		Press,
+		Drag,
+		Release
+    }
+
 	namespace Default
 	{
 		public abstract class Name

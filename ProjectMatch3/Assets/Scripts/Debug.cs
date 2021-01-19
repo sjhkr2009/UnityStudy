@@ -14,4 +14,10 @@ public static class Debug
     {
         UnityEngine.Debug.LogError(msg);
     }
+
+    [Conditional("UNITY_EDITOR")]
+    public static void LogWarning(object msg)
+    {
+        UnityEngine.Debug.LogWarning(msg);
+    }
 }
