@@ -59,6 +59,34 @@ namespace Define
 		{
 			public const float CellSize = 0.5f;
 		}
+		public abstract class BlockMove
+		{
+			public enum Direction
+			{
+				Up,
+				Right,
+				Down,
+				Left,
+				UpRight,
+				DownRight,
+				UpLeft,
+				DownLeft,
+				Count
+			}
+			public static int[] GetDelta(int boardWidth)
+				=> new int[(int)Direction.Count] { -boardWidth, 1, boardWidth, -1, -boardWidth + 1, boardWidth + 1, -boardWidth - 1, boardWidth - 1 };
+
+			public static int[] GetHorizontalDir => new int[2] { (int)Direction.Right, (int)Direction.Left };
+			public static int[] GetVerticalDir => new int[2] { (int)Direction.Up, (int)Direction.Down };
+			public static int[] GetUpRightSquareDir => new int[3] { (int)Direction.Up, (int)Direction.Right, (int)Direction.UpRight };
+			public static int[] GetUpLeftSquareDir => new int[3] { (int)Direction.Up, (int)Direction.Left, (int)Direction.UpLeft };
+			public static int[] GetDownRightSquareDir => new int[3] { (int)Direction.Down, (int)Direction.Right, (int)Direction.DownRight };
+			public static int[] GetDownLeftSquareDir => new int[3] { (int)Direction.Down, (int)Direction.Left, (int)Direction.DownLeft };
+			public static List<int[]> GetSquareDirections => new List<int[]> { GetUpRightSquareDir, GetUpLeftSquareDir, GetDownRightSquareDir, GetDownLeftSquareDir };
+
+			public const int LinearMatchCount = 3;
+			public const float LerpMoveSpeed = 0.2f;
+		}
 		public struct CellInfo
 		{
 			public int posX;
@@ -102,6 +130,15 @@ namespace Define
 		{
 			Empty = 0,
 			NormalRandom = 1
+		}
+		public enum CrushType
+        {
+			Common,
+			ByMatchLinear3,
+			ByMatchLinearMore4,
+			ByMatchSquare,
+			ByFish,
+			ByLinearClear
 		}
 	}
 }

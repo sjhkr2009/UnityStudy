@@ -11,14 +11,16 @@ public class InputManager
     public Vector2 LastDownPoint { get; private set; }
     public Vector2 LastUpPoint { get; private set; }
 
-    int count = 0;
+    public bool cannotInput = false;
+
     public void OnUpdate()
     {
-        if(!Input.anyKey && currentInput == InputType.None) 
+        if (cannotInput)
             return;
 
-        count++;
-        //Debug.Log($"[{count}] Current Input :  {Enum.GetName(typeof(InputType), currentInput)}");
+        if (!Input.anyKey && currentInput == InputType.None)
+            return;
+
 
         if (Input.GetMouseButton(0))
         {
@@ -26,7 +28,6 @@ public class InputManager
             {
                 case InputType.None:
                 case InputType.Release:
-                    //Debug.Log($"{count} : On Press from {Enum.GetName(typeof(InputType), currentInput)}");
                     currentInput = InputType.Press;
                     LastDownPoint = Input.mousePosition;
                     break;
@@ -47,7 +48,6 @@ public class InputManager
                     break;
                 case InputType.Press:
                 case InputType.Drag:
-                    //Debug.Log($"{count} : On Release from {Enum.GetName(typeof(InputType), currentInput)}");
                     currentInput = InputType.Release;
                     LastUpPoint = Input.mousePosition;
                     break;

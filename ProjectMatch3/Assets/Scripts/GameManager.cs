@@ -16,8 +16,6 @@ public class GameManager : MonoBehaviour
 	public static CameraManager Camera => Instance._camera;
 
 
-	
-
 	static void Init()
 	{
 		if (_instance != null)
@@ -36,7 +34,7 @@ public class GameManager : MonoBehaviour
 
 	public static void Clear()
 	{
-
+		Input.Clear();
 	}
 
 	private void Awake()
@@ -50,6 +48,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        Input.OnUpdate();
-    }
+		Input.OnUpdate();
+	}
 }

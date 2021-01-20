@@ -59,8 +59,14 @@ public class CellGenerator
 
 	static void AddBlockType(Block block, CellInfo info)
 	{
+		block.gameObject.GetOrAddComponent<SpriteRenderer>();
+		block.SetType(info.blockType, info.specialTypes);
+	}
+
+	public static Sprite LoadBlockImage(BlockType blockType, int specialTypes)
+    {
 		StringBuilder name = new StringBuilder();
-		switch (info.blockType)
+		switch (blockType)
 		{
 			case BlockType.Blue:
 				name.Append(Name.ColorBlue);
@@ -85,16 +91,14 @@ public class CellGenerator
 				break;
 		}
 		name.Append('_');
-		AddSpecialBlockType(info, name);
+		AddSpecialBlockTypeName(specialTypes, name);
 
-		var sr = block.gameObject.GetOrAddComponent<SpriteRenderer>();
 		Sprite sprite = GameManager.Resource.Load(Path.ToBlockSpritePath(name.ToString()));
-		sr.sprite = sprite;
+		return sprite;
 	}
-	
-	static void AddSpecialBlockType(CellInfo info, StringBuilder name)
+
+	static void AddSpecialBlockTypeName(int typeMask, StringBuilder name)
 	{
-		int typeMask = info.specialTypes;
 		if (typeMask == 0)
 		{
 			name.Append(Name.TypeNormal);
