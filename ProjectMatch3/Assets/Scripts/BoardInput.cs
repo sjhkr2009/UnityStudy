@@ -1,7 +1,10 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Boardì˜ ì…ë ¥ì„ ê°ì§€í•˜ì—¬, ì…ë ¥ì— ë§ëŠ” ë™ì‘ì„ ì‹¤í–‰í•©ë‹ˆë‹¤.
+/// </summary>
 public class BoardInput
 {
 	Board board;
@@ -13,30 +16,37 @@ public class BoardInput
     private BoardHelper Helper => board.Helper;
     private BoardBehavior Behavior => board.Behavior;
 
+
     private int _pressedIndex = -1;
+    /// <summary>
+    /// ë§ˆìš°ìŠ¤/í„°ì¹˜ Downì´ ì…ë ¥ëœ Cellì˜ ì¸ë±ìŠ¤ë¥¼ ì €ì¥í•©ë‹ˆë‹¤. ì—†ì„ ê²½ìš° -1ì˜ ê°’ì„ ê°–ìŠµë‹ˆë‹¤.
+    /// </summary>
     public int PressedIndex
     {
         set { _pressedIndex = Mathf.Clamp(value, -1, Helper.CellCount - 1); }
         get
         {
-            return (_pressedIndex >= 0 && board.cells[_pressedIndex].IsMovable) ?
+            return (_pressedIndex >= 0 && board.Cells[_pressedIndex].IsMovable) ?
               _pressedIndex : -1;
         }
     }
     private int _clickedIndex = -1;
+    /// <summary>
+    /// í´ë¦­ëœ Cellì˜ ì¸ë±ìŠ¤ë¥¼ ì €ì¥í•©ë‹ˆë‹¤. ì—†ì„ ê²½ìš° -1ì˜ ê°’ì„ ê°–ìŠµë‹ˆë‹¤.
+    /// </summary>
     public int ClickedIndex
     {
         set
         {
             if (_clickedIndex >= 0)
             {
-                board.cells[_clickedIndex].UnClick();
+                board.Cells[_clickedIndex].UnClick();
                 if (_clickedIndex == value)
                     return;
             }
 
             if ((value >= 0 && value < Helper.CellCount)
-                && board.cells[value].TryClick() == true)
+                && board.Cells[value].TryClick() == true)
             {
                 _clickedIndex = value;
             }
@@ -47,19 +57,22 @@ public class BoardInput
         }
         get
         {
-            return (_clickedIndex >= 0 && board.cells[_clickedIndex].IsMovable) ?
+            return (_clickedIndex >= 0 && board.Cells[_clickedIndex].IsMovable) ?
               _clickedIndex : -1;
         }
     }
 
-
+    /// <summary>
+    /// InputManagerì—ì„œ ì…ë ¥ì„ ë°›ìœ¼ë©´ í˜¸ì¶œë˜ëŠ” ì½œë°± í•¨ìˆ˜ì…ë‹ˆë‹¤.
+    /// </summary>
+    /// <param name="inputType">ì…ë ¥ ìœ í˜•</param>
+    /// <param name="inputPoint">ì…ë ¥ëœ ì§€ì ì˜ ìŠ¤í¬ë¦° ì¢Œí‘œ</param>
     public void OnInputAction(Define.InputType inputType, Vector2 inputPoint)
     {
         if (inputType == Define.InputType.None)
             return;
 
         Vector2 pos = GameManager.Camera.ToWorldPos(inputPoint);
-        //Debug.Log($"{pos}({ToIndex(pos)}¹ø)¿¡¼­ ÀÔ·Â °¨ÁöµÊ: {System.Enum.GetName(typeof(Define.InputType), inputType)}");
 
         if (!Helper.Contain(pos))
         {
@@ -92,7 +105,6 @@ public class BoardInput
 
     private void OnPress(int index)
     {
-        //Debug.Log($"{index}¹ø ºí·ÏÀÌ Press µÇ¾ú½À´Ï´Ù.");
         PressedIndex = index;
     }
 
@@ -101,10 +113,9 @@ public class BoardInput
         if (PressedIndex < 0 || PressedIndex == index)
             return;
 
-        //Debug.Log($"{PressedIndex}¹ø ºí·ÏÀÌ Press µÇ¾úÀ¸¸ç, ÇöÀç´Â {index}¹ø À§¿¡ ÀÖ½À´Ï´Ù.");
         if (Helper.IsNeighbor(PressedIndex, index))
         {
-            Debug.Log($"µå·¡±×¿¡ ÀÇÇÑ Swap Ã³¸®");
+            Debug.Log($"ë“œë˜ê·¸ì— ì˜í•œ Swap ì²˜ë¦¬");
             RequestSwap(PressedIndex, index);
         }
     }
@@ -133,7 +144,6 @@ public class BoardInput
         }
         if (Helper.IsNeighbor(ClickedIndex, targetIdx))
         {
-            Debug.Log($"¼±ÅÃµÈ ºí·ÏÀÇ ¿ÜºÎ µå·¡±×¿¡ ÀÇÇÑ Swap Ã³¸®");
             RequestSwap(ClickedIndex, targetIdx);
         }
     }
@@ -143,10 +153,9 @@ public class BoardInput
         if (PressedIndex < 0)
             return;
 
-        //Debug.Log($"{index}¹ø ºí·Ï¿¡¼­ Release µÇ¾ú½À´Ï´Ù.");
         if (ClickedIndex >= 0 && Helper.IsNeighbor(ClickedIndex, index))
         {
-            Debug.Log($"ÀÎÁ¢ÇÑ µÎ ºí·Ï ¼±ÅÃ¿¡ ÀÇÇÑ Swap Ã³¸®");
+            Debug.Log($"ì¸ì ‘í•œ ë‘ ë¸”ë¡ ì„ íƒì— ì˜í•œ Swap ì²˜ë¦¬");
             RequestSwap(ClickedIndex, index);
         }
         else
@@ -161,13 +170,16 @@ public class BoardInput
         ClickedIndex = -1;
     }
 
+    /// <summary>
+    /// ìŠ¤ì™‘ ë™ì‘ì— ë§ëŠ” ì…ë ¥ì„ ë°›ì„ ê²½ìš° Behaviorì— Swapì„ ìš”ì²­í•©ë‹ˆë‹¤.
+    /// </summary>
     private void RequestSwap(int index1, int index2)
     {
         PressedIndex = -1;
         ClickedIndex = -1;
 
-        Cell cell1 = board.cells[index1];
-        Cell cell2 = board.cells[index2];
+        Cell cell1 = board.Cells[index1];
+        Cell cell2 = board.Cells[index2];
         Behavior.TrySwap(cell1, cell2);
     }
 }

@@ -1,6 +1,9 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using UnityEngine;
 
+/// <summary>
+/// 유니티 Debug 클래스가 빌드에 포함되지 않도록 하기 위한 커스텀 디버깅 클래스
+/// </summary>
 public static class Debug
 {
     [Conditional("UNITY_EDITOR")]
