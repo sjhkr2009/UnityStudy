@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace Define
 {
+	public enum MoveDir {
+		None,
+		Up,
+		Down,
+		Right,
+		Left
+	}
+	
 	public enum ObjectType
 	{
 		Unknown,
