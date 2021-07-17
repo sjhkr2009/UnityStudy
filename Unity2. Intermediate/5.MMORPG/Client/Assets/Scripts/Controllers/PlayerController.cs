@@ -4,16 +4,23 @@ using System.Collections.Generic;
 using Define;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Object = System.Object;
 
 public class PlayerController : MonoBehaviour {
-    [ShowInInspector] private Grid gridMap;
+    [BoxGroup("Components"), SerializeField] private Grid gridMap;
+    [BoxGroup("Components"), SerializeField] private Animator animator;
+    [BoxGroup("Components"), SerializeField] private SpriteRenderer spriteRenderer;
     [ShowInInspector] public float Speed { get; private set; } = 5;
     [ShowInInspector, ReadOnly] Vector3Int targetCellPos = Vector3Int.zero;
+    
     
     private bool isMoving = false;
     private MoveDir currentDir = MoveDir.None;
         
     void Start() {
+        if (gridMap == null) gridMap = FindObjectOfType<Grid>();
+        if (animator == null) animator = GetComponent<Animator>();
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
         transform.position = gridMap.CellToWorld(targetCellPos);
     }
 
@@ -26,16 +33,46 @@ public class PlayerController : MonoBehaviour {
     void UpdateDirInput()
     {
         if (Input.GetKey(KeyCode.W)) {
-            currentDir = MoveDir.Up;
+            SetDirection(MoveDir.Up);
         } else if (Input.GetKey(KeyCode.S)) {
-            currentDir = MoveDir.Down;
+            SetDirection(MoveDir.Down);
         } else if (Input.GetKey(KeyCode.D)) {
-            currentDir = MoveDir.Right;
+            SetDirection(MoveDir.Right);
         } else if (Input.GetKey(KeyCode.A)) {
-            currentDir = MoveDir.Left;
+            SetDirection(MoveDir.Left);
         } else {
-            currentDir = MoveDir.None;
+            SetDirection(MoveDir.None);
         }
+    }
+
+    void SetDirection(MoveDir direction) {
+        if (currentDir == direction) return;
+        
+        spriteRenderer.flipX = false;
+        switch (direction) {
+            case MoveDir.Up:
+                animator.Play("walk_back");
+                break;
+            case MoveDir.Down:
+                animator.Play("walk_front");
+                break;
+            case MoveDir.Right:
+                animator.Play("walk_right");
+                break;
+            case MoveDir.Left:
+                animator.Play("walk_right");
+                spriteRenderer.flipX = true;
+                break;
+            case MoveDir.None:
+                if (currentDir == MoveDir.Up) animator.Play("idle_back");
+                else if (currentDir == MoveDir.Down) animator.Play("idle_front");
+                else animator.Play("idle_right");
+                
+                if (currentDir == MoveDir.Left) spriteRenderer.flipX = true;
+                break;
+        }
+        
+        currentDir = direction;
     }
 
     void UpdateTargetPos() {
