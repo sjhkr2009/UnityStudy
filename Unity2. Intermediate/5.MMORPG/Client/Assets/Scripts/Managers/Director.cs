@@ -8,14 +8,16 @@ public class Director : MonoBehaviour
 	static Director _instance;
 	public static Director Instance { get { Init(); return _instance; } }
 
-	DataManager _data = new DataManager();
-	InputManager _input = new InputManager();
-	PoolManager _pool = new PoolManager();
-	ResourceManager _resource = new ResourceManager();
-	UiManager _ui = new UiManager();
-	SceneManagerEx _scene = new SceneManagerEx();
-	SoundManager _sound = new SoundManager();
+	#region Common
 
+	private DataManager _data = new DataManager();
+	private InputManager _input = new InputManager();
+	private PoolManager _pool = new PoolManager();
+	private ResourceManager _resource = new ResourceManager();
+	private UiManager _ui = new UiManager();
+	private SceneManagerEx _scene = new SceneManagerEx();
+	private SoundManager _sound = new SoundManager();
+	
 	public static DataManager Data => Instance._data;
 	public static InputManager Input => Instance._input;
 	public static PoolManager Pool => Instance._pool;
@@ -23,7 +25,16 @@ public class Director : MonoBehaviour
 	public static UiManager UI => Instance._ui;
 	public static SceneManagerEx Scene => Instance._scene;
 	public static SoundManager Sound => Instance._sound;
+	
+	#endregion
 
+	#region Contents
+
+	private MapManager _map = new MapManager();
+
+	public static MapManager Map => Instance._map;
+	
+	#endregion
 
 	void Start() => Init();
 	static void Init()

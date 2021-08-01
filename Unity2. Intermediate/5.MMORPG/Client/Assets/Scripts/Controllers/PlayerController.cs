@@ -4,30 +4,34 @@ using System.Collections.Generic;
 using Define;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Object = System.Object;
 
 public class PlayerController : MonoBehaviour {
-    [BoxGroup("Components"), SerializeField] private Grid gridMap;
     [BoxGroup("Components"), SerializeField] private Animator animator;
     [BoxGroup("Components"), SerializeField] private SpriteRenderer spriteRenderer;
     [ShowInInspector] public float Speed { get; private set; } = 5;
-    [ShowInInspector, ReadOnly] Vector3Int targetCellPos = Vector3Int.zero;
+    [ShowInInspector, ReadOnly] Vector3Int cellPos = Vector3Int.zero;
     
-    
+    private Grid GridMap => Director.Map.CurrentGrid;
     private bool isMoving = false;
     private MoveDir currentDir = MoveDir.None;
         
     void Start() {
-        if (gridMap == null) gridMap = FindObjectOfType<Grid>();
         if (animator == null) animator = GetComponent<Animator>();
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
-        transform.position = gridMap.CellToWorld(targetCellPos);
+        transform.position = GridMap.CellToWorld(cellPos);
     }
 
     private void Update() {
         UpdateDirInput();
         UpdateTargetPos();
         UpdatePosition();
+    }
+
+    private void LateUpdate() {
+        // TODO: 테스트용 코드. 카메라 관리 스크립트 따로 만들 것.
+        Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
     }
 
     void UpdateDirInput()
@@ -77,40 +81,45 @@ public class PlayerController : MonoBehaviour {
 
     void UpdateTargetPos() {
         if (isMoving || currentDir == MoveDir.None) return;
-        
+
+        Vector3Int deltaPos = Vector3Int.zero;
         switch (currentDir) {
             case MoveDir.Up:
-                targetCellPos += Vector3Int.up;
+                deltaPos = Vector3Int.up;
                 break;
             case MoveDir.Down:
-                targetCellPos += Vector3Int.down;
+                deltaPos = Vector3Int.down;
                 break;
             case MoveDir.Right:
-                targetCellPos += Vector3Int.right;
+                deltaPos = Vector3Int.right;
                 break;
             case MoveDir.Left:
-                targetCellPos += Vector3Int.left;
+                deltaPos = Vector3Int.left;
                 break;
             default:
                 throw new ArgumentException($"Invalid Position: {currentDir}");
         }
+
+        if (Director.Map.CanGo(cellPos + deltaPos) == false) return;
+
+        cellPos += deltaPos;
         isMoving = true;
     }
 
     void UpdatePosition() {
         if (!isMoving) return;
 
-        Vector3 destPos = gridMap.CellToWorld(targetCellPos);
+        Vector3 destPos = GridMap.CellToWorld(cellPos) + (Vector3.right * 0.5f);
         Vector3 targetVector = destPos - transform.position;
-        float moveDisatanceInFrame = Speed * Time.deltaTime;
+        float moveDistanceInFrame = Speed * Time.deltaTime;
         
         // 움직일 거리가 1프레임에 이동하는 거리보다 짧다면 도착한 것으로 간주한다.
-        if (targetVector.magnitude < moveDisatanceInFrame) {
+        if (targetVector.magnitude < moveDistanceInFrame) {
             transform.position = destPos;
             isMoving = false;
         }
         else {
-            transform.position += targetVector.normalized * moveDisatanceInFrame;
+            transform.position += targetVector.normalized * moveDistanceInFrame;
         }
     }
 }

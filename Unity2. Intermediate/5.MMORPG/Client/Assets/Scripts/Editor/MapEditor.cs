@@ -25,21 +25,29 @@ public class MapEditor
         GameObject[] maps = Resources.LoadAll<GameObject>("Prefabs/Map");
 
         foreach (var map in maps) {
-            Tilemap tilemap = CustomUtility.FindChild<Tilemap>(map, "Tilemap_Collision", true);
-            WriteMapInfo(tilemap);
+            var mapBound = CustomUtility.FindChild<Tilemap>(map, "Tilemap_Base", true).cellBounds;
+            Tilemap collisionMap = CustomUtility.FindChild<Tilemap>(map, "Tilemap_Collision", true);
+            WriteMapInfo(collisionMap, mapBound.xMin, mapBound.xMax, mapBound.yMin, mapBound.yMax, map.name);
         }
     }
 
-    static void WriteMapInfo(Tilemap tilemap) {
-        using (var writer = File.CreateText("Assets/Resources/Map/mapinfo.txt")) {
-            writer.WriteLine(tilemap.cellBounds.xMin);
-            writer.WriteLine(tilemap.cellBounds.xMax);
-            writer.WriteLine(tilemap.cellBounds.yMin);
-            writer.WriteLine(tilemap.cellBounds.yMax);
+    static void WriteMapInfo(Tilemap collision, int xMin, int xMax, int yMin, int yMax, string saveFileName = null) {
+        if (string.IsNullOrEmpty(saveFileName))
+            saveFileName = collision.transform.parent.name;
 
-            for (int y = tilemap.cellBounds.yMax; y >= tilemap.cellBounds.yMin; --y) {
-                for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; ++x) {
-                    var tile = tilemap.GetTile(new Vector3Int(x, y, 0));
+        string directory = "Assets/Resources/Map/";
+        if (Directory.Exists(directory) == false)
+            Directory.CreateDirectory(directory);
+        
+        using (var writer = File.CreateText($"{directory}{saveFileName}.txt")) {
+            writer.WriteLine(xMin);
+            writer.WriteLine(xMax);
+            writer.WriteLine(yMin);
+            writer.WriteLine(yMax);
+
+            for (int y = yMax; y >= yMin; --y) {
+                for (int x = xMin; x < xMax; ++x) {
+                    var tile = collision.GetTile(new Vector3Int(x, y, 0));
                     if(tile != null)
                         writer.Write("1");
                     else
@@ -48,6 +56,11 @@ public class MapEditor
                 writer.WriteLine();
             }
         }
+    }
+
+    static void WriteMapInfo(Tilemap map, string saveFileName = null) {
+        var bound = map.cellBounds;
+        WriteMapInfo(map, bound.xMin, bound.xMax, bound.yMin, bound.yMax);
     }
     
 #endif
