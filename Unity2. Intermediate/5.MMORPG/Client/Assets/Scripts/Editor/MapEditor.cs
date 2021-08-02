@@ -46,12 +46,9 @@ public class MapEditor
             writer.WriteLine(yMax);
 
             for (int y = yMax; y >= yMin; --y) {
-                for (int x = xMin; x < xMax; ++x) {
+                for (int x = xMin; x <= xMax; ++x) {
                     var tile = collision.GetTile(new Vector3Int(x, y, 0));
-                    if(tile != null)
-                        writer.Write("1");
-                    else
-                        writer.Write("0");
+                    writer.Write(tile != null ? "1" : "0");
                 }
                 writer.WriteLine();
             }

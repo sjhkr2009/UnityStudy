@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class MapManager {
     private GameObject map;
@@ -55,7 +57,11 @@ public class MapManager {
             if (line == null) break;
             
             for (int x = 0; x < xCount; x++) {
-                collisionData[y, x] = line[x] != '0';
+                try {
+                    collisionData[y, x] = line[x] != '0';
+                } catch (IndexOutOfRangeException e) {
+                    Debug.LogError($"({x},{y}) 좌표를 찾을 수 없습니다 / Max:{MaxX},{MaxY} / Min: {MinX},{MinY} / Count: {xCount},{yCount} / Line: {line.Length} \n에러 메시지: {e}");
+                }
             }
         }
     }
