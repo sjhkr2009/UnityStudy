@@ -64,7 +64,7 @@ namespace Define
 
 	public enum CreatureState
 	{
-		Die,
+		Die = -1,
 		Idle,
 		Moving,
 		Skill

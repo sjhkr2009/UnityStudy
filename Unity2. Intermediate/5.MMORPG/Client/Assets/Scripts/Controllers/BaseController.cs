@@ -10,11 +10,22 @@ public class BaseController : MonoBehaviour
     [BoxGroup("Components"), SerializeField] protected Animator animator;
     [BoxGroup("Components"), SerializeField] protected SpriteRenderer spriteRenderer;
     [ShowInInspector] public virtual float Speed { get; protected set; } = 5;
-    [ShowInInspector, ReadOnly] protected Vector3Int cellPos = Vector3Int.zero;
+    [ReadOnly] public Vector3Int cellPos { get; protected set; } = Vector3Int.zero;
     
     protected virtual Grid GridMap => Director.Map.CurrentGrid;
-    protected bool isMoving = false;
-    protected MoveDir currentDir = MoveDir.None;
+    public MoveDir CurrentDir { get; private set; } = MoveDir.None;
+    public MoveDir PrevDir { get; private set; } = MoveDir.None;
+    
+    private CreatureState _state = CreatureState.Idle;
+    public CreatureState State {
+        get => _state;
+        set {
+            if (_state == value) return;
+
+            _state = value;
+            UpdateAnimation();
+        }
+    }
         
     void Start() {
         Init();
@@ -25,46 +36,53 @@ public class BaseController : MonoBehaviour
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    public void SetPositionInstant(Vector3Int destPos) {
+        cellPos = destPos;
+        transform.position = GridMap.CellToWorld(cellPos) + (Vector3.right * 0.5f);
+    }
+
     protected virtual void UpdateController() {
         UpdateTargetPos();
         UpdatePosition();
     }
 
     protected virtual void SetDirection(MoveDir direction) {
-        if (currentDir == direction) return;
-        
-        spriteRenderer.flipX = false;
-        switch (direction) {
-            case MoveDir.Up:
-                animator.Play("walk_back");
-                break;
-            case MoveDir.Down:
-                animator.Play("walk_front");
-                break;
-            case MoveDir.Right:
-                animator.Play("walk_right");
-                break;
-            case MoveDir.Left:
-                animator.Play("walk_right");
-                spriteRenderer.flipX = true;
-                break;
-            case MoveDir.None:
-                if (currentDir == MoveDir.Up) animator.Play("idle_back");
-                else if (currentDir == MoveDir.Down) animator.Play("idle_front");
-                else animator.Play("idle_right");
-                
-                if (currentDir == MoveDir.Left) spriteRenderer.flipX = true;
-                break;
-        }
-        
-        currentDir = direction;
+        if (CurrentDir == direction) return;
+
+        CurrentDir = direction;
+        UpdateAnimation();
+
+        if (direction != MoveDir.None)
+            PrevDir = direction;
     }
 
+    protected void UpdateAnimation() {
+        switch (State) {
+            case CreatureState.Idle:
+                UpdateIdleAnimation();
+                break;
+            case CreatureState.Moving:
+                UpdateMovingAnimation();
+                break;
+            case CreatureState.Skill:
+                UpdateSkillAnimation();
+                break;
+            case CreatureState.Die:
+                UpdateDieAnimation();
+                break;
+        }
+    }
+    
+    protected virtual void UpdateIdleAnimation(){}
+    protected virtual void UpdateMovingAnimation(){}
+    protected virtual void UpdateSkillAnimation(){}
+    protected virtual void UpdateDieAnimation(){}
+
     void UpdateTargetPos() {
-        if (isMoving || currentDir == MoveDir.None) return;
+        if (State != CreatureState.Idle || CurrentDir == MoveDir.None) return;
 
         Vector3Int deltaPos = Vector3Int.zero;
-        switch (currentDir) {
+        switch (CurrentDir) {
             case MoveDir.Up:
                 deltaPos = Vector3Int.up;
                 break;
@@ -78,17 +96,20 @@ public class BaseController : MonoBehaviour
                 deltaPos = Vector3Int.left;
                 break;
             default:
-                throw new ArgumentException($"Invalid Position: {currentDir}");
+                throw new ArgumentException($"Invalid Position: {CurrentDir}");
         }
-
+        
+        State = CreatureState.Moving;
+        
+        // 갈 수 없는 영역이거나 다른 오브젝트가 있다면 이동 불가
         if (Director.Map.CanGo(cellPos + deltaPos) == false) return;
+        if (ReferenceEquals(Director.Object.Find(cellPos + deltaPos), null) == false) return;
 
         cellPos += deltaPos;
-        isMoving = true;
     }
 
     void UpdatePosition() {
-        if (!isMoving) return;
+        if (State != CreatureState.Moving) return;
 
         Vector3 destPos = GridMap.CellToWorld(cellPos) + (Vector3.right * 0.5f);
         Vector3 targetVector = destPos - transform.position;
@@ -97,9 +118,8 @@ public class BaseController : MonoBehaviour
         // 움직일 거리가 1프레임에 이동하는 거리보다 짧다면 도착한 것으로 간주한다.
         if (targetVector.magnitude < moveDistanceInFrame) {
             transform.position = destPos;
-            isMoving = false;
-        }
-        else {
+            State = CreatureState.Idle;
+        } else {
             transform.position += targetVector.normalized * moveDistanceInFrame;
         }
     }

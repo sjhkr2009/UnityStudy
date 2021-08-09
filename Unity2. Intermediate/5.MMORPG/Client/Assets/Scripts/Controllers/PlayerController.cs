@@ -37,4 +37,45 @@ public class PlayerController : BaseController {
             SetDirection(MoveDir.None);
         }
     }
+
+    protected override void UpdateIdleAnimation() {
+        spriteRenderer.flipX = false;
+        switch (PrevDir) {
+            case MoveDir.Up:
+                animator.Play("idle_back");
+                break;
+            case MoveDir.Down:
+                animator.Play("idle_front");
+                break;
+            case MoveDir.Right:
+                animator.Play("idle_right");
+                break;
+            case MoveDir.Left:
+                animator.Play("idle_right");
+                spriteRenderer.flipX = true;
+                break;
+            default:
+                animator.Play("idle_front");
+                break;
+        }
+    }
+
+    protected override void UpdateMovingAnimation() {
+        spriteRenderer.flipX = false;
+        switch (CurrentDir) {
+            case MoveDir.Up:
+                animator.Play("walk_back");
+                break;
+            case MoveDir.Down:
+                animator.Play("walk_front");
+                break;
+            case MoveDir.Right:
+                animator.Play("walk_right");
+                break;
+            case MoveDir.Left:
+                animator.Play("walk_right");
+                spriteRenderer.flipX = true;
+                break;
+        }
+    }
 }
