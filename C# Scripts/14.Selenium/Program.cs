@@ -6,6 +6,7 @@ using OpenQA.Selenium;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Text;
+using Newtonsoft.Json;
 
 // 실행 파일 위치에 현재 설치된 크롬 버전에 맞는 chromedriver.exe 필요
 
@@ -13,66 +14,57 @@ static class Program {
 	private static StringBuilder log = new StringBuilder();
 	private static StringBuilder output = new StringBuilder();
 	private const string SavePath = @"C:\Users\서지호\Desktop\NaverFinanceOutput";
-
-	private const string NullValue = "N/A";
-
-	private static readonly int[] ConstTarget = new int[] { };
-
+	
 	private static readonly int[] AlreadyAnalysis = new int[] { };
 
-	private static readonly Dictionary<int, List<string>> outputList = new Dictionary<int, List<string>>();
+	private static readonly List<Company> Companies = new List<Company>();
+
+	private static IWebDriver _driver;
 
 	static async Task Main(string[] args) {
-		await AnalysisAll();
-		//ExtractTargetCompanyNames();
+		//await AnalysisAllFromWeb();
+		await AnalysisAllFromJson();
+
+		ExtractLogToFile();
 	}
+	
+	/// <summary>
+	/// json 파일의 모든 기업을 Companies 배열에 Deserialize하고, 평가를 초기화한 후 분석하여 점수를 재산정합니다. 
+	/// </summary>
+	static async Task AnalysisAllFromJson() {
+		var json = await File.ReadAllTextAsync($"{SavePath}_result.json");
+		List<Company> targets = JsonConvert.DeserializeObject<List<Company>>(json);
 
-	static void ExtractTargetCompanyNames() {
-		string content = File.ReadAllText($"{SavePath}.txt");
-		string info = string.Empty;
-
-		int count = 0;
-		int cur = 0;
-		while (true) {
-			var start = content.IndexOf('[', cur);
-			if (start < 0) break;
-
-			var end = content.IndexOf(']', start);
-			info += $"{content.Substring(start + 1, end - start - 1)}, ";
-
-			cur = end;
-			count++;
-
-			if (count % 5 == 0) info += '\n';
+		foreach (var company in targets) {
+			log.AppendLine($"{company.CompanyName}({company.Code:000000})에 대한 분석을 시작합니다.");
+			company.WarningPoint = 0;
+			company.RecommendPoint = 0;
+			Analysis(company);
+			log.AppendLine();
 		}
-		
-		info += '\n';
-		info += $"선정된 기업: {count}개";
-
-		File.WriteAllText($"{SavePath}_info.txt", info);
 	}
-
-	static async Task AnalysisAll() {
-		outputList.Clear();
+	
+	/// <summary>
+	/// 배열 내 모든 종목을 네이버 금융에서 찾아 분석하고 Companies 리스트에 저장합니다.
+	/// </summary>
+	static async Task AnalysisAllFromWeb() {
+		Companies.Clear();
 		
 		using (IWebDriver driver = new ChromeDriver()) {
-			// 대기 설정. (find로 객체를 찾을 때까지 검색이 되지 않으면 대기하는 시간 초단위)
+			// 대기 설정. (find로 객체를 찾을 때까지 검색이 되지 않으면 대기하는 시간, 초단위)
 			driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
 
 			var targets = TargetData.AnalyticsTargets;
 			
 			int logCount = 0;
 			foreach (var testTarget in targets) {
-				if (!ConstTarget.Contains(testTarget) && AlreadyAnalysis.Contains(testTarget)) continue;
+				if (AlreadyAnalysis.Contains(testTarget)) continue;
 				
 				log.AppendLine($"{testTarget}에 대한 분석을 시작합니다.");
-				bool ok = false;
 				try {
 					driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-					ok = await Analysis(driver, testTarget);
-					
-					if (ok) log.AppendLine($"{testTarget}에 대한 분석을 저장합니다.");
-					else log.AppendLine($"{testTarget}은 적합하지 않은 대상입니다.");
+					var company = Company.Get(driver, testTarget);
+					Analysis(company);
 				} catch (Exception e) {
 					log.AppendLine($"{testTarget}을 분석하던 중 오류가 발생했습니다.");
 					log.AppendLine($"[{e.GetType().Name}] {e.Message} / {e.StackTrace}");
@@ -84,163 +76,220 @@ static class Program {
 				if(logCount > 10) {
 					log.AppendLine("로그 저장됨");
 					_ = File.WriteAllTextAsync($"{SavePath}_log.txt", log.ToString());
-					_ = File.WriteAllTextAsync($"{SavePath}.txt", output.ToString());
 					log.AppendLine();
 					logCount = 0;
 				}
 			}
 		}
-
-		StringBuilder summary = new StringBuilder().AppendLine();
-		foreach (var pair in outputList) {
-			summary.AppendLine($"경고 {pair.Key}개 기업 ({pair.Value.Count}개)");
-			foreach (var name in pair.Value) {
-				summary.Append($"{name},");
-			}
-			summary.Remove(summary.Length - 1, 1);
-			summary.AppendLine();
-		}
-
-		output.AppendLine(summary.ToString());
 		
+		// 창을 닫고 로그의 중간저장(WriteAllTextAsync)이 끝날 때까지 잠시 대기합니다.
 		await Task.Delay(500);
-		await File.WriteAllTextAsync($"{SavePath}.txt", output.ToString());
-		await File.WriteAllTextAsync($"{SavePath}_log.txt", log.ToString());
 	}
+	
+	/// <summary>
+	/// Companies의 종목들을 json 파일로 저장하고, 높은 점수 순으로 정렬한 output 및 로그를 저장합니다.
+	/// </summary>
+	static void ExtractLogToFile() {
+		var resultJson = JsonConvert.SerializeObject(Companies, Formatting.Indented);
 
-	static string GetValueByWeb(IWebDriver driver, By cssSelector) {
-		try {
-			var text = driver.FindElement(cssSelector).Text;
-			return (text == NullValue) ? string.Empty : text;
-		} catch (Exception e) {
-			Console.WriteLine($"값을 읽는 중 에러가 발생했습니다: [{e.GetType().Name}] {e.Message}");
+		Companies.Sort((c1, c2) => {
+			int score1 = c1.RecommendPoint - c1.WarningPoint;
+			int score2 = c2.RecommendPoint - c2.WarningPoint;
+			return score2 - score1;
+		});
+
+		for (int i = 0; i < Companies.Count; i++) {
+			var company = Companies[i];
+			output.AppendLine($"[{i + 1}위] {company.CompanyName} ({company.Code:000000}) : " +
+			                  $"{(company.RecommendPoint - company.WarningPoint)}점 " +
+			                  $"({company.RecommendPoint} - {company.WarningPoint})");
 		}
-		return string.Empty;
+		
+		File.WriteAllText($"{SavePath}.txt", output.ToString());
+		File.WriteAllText($"{SavePath}_log.txt", log.ToString());
+		File.WriteAllText($"{SavePath}_result.json", resultJson);
+		
+		Console.WriteLine("저장이 완료되었습니다.");
 	}
-
-	static async Task<bool> Analysis(IWebDriver driver, int code) {
-		StringBuilder temp = new StringBuilder();
-		StringBuilder penalty = new StringBuilder();
-		int penaltyCount = 0;
-
-		// 해당 Url로 이동한다.
-		driver.Url = UrlHelper.GetUrl(code);
-		Console.WriteLine($"URL: {driver.Url}");
+	
+	
+	/// <summary>
+	/// 입력한 company를 분석하여 점수를 산정하고 Companies 리스트에 추가합니다.
+	/// TODO: 점수 산정 방식이 복잡해질 경우 항목별로 함수를 나누거나, 분석을 하는 클래스를 별도로 만들 것
+	/// </summary>
+	static void Analysis(Company company) {
+		ConvertToNullable(company);
 		
-		// Url 내에서 요소를 찾는건 오래 걸리지 않으므로, 0.2초 내에 못 찾으면 정보 없음으로 간주한다.
-		driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(0.2f);
-
-		string companyName = GetValueByWeb(driver, SelectorHelper.GetSelector(SelectorHelper.Basic.CompanyName));
-		temp.AppendLine($"[{companyName}]");
-
-		//시가총액 500억 미만이면 리턴
-		string marketCapString = GetValueByWeb(driver, SelectorHelper.GetSelector(SelectorHelper.Basic.MarketCap));
-		if (string.IsNullOrEmpty(marketCapString)) AddPenalty($"시가총액 정보 없음");
-		else if (!marketCapString.Contains('조') &&
-		    (int.TryParse(marketCapString.Replace(",", string.Empty), out int v) && v < 500))
-			AddPenalty($"시가총액 낮음 ({marketCapString}억)");
+		//시가총액 500억 미만
+		if (company.MarketCap == null) {
+			AddPenalty("시가총액 정보 없음");
+			company.WarningPoint += 1000;
+		} else if (company.MarketCap < 1000) {
+			AddPenalty($"시가총액 낮음 ({company.MarketCap}억)");
+			company.WarningPoint += company.MarketCap < 1000 ? 50 : 20;
+		} else if (company.MarketCap > 10000) {
+			AddRecommend($"시가총액 높음: {company.MarketCap / 10000}조 {company.MarketCap % 10000}억");
+			company.RecommendPoint += 50;
+		}
 		
-		// PER 40 이상 or PBR 3 이상이면 리턴 (단, 예상 PER은 없어도 통과)
-		string per = GetValueByWeb(driver, SelectorHelper.GetSelector(SelectorHelper.Basic.CurrentPER));
-		string expectedPer = GetValueByWeb(driver, SelectorHelper.GetSelector(SelectorHelper.Basic.ExpectedPER));
-		string pbr = GetValueByWeb(driver, SelectorHelper.GetSelector(SelectorHelper.Basic.PBR));
-
-		if (string.IsNullOrEmpty(per) || !float.TryParse(per, out var perValue)) AddPenalty($"PER 없음 (당기순손실 예상)");
-		else if (perValue > 30f) AddPenalty($"PER 높음 ({perValue:0.0}배)");
-
-		if (string.IsNullOrEmpty(expectedPer) || !float.TryParse(expectedPer, out var ePerValue)) AddPenalty($"PER 예측치 없음");
-		else if (ePerValue > 30f) AddPenalty($"예측 PER 높음 ({ePerValue:0.0}배)");
+		// PER / 미래 PER 예상치 30 이상
+		if (company.Per is > 30f) {
+			AddPenalty(company.Per > 0f ? $"PER 높음 ({company.Per:0.0}배)" : "PER 정보 없음");
+			company.WarningPoint += 20;
+		} else if (company.Per < 10f) {
+			AddRecommend($"PER 낮음 ({company.Per:0.0}배)");
+			company.RecommendPoint += 20;
+		}
+		if (company.ExpectedPer is > 30f) {
+			AddPenalty(company.ExpectedPer > 0f ? $"예측 PER 높음 ({company.ExpectedPer:0.0}배)" : "예상 PER 정보 없음");
+			company.WarningPoint += 30;
+		} else if (company.ExpectedPer < 10f) {
+			AddRecommend($"예측 PER 낮음 ({company.ExpectedPer:0.0}배)");
+			company.RecommendPoint += 30;
+		}
 		
-		if (!float.TryParse(pbr, out var pbrValue)) AddPenalty($"PBR 없음 (당기순손실 예상)");
-		else if (pbrValue > 3f) AddPenalty($"PBR 높음 ({pbrValue:0.0}배)");
-
-		temp.AppendLine($"시가총액: {marketCapString}억 원");
-		temp.AppendLine($"PER: {per} / 미래 PER: {expectedPer}");
-		temp.AppendLine($"PBR: {pbr}");
+		// PBR 3 이상
+		if (company.Pbr is > 3f) {
+			AddPenalty(company.Pbr > 0f ? $"PBR 높음 ({company.Pbr:0.0}배)" : "PBR 정보 없음");
+			company.WarningPoint += 10;
+		}
 		
+		// 시가배당률 2% 이상
+		if (company.DividendRate > 2f) {
+			AddRecommend($"시가배당률 높음 ({company.DividendRate:0.0}%)");
+			company.RecommendPoint += 20;
+		}
 
-		var headers = Enum.GetValues<SelectorHelper.Header>();
-		var values = Enum.GetValues<SelectorHelper.Value>();
+		var prev = company.YearPerformances[0]; 
+		for (int i = 0; i < company.YearPerformances.Length; i++) {
+			var cur = company.YearPerformances[i];
 
-		int emptyInfoCount = 0;
-		foreach (var header in headers) {
-			foreach (var value in values) {
-				if (penaltyCount >= 3) return false;
-				
-				if (value == SelectorHelper.Value.Name) {
-					temp.AppendLine(GetValueByWeb(driver, SelectorHelper.GetSelector(header, value)));
-					temp.AppendLine("연도별 예측");
-					continue;
-				}
-				
-				var text = GetValueByWeb(driver, SelectorHelper.GetSelector(header, value));
-				if (string.IsNullOrEmpty(text) || float.TryParse(text, out var _) == false) {
-					temp.Append("???");
-					emptyInfoCount++;
-					if (emptyInfoCount > 10) {
-						AddPenalty($"정보 공란 10개 이상");
-						return false;
-					}
+			bool isExpected = i == company.YearPerformances.Length - 1;
+			string when = isExpected ? "[올해 예상]" : $"[{company.YearPerformances.Length - 1 - i}년 전]";
+			
+			if (cur.NetProfit is < 0) {
+				AddPenalty(when + $"당기순손실 ({cur.NetProfit}억)");
+				company.WarningPoint += 15;
+			}
+
+			if (cur.DebtRatio is > 100f) {
+				AddPenalty(when + $"부채율 높음 ({cur.DebtRatio:0.0}%)");
+				company.WarningPoint += 5;
+			}
+			
+			if (cur.QuickRatio is < 100f) {
+				AddPenalty(when + $"당좌비율 낮음 ({cur.QuickRatio:0.0}%)");
+				company.WarningPoint += 10;
+			} else if (cur.QuickRatio > 200f) {
+				AddRecommend(when + $"당좌비율 높음 ({cur.QuickRatio:0.0}%)");
+				company.RecommendPoint += 10;
+			}
+			
+			if (cur.ReserveRation is < 500f) {
+				AddPenalty(when + $"유보율 낮음 ({cur.ReserveRation:0.0}%)");
+				company.WarningPoint += 5;
+			} else if (cur.ReserveRation is > 2000f) {
+				AddRecommend(when + $"유보율 높음 ({cur.ReserveRation:0.0}%)");
+				company.RecommendPoint += 5;
+			}
+			
+			if (i == 0) continue;
+			
+			if (cur.NetProfit is > 0 && prev.NetProfit != null && cur.NetProfit > prev.NetProfit) {
+				int curProfit = (int)cur.NetProfit;
+				int prevProfit = Math.Max(0, (int)prev.NetProfit);
+				if (prevProfit != 0) {
+					float increaseRate = ((float)curProfit / prevProfit - 1f) * 100f; 
+					company.RecommendPoint += Math.Min((int)increaseRate, 30);
+					AddRecommend(when + $"당기순이익 {increaseRate:0.0}% 증가 ({prev.NetProfit} -> {cur.NetProfit})");
 				} else {
-					temp.Append(text);
+					company.RecommendPoint += 5;
+					AddRecommend(when + $"흑자 전환");
 				}
+			}
 
-				if (value == SelectorHelper.Value.CurrentYearExpect) {
-					temp.AppendLine();
-					temp.AppendLine("분기별 예측");
-				} else if (value != SelectorHelper.Value.CurrentQuarterExpect) {
-					temp.Append(" -> ");
-				}
-				
-				// 당기순손실이면 감점
-				if (header == SelectorHelper.Header.NetProfit) {
-					if (float.TryParse(text.Replace(",", ""), out var currentValue) &&
-					    currentValue < 0) {
-						AddPenalty($"당기순손실 ({currentValue:0.0}억)");
-					}
-				} // 부채비율이 100% 이상이면 감점
-				else if (header == SelectorHelper.Header.DebtRatio) {
-					if (float.TryParse(text.Replace(",", ""), out var currentValue) &&
-					    currentValue > 100) {
-						AddPenalty($"부채비율 높음 ({currentValue:0.00}%)");
-					}
-				} // 당좌비율이 100% 이하면 감점
-				else if (header == SelectorHelper.Header.QuickRatio) {
-					if (float.TryParse(text.Replace(",", ""), out var currentValue) &&
-					    currentValue < 100) {
-						AddPenalty($"당좌비율 낮음 ({currentValue:0.00}%)");
-					}
-				} // 유보율이 500% 이하면 감점
-				else if (header == SelectorHelper.Header.ReserveRation) {
-					if (float.TryParse(text.Replace(",", ""), out var currentValue) &&
-					    currentValue < 500) {
-						AddPenalty($"유보율 낮음 ({currentValue:0.00}%)");
-					}
+			prev = cur;
+		}
+
+		prev = company.QuarterPerformances[0];
+		for (int i = 0; i < company.QuarterPerformances.Length; i++) {
+			var cur = company.QuarterPerformances[i];
+			
+			bool isExpected = i == company.QuarterPerformances.Length - 1;
+			string when = isExpected ? "[다음분기 예상]" : $"[{company.QuarterPerformances.Length - 1 - i}분기 전]";
+			if (cur.NetProfit is < 0) {
+				AddPenalty(when + $"당기순손실 ({cur.NetProfit}억)");
+				company.WarningPoint += 10;
+			}
+
+			if (cur.DebtRatio is > 100f) {
+				AddPenalty(when + $"부채율 높음 ({cur.DebtRatio:0.0}%)");
+			}
+			
+			if (cur.QuickRatio is < 100f) {
+				AddPenalty(when + $"당좌비율 낮음 ({cur.QuickRatio:0.0}%)");
+			}
+			
+			if (cur.ReserveRation is < 500f) {
+				AddPenalty(when + $"유보율 낮음 ({cur.ReserveRation:0.0}%)");
+			}
+			
+			if (i == 0) continue;
+			
+			if (cur.NetProfit is > 0 && prev.NetProfit != null && cur.NetProfit > prev.NetProfit) {
+				int curProfit = (int)cur.NetProfit;
+				int prevProfit = Math.Max(0, (int)prev.NetProfit);
+				if (prevProfit != 0) {
+					float increaseRate = ((float)curProfit / prevProfit - 1f) * 100f; 
+					company.RecommendPoint += Math.Min((int)increaseRate, 10);
+					AddRecommend(when + $"당기순이익 {increaseRate:0.0}% 증가 ({prev.NetProfit} -> {cur.NetProfit})");
+				} else {
+					company.RecommendPoint += 3;
+					AddRecommend(when + $"흑자 전환");
 				}
 			}
-			temp.AppendLine();
-			temp.AppendLine();
+
+			prev = cur;
 		}
-		
-		// 감점요인이 5개 이상이면 기록하지 않음
-		if (penaltyCount < 5) {
-			output.AppendLine(temp.ToString());
-			if (!outputList.ContainsKey(penaltyCount)) outputList.Add(penaltyCount, new List<string>());
-			outputList[penaltyCount].Add(companyName);
-			if (penaltyCount > 0) {
-				output.AppendLine($"경고 {penaltyCount}개");
-				output.AppendLine(penalty.AppendLine().ToString());
-			}
-			return true;
-		}
-		
-		return false;
+
+		Companies.Add(company);
 
 		void AddPenalty(string reason) {
-			penaltyCount++;
-			string msg = $"경고: {reason}";
-			penalty.AppendLine(msg);
+			string msg = $"감점: {reason}";
 			log.AppendLine(msg);
+		}
+		void AddRecommend(string reason) {
+			string msg = $"가점: {reason}";
+			log.AppendLine(msg);
+		}
+		
+		// 기존에 정보가 없으면 기본값으로 쓰던 부분들을 Nullable 타입으로 변경하면서 한시적으로 사용
+		void ConvertToNullable(Company company) {
+			if (company.MarketCap is 0) company.MarketCap = null;
+			if (company.Per is -1f) company.Per = null;
+			if (company.ExpectedPer is -1f) company.ExpectedPer = null;
+			if (company.DividendRate is 0f) company.DividendRate = null;
+			if (company.Pbr is -1f) company.Pbr = null;
+
+			foreach (var performance in company.YearPerformances) {
+				if (performance.SalesRevenue is 0) performance.SalesRevenue = null;
+				if (performance.GrossProfit is 0) performance.GrossProfit = null;
+				if (performance.NetProfit is 0) performance.NetProfit = null;
+				if (performance.Roe is 0f) performance.Roe = null;
+				if (performance.DebtRatio is 999f) performance.DebtRatio = null;
+				if (performance.QuickRatio is 0f) performance.QuickRatio = null;
+				if (performance.ReserveRation is 0f) performance.ReserveRation = null;
+			}
+
+			foreach (var performance in company.QuarterPerformances) {
+				if (performance.SalesRevenue is 0) performance.SalesRevenue = null;
+				if (performance.GrossProfit is 0) performance.GrossProfit = null;
+				if (performance.NetProfit is 0) performance.NetProfit = null;
+				if (performance.Roe is 0f) performance.Roe = null;
+				if (performance.DebtRatio is 999f) performance.DebtRatio = null;
+				if (performance.QuickRatio is 0f) performance.QuickRatio = null;
+				if (performance.ReserveRation is 0f) performance.ReserveRation = null;
+			}
 		}
 	}
 }

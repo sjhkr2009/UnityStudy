@@ -2,6 +2,8 @@
 using OpenQA.Selenium;
 
 public static class SelectorHelper {
+    private const string NullValue = "N/A";
+    
     private const string NameSelector = "#middle > div.h_company > div.wrap_company > h2 > a";
 
     private const string MarketCapSelector = "#_market_sum";
@@ -131,5 +133,21 @@ public static class SelectorHelper {
         Quarter2Before,
         Quarter1Before,
         CurrentQuarterExpect
+    }
+
+    public static string GetValueByWeb(IWebDriver driver, Basic basicInfo)
+        => GetValueByWeb(driver, GetSelector(basicInfo));
+    
+    public static string GetValueByWeb(IWebDriver driver, Header header, Value value)
+        => GetValueByWeb(driver, GetSelector(header, value));
+
+    private static string GetValueByWeb(IWebDriver driver, By cssSelector) {
+        try {
+            var text = driver.FindElement(cssSelector).Text;
+            return (text == NullValue) ? string.Empty : text;
+        } catch (Exception e) {
+            Console.WriteLine($"값을 읽는 중 에러가 발생했습니다: [{e.GetType().Name}] {e.Message}");
+        }
+        return string.Empty;
     }
 }
