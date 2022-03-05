@@ -1,5 +1,11 @@
-﻿public static class TargetData {
-    public static readonly int[] AnalyticsTargets = new int[] {
+﻿interface AnalysisTargetData {
+	// 국내 모든 상장기업 종목 코드
+	static AnalysisTargetData AllListedCompanies { get; } = new TargetData();
+	public int[] TargetCodes { get; }
+}
+
+public class TargetData : AnalysisTargetData {
+    public int[] TargetCodes { get; } = new int[] {
 		405350, 211050, 137080, 136410, 276040, 377330, 373220, 179530, 102370, 169670, 404950, 353590, 200350, 400560,
 		396770, 397880, 400840, 298870, 403360, 254160, 404990, 199800, 396690, 397500, 402420, 402340, 377480, 361570,
 		400760, 222160, 290090, 372800, 311320, 376300, 357880, 389030, 377300, 376180, 348370, 377450, 382800, 114840,

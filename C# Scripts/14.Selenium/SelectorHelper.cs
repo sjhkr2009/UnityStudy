@@ -12,7 +12,7 @@ public static class SelectorHelper {
     private const string PbrSelector = "#_pbr";
     private const string DividendYieldSelector = "#_dvr";
     private const string SimilarCompaniesPerSelector = "#tab_con1 > div:nth-child(6) > table > tbody > tr.strong > td > em";
-    
+
     private const string AnalyticsRoot = "#content > div.section.cop_analysis > div.sub_section > table > tbody";
 
     private const string HeaderRoot = "th > strong";

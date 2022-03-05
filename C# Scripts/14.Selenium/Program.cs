@@ -54,7 +54,7 @@ static class Program {
 			// 대기 설정. (find로 객체를 찾을 때까지 검색이 되지 않으면 대기하는 시간, 초단위)
 			driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
 
-			var targets = TargetData.AnalyticsTargets;
+			var targets = AnalysisTargetData.AllListedCompanies.TargetCodes;
 			
 			int logCount = 0;
 			foreach (var testTarget in targets) {
@@ -133,19 +133,19 @@ static class Program {
 		}
 		
 		// PER / 미래 PER 예상치 30 이상
-		if (company.Per is > 30f) {
-			AddPenalty(company.Per > 0f ? $"PER 높음 ({company.Per:0.0}배)" : "PER 정보 없음");
+		if (company.Per is null or > 30f) {
+			AddPenalty(company.Per != null ? $"PER 높음 ({company.Per:0.0}배)" : "PER 정보 없음");
 			company.WarningPoint += 20;
-		} else if (company.Per < 10f) {
-			AddRecommend($"PER 낮음 ({company.Per:0.0}배)");
-			company.RecommendPoint += 20;
+		} else if (company.Per is < 15f && company.SimilarCompanyPer == null && company.Per < company.SimilarCompanyPer) {
+			AddRecommend($"PER 낮음 ({company.Per:0.0}배 / 동종업계 {company.SimilarCompanyPer:0.0}배)");
+			company.RecommendPoint += Math.Min((int)(10f * company.Per / company.SimilarCompanyPer), 20);
 		}
 		if (company.ExpectedPer is > 30f) {
 			AddPenalty(company.ExpectedPer > 0f ? $"예측 PER 높음 ({company.ExpectedPer:0.0}배)" : "예상 PER 정보 없음");
 			company.WarningPoint += 30;
-		} else if (company.ExpectedPer < 10f) {
-			AddRecommend($"예측 PER 낮음 ({company.ExpectedPer:0.0}배)");
-			company.RecommendPoint += 30;
+		} else if (company.ExpectedPer != null && company.Per != null && company.ExpectedPer < company.Per) {
+			AddRecommend($"PER 개선 예측 ({company.Per:0.0}배 -> {company.ExpectedPer:0.0}배)");
+			company.RecommendPoint += 20;
 		}
 		
 		// PBR 3 이상
@@ -155,9 +155,9 @@ static class Program {
 		}
 		
 		// 시가배당률 2% 이상
-		if (company.DividendRate > 2f) {
+		if (company.DividendRate is > 2f) {
 			AddRecommend($"시가배당률 높음 ({company.DividendRate:0.0}%)");
-			company.RecommendPoint += 20;
+			company.RecommendPoint += Math.Min((int)((company.DividendRate - 2f) * 5f) + 5, 50);
 		}
 
 		var prev = company.YearPerformances[0]; 
@@ -169,49 +169,61 @@ static class Program {
 			
 			if (cur.NetProfit is < 0) {
 				AddPenalty(when + $"당기순손실 ({cur.NetProfit}억)");
-				company.WarningPoint += 15;
+				company.WarningPoint += 20;
+			} else if (cur.GrossProfit is < 0) {
+				AddPenalty(when + $"영업손실 ({cur.GrossProfit}억)");
+				company.WarningPoint += 20;
 			}
 
-			if (cur.DebtRatio is > 100f) {
-				AddPenalty(when + $"부채율 높음 ({cur.DebtRatio:0.0}%)");
-				company.WarningPoint += 5;
+			if (i > 0 && cur.GrossProfit is > 0 && prev.GrossProfit != null) {
+				if (cur.GrossProfit > prev.GrossProfit) {
+					int curProfit = (int)cur.GrossProfit;
+					int prevProfit = Math.Max(0, (int)prev.GrossProfit);
+					if (prevProfit != 0) {
+						float increaseRate = ((float)curProfit / prevProfit - 1f) * 100f; 
+						company.RecommendPoint += Math.Clamp((int)increaseRate, 10, 30);
+						AddRecommend(when + $"영업이익 {increaseRate:0.0}% 증가 ({prev.GrossProfit} -> {cur.GrossProfit})");
+					} else {
+						company.RecommendPoint += 5;
+						AddRecommend(when + $"흑자 전환");
+					}
+				}
+
+				if (cur.GrossProfit < prev.GrossProfit) {
+					float curProfit = (float)cur.GrossProfit;
+					float prevProfit = (float)prev.GrossProfit;
+					float decreaseRate = (1f - (curProfit / prevProfit)) * 100f;
+					AddPenalty(when + $"영업이익 {decreaseRate:0.0}% 감소: {prev.GrossProfit} -> {cur.GrossProfit}");
+					company.WarningPoint += Math.Min((int)(decreaseRate * 0.5f), 20);
+				}
+
+				prev = cur;
 			}
+
+			if (i >= company.YearPerformances.Length - 2) {
+				if (cur.DebtRatio is > 100f) {
+					AddPenalty(when + $"부채율 높음 ({cur.DebtRatio:0.0}%)");
+					company.WarningPoint += 10;
+				}
 			
-			if (cur.QuickRatio is < 100f) {
-				AddPenalty(when + $"당좌비율 낮음 ({cur.QuickRatio:0.0}%)");
-				company.WarningPoint += 10;
-			} else if (cur.QuickRatio > 200f) {
-				AddRecommend(when + $"당좌비율 높음 ({cur.QuickRatio:0.0}%)");
-				company.RecommendPoint += 10;
-			}
+				if (cur.QuickRatio is < 100f) {
+					AddPenalty(when + $"당좌비율 낮음 ({cur.QuickRatio:0.0}%)");
+					company.WarningPoint += 10;
+				} else if (cur.QuickRatio > 200f) {
+					AddRecommend(when + $"당좌비율 높음 ({cur.QuickRatio:0.0}%)");
+					company.RecommendPoint += 10;
+				}
 			
-			if (cur.ReserveRation is < 500f) {
-				AddPenalty(when + $"유보율 낮음 ({cur.ReserveRation:0.0}%)");
-				company.WarningPoint += 5;
-			} else if (cur.ReserveRation is > 2000f) {
-				AddRecommend(when + $"유보율 높음 ({cur.ReserveRation:0.0}%)");
-				company.RecommendPoint += 5;
-			}
-			
-			if (i == 0) continue;
-			
-			if (cur.NetProfit is > 0 && prev.NetProfit != null && cur.NetProfit > prev.NetProfit) {
-				int curProfit = (int)cur.NetProfit;
-				int prevProfit = Math.Max(0, (int)prev.NetProfit);
-				if (prevProfit != 0) {
-					float increaseRate = ((float)curProfit / prevProfit - 1f) * 100f; 
-					company.RecommendPoint += Math.Min((int)increaseRate, 30);
-					AddRecommend(when + $"당기순이익 {increaseRate:0.0}% 증가 ({prev.NetProfit} -> {cur.NetProfit})");
-				} else {
+				if (cur.ReserveRation is < 500f) {
+					AddPenalty(when + $"유보율 낮음 ({cur.ReserveRation:0.0}%)");
+					company.WarningPoint += 5;
+				} else if (cur.ReserveRation is > 2000f) {
+					AddRecommend(when + $"유보율 높음 ({cur.ReserveRation:0.0}%)");
 					company.RecommendPoint += 5;
-					AddRecommend(when + $"흑자 전환");
 				}
 			}
-
-			prev = cur;
 		}
 
-		prev = company.QuarterPerformances[0];
 		for (int i = 0; i < company.QuarterPerformances.Length; i++) {
 			var cur = company.QuarterPerformances[i];
 			
@@ -221,35 +233,6 @@ static class Program {
 				AddPenalty(when + $"당기순손실 ({cur.NetProfit}억)");
 				company.WarningPoint += 10;
 			}
-
-			if (cur.DebtRatio is > 100f) {
-				AddPenalty(when + $"부채율 높음 ({cur.DebtRatio:0.0}%)");
-			}
-			
-			if (cur.QuickRatio is < 100f) {
-				AddPenalty(when + $"당좌비율 낮음 ({cur.QuickRatio:0.0}%)");
-			}
-			
-			if (cur.ReserveRation is < 500f) {
-				AddPenalty(when + $"유보율 낮음 ({cur.ReserveRation:0.0}%)");
-			}
-			
-			if (i == 0) continue;
-			
-			if (cur.NetProfit is > 0 && prev.NetProfit != null && cur.NetProfit > prev.NetProfit) {
-				int curProfit = (int)cur.NetProfit;
-				int prevProfit = Math.Max(0, (int)prev.NetProfit);
-				if (prevProfit != 0) {
-					float increaseRate = ((float)curProfit / prevProfit - 1f) * 100f; 
-					company.RecommendPoint += Math.Min((int)increaseRate, 10);
-					AddRecommend(when + $"당기순이익 {increaseRate:0.0}% 증가 ({prev.NetProfit} -> {cur.NetProfit})");
-				} else {
-					company.RecommendPoint += 3;
-					AddRecommend(when + $"흑자 전환");
-				}
-			}
-
-			prev = cur;
 		}
 
 		Companies.Add(company);
@@ -264,14 +247,14 @@ static class Program {
 		}
 		
 		// 기존에 정보가 없으면 기본값으로 쓰던 부분들을 Nullable 타입으로 변경하면서 한시적으로 사용
-		void ConvertToNullable(Company company) {
-			if (company.MarketCap is 0) company.MarketCap = null;
-			if (company.Per is -1f) company.Per = null;
-			if (company.ExpectedPer is -1f) company.ExpectedPer = null;
-			if (company.DividendRate is 0f) company.DividendRate = null;
-			if (company.Pbr is -1f) company.Pbr = null;
+		void ConvertToNullable(Company convertTarget) {
+			if (convertTarget.MarketCap is 0) convertTarget.MarketCap = null;
+			if (convertTarget.Per is -1f) convertTarget.Per = null;
+			if (convertTarget.ExpectedPer is -1f) convertTarget.ExpectedPer = null;
+			if (convertTarget.DividendRate is 0f) convertTarget.DividendRate = null;
+			if (convertTarget.Pbr is -1f) convertTarget.Pbr = null;
 
-			foreach (var performance in company.YearPerformances) {
+			foreach (var performance in convertTarget.YearPerformances) {
 				if (performance.SalesRevenue is 0) performance.SalesRevenue = null;
 				if (performance.GrossProfit is 0) performance.GrossProfit = null;
 				if (performance.NetProfit is 0) performance.NetProfit = null;
@@ -281,7 +264,7 @@ static class Program {
 				if (performance.ReserveRation is 0f) performance.ReserveRation = null;
 			}
 
-			foreach (var performance in company.QuarterPerformances) {
+			foreach (var performance in convertTarget.QuarterPerformances) {
 				if (performance.SalesRevenue is 0) performance.SalesRevenue = null;
 				if (performance.GrossProfit is 0) performance.GrossProfit = null;
 				if (performance.NetProfit is 0) performance.NetProfit = null;

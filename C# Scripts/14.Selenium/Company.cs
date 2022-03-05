@@ -1,6 +1,8 @@
-﻿
-using System.Dynamic;
+﻿using System.Dynamic;
+using System.Globalization;
+using NaverFinance;
 using OpenQA.Selenium;
+using static System.Globalization.NumberStyles;
 
 [Serializable]
 public class Company {
@@ -12,6 +14,7 @@ public class Company {
     public float? ExpectedPer;
     public float? Pbr;
     public float? DividendRate;
+    public float? SimilarCompanyPer;
 
     public int WarningPoint;
     public int RecommendPoint;
@@ -34,18 +37,19 @@ public class Company {
         Console.WriteLine($"URL: {driver.Url}");
         
         // Url 로딩 후에는 페이지의 요소를 찾는 시간을 0.1초로 제한한다.
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(0.1f);
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(0f);
 
         ret.Code = code;
         ret.CompanyName = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.CompanyName);
         
         string marketCapString = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.MarketCap)
             .Replace("조", "").Replace(",", "").Replace(" ", "");
-        ret.MarketCap = int.TryParse(marketCapString, out var marketCap) ? marketCap : null;
-        ret.Per = float.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.CurrentPER), out var per) ? per : null;
-        ret.ExpectedPer = float.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.ExpectedPER), out var ePer) ? ePer : ret.Per;
-        ret.Pbr = float.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.PBR), out var pbr) ? pbr : null;
-        ret.DividendRate = float.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.DividendYield), out var rate) ? rate : null;
+        ret.MarketCap = marketCapString.ToInt32();
+        ret.Per = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.CurrentPER).ToFloat();
+        ret.ExpectedPer = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.ExpectedPER).ToFloat();
+        ret.Pbr = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.PBR).ToFloat();
+        ret.DividendRate = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.DividendYield).ToFloat();
+        ret.SimilarCompanyPer = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.OthersPER).ToFloat(); 
         
         var headers = Enum.GetValues<SelectorHelper.Header>();
         var yearValues = new SelectorHelper.Value[YearInfoCount] {
@@ -88,13 +92,13 @@ public class Company {
 
         internal static Performance Get(IWebDriver driver, SelectorHelper.Value valueIndex) {
             var ret = new Performance {
-                SalesRevenue = int.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.SalesRevenue, valueIndex), out var cap) ? cap : null,
-                GrossProfit = int.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.GrossProfit, valueIndex), out var gross) ? gross : null,
-                NetProfit = int.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.NetProfit, valueIndex), out var net) ? net : null,
-                Roe = float.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.ROE, valueIndex), out var roe) ? roe : null,
-                DebtRatio = float.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.DebtRatio, valueIndex), out var debt) ? debt : null,
-                QuickRatio = float.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.QuickRatio, valueIndex), out var quick) ? quick : null,
-                ReserveRation = float.TryParse(SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.ReserveRation, valueIndex), out var rr) ? rr : null
+                SalesRevenue = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.SalesRevenue, valueIndex).ToInt32(),
+                GrossProfit = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.GrossProfit, valueIndex).ToInt32(),
+                NetProfit = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.NetProfit, valueIndex).ToInt32(),
+                Roe = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.ROE, valueIndex).ToFloat(),
+                DebtRatio = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.DebtRatio, valueIndex).ToFloat(),
+                QuickRatio = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.QuickRatio, valueIndex).ToFloat(),
+                ReserveRation = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.ReserveRation, valueIndex).ToFloat()
             };
 
             return ret;
