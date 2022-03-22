@@ -1,15 +1,18 @@
 ﻿using System.Dynamic;
 using System.Globalization;
-using NaverFinance;
 using OpenQA.Selenium;
 using static System.Globalization.NumberStyles;
 
 [Serializable]
 public class Company {
+    public DateTime LastUpdateTime;
+    
     public string CompanyName;
     public int Code;
     
     public int? MarketCap;
+    public long? TotalStockCount;
+    public int? CurrentPrice;
     public float? Per;
     public float? ExpectedPer;
     public float? Pbr;
@@ -27,17 +30,12 @@ public class Company {
 
     private Company() { }
 
-    public static Company Get(IWebDriver driver, int code) {
+    public static Company CreateFromWeb(IWebDriver driver, int code) {
         var ret = new Company();
         
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+        driver.GoTo(code);
         
-        // 해당 Url로 이동한다.
-        driver.Url = UrlHelper.GetUrl(code);
-        Console.WriteLine($"URL: {driver.Url}");
-        
-        // Url 로딩 후에는 페이지의 요소를 찾는 시간을 0.1초로 제한한다.
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(0f);
+        ret.LastUpdateTime = DateTime.Now;
 
         ret.Code = code;
         ret.CompanyName = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.CompanyName);
@@ -45,6 +43,9 @@ public class Company {
         string marketCapString = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.MarketCap)
             .Replace("조", "").Replace(",", "").Replace(" ", "");
         ret.MarketCap = marketCapString.ToInt32();
+        ret.TotalStockCount = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.StockCount).ToInt64();
+        ret.CurrentPrice = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.Price).ToInt32();
+
         ret.Per = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.CurrentPER).ToFloat();
         ret.ExpectedPer = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.ExpectedPER).ToFloat();
         ret.Pbr = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Basic.PBR).ToFloat();
@@ -88,6 +89,11 @@ public class Company {
         public float? QuickRatio;
         public float? ReserveRation;
         
+        public int? Eps;
+        public float? Per;
+        public float? DividendRate;
+        public float? DividendPayoutRatio;
+        
         private Performance(){}
 
         internal static Performance Get(IWebDriver driver, SelectorHelper.Value valueIndex) {
@@ -98,7 +104,11 @@ public class Company {
                 Roe = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.ROE, valueIndex).ToFloat(),
                 DebtRatio = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.DebtRatio, valueIndex).ToFloat(),
                 QuickRatio = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.QuickRatio, valueIndex).ToFloat(),
-                ReserveRation = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.ReserveRation, valueIndex).ToFloat()
+                ReserveRation = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.ReserveRation, valueIndex).ToFloat(),
+                Eps = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.EPS, valueIndex).ToInt32(),
+                Per = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.PER, valueIndex).ToFloat(),
+                DividendRate = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.DividendRate, valueIndex).ToFloat(),
+                DividendPayoutRatio = SelectorHelper.GetValueByWeb(driver, SelectorHelper.Header.DivPayoutRatio, valueIndex).ToFloat(),
             };
 
             return ret;

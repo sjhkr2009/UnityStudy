@@ -7,6 +7,8 @@ public static class SelectorHelper {
     private const string NameSelector = "#middle > div.h_company > div.wrap_company > h2 > a";
 
     private const string MarketCapSelector = "#_market_sum";
+    private const string TotalStockCountSelector = "#tab_con1 > div.first > table > tbody > tr:nth-child(3) > td > em";
+    private const string CurrentPriceSelector = "#content > div.section.invest_trend > div.sub_section.right > table > tbody > tr:nth-child(2) > td:nth-child(2) > em";
     private const string CurrentPerSelector = "#_per";
     private const string ExpectedPerSelector = "#_cns_per";
     private const string PbrSelector = "#_pbr";
@@ -23,6 +25,10 @@ public static class SelectorHelper {
     private const string DebtRatioRoot = "tr:nth-child(7)";
     private const string QuickRatioRoot = "tr:nth-child(8)";
     private const string ReserveRationRoot = "tr:nth-child(9)";
+    private const string EpsRoot = "tr:nth-child(10)";
+    private const string PerRoot = "tr:nth-child(11)";
+    private const string DividendRateRoot = "tr:nth-child(15)";
+    private const string DividendPayoutRatioRoot = "tr:nth-child(16)";
 
     private const int ExpectYearPostfixNumber = 5;
     private const int ExpectQuarterPostfixNumber = 11;
@@ -56,6 +62,8 @@ public static class SelectorHelper {
             Basic.CompanyName => NameSelector,
             Basic.DividendYield => DividendYieldSelector,
             Basic.MarketCap => MarketCapSelector,
+            Basic.StockCount => TotalStockCountSelector,
+            Basic.Price => CurrentPriceSelector,
             Basic.PBR => PbrSelector,
             Basic.CurrentPER => CurrentPerSelector,
             Basic.ExpectedPER => ExpectedPerSelector,
@@ -80,6 +88,10 @@ public static class SelectorHelper {
             Header.QuickRatio => QuickRatioRoot,
             Header.ReserveRation => ReserveRationRoot,
             Header.ROE => RoeRoot,
+            Header.DividendRate => DividendRateRoot,
+            Header.DivPayoutRatio => DividendPayoutRatioRoot,
+            Header.EPS => EpsRoot,
+            Header.PER => PerRoot,
             _ => string.Empty
         };
     }
@@ -106,6 +118,8 @@ public static class SelectorHelper {
     public enum Basic {
         CompanyName,    // 회사명
         MarketCap,      // 시가총액
+        StockCount,     // 상장주식수
+        Price,          // 현재 주가
         CurrentPER,     // PER
         ExpectedPER,    // 예측 PER
         PBR,            // PBR
@@ -120,6 +134,10 @@ public static class SelectorHelper {
         QuickRatio,     // 당좌비율
         ReserveRation,  // 유보율
         ROE,            // ROE (자기자본이익율)
+        EPS,            // EPS (주당순이익)
+        PER,            // PER (주가수익비율)
+        DividendRate,   // 배당률
+        DivPayoutRatio, // 배당성향
     }
 
     public enum Value {
