@@ -1,11 +1,11 @@
 using UnityEditor;
 using UnityEngine;
 
-public class EditorFields : EditorWindow {
+public class A02_EditorFields : EditorWindow {
     // 메뉴의 우선순위를 priority로 지정할 수 있다. 기본값은 1000이며, 앞뒤 요소와 11 이상 차이가 날 경우 구분선이 생긴다.
-    [MenuItem("Custom/02-Fields", false, 2000)]
+    [MenuItem("Custom/01-2 Fields", false, 1010)]
     static void Open() {
-        GetWindow<EditorFields>();
+        GetWindow<A02_EditorFields>();
     }
 
     private int intValue;
@@ -32,7 +32,8 @@ public class EditorFields : EditorWindow {
         gradientValue = EditorGUILayout.GradientField("Gradient 값", gradientValue);
         vector3Value = EditorGUILayout.Vector3Field("Vector3 값", vector3Value);
         rectValue = EditorGUILayout.RectField("Rect 값", rectValue);
-
+        
+        // GUILayout계열 함수 사용 시, Space로 공간을 띄울 수 있다. 기본값은 6이다.
         EditorGUILayout.Space(20);
         
         // HelpBox로 박스 형태의 문구를 띄울 수 있다.

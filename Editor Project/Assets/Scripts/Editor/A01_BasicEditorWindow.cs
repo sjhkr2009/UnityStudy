@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class BasicEditorWindow : EditorWindow {
+public class A01_BasicEditorWindow : EditorWindow {
     // MenuItem으로 상단바에 커스텀 항목을 추가한다.
     // 단축키 지정이 가능하다.
     /*
@@ -13,10 +13,10 @@ public class BasicEditorWindow : EditorWindow {
      * # : Shift
      * 숫자나 문자, F1~F12 지정 가능
      */
-    [MenuItem("Custom/01-Basic %&#f1")]
+    [MenuItem("Custom/01-1 Basic %&#f1")]
     static void OpenWindow() {
         // static 함수인 EditorWindow.GetWindow를 사용해서 창을 띄울 수 있다.
-        GetWindow<BasicEditorWindow>("ㅎㅎ");
+        GetWindow<A01_BasicEditorWindow>("ㅎㅎ");
     }
     
     // 에디터에서 매 프레임 호출되는 함수
