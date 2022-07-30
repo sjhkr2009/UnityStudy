@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class C01_Event : EditorWindow {
-    [MenuItem("Custom/03-1 Event", false, 2003)]
+public class B05_Event : EditorWindow {
+    [MenuItem("Custom/02-5 Event", false, 2004)]
     static void Open() {
-        GetWindow<C01_Event>();
+        GetWindow<B05_Event>();
     }
 
     private void OnGUI() {
