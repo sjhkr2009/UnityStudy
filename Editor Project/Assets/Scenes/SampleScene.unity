@@ -155,6 +155,11 @@ MonoBehaviour:
   myObject: {fileID: 0}
   myString: abc
   myInt: 50
+  myClass:
+    level: 1
+    name: 
+    hp: 0
+    type: 0
 --- !u!4 &201641764
 Transform:
   m_ObjectHideFlags: 0
@@ -380,6 +385,11 @@ MonoBehaviour:
   myObject: {fileID: 0}
   myString: b
   myInt: 44
+  myClass:
+    level: 0
+    name: 
+    hp: 0
+    type: 0
 --- !u!4 &1414009432
 Transform:
   m_ObjectHideFlags: 0
@@ -427,6 +437,11 @@ MonoBehaviour:
   myObject: {fileID: 0}
   myString: a
   myInt: 20
+  myClass:
+    level: 0
+    name: 
+    hp: 0
+    type: 0
 --- !u!4 &1480721314
 Transform:
   m_ObjectHideFlags: 0
@@ -474,6 +489,11 @@ MonoBehaviour:
   myObject: {fileID: 0}
   myString: c
   myInt: 74
+  myClass:
+    level: 0
+    name: 
+    hp: 0
+    type: 0
 --- !u!4 &1631097192
 Transform:
   m_ObjectHideFlags: 0
