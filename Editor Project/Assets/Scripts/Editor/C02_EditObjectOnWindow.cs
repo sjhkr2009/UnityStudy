@@ -48,14 +48,14 @@ public class C02_EditObjectOnWindow : EditorWindow {
     void Refresh() {
         Targets.Clear();
 
-        var findAll = FindObjectsOfType<C_ComponentExample>();
+        var findAll = FindObjectsOfType<C01_Example>();
         if (findAll == null) return;
 
         foreach (var component in findAll) {
             var obj = new SerializedObject(component);
             var properties = new List<SerializedProperty>() {
-                obj.FindProperty(nameof(C_ComponentExample.myObject)),
-                obj.FindProperty(nameof(C_ComponentExample.myString)),
+                obj.FindProperty(nameof(C01_Example.myObject)),
+                obj.FindProperty(nameof(C01_Example.myString)),
                 obj.FindProperty("myInt")
             };
 
