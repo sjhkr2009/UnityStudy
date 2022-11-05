@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
@@ -38,6 +39,13 @@ public class EventManagerColorEditor : Editor {
             GUI.color = textColor;
             EditorGUILayout.TextArea($"Text: {inputTextRich}");
         } else {
+            if (EditorGUIUtility.textFieldHasSelection) {
+                // 얘는 GUILayout.TextArea 에서만 동작하고 EditorGUI 기반의 에디터에선 동작하지 않아서, 리플렉션을 사용하기로 함
+                //TextEditor editor = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
+                TextEditor editor = typeof(EditorGUI)
+                    .GetField("activeEditor", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) as TextEditor;
+                if(!string.IsNullOrEmpty(editor?.SelectedText)) EditorGUILayout.LabelField($"Selected: {editor.SelectedText}");
+            }
             EditorGUILayout.LabelField($"Is Not Colored Text");
         }
         GUI.color = Color.white;
