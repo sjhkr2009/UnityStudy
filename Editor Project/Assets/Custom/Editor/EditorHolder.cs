@@ -20,6 +20,7 @@ public class EditorHolder : EditorWindow {
     private Dictionary<int, ScriptableObject> cachedTargets = new Dictionary<int, ScriptableObject>();
 
     private void OnGUI() {
+        // 참고: 여러 줄을 가진 툴바는 GUILayout.SelectionGrid를 사용
         SelectionValue = GUILayout.Toolbar(SelectionValue, tabName);
 
         if (!cachedTargets.TryGetValue(SelectionValue, out var target)) {

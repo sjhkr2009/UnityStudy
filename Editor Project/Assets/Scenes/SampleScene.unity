@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 419735982}
   - component: {fileID: 419735981}
   m_Layer: 0
-  m_Name: C_Example (4)
+  m_Name: C_Example Tracker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

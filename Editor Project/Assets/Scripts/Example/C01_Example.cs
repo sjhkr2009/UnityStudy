@@ -10,6 +10,12 @@ public class C01_Example : MonoBehaviour {
     [SerializeField] private int myInt;
 
     public C_ClassExample myClass;
+
+    private void OnEnable() {
+        // 참고: 모든 UnityEngine.Object는 hideFlags를 가지고 있다. DontSave로 지정 시 인스펙터에서 수정 중에 게임 플레이/정지해도 언로드되지 않는다.
+        // 그 외에 하이어라키에서 숨기거나 수정불가하게 하는 등의 조작이 가능하다. 기본값은 None.
+        gameObject.hideFlags = HideFlags.DontSave;
+    }
 }
 
 [Serializable]
