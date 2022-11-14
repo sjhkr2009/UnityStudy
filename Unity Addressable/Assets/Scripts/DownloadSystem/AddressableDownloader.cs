@@ -67,5 +67,6 @@ public class AddressableDownloader : MonoBehaviour {
             State.DownloadingBundle => State.Finished,
             _ => CurrentState
         };
+        LastValidState = CurrentState;
     }
 }

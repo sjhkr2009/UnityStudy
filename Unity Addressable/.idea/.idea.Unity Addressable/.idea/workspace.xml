@@ -48,10 +48,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="20388">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="20388" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -67,7 +67,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1668312130249</updated>
-      <workItem from="1668312146451" duration="12034000" />
+      <workItem from="1668312146451" duration="14687000" />
     </task>
     <servers />
   </component>
@@ -79,5 +79,102 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/AddressableDownloader.cs</url>
+          <line>33</line>
+          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\AddressableDownloader.cs" initialLine="33" containingFunctionPresentation="method 'StartDownload'">
+            <startOffsets>
+              <option value="992" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1041" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/AddressableDownloader.cs</url>
+          <line>27</line>
+          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\AddressableDownloader.cs" initialLine="27" containingFunctionPresentation="method 'StartDownload'">
+            <startOffsets>
+              <option value="834" />
+            </startOffsets>
+            <endOffsets>
+              <option value="835" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/DownloadPopup.cs</url>
+          <line>34</line>
+          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\DownloadPopup.cs" initialLine="34" containingFunctionPresentation="method 'StartAsync'">
+            <startOffsets>
+              <option value="926" />
+            </startOffsets>
+            <endOffsets>
+              <option value="927" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/DownloadController.cs</url>
+          <line>43</line>
+          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\DownloadController.cs" initialLine="43" containingFunctionPresentation="lambda expression inside method 'UpdateCatalog'">
+            <startOffsets>
+              <option value="1676" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1711" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/DownloadPopup.cs</url>
+          <line>94</line>
+          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\DownloadPopup.cs" initialLine="94" containingFunctionPresentation="method 'OnCatalogUpdated'">
+            <startOffsets>
+              <option value="2801" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2802" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/AddressableDownloader.cs</url>
+          <line>60</line>
+          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\AddressableDownloader.cs" initialLine="60" containingFunctionPresentation="method 'GoNext'">
+            <startOffsets>
+              <option value="1962" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1963" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/AddressableDownloader.cs</url>
+          <line>41</line>
+          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\AddressableDownloader.cs" initialLine="41" containingFunctionPresentation="method 'OnExecute'">
+            <startOffsets>
+              <option value="1228" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1235" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

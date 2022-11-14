@@ -16,19 +16,12 @@ public class DownloadPopup : MonoBehaviour {
         Downloading,
         DownloadFinished
     }
-
-    [Serializable]
-    public class Root {
-        public State State;
-        public GameObject root;
-    }
-
-    [SerializeField] private List<Root> roots;
+    
     [SerializeField] private Text title;
     [SerializeField] private Text desc;
-    [SerializeField] private Text downloadBarText;
+    [SerializeField] private Button button;
 
-    private AddressableDownloader Downloader;
+    [SerializeField] private AddressableDownloader Downloader;
 
     private DownloadProgress progressInfo;
     private DownloadUtility.SizeUnits sizeUnit;
@@ -52,13 +45,7 @@ public class DownloadPopup : MonoBehaviour {
     }
 
     void SetState(State newState, bool updateUI) {
-        var prevRoot = roots.Find(r => r.State == CurrentState);
-        var nextRoot = roots.Find(r => r.State == newState);
-
         CurrentState = newState;
-
-        prevRoot?.root.SetActive(false);
-        nextRoot?.root.SetActive(true);
 
         if (updateUI) UpdateUI();
     }
@@ -85,6 +72,8 @@ public class DownloadPopup : MonoBehaviour {
 
     public void OnClickStartDownload() {
         SetState(State.Downloading, true);
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(OnClickCancel);
     }
     
     public void OnClickCancel() {
@@ -108,11 +97,16 @@ public class DownloadPopup : MonoBehaviour {
     }
     
     private void OnSizeDownloaded(long size) {
+        button.onClick.RemoveAllListeners();
+        
         if (size == 0) {
             SetState(State.NothingToDownload, true);
+            button.onClick.AddListener(OnClickEnterGame);
         } else {
             sizeUnit = DownloadUtility.GetProperByteUnit(size);
             totalSize = DownloadUtility.ConvertByteByUnit(size, sizeUnit);
+            SetState(State.AskingDownload, true);
+            button.onClick.AddListener(OnClickStartDownload);
         }
     }
 
@@ -129,5 +123,7 @@ public class DownloadPopup : MonoBehaviour {
     private void OnFinished(bool success) {
         SetState(State.DownloadFinished, true);
         Downloader.GoNext();
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(OnClickEnterGame);
     }
 }
