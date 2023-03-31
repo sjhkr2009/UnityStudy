@@ -12,4 +12,12 @@ public class PlayerStatus {
     public PlayerStatus(GameObject playerObject) {
         GameObject = playerObject;
     }
-}
+
+    public PlayerStatus Clone() {
+        return new PlayerStatus(GameObject) {
+            inputVector = inputVector,
+            deltaMove = deltaMove,
+            isDead = isDead
+        };
+    }
+} 

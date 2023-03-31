@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour {
     [ShowInInspector, ReadOnly] private PlayerStatus playerStatus;
 
-    public Vector3 CurrentDirection => playerStatus.inputVector;
+    public PlayerStatus ClonedStatus => playerStatus.Clone();
     
     private PlayerMoveController moveController;
     private PlayerAnimator animatorController;
