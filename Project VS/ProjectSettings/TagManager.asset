@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - Area
   - Enemy
+  - ScreenArea
   layers:
   - Default
   - TransparentFX

@@ -217,9 +217,10 @@ GameObject:
   m_Component:
   - component: {fileID: 218810277}
   - component: {fileID: 218810278}
+  - component: {fileID: 218810279}
   m_Layer: 0
   m_Name: Area
-  m_TagString: Area
+  m_TagString: ScreenArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -265,6 +266,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 20, y: 20}
   m_EdgeRadius: 0
+--- !u!114 &218810279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218810276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4826593af07dd8f4b8663d83c6404ea4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &283970934
 GameObject:
   m_ObjectHideFlags: 3
@@ -551,7 +564,6 @@ GameObject:
   - component: {fileID: 556715521}
   - component: {fileID: 556715520}
   - component: {fileID: 556715519}
-  - component: {fileID: 556715525}
   m_Layer: 0
   m_Name: Enemy01
   m_TagString: Enemy
@@ -696,21 +708,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffce280dcaf2cf841af012954f86a946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 1.5
   target: {fileID: 1602985784}
---- !u!114 &556715525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 556715518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4826593af07dd8f4b8663d83c6404ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveDistance: 40
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -953,9 +952,9 @@ GameObject:
   - component: {fileID: 1106841805}
   - component: {fileID: 1106841804}
   - component: {fileID: 1106841803}
+  - component: {fileID: 1106841806}
   - component: {fileID: 1106841802}
   - component: {fileID: 1106841801}
-  - component: {fileID: 1106841800}
   m_Layer: 0
   m_Name: Tilemap (2)
   m_TagString: Ground
@@ -978,19 +977,6 @@ Transform:
   m_Father: {fileID: 1086705085}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1106841800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1106841798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4826593af07dd8f4b8663d83c6404ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveDistance: 40
 --- !u!66 &1106841801
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -5185,6 +5171,19 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &1106841806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106841798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959084e2276c7574a8abb8265118d7ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDistance: 40
 --- !u!1 &1208707107
 GameObject:
   m_ObjectHideFlags: 0
@@ -5197,9 +5196,9 @@ GameObject:
   - component: {fileID: 1208707113}
   - component: {fileID: 1208707112}
   - component: {fileID: 1208707111}
+  - component: {fileID: 1208707114}
   - component: {fileID: 1208707110}
   - component: {fileID: 1208707109}
-  - component: {fileID: 1208707114}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Ground
@@ -9425,7 +9424,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1208707107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4826593af07dd8f4b8663d83c6404ea4, type: 3}
+  m_Script: {fileID: 11500000, guid: 959084e2276c7574a8abb8265118d7ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveDistance: 40
@@ -9443,7 +9442,6 @@ GameObject:
   - component: {fileID: 1267906892}
   - component: {fileID: 1267906891}
   - component: {fileID: 1267906890}
-  - component: {fileID: 1267906896}
   m_Layer: 0
   m_Name: Enemy02
   m_TagString: Enemy
@@ -9588,21 +9586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffce280dcaf2cf841af012954f86a946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 1.5
   target: {fileID: 1602985784}
---- !u!114 &1267906896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1267906889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4826593af07dd8f4b8663d83c6404ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveDistance: 40
 --- !u!1 &1542465361
 GameObject:
   m_ObjectHideFlags: 0
@@ -9615,9 +9600,9 @@ GameObject:
   - component: {fileID: 1542465368}
   - component: {fileID: 1542465367}
   - component: {fileID: 1542465366}
+  - component: {fileID: 1542465369}
   - component: {fileID: 1542465365}
   - component: {fileID: 1542465364}
-  - component: {fileID: 1542465363}
   m_Layer: 0
   m_Name: Tilemap (1)
   m_TagString: Ground
@@ -9640,19 +9625,6 @@ Transform:
   m_Father: {fileID: 1086705085}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1542465363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1542465361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4826593af07dd8f4b8663d83c6404ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveDistance: 40
 --- !u!66 &1542465364
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -13847,6 +13819,19 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &1542465369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542465361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959084e2276c7574a8abb8265118d7ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDistance: 40
 --- !u!1 &1596322767
 GameObject:
   m_ObjectHideFlags: 0
@@ -13948,7 +13933,7 @@ GameObject:
   - component: {fileID: 1602985788}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14262,9 +14247,9 @@ GameObject:
   - component: {fileID: 2144077377}
   - component: {fileID: 2144077376}
   - component: {fileID: 2144077375}
+  - component: {fileID: 2144077378}
   - component: {fileID: 2144077374}
   - component: {fileID: 2144077373}
-  - component: {fileID: 2144077372}
   m_Layer: 0
   m_Name: Tilemap (3)
   m_TagString: Ground
@@ -14287,19 +14272,6 @@ Transform:
   m_Father: {fileID: 1086705085}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2144077372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2144077370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4826593af07dd8f4b8663d83c6404ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveDistance: 40
 --- !u!66 &2144077373
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -18494,3 +18466,16 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &2144077378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144077370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959084e2276c7574a8abb8265118d7ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDistance: 40

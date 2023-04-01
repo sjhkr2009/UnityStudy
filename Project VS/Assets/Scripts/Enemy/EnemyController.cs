@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class EnemyController : MonoBehaviour {
+public class EnemyController : MonoBehaviour, IRepositionTarget {
     public float speed;
     public Rigidbody2D target;
 
@@ -32,5 +33,16 @@ public class EnemyController : MonoBehaviour {
 
     private void LateUpdate() {
         spriteRenderer.flipX = target.position.x < rigid.position.x;
+    }
+
+    public void Reposition(Transform pivotTransform) {
+        if (!isAlive) return;
+        
+        var playerDir = GameManager.Instance.Player.ClonedStatus.inputVector;
+        
+        var randomVector = CustomUtility.GetRandomVector(-3f, 3f);
+        var moveDelta = (playerDir * Define.EnvironmentSetting.TileMapSize) + randomVector;
+        
+        transform.Translate(moveDelta);
     }
 }
