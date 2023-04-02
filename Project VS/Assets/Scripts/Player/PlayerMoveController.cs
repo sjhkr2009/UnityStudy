@@ -7,8 +7,8 @@ using UnityEngine.InputSystem;
 public class PlayerMoveController {
     private Rigidbody2D Rigidbody { get; }
 
-    public float Speed { get; private set; }
-    public float Acceleration { get; private set; }
+    public float Speed { get; set; }
+    public float Acceleration { get; set; }
     public Vector2 CurrentSpeed { get; private set; }
     public Vector2 DeltaMove { get; private set; }
 
@@ -19,7 +19,7 @@ public class PlayerMoveController {
     }
 
     public void Move(PlayerStatus playerStatus) {
-        var inputVector = playerStatus.inputVector;
+        var inputVector = playerStatus.InputVector;
         
         // 참고) 속도 제어 방식은 AddForce나 velocity 사용
         var inputX = Mathf.Approximately(inputVector.x, 0f)
@@ -32,9 +32,6 @@ public class PlayerMoveController {
         
         var moveDelta = (Speed * Time.fixedDeltaTime) * CurrentSpeed;
         Rigidbody.MovePosition(Rigidbody.position + moveDelta);
-        playerStatus.deltaMove = moveDelta;
+        playerStatus.DeltaMove = moveDelta;
     }
-
-    public void SetSpeed(float speed) => Speed = speed;
-    public void SetAcceleration(float acceleration) => Acceleration = acceleration;
 }

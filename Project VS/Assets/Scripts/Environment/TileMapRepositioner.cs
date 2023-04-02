@@ -12,7 +12,7 @@ public class TileMapRepositioner : MonoBehaviour, IRepositionTarget {
         float diffX = Mathf.Abs(playerPos.x - myPos.x);
         float diffY = Mathf.Abs(playerPos.y - myPos.y);
 
-        var playerDir = player.ClonedStatus.inputVector;
+        var playerDir = player.GetStatus.InputVector;
         var dirX = playerDir.x < 0 ? -1 : 1;
         var dirY = playerDir.y < 0 ? -1 : 1;
 

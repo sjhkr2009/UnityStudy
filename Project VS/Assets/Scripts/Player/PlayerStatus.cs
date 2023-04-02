@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerStatus {
     public GameObject GameObject { get; }
     
-    public Vector2 inputVector = Vector2.zero;
-    public Vector2 deltaMove = Vector2.zero;
-    public bool isDead = false;
+    public Vector2 InputVector { get; set; } = Vector2.zero;
+    public Vector2 DeltaMove { get; set; } = Vector2.zero;
+    public bool IsDead { get; set; } = false;
 
     public PlayerStatus(GameObject playerObject) {
         GameObject = playerObject;
@@ -15,9 +15,9 @@ public class PlayerStatus {
 
     public PlayerStatus Clone() {
         return new PlayerStatus(GameObject) {
-            inputVector = inputVector,
-            deltaMove = deltaMove,
-            isDead = isDead
+            InputVector = InputVector,
+            DeltaMove = DeltaMove,
+            IsDead = IsDead
         };
     }
-} 
+}
