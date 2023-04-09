@@ -17,4 +17,13 @@ public class GameManager : MonoBehaviour {
     private void Awake() {
         instance = this;
     }
+
+    private float timer = 0f;
+    private void Update() {
+        timer += Time.deltaTime;
+        if (timer > 0.2f) {
+            timer = 0f;
+            PoolManager.Get($"Enemy{Random.Range(1, 3):00}");
+        }
+    }
 }
