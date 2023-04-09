@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour {
     private PlayerView viewController;
 
     private void Awake() {
+        GlobalCachedData.Player = this;
+        
         var go = gameObject;
         playerStatus = new PlayerStatus(go);
         moveController = new PlayerMoveController(go);

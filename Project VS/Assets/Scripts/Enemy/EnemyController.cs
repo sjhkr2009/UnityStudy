@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
@@ -6,12 +5,10 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
     public float speed;
     public Rigidbody2D target;
 
-    protected override void Awake() {
-        base.Awake();
-        
+    private void Start() {
         moveController.Speed = speed;
         if (moveController is ITargetTracker tracker) {
-            if (!target) target = GameManager.Instance.Player.GetComponent<Rigidbody2D>();
+            if (!target) target = GlobalCachedData.Player.GetComponent<Rigidbody2D>();
             tracker.SetTarget(target);
         }
     }
@@ -19,7 +16,7 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
     public virtual void Reposition(Transform pivotTransform) {
         if (Status.IsDead) return;
         
-        var playerDir = GameManager.Instance.Player.GetStatus.InputVector;
+        var playerDir = GlobalCachedData.Player.GetStatus.InputVector;
         
         var randomVector = CustomUtility.GetRandomVector(-3f, 3f);
         var moveDelta = (playerDir * Define.EnvironmentSetting.TileMapSize) + randomVector;

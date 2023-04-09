@@ -8,10 +8,12 @@ public static class PoolManager {
     class PoolInfo {
         public GameObject Origin { get; }
         private Queue<GameObject> Pool { get; }
+        private bool HasHandler { get; }
         public string Name { get; }
 
         public PoolInfo(GameObject originPrefab, string name) {
             Origin = originPrefab;
+            HasHandler = originPrefab.GetComponent<IPoolHandler>() != null;
             Pool = new Queue<GameObject>();
             Name = name;
         }
@@ -19,7 +21,6 @@ public static class PoolManager {
         private GameObject CreateItem() {
             var obj = Object.Instantiate(Origin, PoolParent);
             obj.name = Name;
-            obj.GetOrAddPoolable();
 
             return obj;
         }
@@ -32,12 +33,15 @@ public static class PoolManager {
         
         public GameObject GetItem() {
             GameObject item = (Pool.Count > 0) ? Pool.Dequeue() : CreateItem();
-            item.GetOrAddPoolable().Initialize();
+            item.SetActive(true);
+            if (HasHandler) item.GetComponent<IPoolHandler>()?.Initialize();
             return item;
         }
 
         public void ReleaseItem(GameObject item) {
-            item.GetOrAddPoolable().Release();
+            if (HasHandler) item.GetComponent<IPoolHandler>()?.Release();
+            item.SetActive(false);
+            item.transform.SetParent(PoolParent);
             Pool.Enqueue(item);
         }
         
@@ -48,7 +52,7 @@ public static class PoolManager {
     private static Dictionary<string, PoolInfo> Pools { get; } = new Dictionary<string, PoolInfo>();
 
     private static Transform poolParent;
-    public static Transform PoolParent {
+    private static Transform PoolParent {
         get {
             if (poolParent) return poolParent;
 
@@ -57,15 +61,6 @@ public static class PoolManager {
             poolParent = poolObj.transform;
             return poolParent;
         }
-    }
-
-    private static IPoolable GetOrAddPoolable(this GameObject gameObject) {
-        var poolable = gameObject.GetComponent<IPoolable>();
-        if (poolable == null) {
-            gameObject.AddComponent<BasicPoolable>();
-        }
-
-        return poolable;
     }
 
     public static T Get<T>(string name, Transform parent = null, bool stayTransform = false) where T : Component {
@@ -79,9 +74,9 @@ public static class PoolManager {
             item = poolInfo.GetItem();
         }
 
-        if (item == null) {
+        if (!item) {
             var prefab = Resources.Load<GameObject>(name);
-            if (prefab == null) {
+            if (!prefab) {
                 Debug.LogError($"[PoolManager.Get] Cannot Find Object '{name}' in Resources!!");
                 return null;
             }
@@ -91,7 +86,7 @@ public static class PoolManager {
             item = poolInfo.GetItem();
         }
 
-        if (parent != null) {
+        if (parent) {
             item.transform.SetParent(parent);
             if (!stayTransform) item.transform.ResetTransform();
         }

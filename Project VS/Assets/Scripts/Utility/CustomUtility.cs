@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -34,5 +37,19 @@ public static class CustomUtility {
         transform.localPosition = Vector3.zero;
         transform.localScale = Vector3.one;
         transform.localRotation = Quaternion.identity;
+    }
+
+    public static void ForEach<T>(this IEnumerable<T> container, Action<T> action) {
+        foreach (var element in container) {
+            action?.Invoke(element);
+        }
+    }
+
+    public static T PickRandom<T>(this IEnumerable<T> container) {
+        var count = container.Count();
+        if (count <= 0) return default;
+        
+        var index = Random.Range(0, count);
+        return container.ElementAt(index);
     }
 }
