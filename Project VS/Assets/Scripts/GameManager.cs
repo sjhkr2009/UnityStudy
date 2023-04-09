@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
     // TODO: 싱글톤 코드 구현하기. 일단 귀찮으니 이렇게 해둠... 

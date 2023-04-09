@@ -15,7 +15,11 @@ public class EnemyMoveController : IEnemyMoveController, ITargetTracker {
 
     public void Update(EnemyStatus status) {
         if (status.IsDead) return;
-        
+        if (!Target) {
+            Debug.LogError("[EnemyMoveController.Update] ITargetTracker.Target is null!!");
+            return;
+        }
+
         Vector2 dirVec = Target.position - Rigidbody.position;
         Vector2 deltaVector = dirVec.normalized * (Speed * Time.deltaTime);
         

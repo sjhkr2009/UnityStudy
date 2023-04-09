@@ -10,7 +10,10 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
         base.Awake();
         
         moveController.Speed = speed;
-        if (moveController is ITargetTracker tracker) tracker.SetTarget(target);
+        if (moveController is ITargetTracker tracker) {
+            if (!target) target = GameManager.Instance.Player.GetComponent<Rigidbody2D>();
+            tracker.SetTarget(target);
+        }
     }
 
     public virtual void Reposition(Transform pivotTransform) {
