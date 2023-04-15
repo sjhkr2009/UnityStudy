@@ -2,8 +2,12 @@ using System;
 
 public class Timer {
     public DateTime StartTime { get; private set; }
-    public TimeSpan GetElapsedTime => CurrentTime - StartTime;
-
+    
+    private DateTime lastUpdatedTime;
+    public TimeSpan DeltaTime { get; private set; }
+    public float DeltaTimeSeconds => (float)DeltaTime.TotalSeconds;
+    
+    public TimeSpan GetElapsedTime => lastUpdatedTime - StartTime;
     public float GetElapsedSeconds => (float)GetElapsedTime.TotalSeconds;
     
     private Timer() { }
@@ -19,6 +23,12 @@ public class Timer {
         }
     }
 
+    public void Update() {
+        var currentTime = CurrentTime;
+        DeltaTime = currentTime - lastUpdatedTime;
+        lastUpdatedTime = CurrentTime;
+    }
+
     public static Timer StartNew() {
         var timer = new Timer();
         timer.Start();
@@ -27,5 +37,7 @@ public class Timer {
 
     public void Start() {
         StartTime = CurrentTime;
+        lastUpdatedTime = StartTime;
+        DeltaTime = TimeSpan.Zero;
     }
 }

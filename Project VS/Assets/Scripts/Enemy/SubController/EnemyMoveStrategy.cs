@@ -16,7 +16,7 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
     public void Update() {
         if (StatusHandler.IsDead) return;
         if (!Target) {
-            Debug.LogError("[EnemyMoveController.Update] ITargetTracker.Target is null!!");
+            Debugger.Error("[EnemyMoveController.Update] ITargetTracker.Target is null!!");
             return;
         }
 

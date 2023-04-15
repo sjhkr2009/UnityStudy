@@ -77,7 +77,7 @@ public static class PoolManager {
         if (!item) {
             var prefab = Resources.Load<GameObject>(name);
             if (!prefab) {
-                Debug.LogError($"[PoolManager.Get] Cannot Find Object '{name}' in Resources!!");
+                Debugger.Error($"[PoolManager.Get] Cannot Find Object '{name}' in Resources!!");
                 return null;
             }
 
@@ -100,7 +100,7 @@ public static class PoolManager {
             return;
         }
         
-        Debug.LogError($"[PoolManager.Abandon] Cannot Find PoolInfo of '{item.name}'!!");
+        Debugger.Error($"[PoolManager.Abandon] Cannot Find PoolInfo of '{item.name}'!!");
         Object.Destroy(item);
     }
 }

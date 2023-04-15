@@ -619,6 +619,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe7a8e8cc3e58314c9fb67ba6a697d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnSettings:
+  - prefabName: Enemy01
+    spawnCooldown: 2
+    useCustomStat: 0
+    stat:
+      attackDamage: 0
+      speed: 0
+      hp: 0
+  - prefabName: Enemy02
+    spawnCooldown: 1
+    useCustomStat: 0
+    stat:
+      attackDamage: 0
+      speed: 0
+      hp: 0
   spawnPoint:
   - {fileID: 624727500}
   - {fileID: 1162908448}
@@ -636,7 +651,7 @@ MonoBehaviour:
   - {fileID: 2134940700}
   - {fileID: 961906581}
   - {fileID: 77582013}
-  spawnDelay: 0.2
+  globalSpawnDelay: 0.2
 --- !u!1 &468806511
 GameObject:
   m_ObjectHideFlags: 0
