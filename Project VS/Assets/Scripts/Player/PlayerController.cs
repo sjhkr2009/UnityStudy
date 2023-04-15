@@ -5,9 +5,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.Scripting;
 
 public class PlayerController : MonoBehaviour {
-    [ShowInInspector, ReadOnly] private PlayerStatus playerStatus;
+    [ShowInInspector, ReadOnly] private PlayerStatusHandler _playerStatusHandler;
 
-    public PlayerStatus GetStatus => playerStatus;
+    public PlayerStatusHandler GetStatusHandler => _playerStatusHandler;
     
     private PlayerMoveController moveController;
     private PlayerView viewController;
@@ -16,25 +16,25 @@ public class PlayerController : MonoBehaviour {
         GlobalCachedData.Player = this;
         
         var go = gameObject;
-        playerStatus = new PlayerStatus(go);
+        _playerStatusHandler = new PlayerStatusHandler(go);
         moveController = new PlayerMoveController(go);
         viewController = new PlayerView(go);
     }
 
     private void FixedUpdate() {
-        playerStatus.DeltaMove = Vector2.zero;
-        moveController?.Move(playerStatus);
+        _playerStatusHandler.DeltaMove = Vector2.zero;
+        moveController?.Move(_playerStatusHandler);
     }
 
     private void LateUpdate() {
-        viewController?.Render(playerStatus);
-        viewController?.UpdateAnimator(playerStatus);
+        viewController?.Render(_playerStatusHandler);
+        viewController?.UpdateAnimator(_playerStatusHandler);
     }
 
     /** PlayerInput 컴포넌트에 의해 매 프레임 자동으로 호출됩니다. */
     [Preserve]
     void OnMove(InputValue inputValue) {
         // 세팅에 의해 normalized Vector2 값이 들어온다.
-        playerStatus.InputVector = inputValue.Get<Vector2>();
+        _playerStatusHandler.InputVector = inputValue.Get<Vector2>();
     }
 }

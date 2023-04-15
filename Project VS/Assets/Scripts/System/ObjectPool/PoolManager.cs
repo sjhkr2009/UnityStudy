@@ -34,12 +34,12 @@ public static class PoolManager {
         public GameObject GetItem() {
             GameObject item = (Pool.Count > 0) ? Pool.Dequeue() : CreateItem();
             item.SetActive(true);
-            if (HasHandler) item.GetComponent<IPoolHandler>()?.Initialize();
+            if (HasHandler) item.GetComponent<IPoolHandler>()?.OnInitialize();
             return item;
         }
 
         public void ReleaseItem(GameObject item) {
-            if (HasHandler) item.GetComponent<IPoolHandler>()?.Release();
+            if (HasHandler) item.GetComponent<IPoolHandler>()?.OnRelease();
             item.SetActive(false);
             item.transform.SetParent(PoolParent);
             Pool.Enqueue(item);

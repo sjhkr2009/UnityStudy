@@ -2,6 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEnemyView {
+public interface IEnemyMoveStrategy {
     void Update();
 }

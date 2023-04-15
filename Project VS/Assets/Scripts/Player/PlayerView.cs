@@ -14,18 +14,18 @@ public class PlayerView {
         Animator = target.GetOrAddComponent<Animator>();
     }
 
-    public void Render(PlayerStatus status) {
-        if (status.InputVector == Vector2.zero) return;
+    public void Render(PlayerStatusHandler statusHandler) {
+        if (statusHandler.InputVector == Vector2.zero) return;
 
-        SpriteRenderer.flipX = status.InputVector.x < 0;
+        SpriteRenderer.flipX = statusHandler.InputVector.x < 0;
     }
 
-    public void UpdateAnimator(PlayerStatus status) {
-        if (status.IsDead) {
+    public void UpdateAnimator(PlayerStatusHandler statusHandler) {
+        if (statusHandler.IsDead) {
             Animator.SetTrigger(Dead);
             return;
         }
         
-        Animator.SetFloat(Speed, status.DeltaMove.magnitude);
+        Animator.SetFloat(Speed, statusHandler.DeltaMove.magnitude);
     }
 }

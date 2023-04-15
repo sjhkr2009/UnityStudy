@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class EnemyView : IEnemyView {
     private SpriteRenderer SpriteRenderer { get; }
+    private EnemyStatusHandler StatusHandler { get; }
     
-    public EnemyView(GameObject target) {
-        SpriteRenderer = target.GetOrAddComponent<SpriteRenderer>();
+    public EnemyView(EnemyStatusHandler statusHandler) {
+        StatusHandler = statusHandler;
+        SpriteRenderer = StatusHandler.GameObject.GetOrAddComponent<SpriteRenderer>();
     }
 
-    public void Update(EnemyStatus status) {
-        if (status.CurrentDirection == Direction.Right) SpriteRenderer.flipX = true;
-        else if (status.CurrentDirection == Direction.Left) SpriteRenderer.flipX = false;
+    public void Update() {
+        if (StatusHandler.CurrentDirection == Direction.Right) SpriteRenderer.flipX = true;
+        else if (StatusHandler.CurrentDirection == Direction.Left) SpriteRenderer.flipX = false;
     }
 }

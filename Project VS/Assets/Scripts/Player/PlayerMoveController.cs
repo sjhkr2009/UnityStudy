@@ -18,8 +18,8 @@ public class PlayerMoveController {
         Acceleration = acceleration;
     }
 
-    public void Move(PlayerStatus playerStatus) {
-        var inputVector = playerStatus.InputVector;
+    public void Move(PlayerStatusHandler playerStatusHandler) {
+        var inputVector = playerStatusHandler.InputVector;
         
         // 참고) 속도 제어 방식은 AddForce나 velocity 사용
         var inputX = Mathf.Approximately(inputVector.x, 0f)
@@ -32,6 +32,6 @@ public class PlayerMoveController {
         
         var moveDelta = (Speed * Time.fixedDeltaTime) * CurrentSpeed;
         Rigidbody.MovePosition(Rigidbody.position + moveDelta);
-        playerStatus.DeltaMove = moveDelta;
+        playerStatusHandler.DeltaMove = moveDelta;
     }
 }
