@@ -33,10 +33,11 @@ public static class CustomUtility {
         return gameObject.AddComponent<T>();
     }
 
-    public static void ResetTransform(this Transform transform) {
+    public static Transform ResetTransform(this Transform transform) {
         transform.localPosition = Vector3.zero;
         transform.localScale = Vector3.one;
         transform.localRotation = Quaternion.identity;
+        return transform;
     }
 
     public static void ForEach<T>(this IEnumerable<T> container, Action<T> action) {

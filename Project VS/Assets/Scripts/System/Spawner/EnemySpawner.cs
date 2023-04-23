@@ -38,8 +38,6 @@ public class EnemySpawner : MonoBehaviour {
         var elapsedTimeFromLastSpawn = elapsedGameTime - lastSpawnTime;
 
         if (elapsedTimeFromLastSpawn > globalSpawnDelay) {
-            elapsedTimeFromLastSpawn = 0f;
-            //elapsedTimeFromLastSpawn -= globalSpawnDelay;
             Spawn();
 
             lastSpawnTime = elapsedGameTime;
@@ -53,7 +51,7 @@ public class EnemySpawner : MonoBehaviour {
         }
         
         var setting = PickSpawnSetting(spawnSettings.Where(IsSpawnable));
-        if (setting == null) return;
+        if (setting == null) return; // 지금 스폰가능한 세팅이 없으면 생략 
         
         var enemy = PoolManager.Get<EnemyControllerBase>(setting.prefabName);
         

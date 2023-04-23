@@ -24,10 +24,11 @@ public abstract class EnemyControllerBase : MonoBehaviour, IPoolHandler {
         view?.Update();
     }
     
-    public void OnInitialize() {
+    public virtual void OnInitialize() {
+        StatusHandler.Initialize(defaultStat);
         view = new EnemyView(StatusHandler);
         moveStrategy = new EnemyMoveStrategy(StatusHandler);
     }
 
-    public void OnRelease() { }
+    public virtual void OnRelease() { }
 }

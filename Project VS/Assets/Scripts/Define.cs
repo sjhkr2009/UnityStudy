@@ -7,6 +7,11 @@ public static class Define {
         public const string Ground = "Ground";
         public const string ScreenArea = "ScreenArea";
         public const string Enemy = "Enemy";
+        public const string Projectile = "Projectile";
+    }
+
+    public static class Layer {
+        public const string Enemy = "Enemy";
     }
 
     public static class EnvironmentSetting {
