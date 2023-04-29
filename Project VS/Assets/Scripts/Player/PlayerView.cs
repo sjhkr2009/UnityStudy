@@ -14,13 +14,13 @@ public class PlayerView {
         Animator = target.GetOrAddComponent<Animator>();
     }
 
-    public void Render(PlayerStatusHandler statusHandler) {
+    public void Render(PlayerStatus statusHandler) {
         if (statusHandler.InputVector == Vector2.zero) return;
 
         SpriteRenderer.flipX = statusHandler.InputVector.x < 0;
     }
 
-    public void UpdateAnimator(PlayerStatusHandler statusHandler) {
+    public void UpdateAnimator(PlayerStatus statusHandler) {
         if (statusHandler.IsDead) {
             Animator.SetTrigger(Dead);
             return;

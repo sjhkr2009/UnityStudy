@@ -47,7 +47,7 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
     public override void Abandon() { }
     
     protected virtual void Fire() {
-        var player = GlobalCachedData.Player;
+        var player = GlobalData.Player;
         if (!player) return;
 
         if (!scanner.NearestTarget) return;

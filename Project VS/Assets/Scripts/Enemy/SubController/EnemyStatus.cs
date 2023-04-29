@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStatusHandler {
+public class EnemyStatus {
     public GameObject GameObject { get; }
 
     public Direction CurrentDirection { get; set; } = Direction.None;
 
     public bool IsDead { get; set; }
+    public bool IsMovable { get; set; }
     public float Speed { get; set; }
 
     private float _hp;
@@ -18,17 +19,18 @@ public class EnemyStatusHandler {
 
     public float MaxHp { get; private set; }
 
-    public EnemyStatusHandler(GameObject enemyObject) {
+    public EnemyStatus(GameObject enemyObject) {
         GameObject = enemyObject;
     }
 
-    public void Initialize(EnemyStat stat) {
+    public void Initialize(EnemyStatData statData) {
         CurrentDirection = Direction.None;
         IsDead = false;
+        IsMovable = true;
         
-        MaxHp = stat.hp;
-        Hp = stat.hp;
-        Speed = stat.speed;
+        MaxHp = statData.hp;
+        Hp = statData.hp;
+        Speed = statData.speed;
     }
 
     public void SetMaxHp(int maxHp) {

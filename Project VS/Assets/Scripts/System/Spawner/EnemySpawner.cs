@@ -61,7 +61,9 @@ public class EnemySpawner : MonoBehaviour {
         }
         
         enemy.transform.position = spawnPoint.PickRandom().position;
-        if (setting.useCustomStat) enemy.StatusHandler.Initialize(setting.stat);
+        if (setting.useCustomStat) {
+            enemy.Status.Initialize(setting.stat);
+        }
         
         setting.OnSpawn();
     }

@@ -1,26 +1,32 @@
-using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
+[RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(Animator))]
 public class EnemyController : EnemyControllerBase, IRepositionTarget {
     public Rigidbody2D target;
 
     public override void OnInitialize() {
         base.OnInitialize();
+        view = new EnemyView(Status);
+        moveStrategy = new EnemyMoveStrategy(Status);
+        
+        view.OnCreate();
+        moveStrategy.OnCreate();
+        
         SetTarget();
     }
 
     void SetTarget() {
         if (moveStrategy is ITargetTracker tracker) {
-            if (!target) target = GlobalCachedData.Player.GetComponent<Rigidbody2D>();
+            if (!target) target = GlobalData.Player.GetComponent<Rigidbody2D>();
             tracker.SetTarget(target);
         }
     }
 
     public virtual void Reposition(Transform pivotTransform) {
-        if (StatusHandler.IsDead) return;
+        if (Status.IsDead) return;
         
-        var playerDir = GlobalCachedData.Player.GetStatusHandler.InputVector;
+        var playerDir = GlobalData.Player.GetStatusHandler.InputVector;
         
         var randomVector = CustomUtility.GetRandomVector(-3f, 3f);
         var moveDelta = (playerDir * Define.EnvironmentSetting.TileMapSize) + randomVector;
@@ -29,7 +35,7 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (!other.CompareTag(Define.Tag.Projectile)) return;
+        if (!other.CompareTag(Define.Tag.Projectile) || Status.IsDead) return;
 
         var damageHandler = other.GetComponent<IDamageGetter>();
         if (damageHandler == null) {
@@ -37,12 +43,20 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
             return;
         }
 
-        StatusHandler.Hp -= damageHandler.Damage;
-        if (StatusHandler.Hp <= 0) Dead();
+        Status.Hp -= damageHandler.Damage;
+        
+        if (Status.Hp <= 0) {
+            Dead();
+        } else {
+            view.OnHit();
+            moveStrategy.OnHit();
+        }
     }
 
     void Dead() {
-        StatusHandler.IsDead = true;
-        PoolManager.Abandon(gameObject);
+        Status.IsDead = true;
+        view.OnDead();
+        moveStrategy.OnDead();
+        GlobalData.Controller.GainExp(1);
     }
 }

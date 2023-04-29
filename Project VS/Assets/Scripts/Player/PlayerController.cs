@@ -5,18 +5,18 @@ using UnityEngine.InputSystem;
 using UnityEngine.Scripting;
 
 public class PlayerController : MonoBehaviour {
-    [ShowInInspector, ReadOnly] private PlayerStatusHandler _playerStatusHandler;
+    [ShowInInspector, ReadOnly] private PlayerStatus _playerStatusHandler;
 
-    public PlayerStatusHandler GetStatusHandler => _playerStatusHandler;
+    public PlayerStatus GetStatusHandler => _playerStatusHandler;
     
     private PlayerMoveController moveController;
     private PlayerView viewController;
 
     private void Awake() {
-        GlobalCachedData.Player = this;
+        GlobalData.Player = this;
         
         var go = gameObject;
-        _playerStatusHandler = new PlayerStatusHandler(go);
+        _playerStatusHandler = new PlayerStatus(go);
         moveController = new PlayerMoveController(go);
         viewController = new PlayerView(go);
     }

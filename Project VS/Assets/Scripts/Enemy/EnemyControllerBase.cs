@@ -1,16 +1,16 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 public abstract class EnemyControllerBase : MonoBehaviour, IPoolHandler {
-    [SerializeField] private EnemyStat defaultStat = new EnemyStat();
-    [ShowInInspector, ReadOnly] public EnemyStatusHandler StatusHandler { get; private set; }
+    [SerializeField] private EnemyStatData defaultStat = new EnemyStatData();
+    [ShowInInspector, ReadOnly] public EnemyStatus Status { get; private set; }
     
     protected IEnemyView view;
     protected IEnemyMoveStrategy moveStrategy;
     
     protected virtual void Awake() {
-        StatusHandler = new EnemyStatusHandler(gameObject);
-        StatusHandler.Initialize(defaultStat);
+        Status = new EnemyStatus(gameObject);
         OnInitialize();
     }
 
@@ -23,9 +23,7 @@ public abstract class EnemyControllerBase : MonoBehaviour, IPoolHandler {
     }
     
     public virtual void OnInitialize() {
-        StatusHandler.Initialize(defaultStat);
-        view = new EnemyView(StatusHandler);
-        moveStrategy = new EnemyMoveStrategy(StatusHandler);
+        Status.Initialize(defaultStat);
     }
 
     public virtual void OnRelease() { }

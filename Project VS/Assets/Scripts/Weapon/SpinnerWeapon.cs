@@ -13,7 +13,7 @@ public class SpinnerWeapon : WeaponBase {
     public override void Initialize(WeaponController controller) {
         Transform = controller.CreateDummyTransform(this);
         AttackSpeed = 150;
-        AttackRange = 1.5f;
+        AttackRange = 1f;
         Damage = 10;
         AttackCount = 3;
         

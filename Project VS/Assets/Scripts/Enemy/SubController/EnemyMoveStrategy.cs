@@ -1,20 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
-    private EnemyStatusHandler StatusHandler { get; }
+    private EnemyStatus Status { get; }
+    private Transform Transform { get; }
     private Rigidbody2D Rigidbody { get; }
+    private Collider2D Collider { get; }
     public Rigidbody2D Target { get; private set; }
-    private float Speed => StatusHandler.Speed;
+    private float Speed => Status.Speed;
     
-    public EnemyMoveStrategy(EnemyStatusHandler statusHandler) {
-        StatusHandler = statusHandler;
-        Rigidbody = statusHandler.GameObject.GetComponent<Rigidbody2D>();
+    public EnemyMoveStrategy(EnemyStatus status) {
+        Status = status;
+        Transform = status.GameObject.transform;
+        Collider = status.GameObject.GetComponent<Collider2D>();
+        Rigidbody = status.GameObject.GetComponent<Rigidbody2D>();
+    }
+
+    public void OnCreate() {
+        Collider.enabled = true;
+        Rigidbody.simulated = true;
     }
 
     public void Update() {
-        if (StatusHandler.IsDead) return;
+        if (Status.IsDead) return;
+        if (!Status.IsMovable) return;
+        
         if (!Target) {
             Debugger.Error("[EnemyMoveController.Update] ITargetTracker.Target is null!!");
             return;
@@ -26,13 +38,34 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
         Rigidbody.MovePosition(Rigidbody.position + deltaVector);
         Rigidbody.velocity = Vector2.zero; //
 
-        UpdateDirection(StatusHandler);
+        UpdateDirection(Status);
     }
 
-    void UpdateDirection(EnemyStatusHandler statusHandler) {
-        if (Target.position.x < Rigidbody.position.x) statusHandler.CurrentDirection = Direction.Right;
-        else if (Target.position.x > Rigidbody.position.x) statusHandler.CurrentDirection = Direction.Left;
+    public void OnHit() {
+        KnockBack(3f).Forget();
+    }
+
+    public void OnDead() {
+        Collider.enabled = false;
+        Rigidbody.simulated = false;
+    }
+
+    void UpdateDirection(EnemyStatus status) {
+        if (Target.position.x < Rigidbody.position.x) status.CurrentDirection = Direction.Right;
+        else if (Target.position.x > Rigidbody.position.x) status.CurrentDirection = Direction.Left;
     }
 
     public void SetTarget(Rigidbody2D target) => Target = target;
+    
+    async UniTaskVoid KnockBack(float power) {
+        await UniTask.DelayFrame(1, PlayerLoopTiming.FixedUpdate);
+
+        Status.IsMovable = false;
+        var playerPos = GlobalData.Player.transform.position;
+        var dir = (Transform.position - playerPos).normalized;
+        
+        Rigidbody.AddForce(dir * power, ForceMode2D.Impulse);
+        await UniTask.Delay(150);
+        Status.IsMovable = true;
+    }
 }

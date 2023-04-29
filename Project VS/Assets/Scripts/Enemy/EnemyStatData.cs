@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public struct EnemyStat {
+public struct EnemyStatData {
     public float attackDamage;
     public float speed;
     public float hp;

@@ -11,7 +11,7 @@ public class EnemySpawnSetting {
     public bool useCustomStat;
     
     [ShowIf("useCustomStat")]
-    public EnemyStat stat;
+    public EnemyStatData stat;
 
     private float elapsedTimeFromSpawn;
 

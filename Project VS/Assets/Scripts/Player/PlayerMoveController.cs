@@ -18,7 +18,7 @@ public class PlayerMoveController {
         Acceleration = acceleration;
     }
 
-    public void Move(PlayerStatusHandler playerStatusHandler) {
+    public void Move(PlayerStatus playerStatusHandler) {
         var inputVector = playerStatusHandler.InputVector;
         
         // 참고) 속도 제어 방식은 AddForce나 velocity 사용
