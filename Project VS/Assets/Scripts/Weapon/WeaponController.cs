@@ -16,46 +16,31 @@ public class WeaponController : MonoBehaviour {
 
     [Button]
     public void AddOnEditor() {
-        if (Weapons.Count == 0) AddWeapon<SpinnerWeapon>();
-        else if (Weapons.Count == 1) AddWeapon<FireBulletWeapon>();
+        if (Weapons.Count == 0) AddWeapon(new SpinnerWeapon());
+        else if (Weapons.Count == 1) AddWeapon(new FireBulletWeapon());
     }
 
-    private T CreateWeapon<T>() where T : WeaponBase {
-        var weaponTr = new GameObject(typeof(T).Name).transform;
-        weaponTr.SetParent(transform);
-        weaponTr.ResetTransform();
-
-        var weapon = weaponTr.AddComponent<T>();
-        return weapon;
-    }
-
-    private WeaponBase LoadWeapon(string prefabName) {
-        var weapon = PoolManager.Get<WeaponBase>(prefabName, transform);
-        if (!weapon) {
-            Debugger.Error($"[WeaponController.AddWeapon] Cannot Find Weapon: {prefabName}");
+    public Transform CreateDummyTransform(WeaponBase weapon) => CreateDummyTransform(weapon?.GetType().Name);
+    public Transform CreateDummyTransform(string dummyObjectName) {
+        if (string.IsNullOrEmpty(dummyObjectName)) {
+            Debugger.Error("[WeaponController.CreateDummyTransform] Parameter is Empty!!");
         }
-        return weapon;
-    }
-
-    public void AddWeapon<T>() where T : WeaponBase {
-        var weapon = CreateWeapon<T>();
-
-        weapon.Initialize(this);
-        Weapons.Add(weapon);
-    }
-
-    public bool AddWeapon(string prefabName) {
-        var weapon = LoadWeapon(prefabName);
-        if (!weapon) return false;
         
+        var dummy = new GameObject(dummyObjectName).transform;
+        dummy.SetParent(transform);
+        dummy.ResetTransform();
+
+        return dummy;
+    }
+
+    public void AddWeapon(WeaponBase weapon) {
         weapon.Initialize(this);
         Weapons.Add(weapon);
-        return true;
     }
     
     public bool RemoveWeapon<T>() where T : WeaponBase {
         var target = Weapons.FirstOrDefault(w => w is T);
-        if (!target) {
+        if (target == null) {
             Debugger.Error($"[WeaponController.RemoveWeapon] Cannot Find: {typeof(T).Name}");
             return false;
         }
