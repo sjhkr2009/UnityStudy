@@ -7,11 +7,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour {
-    public EnemyScanner EnemyScanner { get; private set; }
+    public Scanner Scanner { get; private set; }
     private List<WeaponBase> Weapons { get; } = new List<WeaponBase>();
 
     private void Awake() {
-        EnemyScanner = GetComponent<EnemyScanner>();
+        Scanner = GetComponent<Scanner>();
     }
 
     [Button]

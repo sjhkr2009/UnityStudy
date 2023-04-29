@@ -743,6 +743,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scanRange: 5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
   nearestTarget: {fileID: 0}
 --- !u!1 &519420028
 GameObject:

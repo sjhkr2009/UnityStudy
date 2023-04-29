@@ -4,17 +4,13 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class EnemyScanner : MonoBehaviour {
-    public float scanRange;
+public class Scanner : MonoBehaviour {
+    [SerializeField] private float scanRange;
+    [SerializeField] private LayerMask targetLayer;
     
     private RaycastHit2D[] targets;
-    private LayerMask targetLayer;
-    
-    public Transform nearestTarget;
-
-    private void Start() {
-        targetLayer = LayerMask.NameToLayer(Define.Layer.Enemy);
-    }
+    private Transform _nearestTarget;
+    public Transform NearestTarget => _nearestTarget;
 
     private void FixedUpdate() {
         if (targetLayer <= 0) {
@@ -22,8 +18,8 @@ public class EnemyScanner : MonoBehaviour {
             return;
         }
         
-        targets = Physics2D.CircleCastAll(transform.position, scanRange, Vector2.zero, targetLayer);
-        nearestTarget = GetNearest();
+        targets = Physics2D.CircleCastAll(transform.position, scanRange, Vector2.zero, scanRange, targetLayer);
+        _nearestTarget = GetNearest();
     }
 
     Transform GetNearest() {

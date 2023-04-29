@@ -7,13 +7,14 @@ public class FireBulletWeapon : WeaponBase {
     public float fireInterval = 0.2f;
     public int fireCount = 1;
     public int firePenetration = 2;
+    public float speed = 10f;
 
     protected float fireTimer;
-    protected EnemyScanner enemyScanner;
+    protected Scanner scanner;
     
     public override void Initialize(WeaponController controller) {
         damage = 5;
-        enemyScanner = controller.EnemyScanner;
+        scanner = controller.Scanner;
     }
 
     public override void OnUpdate(float deltaTime) {
@@ -32,15 +33,15 @@ public class FireBulletWeapon : WeaponBase {
         var player = GlobalCachedData.Player;
         if (!player) return;
 
-        if (!enemyScanner.nearestTarget) return;
+        if (!scanner.NearestTarget) return;
 
-        var targetPos = enemyScanner.nearestTarget.position;
+        var targetPos = scanner.NearestTarget.position;
         var dir = (targetPos - transform.position).normalized;
         
         var bulletTr = PoolManager.Get(bulletPrefabName).transform;
         bulletTr.position = transform.position;
         bulletTr.rotation = Quaternion.FromToRotation(Vector3.up, dir); // y축을 기준으로 dir을 바라봄
         
-        bulletTr.GetComponent<Projectile>().Initialize(damage, firePenetration, dir);
+        bulletTr.GetComponent<Projectile>().Initialize(damage, firePenetration, dir * speed);
     }
 }
