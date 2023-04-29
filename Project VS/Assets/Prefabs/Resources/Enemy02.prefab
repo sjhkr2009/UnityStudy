@@ -186,6 +186,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultStat:
+    tier: 1
+    level: 0
     attackDamage: 2
     speed: 2
     hp: 10

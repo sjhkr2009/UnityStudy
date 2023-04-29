@@ -1240,7 +1240,7 @@ GameObject:
   - component: {fileID: 1041262950}
   - component: {fileID: 1041262949}
   m_Layer: 0
-  m_Name: GameController
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1255,15 +1255,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1041262948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecb3dd01e3d6e3143a5913ed9aa8f19b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8fb53c52981981e42ba5341da922afc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 0
-  kill: 0
-  exp: 0
-  nextExp: 0a0000001e0000003c0000006400000096000000d20000001801000068010000c201000058020000
-  gameTime: 0
-  maxGameTime: 0
+  setting: {fileID: 11400000, guid: 77647ed0bed82664285059b166f2464b, type: 2}
 --- !u!4 &1041262950
 Transform:
   m_ObjectHideFlags: 0

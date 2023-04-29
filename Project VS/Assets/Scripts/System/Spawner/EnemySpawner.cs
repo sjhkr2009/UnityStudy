@@ -31,6 +31,8 @@ public class EnemySpawner : MonoBehaviour {
     }
 
     private void Update() {
+        if (GlobalData.Controller == null) return;
+        
         timer.Update();
         spawnSettings.ForEach(setting => setting.Update(Time.deltaTime));
 
