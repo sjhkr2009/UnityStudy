@@ -5,9 +5,13 @@ using Cinemachine;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour, IWeaponCollider {
-    [TagSelector] public string targetTag = Define.Tag.Enemy;
+    [TagSelector] public string targetTag;
     
     public virtual bool IsValidTarget(GameObject target) {
+        if (string.IsNullOrEmpty(targetTag)) {
+            Debugger.Error("[Projectile.IsValidTarget] Target Tag is null!!");
+            return false;
+        }
         return target.CompareTag(targetTag);
     }
 

@@ -26,7 +26,7 @@ public class GameSetting : ScriptableObject {
         }
         
         int index = (currentLevel - 1).Clamp(0, expByLevel.Count - 1);
-        return expByLevel[currentLevel];
+        return expByLevel[index];
     }
 
     public int GetGainExp(EnemyStatus targetEnemy) {

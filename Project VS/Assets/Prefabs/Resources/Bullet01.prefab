@@ -99,8 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cab9d4911691c44aabee7f1276dfc50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
-  penetration: 0
+  targetTag: Enemy
 --- !u!70 &8400075439234615891
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

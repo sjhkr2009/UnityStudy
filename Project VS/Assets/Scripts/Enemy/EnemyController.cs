@@ -54,6 +54,6 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
         Status.IsDead = true;
         view.OnDead();
         moveStrategy.OnDead();
-        GameManager.Instance.OnDeadEnemy(Status);
+        GameManager.Instance.CallEnemyDead(Status);
     }
 }

@@ -5,6 +5,12 @@ using UnityEngine;
 
 public sealed class GameManager : Singleton<GameManager> {
     [SerializeField] private GameSetting setting;
+    
+    public static event Action OnGameStart;
+    public static event Action OnDeadEnemy;
+    public static event Action OnLevelUp;
+    public static event Action OnEverySecond;
+    public static event Action OnGameEnd;
 
     public GameSetting Setting => setting ??= GameSetting.Load();
 
@@ -17,9 +23,31 @@ public sealed class GameManager : Singleton<GameManager> {
 
     public void StartGame() {
         controller = new GameController(Setting);
+        controller.StartGame();
+        OnGameStart?.Invoke();
+        
+        InvokeRepeating(nameof(CallOnEverySecond), 0f, 1f);
     }
 
-    public void OnDeadEnemy(EnemyStatus deadEnemy) {
+    void CallOnEverySecond() {
+        OnEverySecond?.Invoke();
+    }
+
+    private void Update() {
+        controller?.Update(Time.deltaTime);
+    }
+
+    public void CallLevelUp() {
+        OnLevelUp?.Invoke();
+    }
+    
+    public void CallEnemyDead(EnemyStatus deadEnemy) {
         controller?.OnDeadEnemy(deadEnemy);
+        OnDeadEnemy?.Invoke();
+    }
+
+    public void CallEndGame() {
+        controller.EndGame();
+        OnGameEnd?.Invoke();
     }
 }

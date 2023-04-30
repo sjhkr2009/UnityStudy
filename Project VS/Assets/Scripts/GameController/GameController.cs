@@ -9,19 +9,26 @@ public class GameController {
         GlobalData.Controller = this;
     }
 
-    public int Level { get; protected set; } = 1;
+    public int Level { get; protected set; }
     public int KillCount { get; protected set; }
     public int Exp { get; protected set; }
+    public int RequiredExp { get; protected set; }
     
     public bool IsPause { get; protected set; }
     public float GameTime { get; protected set; }
 
+    public void StartGame() {
+        Level = 1;
+        IsPause = false;
+        RequiredExp = Setting.GetRequiredExp(Level);
+    }
+    
     public void Update(float deltaTime) {
         if (IsPause) return;
         
         GameTime += deltaTime;
         if (GameTime > Setting.maxGameTime) {
-            // TODO: 게임 종료 처리 또는 시간 경과에 따른 이벤트
+            GameManager.Instance.CallEndGame();
         }
     }
 
@@ -32,11 +39,21 @@ public class GameController {
 
     private void GainExp(int value) {
         Exp += value;
-
-        var requiredExp = Setting.GetRequiredExp(Level);
-        if (Exp >= requiredExp) {
-            Level++;
-            Exp -= requiredExp;
+        
+        if (Exp >= RequiredExp) {
+            LevelUp();
         }
+    }
+
+    private void LevelUp() {
+        Exp -= RequiredExp;
+        Level++;
+        RequiredExp = Setting.GetRequiredExp(Level);
+        
+        GameManager.Instance.CallLevelUp();
+    }
+
+    public void EndGame() {
+        IsPause = true;
     }
 }

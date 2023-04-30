@@ -26,7 +26,7 @@ public class TagSelectorAttributeEditor : PropertyDrawer {
         
         
         index = EditorGUI.Popup(position, label.text, index, tagList.ToArray());
-        property.stringValue = index == 0 ? string.Empty : tagList[index];
+        property.stringValue = tagList[index];
             
         EditorGUI.EndProperty();
     }
