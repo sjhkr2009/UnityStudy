@@ -12,9 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6935635419694184ca23963a71278247, type: 3}
   m_Name: GameSetting
   m_EditorClassIdentifier: 
-  expGainData:
-  - targetTier: 1
-    targetLevel: 0
-    gainExp: 5
   expByLevel: 0a0000001e0000003c0000006400000096000000d20000001801000068010000c201000058020000
   maxGameTime: 600

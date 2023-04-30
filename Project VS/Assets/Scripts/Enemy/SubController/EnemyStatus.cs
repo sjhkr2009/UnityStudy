@@ -8,7 +8,7 @@ public class EnemyStatus {
     public Direction CurrentDirection { get; set; } = Direction.None;
     
     public EnemyTier Tier { get; set; }
-    public int Level { get; set; }
+    public int Exp { get; set; }
     
     public bool IsDead { get; set; }
     public bool IsMovable { get; set; }
@@ -35,7 +35,7 @@ public class EnemyStatus {
         Hp = statData.hp;
         Speed = statData.speed;
         Tier = statData.tier;
-        Level = statData.level;
+        Exp = statData.exp;
     }
 
     public void SetMaxHp(int maxHp) {

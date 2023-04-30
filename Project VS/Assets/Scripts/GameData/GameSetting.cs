@@ -15,8 +15,7 @@ public class GameSetting : ScriptableObject {
         }
         return setting;
     }
-
-    public List<EnemyExpData> expGainData = new List<EnemyExpData>() { new EnemyExpData() };
+    
     public List<int> expByLevel = new List<int>() { 10, 30, 60, 100, 150, 210, 280, 360, 450, 600 };
     public float maxGameTime = 60f * 10;
     
@@ -31,13 +30,12 @@ public class GameSetting : ScriptableObject {
     }
 
     public int GetGainExp(EnemyStatus targetEnemy) {
-        var expData = expGainData.FirstOrDefault(data => data.targetTier == targetEnemy.Tier && data.targetLevel == targetEnemy.Level) ??
-                      expGainData.FirstOrDefault(data => data.targetTier == targetEnemy.Tier);
-        if (expData == null) {
-            Debugger.Log($"[GameSetting.GetGainExp] Cannot exp data {targetEnemy.Tier} : {targetEnemy.Level}");
+        var gainExp = targetEnemy.Exp;
+        if (gainExp <= 0) {
+            Debugger.Log($"[GameSetting.GetGainExp] Enemy exp <= 0 | {targetEnemy.GameObject.name}({targetEnemy.Tier})");
             return 1;
         }
         
-        return expData.gainExp;
+        return gainExp;
     }
 }

@@ -187,10 +187,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultStat:
     tier: 1
-    level: 0
+    exp: 8
     attackDamage: 2
     speed: 2
-    hp: 10
+    hp: 15
   target: {fileID: 0}
 --- !u!95 &6091537602426877108
 Animator:

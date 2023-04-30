@@ -36,14 +36,11 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (!other.CompareTag(Define.Tag.Projectile) || Status.IsDead) return;
+        
+        var weapon = other.GetComponent<IWeaponCollider>();
+        if (weapon == null || !weapon.IsValidTarget(gameObject)) return;
 
-        var damageHandler = other.GetComponent<IDamageGetter>();
-        if (damageHandler == null) {
-            Debugger.Error($"[EnemyController.OnTriggerEnter2D] {other.gameObject.name} not have IDamageable!!");
-            return;
-        }
-
-        Status.Hp -= damageHandler.Damage;
+        Status.Hp -= weapon.Damage;
         
         if (Status.Hp <= 0) {
             Dead();
