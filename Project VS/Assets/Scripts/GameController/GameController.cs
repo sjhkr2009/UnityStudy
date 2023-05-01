@@ -19,6 +19,8 @@ public class GameController {
 
     public void StartGame() {
         Level = 1;
+        KillCount = 0;
+        GameTime = 0f;
         IsPause = false;
         RequiredExp = Setting.GetRequiredExp(Level);
     }
@@ -33,6 +35,7 @@ public class GameController {
     }
 
     public void OnDeadEnemy(EnemyStatus deadEnemy) {
+        KillCount++;
         var gainExp = Setting.GetGainExp(deadEnemy);
         GainExp(gainExp);
     }
