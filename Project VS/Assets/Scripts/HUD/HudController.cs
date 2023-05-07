@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HUD : MonoBehaviour {
+public class HudController : MonoBehaviour {
     [SerializeField] private GaugeWithText expDrawer;
     [SerializeField] private TMP_Text killDrawer;
     [SerializeField] private TMP_Text levelDrawer;
@@ -33,21 +33,21 @@ public class HUD : MonoBehaviour {
     }
 
     void UpdateExp() {
-        var exp = GlobalData.Controller.Exp;
-        var requiredExp = GlobalData.Controller.RequiredExp;
+        var exp = GameManager.Controller.Exp;
+        var requiredExp = GameManager.Controller.RequiredExp;
         expDrawer.SetValue(exp, requiredExp);
     }
 
     void UpdateLevel() {
-        levelDrawer.text = $"Lv.{GlobalData.Controller.Level}";
+        levelDrawer.text = $"Lv.{GameManager.Controller.Level}";
     }
     
     void UpdateKillCount() {
-        killDrawer.text = GlobalData.Controller.KillCount.ToString();
+        killDrawer.text = GameManager.Controller.KillCount.ToString();
     }
     
     void UpdateTimer() {
-        var time = TimeSpan.FromSeconds(GlobalData.Controller.GameTime);
+        var time = TimeSpan.FromSeconds(GameManager.Controller.GameTime);
         timeDrawer.text = time.ToString("mm':'ss");
     }
 }

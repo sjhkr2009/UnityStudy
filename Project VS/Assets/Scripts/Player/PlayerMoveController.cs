@@ -6,32 +6,31 @@ using UnityEngine.InputSystem;
 
 public class PlayerMoveController {
     private Rigidbody2D Rigidbody { get; }
-
-    public float Speed { get; set; }
-    public float Acceleration { get; set; }
+    private PlayerStatus Status { get; }
+    
     public Vector2 CurrentSpeed { get; private set; }
     public Vector2 DeltaMove { get; private set; }
 
-    public PlayerMoveController(GameObject target, float speed = 3f, float acceleration = 20f) {
-        Rigidbody = target.GetOrAddComponent<Rigidbody2D>();
-        Speed = speed;
-        Acceleration = acceleration;
+    public PlayerMoveController(PlayerStatus status) {
+        Rigidbody = status.GameObject.GetOrAddComponent<Rigidbody2D>();
     }
 
-    public void Move(PlayerStatus playerStatusHandler) {
-        var inputVector = playerStatusHandler.InputVector;
+    public void Move() {
+        var inputVector = Status.InputVector;
+        var speed = Status.Speed;
+        var acceleration = Status.Acceleration;
         
         // 참고) 속도 제어 방식은 AddForce나 velocity 사용
         var inputX = Mathf.Approximately(inputVector.x, 0f)
-            ? (Mathf.Abs(CurrentSpeed.x) < 0.001f ? 0f : Mathf.Lerp(CurrentSpeed.x, 0f, Acceleration * Time.fixedDeltaTime)) 
-            : (CurrentSpeed.x + (inputVector.x * Acceleration * Time.fixedDeltaTime)).Clamp(-1f, 1f);
+            ? (Mathf.Abs(CurrentSpeed.x) < 0.001f ? 0f : Mathf.Lerp(CurrentSpeed.x, 0f, acceleration * Time.fixedDeltaTime)) 
+            : (CurrentSpeed.x + (inputVector.x * acceleration * Time.fixedDeltaTime)).Clamp(-1f, 1f);
         var inputY = Mathf.Approximately(inputVector.y, 0f)
-            ? (Mathf.Abs(CurrentSpeed.y) < 0.001f ? 0f : Mathf.Lerp(CurrentSpeed.y, 0f, Acceleration * Time.fixedDeltaTime)) 
-            : (CurrentSpeed.y + (inputVector.y * Acceleration * Time.fixedDeltaTime)).Clamp(-1f, 1f);
+            ? (Mathf.Abs(CurrentSpeed.y) < 0.001f ? 0f : Mathf.Lerp(CurrentSpeed.y, 0f, acceleration * Time.fixedDeltaTime)) 
+            : (CurrentSpeed.y + (inputVector.y * acceleration * Time.fixedDeltaTime)).Clamp(-1f, 1f);
         CurrentSpeed = new Vector2(inputX, inputY);
         
-        var moveDelta = (Speed * Time.fixedDeltaTime) * CurrentSpeed;
+        var moveDelta = (speed * Time.fixedDeltaTime) * CurrentSpeed;
         Rigidbody.MovePosition(Rigidbody.position + moveDelta);
-        playerStatusHandler.DeltaMove = moveDelta;
+        Status.DeltaMove = moveDelta;
     }
 }

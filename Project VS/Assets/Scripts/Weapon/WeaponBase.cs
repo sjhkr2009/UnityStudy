@@ -16,8 +16,9 @@ public abstract class WeaponBase {
     
     public abstract void Initialize(WeaponController controller);
     public abstract void OnUpdate(float deltaTime);
-    public abstract void OnUpgrade();
+    public abstract void Upgrade();
     public abstract void Abandon();
+    public virtual void OnAddOrUpgradeOtherWeapon(WeaponBase changedWeapon){}
 
     public virtual bool IsEqual(WeaponBase weapon) {
         return Index == weapon.Index && InternalType == weapon.InternalType;

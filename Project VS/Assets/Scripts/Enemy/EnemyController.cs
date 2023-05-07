@@ -18,7 +18,7 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
 
     void SetTarget() {
         if (moveStrategy is ITargetTracker tracker) {
-            if (!target) target = GlobalData.Player.GetComponent<Rigidbody2D>();
+            if (!target) target = GameManager.Player.GetComponent<Rigidbody2D>();
             tracker.SetTarget(target);
         }
     }
@@ -26,7 +26,7 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
     public virtual void Reposition(Transform pivotTransform) {
         if (Status.IsDead) return;
         
-        var playerDir = GlobalData.Player.GetStatusHandler.InputVector;
+        var playerDir = GameManager.Player.Status.InputVector;
         
         var randomVector = CustomUtility.GetRandomVector(-3f, 3f);
         var moveDelta = (playerDir * Define.EnvironmentSetting.TileMapSize) + randomVector;

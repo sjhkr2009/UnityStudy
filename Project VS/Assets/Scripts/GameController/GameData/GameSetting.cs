@@ -5,7 +5,7 @@ using InternalData;
 using Newtonsoft.Json;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Create GameSetting", fileName = nameof(GameSetting))]
+[CreateAssetMenu(fileName = nameof(GameSetting), menuName = "Custom/Create GameSetting")]
 public class GameSetting : ScriptableObject {
     public static GameSetting Load() {
         var setting = Resources.Load<GameSetting>(nameof(GameSetting));

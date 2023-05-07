@@ -6,7 +6,7 @@ public class GameController {
     
     public GameController(GameSetting setting) {
         Setting = setting;
-        GlobalData.Controller = this;
+        GameManager.Controller = this;
     }
 
     public int Level { get; protected set; }

@@ -8,24 +8,26 @@ public class PlayerView {
     
     private SpriteRenderer SpriteRenderer { get; }
     private Animator Animator { get; }
+    private PlayerStatus Status { get; }
     
-    public PlayerView(GameObject target) {
+    public PlayerView(PlayerStatus status) {
+        var target = status.GameObject;
         SpriteRenderer = target.GetOrAddComponent<SpriteRenderer>();
         Animator = target.GetOrAddComponent<Animator>();
     }
 
-    public void Render(PlayerStatus statusHandler) {
-        if (statusHandler.InputVector == Vector2.zero) return;
+    public void Render() {
+        if (Status.InputVector == Vector2.zero) return;
 
-        SpriteRenderer.flipX = statusHandler.InputVector.x < 0;
+        SpriteRenderer.flipX = Status.InputVector.x < 0;
     }
 
-    public void UpdateAnimator(PlayerStatus statusHandler) {
-        if (statusHandler.IsDead) {
+    public void UpdateAnimator() {
+        if (Status.IsDead) {
             Animator.SetTrigger(Dead);
             return;
         }
         
-        Animator.SetFloat(Speed, statusHandler.DeltaMove.magnitude);
+        Animator.SetFloat(Speed, Status.DeltaMove.magnitude);
     }
 }

@@ -14,9 +14,10 @@ public sealed class GameManager : Singleton<GameManager> {
     public static event Action OnGameEnd;
 
     public GameSetting Setting => setting ??= GameSetting.Load();
-
-    private GameController controller;
-    private PlayerController player;
+    
+    public static GameController Controller { get; set; }
+    public static PlayerController Player { get; set; }
+    public static WeaponController Weapon { get; set; }
 
     private void Start() {
         // TODO: 유니티 이벤트로 자동 시작하는 대신, 게임 시작 신호를 받아서 시작할 수 있게 변경
@@ -24,9 +25,8 @@ public sealed class GameManager : Singleton<GameManager> {
     }
 
     public void StartGame() {
-        player = GlobalData.Player;
-        controller = new GameController(Setting);
-        controller.StartGame();
+        Controller = new GameController(Setting);
+        Controller.StartGame();
         OnGameStart?.Invoke();
         
         InvokeRepeating(nameof(CallOnEverySecond), 0f, 1f);
@@ -37,7 +37,7 @@ public sealed class GameManager : Singleton<GameManager> {
     }
 
     private void Update() {
-        controller?.Update(Time.deltaTime);
+        Controller?.Update(Time.deltaTime);
     }
 
     public void CallLevelUp() {
@@ -45,12 +45,12 @@ public sealed class GameManager : Singleton<GameManager> {
     }
     
     public void CallEnemyDead(EnemyStatus deadEnemy) {
-        controller?.OnDeadEnemy(deadEnemy);
+        Controller?.OnDeadEnemy(deadEnemy);
         OnDeadEnemy?.Invoke();
     }
 
     public void CallEndGame() {
-        controller.EndGame();
+        Controller.EndGame();
         OnGameEnd?.Invoke();
     }
 }

@@ -22,6 +22,8 @@ public class SpinnerWeapon : WeaponBase {
 
     protected virtual void CreateSpinners() {
         if (!Transform) return;
+
+        ClearAllSpinners();
         
         for (int i = 0; i < AttackCount; i++) {
             var spinner = PoolManager.Get(spinnerPrefabName, Transform).transform;
@@ -40,15 +42,17 @@ public class SpinnerWeapon : WeaponBase {
         Transform.Rotate(Vector3.back * (AttackSpeed * deltaTime));
     }
 
-    public override void OnUpgrade() {
-        Abandon();
+    public override void Upgrade() {
         CreateSpinners();
     }
 
-    public override void Abandon() {
+    void ClearAllSpinners() {
         spinners.ForEach(t => PoolManager.Abandon(t.gameObject));
         spinners.Clear();
-        
+    }
+
+    public override void Abandon() {
+        ClearAllSpinners();
         Object.Destroy(Transform.gameObject);
     }
 }

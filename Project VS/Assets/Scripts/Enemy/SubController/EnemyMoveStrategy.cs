@@ -61,7 +61,7 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
         await UniTask.DelayFrame(1, PlayerLoopTiming.FixedUpdate);
 
         Status.IsMovable = false;
-        var playerPos = GlobalData.Player.transform.position;
+        var playerPos = GameManager.Player.transform.position;
         var dir = (Transform.position - playerPos).normalized;
         
         Rigidbody.AddForce(dir * power, ForceMode2D.Impulse);

@@ -42,12 +42,12 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
         }
     }
 
-    public override void OnUpgrade() { }
+    public override void Upgrade() { }
 
     public override void Abandon() { }
     
     protected virtual void Fire() {
-        var player = GlobalData.Player;
+        var player = GameManager.Player;
         if (!player) return;
 
         if (!scanner.NearestTarget) return;
