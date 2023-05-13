@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
 public class ItemUpgradeButton : MonoBehaviour {
-    public WeaponData data;
+    public ItemData data;
     public int level;
     public WeaponController weaponController;
 
@@ -25,6 +25,6 @@ public class ItemUpgradeButton : MonoBehaviour {
     }
 
     private void OnClick() {
-        weaponController.AddOrUpgradeWeapon(data.weaponIndex);
+        weaponController.AddOrUpgradeWeapon(data.itemIndex);
     }
 }

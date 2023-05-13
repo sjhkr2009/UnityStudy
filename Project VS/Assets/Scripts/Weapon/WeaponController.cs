@@ -56,21 +56,21 @@ public class WeaponController : MonoBehaviour {
         return Weapons.FirstOrDefault(w => w is T) as T;
     }
     
-    public WeaponBase GetWeapon(WeaponIndex weaponIndex) {
-        return Weapons.FirstOrDefault(w => w.Index == weaponIndex);
+    public WeaponBase GetWeapon(ItemIndex itemIndex) {
+        return Weapons.FirstOrDefault(w => w.Index == itemIndex);
     }
 
-    public void AddOrUpgradeWeapon(WeaponIndex weaponIndex) {
-        var weapon = GetWeapon(weaponIndex);
+    public void AddOrUpgradeWeapon(ItemIndex itemIndex) {
+        var weapon = GetWeapon(itemIndex);
         if (weapon != null) {
             UpgradeWeapon(weapon);
             return;
         }
         
         // TODO: 모든 무기 정보를 가진 데이터를 만들어서 WeaponIndex와 구현 클래스를 연결할 것 
-        weapon = weaponIndex switch {
-            WeaponIndex.AutoGun => new FireBulletWeapon(),
-            WeaponIndex.SpinAround => new SpinnerWeapon(),
+        weapon = itemIndex switch {
+            ItemIndex.WeaponAutoGun => new FireBulletWeapon(),
+            ItemIndex.WeaponSpinAround => new SpinnerWeapon(),
             _ => null
         };
         AddWeapon(weapon);

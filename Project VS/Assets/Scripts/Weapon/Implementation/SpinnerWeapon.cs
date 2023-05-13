@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpinnerWeapon : WeaponBase {
-    public override WeaponIndex Index => WeaponIndex.SpinAround;
+    public override ItemIndex Index => ItemIndex.WeaponSpinAround;
     public override Transform Transform { get; set; }
 
     public string spinnerPrefabName = "Bullet00";

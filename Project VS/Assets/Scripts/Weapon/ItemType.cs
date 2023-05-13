@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WeaponType {
-    Melee,
-    Range,
+public enum ItemType {
+    Unknown,
+    WeaponMelee,
+    WeaponRange,
     Glove,
     Shoe
 }

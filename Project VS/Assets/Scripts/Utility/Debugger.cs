@@ -6,6 +6,10 @@ public static class Debugger {
         Debug.Log(message);
     }
     
+    public static void Warning(object message) {
+        Debug.LogWarning(message);
+    }
+    
     public static void Error(object message) {
         Debug.LogError(message);
     }

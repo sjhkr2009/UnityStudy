@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class WeaponBase {
-    public abstract WeaponIndex Index { get; }
+    public abstract ItemIndex Index { get; }
     /** 같은 Index 내에서 무기의 구분이 필요할 때 사용한다. */
     public virtual int InternalType { get; set; } = 0;
     public abstract Transform Transform { get; set; }

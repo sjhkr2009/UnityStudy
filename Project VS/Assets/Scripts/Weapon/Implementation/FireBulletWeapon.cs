@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FireBulletWeapon : WeaponBase, IBulletCreator {
-    public override WeaponIndex Index => WeaponIndex.AutoGun;
+    public override ItemIndex Index => ItemIndex.WeaponAutoGun;
     public override Transform Transform { get; set; }
     
     public string bulletPrefabName = "Bullet01";
