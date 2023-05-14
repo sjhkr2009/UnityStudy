@@ -17,7 +17,7 @@ public sealed class GameManager : Singleton<GameManager> {
     
     public static GameController Controller { get; set; }
     public static PlayerController Player { get; set; }
-    public static WeaponController Weapon { get; set; }
+    public static ItemController Item { get; set; }
 
     private void Start() {
         // TODO: 유니티 이벤트로 자동 시작하는 대신, 게임 시작 신호를 받아서 시작할 수 있게 변경

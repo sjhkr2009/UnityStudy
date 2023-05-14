@@ -13,6 +13,7 @@ public class PlayerMoveController {
 
     public PlayerMoveController(PlayerStatus status) {
         Rigidbody = status.GameObject.GetOrAddComponent<Rigidbody2D>();
+        Status = status;
     }
 
     public void Move() {

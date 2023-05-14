@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Scripting;
 
 public class PlayerController : MonoBehaviour {
+    [SerializeField] private ItemController itemController;
     [ShowInInspector, ReadOnly] private PlayerStatus _playerStatus; // for debug
 
     public PlayerStatus Status => _playerStatus;
@@ -14,9 +15,10 @@ public class PlayerController : MonoBehaviour {
 
     private void Awake() {
         GameManager.Player = this;
+        if (!itemController) itemController = GetComponentInChildren<ItemController>();
         
         var go = gameObject;
-        _playerStatus = new PlayerStatus(go);
+        _playerStatus = new PlayerStatus(go, itemController);
         moveController = new PlayerMoveController(Status);
         viewController = new PlayerView(Status);
     }

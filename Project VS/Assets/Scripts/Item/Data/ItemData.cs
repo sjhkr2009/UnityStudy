@@ -24,4 +24,14 @@ public class ItemData {
             itemIndex = itemIndex
         };
     }
+
+    public float GetValue(int oneBasedLevel) {
+        if (values == null || values.Count == 0) return baseValue;
+
+        var index = (oneBasedLevel - 1).Clamp(0, values.Count - 1);
+        if (index != (oneBasedLevel - 1)) {
+            Debugger.Warning($"[ItemData.GetValue] Cannot find {oneBasedLevel} level data on {itemIndex}. Return clamped value.");
+        }
+        return values[index];
+    }
 }

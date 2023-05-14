@@ -14,6 +14,7 @@ public class PlayerView {
         var target = status.GameObject;
         SpriteRenderer = target.GetOrAddComponent<SpriteRenderer>();
         Animator = target.GetOrAddComponent<Animator>();
+        Status = status;
     }
 
     public void Render() {

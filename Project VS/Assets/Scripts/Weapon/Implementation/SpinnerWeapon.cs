@@ -10,7 +10,9 @@ public class SpinnerWeapon : WeaponBase {
     
     private List<Transform> spinners = new List<Transform>();
 
-    public override void Initialize(WeaponController controller) {
+    public override void Initialize(ItemController controller) {
+        base.Initialize(controller);
+        
         Transform = controller.CreateDummyTransform(this);
         AttackSpeed = 150;
         AttackRange = 1f;
@@ -38,11 +40,12 @@ public class SpinnerWeapon : WeaponBase {
         }
     }
 
-    public override void OnUpdate(float deltaTime) {
+    public override void OnEveryFrame(float deltaTime) {
         Transform.Rotate(Vector3.back * (AttackSpeed * deltaTime));
     }
 
     public override void Upgrade() {
+        base.Upgrade();
         CreateSpinners();
     }
 

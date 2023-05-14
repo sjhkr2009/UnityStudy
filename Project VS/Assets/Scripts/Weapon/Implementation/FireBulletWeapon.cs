@@ -23,7 +23,9 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
     protected float fireTimer;
     protected Scanner scanner;
     
-    public override void Initialize(WeaponController controller) {
+    public override void Initialize(ItemController controller) {
+        base.Initialize(controller);
+        
         Damage = 5;
         AttackSpeed = 2f;
         AttackRange = 10f;
@@ -34,7 +36,7 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
         scanner = controller.Scanner;
     }
 
-    public override void OnUpdate(float deltaTime) {
+    public override void OnEveryFrame(float deltaTime) {
         fireTimer += deltaTime;
         if (fireTimer > fireInterval) {
             fireTimer = 0f;

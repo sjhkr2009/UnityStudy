@@ -22,13 +22,13 @@ MonoBehaviour:
     baseSubValue: 0
     baseCount: 3
     values:
-    - 0
-    - 3
-    - 2
     - 5
-    - 5
+    - 8
+    - 10
+    - 15
+    - 20
     subValues: []
-    counts: 0000000001000000020000000100000003000000
+    counts: 030000000400000006000000070000000a000000
   - itemType: 2
     itemIndex: 11000
     itemName: "\uC5FD\uCD1D"
@@ -38,17 +38,17 @@ MonoBehaviour:
     baseSubValue: 150
     baseCount: 1
     values:
-    - 0
     - 5
-    - 5
-    - 0
     - 10
+    - 15
+    - 15
+    - 25
     subValues:
-    - 0
-    - 0
-    - -50
-    - -50
-    - -25
+    - 150
+    - 150
+    - 100
+    - 50
+    - 25
     counts: 
   - itemType: 4
     itemIndex: 20000
