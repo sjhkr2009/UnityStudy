@@ -15760,6 +15760,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1950670672}
   - component: {fileID: 1950670673}
+  - component: {fileID: 1950670674}
   m_Layer: 5
   m_Name: LevelUp
   m_TagString: Untagged
@@ -15813,6 +15814,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1950670674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950670671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 769617d6f2be0c940b8498fa951ba1da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemIndices: 10270000f82a0000204e0000
 --- !u!1 &1979957916
 GameObject:
   m_ObjectHideFlags: 0

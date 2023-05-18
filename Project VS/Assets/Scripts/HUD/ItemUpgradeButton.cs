@@ -7,18 +7,20 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class ItemUpgradeButton : MonoBehaviour, IPoolHandler {
     private ItemData data;
-    public ItemController ItemController => GameManager.Item;
 
     [SerializeField] private Image iconImage;
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text descText;
 
+    private IUiEventListener<ItemIndex> listener;
+
     private void Awake() {
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
-    public void Initialize(ItemIndex itemIndex) {
+    public void Initialize(IUiEventListener<ItemIndex> listener, ItemIndex itemIndex) {
         data = ItemDataContainer.GetDataOrDefault(itemIndex);
+        this.listener = listener;
         UpdateData();
     }
 
@@ -31,7 +33,7 @@ public class ItemUpgradeButton : MonoBehaviour, IPoolHandler {
         iconImage.sprite = data.itemIcon;
         descText.text = data.itemDesc;
         
-        int level = ItemController.GetLevel(data.itemIndex);
+        int level = GameManager.Item.GetLevel(data.itemIndex);
         levelText.text = $"Lv.{level + 1}";
     }
 
@@ -40,7 +42,7 @@ public class ItemUpgradeButton : MonoBehaviour, IPoolHandler {
             Debugger.Error("[ItemUpgradeButton.OnClick] ItemUpgradeButton not initialized");
             return;
         }
-        ItemController.AddOrUpgradeItem(data.itemIndex);
+        listener?.InvokeEvent(data.itemIndex);
     }
 
     public void OnInitialize() { }

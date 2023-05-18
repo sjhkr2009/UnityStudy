@@ -9,6 +9,7 @@ public abstract class ItemBase : IItemHandler {
 
     public virtual void Initialize(ItemController controller) {
         Data = ItemDataContainer.GetDataOrDefault(Index);
+        Level = 1;
     }
 
     public virtual void Upgrade() {

@@ -62,6 +62,10 @@ public static class PoolManager {
             return poolParent;
         }
     }
+    
+    public static T GetByType<T>(Transform parent = null, bool stayTransform = false) where T : Component {
+        return Get<T>(typeof(T).Name, parent, stayTransform);
+    }
 
     public static T Get<T>(string name, Transform parent = null, bool stayTransform = false) where T : Component {
         var item = Get(name, parent, stayTransform);

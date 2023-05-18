@@ -21,6 +21,9 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
     public void OnCreate() {
         Collider.enabled = true;
         Rigidbody.simulated = true;
+
+        GameManager.OnPauseGame += SetDisable;
+        GameManager.OnResumeGame += SetEnable;
     }
 
     public void Update() {
@@ -47,6 +50,17 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
 
     public void OnDead() {
         Collider.enabled = false;
+        Rigidbody.simulated = false;
+        
+        GameManager.OnPauseGame -= SetDisable;
+        GameManager.OnResumeGame -= SetEnable;
+    }
+
+    void SetEnable() {
+        Rigidbody.simulated = true;
+    }
+
+    void SetDisable() {
         Rigidbody.simulated = false;
     }
 

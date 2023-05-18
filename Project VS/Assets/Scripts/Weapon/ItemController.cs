@@ -68,7 +68,7 @@ public class ItemController : MonoBehaviour {
         }
         
         // TODO: 모든 무기 정보를 가진 데이터를 만들어서 WeaponIndex와 구현 클래스를 연결할 것 
-        item = ItemTemplate.GetItem(itemIndex);
+        item = ItemFactory.Create(itemIndex);
         AddItem(item);
     }
 

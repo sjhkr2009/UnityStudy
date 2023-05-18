@@ -10,6 +10,9 @@ public sealed class GameManager : Singleton<GameManager> {
     public static event Action OnDeadEnemy;
     public static event Action OnHitPlayer;
     public static event Action OnLevelUp;
+    public static event Action OnPauseGame;
+    public static event Action OnResumeGame;
+    public static event Action OnSelectItem;
     public static event Action OnEverySecond;
     public static event Action OnGameEnd;
 
@@ -42,6 +45,18 @@ public sealed class GameManager : Singleton<GameManager> {
 
     public void CallLevelUp() {
         OnLevelUp?.Invoke();
+    }
+    
+    public void CallSelectItem() {
+        OnSelectItem?.Invoke();
+    }
+
+    public void CallPauseGame() {
+        OnPauseGame?.Invoke();
+    }
+
+    public void CallResumeGame() {
+        OnResumeGame?.Invoke();
     }
     
     public void CallEnemyDead(EnemyStatus deadEnemy) {

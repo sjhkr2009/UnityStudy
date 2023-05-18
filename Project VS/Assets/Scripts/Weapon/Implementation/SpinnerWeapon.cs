@@ -14,12 +14,7 @@ public class SpinnerWeapon : WeaponBase {
         base.Initialize(controller);
         
         Transform = controller.CreateDummyTransform(this);
-        AttackSpeed = 150;
-        AttackRange = 1f;
-        Damage = 10;
-        AttackCount = 3;
-        
-        CreateSpinners();
+        SetDataByLevel();
     }
 
     protected virtual void CreateSpinners() {
@@ -46,6 +41,16 @@ public class SpinnerWeapon : WeaponBase {
 
     public override void Upgrade() {
         base.Upgrade();
+
+        SetDataByLevel();
+    }
+
+    private void SetDataByLevel() {
+        AttackSpeed = Data.GetSubValue(Level);
+        AttackRange = Data.GetRange(Level);
+        Damage = Data.GetMainValue(Level);
+        AttackCount = Data.GetCount(Level);
+        
         CreateSpinners();
     }
 

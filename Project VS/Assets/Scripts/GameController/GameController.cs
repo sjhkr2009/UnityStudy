@@ -13,16 +13,21 @@ public class GameController {
     public int KillCount { get; protected set; }
     public int Exp { get; protected set; }
     public int RequiredExp { get; protected set; }
+
+    public bool IsPause => pauseCount > 0;
+    private int pauseCount = 0;
     
-    public bool IsPause { get; protected set; }
     public float GameTime { get; protected set; }
 
     public void StartGame() {
         Level = 1;
         KillCount = 0;
         GameTime = 0f;
-        IsPause = false;
+        pauseCount = 0;
         RequiredExp = Setting.GetRequiredExp(Level);
+        
+        GameManager.OnLevelUp += PauseGame;
+        GameManager.OnSelectItem += ResumeGame;
     }
     
     public void Update(float deltaTime) {
@@ -56,7 +61,25 @@ public class GameController {
         GameManager.Instance.CallLevelUp();
     }
 
+    public void PauseGame() {
+        if (pauseCount == 0) GameManager.Instance.CallPauseGame();
+        pauseCount++;
+    }
+    
+    public void ResumeGame() {
+        if (pauseCount <= 0) {
+            Debugger.Error($"[GameController.ResumeGame] PauseCount already < 0 ({pauseCount})");
+            return;
+        }
+        
+        pauseCount--;
+        if (pauseCount == 0) GameManager.Instance.CallResumeGame();
+    }
+
     public void EndGame() {
-        IsPause = true;
+        PauseGame();
+        
+        GameManager.OnLevelUp -= PauseGame;
+        GameManager.OnSelectItem -= ResumeGame;
     }
 }

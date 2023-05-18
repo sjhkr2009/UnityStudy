@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class ItemTemplate {
-    public static ItemBase GetItem(ItemIndex itemIndex) {
+public static class ItemFactory {
+    public static ItemBase Create(ItemIndex itemIndex) {
         ItemBase item = itemIndex switch {
             ItemIndex.WeaponAutoGun => new FireBulletWeapon(),
             ItemIndex.WeaponSpinAround => new SpinnerWeapon(),
@@ -11,7 +11,7 @@ public static class ItemTemplate {
             ItemIndex.NormalGlove => new NormalGlove(),
             _ => null
         };
-        if (item == null) Debugger.Error($"[ItemBase.Find] Cannot find {itemIndex} Implementation!");
+        if (item == null) Debugger.Error($"[ItemFactory.Create] Cannot find {itemIndex} Implementation!");
         
         return item;
     }

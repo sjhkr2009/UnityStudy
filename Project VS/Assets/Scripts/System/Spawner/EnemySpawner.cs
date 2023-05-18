@@ -32,6 +32,7 @@ public class EnemySpawner : MonoBehaviour {
 
     private void Update() {
         if (GameManager.Controller == null) return;
+        if (GameManager.Controller.IsPause) return;
         
         timer.Update();
         spawnSettings.ForEach(setting => setting.Update(Time.deltaTime));
