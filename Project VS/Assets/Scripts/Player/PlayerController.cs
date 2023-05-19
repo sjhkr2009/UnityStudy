@@ -6,8 +6,8 @@ using UnityEngine.Scripting;
 
 public class PlayerController : MonoBehaviour {
     [SerializeField] private ItemController itemController;
-    [ShowInInspector, ReadOnly] private PlayerStatus _playerStatus; // for debug
 
+    private PlayerStatus _playerStatus;
     public PlayerStatus Status => _playerStatus;
     protected bool isPaused = false;
     
@@ -59,5 +59,6 @@ public class PlayerController : MonoBehaviour {
     private void OnDestroy() {
         GameManager.OnPauseGame -= OnPauseGame;
         GameManager.OnResumeGame -= OnResumeGame;
+        _playerStatus.Release();
     }
 }

@@ -1,35 +1,16 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
 public class PlayerStatus {
     public GameObject GameObject { get; }
     public CharacterData CharacterData { get; }
     public ItemController ItemController { get; }
 
-    public float Speed {
-        get {
-            var speed = CharacterData.speed;
-            foreach (var item in ItemController.Items) {
-                if (item is ISpeedModifier speedModifier) {
-                    speed = speedModifier.ModifySpeed(speed);
-                }
-            }
-            return speed;
-        }
-    }
+    public float Speed { get; private set; }
+    public float AttackRange { get; private set; }
+    public float AttackPower { get; private set; }
     
-    public float AttackRange {
-        get {
-            var range = CharacterData.attackRange;
-            foreach (var item in ItemController.Items) {
-                if (item is IAttackRangeModifier modifier) {
-                    range = modifier.ModifyAttackRange(range);
-                }
-            }
-            return range;
-        }
-    }
     public float Acceleration { get; set; } = 20f;
     public Vector2 InputVector { get; set; } = Vector2.zero;
     public Vector2 DeltaMove { get; set; } = Vector2.zero;
@@ -39,6 +20,48 @@ public class PlayerStatus {
         GameObject = playerObject;
         CharacterData = new CharacterData();
         ItemController = itemController;
+        
+        Initialize();
+    }
+
+    ~PlayerStatus() {
+        Release();
+    }
+
+    void Initialize() {
+        UpdateStat();
+        
+        GameManager.OnUpdateItem += UpdateStat;
+
+        OnAfterInitialize();
+    }
+
+    // TODO: 캐릭터에 따라 초기에 몇 가지 업그레이드를 가지고 시작하는 경우 이곳에서 처리. 많아질 경우 PlayerStatus를 추상화해서 클래스 단위로 분리할 수 있음. 
+    void OnAfterInitialize() {
+        ItemController.AddOrUpgradeItem(ItemIndex.WeaponSpinAround);
+    }
+
+    public void Release() {
+        GameManager.OnUpdateItem -= UpdateStat;
+    }
+
+    private void UpdateStat() {
+        var speed = CharacterData.speed;
+        var power = CharacterData.attackPower;
+        var range = CharacterData.attackRange;
+        
+        foreach (var item in ItemController.Items) {
+            if (item is ISpeedModifier speedModifier) {
+                speed = speedModifier.ModifySpeed(speed);
+            }
+            if (item is IAttackPowerModifier powerModifier) {
+                power = powerModifier.ModifyAttackPower(power);
+            }
+            if (item is IAttackRangeModifier rangeModifier) {
+                range = rangeModifier.ModifyAttackRange(range);
+            }
+        }
+        
     }
 }
 

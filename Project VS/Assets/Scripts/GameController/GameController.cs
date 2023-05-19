@@ -1,4 +1,5 @@
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class GameController {
@@ -25,7 +26,7 @@ public class GameController {
         GameTime = 0f;
         pauseCount = 0;
         RequiredExp = Setting.GetRequiredExp(Level);
-        
+         
         GameManager.OnLevelUp += PauseGame;
         GameManager.OnSelectItem += ResumeGame;
     }

@@ -15,14 +15,8 @@ public class ItemController : MonoBehaviour {
         GameManager.Item = this;
     }
 
-    [Button]
-    public void AddOnEditor() {
-        if (Items.Count == 0) AddItem(new SpinnerWeapon());
-        else if (Items.Count == 1) AddItem(new FireBulletWeapon());
-    }
-
     public Transform CreateDummyTransform(ItemBase item) => CreateDummyTransform(item?.GetType().Name);
-    public Transform CreateDummyTransform(string dummyObjectName) {
+    private Transform CreateDummyTransform(string dummyObjectName) {
         if (string.IsNullOrEmpty(dummyObjectName)) {
             Debugger.Error("[ItemController.CreateDummyTransform] Parameter is Empty!!");
         }
@@ -34,7 +28,7 @@ public class ItemController : MonoBehaviour {
         return dummy;
     }
 
-    public void AddItem(ItemBase item) {
+    private void AddItem(ItemBase item) {
         item.Initialize(this);
         Items.Add(item);
         SendChangeItemToOther(item);
@@ -60,21 +54,23 @@ public class ItemController : MonoBehaviour {
         return Items.FirstOrDefault(w => w.Index == itemIndex);
     }
 
-    public void AddOrUpgradeItem(ItemIndex itemIndex) {
+    public ItemBase AddOrUpgradeItem(ItemIndex itemIndex) {
         var item = GetItem(itemIndex);
         if (item != null) {
             UpgradeItem(item);
-            return;
+            return item;
         }
         
         // TODO: 모든 무기 정보를 가진 데이터를 만들어서 WeaponIndex와 구현 클래스를 연결할 것 
         item = ItemFactory.Create(itemIndex);
         AddItem(item);
+        return item;
     }
 
     private void UpgradeItem(ItemBase item) {
         item.Upgrade();
         SendChangeItemToOther(item);
+        GameManager.Instance.CallUpdateItem();
     }
 
     private void SendChangeItemToOther(ItemBase updatedItem) {

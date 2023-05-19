@@ -13,6 +13,7 @@ public sealed class GameManager : Singleton<GameManager> {
     public static event Action OnPauseGame;
     public static event Action OnResumeGame;
     public static event Action OnSelectItem;
+    public static event Action OnUpdateItem;
     public static event Action OnEverySecond;
     public static event Action OnGameEnd;
 
@@ -49,6 +50,10 @@ public sealed class GameManager : Singleton<GameManager> {
     
     public void CallSelectItem() {
         OnSelectItem?.Invoke();
+    }
+
+    public void CallUpdateItem() {
+        OnUpdateItem?.Invoke();
     }
 
     public void CallPauseGame() {
