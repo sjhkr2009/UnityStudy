@@ -36,6 +36,7 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (!other.CompareTag(Define.Tag.Projectile) || Status.IsDead) return;
+        if (GameManager.IsPause) return;
         
         var weapon = other.GetComponent<IWeaponCollider>();
         if (weapon == null || !weapon.IsValidTarget(gameObject)) return;

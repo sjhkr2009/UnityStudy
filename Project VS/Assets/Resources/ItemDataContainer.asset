@@ -37,8 +37,8 @@ MonoBehaviour:
     itemDesc: "\uC870\uC900\uC774 \uD544\uC694 \uC5C6\uC2B5\uB2C8\uB2E4."
     itemIcon: {fileID: -205726582, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
     baseValue: 5
-    baseSubValue: 150
-    baseRange: 0
+    baseSubValue: 0.5
+    baseRange: 10
     baseCount: 1
     values:
     - 5
@@ -47,11 +47,11 @@ MonoBehaviour:
     - 15
     - 25
     subValues:
-    - 150
-    - 150
-    - 100
-    - 50
-    - 25
+    - 0.5
+    - 0.5
+    - 0.4
+    - 0.2
+    - 0.1
     ranges: []
     counts: 
   - itemType: 4

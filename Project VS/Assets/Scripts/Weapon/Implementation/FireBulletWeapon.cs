@@ -7,15 +7,6 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
     public override Transform Transform { get; set; }
     
     public string bulletPrefabName = "Bullet01";
-
-    private float fireInterval;
-    public override float AttackSpeed {
-        get => base.AttackSpeed;
-        set {
-            base.AttackSpeed = value;
-            fireInterval = 1f / value;
-        }
-    }
     
     public float BulletSpeed { get; set; }
     public float Penetration { get; set; }
@@ -25,28 +16,34 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
     
     public override void Initialize(ItemController controller) {
         base.Initialize(controller);
-        
-        Damage = 5;
-        AttackSpeed = 2f;
-        AttackRange = 10f;
-        AttackCount = 1;
-        BulletSpeed = 10f;
-        Penetration = 2;
+
+        SetDataByLevel();
         Transform = controller.transform;
         scanner = controller.Scanner;
     }
 
     public override void OnEveryFrame(float deltaTime) {
         fireTimer += deltaTime;
-        if (fireTimer > fireInterval) {
+        if (fireTimer > AttackSpeed) {
             fireTimer = 0f;
             Fire();
         }
     }
 
-    public override void Upgrade() { }
+    public override void Upgrade() {
+        base.Upgrade();
+        SetDataByLevel();
+    }
+    
+    private void SetDataByLevel() {
+        Damage = Data.GetMainValue(Level);
+        AttackSpeed = Data.GetSubValue(Level);
+        AttackRange = Data.GetRange(Level);
+        AttackCount = Data.GetCount(Level);
 
-    public override void Abandon() { }
+        Penetration = Level + 1;
+        BulletSpeed = 5f + (1f / AttackSpeed);
+    }
     
     protected virtual void Fire() {
         var player = GameManager.Player;

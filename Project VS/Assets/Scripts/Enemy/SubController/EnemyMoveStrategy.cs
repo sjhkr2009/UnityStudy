@@ -22,8 +22,7 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
         Collider.enabled = true;
         Rigidbody.simulated = true;
 
-        GameManager.OnPauseGame += SetDisable;
-        GameManager.OnResumeGame += SetEnable;
+        GameManager.OnPauseGame += Stop;
     }
 
     public void Update() {
@@ -52,16 +51,11 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
         Collider.enabled = false;
         Rigidbody.simulated = false;
         
-        GameManager.OnPauseGame -= SetDisable;
-        GameManager.OnResumeGame -= SetEnable;
+        GameManager.OnPauseGame -= Stop;
     }
 
-    void SetEnable() {
-        Rigidbody.simulated = true;
-    }
-
-    void SetDisable() {
-        Rigidbody.simulated = false;
+    void Stop() {
+        Rigidbody.velocity = Vector2.zero;
     }
 
     void UpdateDirection(EnemyStatus status) {

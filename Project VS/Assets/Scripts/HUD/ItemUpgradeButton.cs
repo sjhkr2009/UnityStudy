@@ -9,6 +9,7 @@ public class ItemUpgradeButton : MonoBehaviour, IPoolHandler {
     private ItemData data;
 
     [SerializeField] private Image iconImage;
+    [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text descText;
 
@@ -31,10 +32,11 @@ public class ItemUpgradeButton : MonoBehaviour, IPoolHandler {
         }
         
         iconImage.sprite = data.itemIcon;
+        titleText.text = data.itemName;
         descText.text = data.itemDesc;
         
         int level = GameManager.Item.GetLevel(data.itemIndex);
-        levelText.text = $"Lv.{level + 1}";
+        levelText.text = level <= 0 ? "New!" : $"Lv.{level} >> Lv.{level + 1}";
     }
 
     private void OnClick() {

@@ -46,22 +46,21 @@ public class PlayerStatus {
     }
 
     private void UpdateStat() {
-        var speed = CharacterData.speed;
-        var power = CharacterData.attackPower;
-        var range = CharacterData.attackRange;
+        Speed = CharacterData.speed;
+        AttackPower = CharacterData.attackPower;
+        AttackRange = CharacterData.attackRange;
         
         foreach (var item in ItemController.Items) {
             if (item is ISpeedModifier speedModifier) {
-                speed = speedModifier.ModifySpeed(speed);
+                Speed = speedModifier.ModifySpeed(Speed);
             }
             if (item is IAttackPowerModifier powerModifier) {
-                power = powerModifier.ModifyAttackPower(power);
+                AttackPower = powerModifier.ModifyAttackPower(AttackPower);
             }
             if (item is IAttackRangeModifier rangeModifier) {
-                range = rangeModifier.ModifyAttackRange(range);
+                AttackRange = rangeModifier.ModifyAttackRange(AttackRange);
             }
         }
-        
     }
 }
 

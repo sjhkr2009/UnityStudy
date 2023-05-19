@@ -84,6 +84,8 @@ public class ItemController : MonoBehaviour {
     }
 
     private void Update() {
+        if (GameManager.IsPause) return;
+        
         var deltaTime = Time.deltaTime;
         Items.ForEach(w => w.OnEveryFrame(deltaTime));
     }
