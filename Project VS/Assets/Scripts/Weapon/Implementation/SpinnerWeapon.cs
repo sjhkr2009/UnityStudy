@@ -36,7 +36,7 @@ public class SpinnerWeapon : WeaponBase {
     }
 
     public override void OnEveryFrame(float deltaTime) {
-        Transform.Rotate(Vector3.back * (AttackSpeed * deltaTime));
+        Transform.Rotate(Vector3.back * (ObjectSpeed * deltaTime));
     }
 
     public override void Upgrade() {
@@ -46,10 +46,11 @@ public class SpinnerWeapon : WeaponBase {
     }
 
     private void SetDataByLevel() {
-        AttackSpeed = Data.GetSubValue(Level);
-        AttackRange = Data.GetRange(Level);
-        Damage = Data.GetMainValue(Level);
-        AttackCount = Data.GetCount(Level);
+        var data = Data.GetValue(Level);
+        ObjectSpeed = data.objectSpeed;
+        AttackRange = data.attackRange;
+        Damage = data.damage;
+        AttackCount = data.attackCount;
         
         CreateSpinners();
     }

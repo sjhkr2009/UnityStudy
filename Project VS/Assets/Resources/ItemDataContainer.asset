@@ -16,77 +16,188 @@ MonoBehaviour:
   - itemType: 1
     itemIndex: 10000
     itemName: "\uC0BD"
-    itemDesc: "\uB545\uC744 \uD314 \uB54C\uB9CC \uC4F0\uB294 \uAC74 \uC544\uB2D9\uB2C8\uB2E4."
     itemIcon: {fileID: -181907988, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-    baseValue: 5
-    baseSubValue: 150
-    baseRange: 1
-    baseCount: 3
-    values:
-    - 5
-    - 8
-    - 10
-    - 15
-    - 20
-    subValues: []
-    ranges: []
-    counts: 030000000400000006000000070000000a000000
+    maxLevel: 5
+    indexedValues:
+    - damage: 5
+      attackRange: 1
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 3
+      penetration: 0
+      objectSpeed: 150
+    - damage: 8
+      attackRange: 1
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 4
+      penetration: 0
+      objectSpeed: 150
+    - damage: 10
+      attackRange: 1.2
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 6
+      penetration: 0
+      objectSpeed: 210
+    - damage: 15
+      attackRange: 1.2
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 7
+      penetration: 0
+      objectSpeed: 210
+    - damage: 20
+      attackRange: 1.5
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 10
+      penetration: 0
+      objectSpeed: 270
+    descriptions:
+    - "\uB545\uC744 \uD314 \uB54C\uB9CC \uC4F0\uB294 \uAC74 \uC544\uB2D9\uB2C8\uB2E4."
+    - 
+    - 
+    - 
+    - 
   - itemType: 2
     itemIndex: 11000
     itemName: "\uC5FD\uCD1D"
-    itemDesc: "\uC870\uC900\uC774 \uD544\uC694 \uC5C6\uC2B5\uB2C8\uB2E4."
     itemIcon: {fileID: -205726582, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-    baseValue: 5
-    baseSubValue: 0.5
-    baseRange: 10
-    baseCount: 1
-    values:
-    - 5
-    - 10
-    - 15
-    - 15
-    - 25
-    subValues:
-    - 0.5
-    - 0.5
-    - 0.4
-    - 0.2
-    - 0.1
-    ranges: []
-    counts: 
+    maxLevel: 5
+    indexedValues:
+    - damage: 5
+      attackRange: 10
+      moveSpeed: 0
+      attackInterval: 0.5
+      attackCount: 1
+      penetration: 0
+      objectSpeed: 0
+    - damage: 10
+      attackRange: 10
+      moveSpeed: 0
+      attackInterval: 0.5
+      attackCount: 1
+      penetration: 0
+      objectSpeed: 0
+    - damage: 15
+      attackRange: 10
+      moveSpeed: 0
+      attackInterval: 0.4
+      attackCount: 1
+      penetration: 0
+      objectSpeed: 0
+    - damage: 15
+      attackRange: 10
+      moveSpeed: 0
+      attackInterval: 0.2
+      attackCount: 1
+      penetration: 0
+      objectSpeed: 0
+    - damage: 25
+      attackRange: 10
+      moveSpeed: 0
+      attackInterval: 0.1
+      attackCount: 1
+      penetration: 0
+      objectSpeed: 0
+    descriptions:
+    - "\uC870\uC900\uC774 \uD544\uC694 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - 
+    - 
+    - 
+    - 
   - itemType: 4
     itemIndex: 20000
     itemName: "\uC2E0\uBC1C"
-    itemDesc: "\uBC14\uB2E5\uC744 \uC870\uC2EC\uD558\uC138\uC694!"
     itemIcon: {fileID: -966295699, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-    baseValue: 1.1
-    baseSubValue: 0
-    baseRange: 0
-    baseCount: 0
-    values:
-    - 1.1
-    - 1.2
-    - 1.4
-    - 1.6
-    - 2
-    subValues: []
-    ranges: []
-    counts: 
+    maxLevel: 5
+    indexedValues:
+    - damage: 0
+      attackRange: 0
+      moveSpeed: 1.1
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    - damage: 0
+      attackRange: 0
+      moveSpeed: 1.2
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    - damage: 0
+      attackRange: 0
+      moveSpeed: 1.3
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    - damage: 0
+      attackRange: 0
+      moveSpeed: 1.4
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    - damage: 0
+      attackRange: 0
+      moveSpeed: 1.5
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    descriptions:
+    - "\uBC14\uB2E5\uC744 \uC870\uC2EC\uD558\uC138\uC694!"
+    - 
+    - 
+    - 
+    - 
   - itemType: 3
     itemIndex: 30000
     itemName: "\uC7A5\uAC11"
-    itemDesc: "\uAD73\uC740\uC0B4\uC744 \uB9C9\uC544\uC90D\uB2C8\uB2E4."
     itemIcon: {fileID: 927338625, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-    baseValue: 1.1
-    baseSubValue: 0
-    baseRange: 0
-    baseCount: 0
-    values:
-    - 1.1
-    - 1.2
-    - 1.3
-    - 1.4
-    - 1.7
-    subValues: []
-    ranges: []
-    counts: 
+    maxLevel: 5
+    indexedValues:
+    - damage: 0
+      attackRange: 1.1
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    - damage: 0
+      attackRange: 1.2
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    - damage: 0
+      attackRange: 1.3
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    - damage: 0
+      attackRange: 1.4
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    - damage: 0
+      attackRange: 1.5
+      moveSpeed: 0
+      attackInterval: 0
+      attackCount: 0
+      penetration: 0
+      objectSpeed: 0
+    descriptions:
+    - "\uAD73\uC740\uC0B4\uC744 \uB9C9\uC544\uC90D\uB2C8\uB2E4."
+    - 
+    - 
+    - 
+    - 

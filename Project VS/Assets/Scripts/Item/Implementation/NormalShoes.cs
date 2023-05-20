@@ -5,7 +5,7 @@ using UnityEngine;
 public class NormalShoes : ItemBase, ISpeedModifier {
     public override ItemIndex Index => ItemIndex.NormalShoes;
     public float ModifySpeed(float prevSpeed) {
-        var factor = Data.GetMainValue(Level);
+        var factor = Data.GetValue(Level).moveSpeed;
         return prevSpeed * factor;
     }
 }

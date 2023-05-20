@@ -24,7 +24,7 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
 
     public override void OnEveryFrame(float deltaTime) {
         fireTimer += deltaTime;
-        if (fireTimer > AttackSpeed) {
+        if (fireTimer > AttackInterval) {
             fireTimer = 0f;
             Fire();
         }
@@ -36,13 +36,14 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
     }
     
     private void SetDataByLevel() {
-        Damage = Data.GetMainValue(Level);
-        AttackSpeed = Data.GetSubValue(Level);
-        AttackRange = Data.GetRange(Level);
-        AttackCount = Data.GetCount(Level);
+        var data = Data.GetValue(Level);
+        Damage = data.damage;
+        AttackInterval = data.attackInterval;
+        AttackRange = data.attackRange;
+        AttackCount = data.attackCount;
 
         Penetration = Level + 1;
-        BulletSpeed = 5f + (1f / AttackSpeed);
+        BulletSpeed = 5f + (1f / AttackInterval);
     }
     
     protected virtual void Fire() {

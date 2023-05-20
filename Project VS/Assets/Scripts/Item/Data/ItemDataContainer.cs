@@ -7,14 +7,14 @@ using UnityEngine;
 public class ItemDataContainer : ScriptableObject {
     private static ItemDataContainer instance;
     
-    [SerializeField] private List<ItemData> dataContainer = new List<ItemData>();
+    [SerializeField] public List<ItemData> dataContainer = new List<ItemData>();
 
     public ItemData GetData(ItemIndex itemIndex) {
         return dataContainer.FirstOrDefault(d => itemIndex == d.itemIndex);
     }
 
     private ItemData AddDataInternal(ItemIndex itemIndex) {
-        var data = ItemData.CreateDefault(itemIndex);
+        var data = new ItemData() { itemIndex = itemIndex };
         dataContainer.Add(data);
         return data;
     }
@@ -36,7 +36,7 @@ public class ItemDataContainer : ScriptableObject {
         foreach (var itemData in dataContainer) {
             bool isValid = true;
             if (!Enum.IsDefined(typeof(ItemIndex), itemData.itemIndex)) {
-                Debugger.Warning($"ItemIndex not defined: {itemData.itemName} | {itemData.itemDesc} | This data will be removed.");
+                Debugger.Warning($"ItemIndex not defined: {itemData.itemName} | This data will be removed.");
                 isValid = false;
             }
             if (itemDatas.ContainsKey(itemData.itemIndex)) {
@@ -64,7 +64,7 @@ public class ItemDataContainer : ScriptableObject {
     }
 
     public static ItemData GetDataOrDefault(ItemIndex itemIndex) {
-        return GetInstance().GetData(itemIndex) ?? ItemData.CreateDefault(itemIndex);
+        return GetInstance().GetData(itemIndex) ?? new ItemData() { itemIndex = itemIndex };
     }
 
     private static ItemDataContainer GetInstance() {

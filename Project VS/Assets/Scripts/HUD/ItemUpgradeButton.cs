@@ -33,9 +33,9 @@ public class ItemUpgradeButton : MonoBehaviour, IPoolHandler {
         
         iconImage.sprite = data.itemIcon;
         titleText.text = data.itemName;
-        descText.text = data.itemDesc;
-        
+
         int level = GameManager.Item.GetLevel(data.itemIndex);
+        descText.text = data.GetDescription(level + 1);
         levelText.text = level <= 0 ? "New!" : $"Lv.{level} >> Lv.{level + 1}";
     }
 

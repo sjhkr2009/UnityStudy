@@ -80,7 +80,7 @@ public class ItemController : MonoBehaviour {
     }
 
     public int GetLevel(ItemIndex itemIndex) {
-        return Items.FirstOrDefault(i => i.Index == itemIndex)?.Level ?? -1;
+        return Items.FirstOrDefault(i => i.Index == itemIndex)?.Level ?? 0;
     }
 
     private void Update() {

@@ -1,69 +1,55 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
 public class ItemData {
-    [BoxGroup("Main")] public ItemType itemType = ItemType.Unknown;
-    [BoxGroup("Main")] public ItemIndex itemIndex;
+    [SerializeField] public ItemType itemType = ItemType.Unknown;
+    [SerializeField] public ItemIndex itemIndex;
     
-    [BoxGroup("View")] public string itemName;
-    [BoxGroup("View")] public string itemDesc;
-    [BoxGroup("View")] public Sprite itemIcon;
+    [SerializeField] public string itemName;
+    [SerializeField] public Sprite itemIcon;
     
-    [BoxGroup("Spec")] public float baseValue;
-    [BoxGroup("Spec")] public float baseSubValue;
-    [BoxGroup("Spec")] public float baseRange;
-    [BoxGroup("Spec")] public int baseCount;
-    [BoxGroup("Spec")] public List<float> values = new List<float>();
-    [BoxGroup("Spec")] public List<float> subValues = new List<float>();
-    [BoxGroup("Spec")] public List<float> ranges = new List<float>();
-    [BoxGroup("Spec")] public List<int> counts = new List<int>();
+    [SerializeField] public int maxLevel = Define.DataSetting.ItemMaxLevel;
+    [SerializeField] public List<ItemIndexedValue> indexedValues = new List<ItemIndexedValue>();
+    [SerializeField] public List<string> descriptions = new List<string>();
 
-    public static ItemData CreateDefault(ItemIndex itemIndex) {
-        return new ItemData {
-            itemIndex = itemIndex
-        };
+    public ItemIndexedValue GetValue(int oneBasedLevel) {
+        int zeroBasedLevel = oneBasedLevel - 1;
+
+        if (indexedValues == null || indexedValues.Count == 0) {
+            Debugger.Error($"[ItemData.GetValue] {itemIndex} | indexedValues is empty!!");
+            return new ItemIndexedValue();
+        }
+
+        if (zeroBasedLevel < 0 || zeroBasedLevel >= indexedValues.Count) {
+            Debugger.Warning($"[ItemData.GetValue] {itemIndex} | indexedValues not have {zeroBasedLevel} data. Return clamped value(0~{indexedValues.Count}).");
+            zeroBasedLevel = zeroBasedLevel.Clamp(0, indexedValues.Count - 1);
+        }
+
+        return indexedValues[zeroBasedLevel];
     }
 
-    public float GetMainValue(int oneBasedLevel) {
-        if (values == null || values.Count == 0) return baseValue;
-
-        var index = (oneBasedLevel - 1).Clamp(0, values.Count - 1);
-        if (index != (oneBasedLevel - 1)) {
-            Debugger.Warning($"[ItemData.GetValue] Cannot find {oneBasedLevel} level data on {itemIndex}. Return clamped value.");
+    public string GetDescription(int oneBasedLevel) {
+        int zeroBasedLevel = oneBasedLevel - 1;
+        
+        if (descriptions == null || descriptions.Count == 0) {
+            Debugger.Error($"[ItemData.GetDescription] {itemIndex} | descriptions is empty!!");
+            return string.Empty;
         }
-        return values[index];
-    }
-    
-    public float GetRange(int oneBasedLevel) {
-        if (ranges == null || ranges.Count == 0) return baseRange;
 
-        var index = (oneBasedLevel - 1).Clamp(0, ranges.Count - 1);
-        if (index != (oneBasedLevel - 1)) {
-            Debugger.Warning($"[ItemData.GetRange] Cannot find {oneBasedLevel} level data on {itemIndex}. Return clamped value.");
+        if (zeroBasedLevel < 0 || zeroBasedLevel >= descriptions.Count) {
+            Debugger.Warning($"[ItemData.GetDescription] {itemIndex} | descriptions not have {zeroBasedLevel} data. Return clamped value(0~{descriptions.Count}).");
+            zeroBasedLevel = zeroBasedLevel.Clamp(0, descriptions.Count - 1);
         }
-        return ranges[index];
-    }
-    
-    public float GetSubValue(int oneBasedLevel) {
-        if (subValues == null || subValues.Count == 0) return baseSubValue;
 
-        var index = (oneBasedLevel - 1).Clamp(0, subValues.Count - 1);
-        if (index != (oneBasedLevel - 1)) {
-            Debugger.Warning($"[ItemData.GetSubValue] Cannot find {oneBasedLevel} level data on {itemIndex}. Return clamped value.");
+        var ret = descriptions[zeroBasedLevel];
+        if (string.IsNullOrWhiteSpace(ret)) {
+            Debugger.Warning($"[ItemData.GetDescription] {itemIndex} | description is empty. Return first valid description.");
+            return descriptions.FirstOrDefault(desc => !string.IsNullOrWhiteSpace(desc)) ?? string.Empty;
         }
-        return subValues[index];
-    }
-    
-    public int GetCount(int oneBasedLevel) {
-        if (counts == null || counts.Count == 0) return baseCount;
-
-        var index = (oneBasedLevel - 1).Clamp(0, counts.Count - 1);
-        if (index != (oneBasedLevel - 1)) {
-            Debugger.Warning($"[ItemData.GetCount] Cannot find {oneBasedLevel} level data on {itemIndex}. Return clamped value.");
-        }
-        return counts[index];
+        return ret;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class NormalGlove : ItemBase, IAttackRangeModifier {
     public override ItemIndex Index => ItemIndex.NormalGlove;
     public float ModifyAttackRange(float prevValue) {
-        var factor = Data.GetMainValue(Level);
+        var factor = Data.GetValue(Level).attackRange;
         return prevValue * factor;
     }
 }
