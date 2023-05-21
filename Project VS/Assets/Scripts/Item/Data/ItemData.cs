@@ -47,7 +47,7 @@ public class ItemData {
 
         var ret = descriptions[zeroBasedLevel];
         if (string.IsNullOrWhiteSpace(ret)) {
-            Debugger.Warning($"[ItemData.GetDescription] {itemIndex} | description is empty. Return first valid description.");
+            Debugger.Log($"[ItemData.GetDescription] {itemIndex} | description is empty. Return first valid description.");
             return descriptions.FirstOrDefault(desc => !string.IsNullOrWhiteSpace(desc)) ?? string.Empty;
         }
         return ret;

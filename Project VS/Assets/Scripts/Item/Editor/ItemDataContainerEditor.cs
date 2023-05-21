@@ -114,7 +114,10 @@ public class ItemDataContainerEditor : OdinEditor {
         using (new EditorGUILayout.HorizontalScope()) {
             DrawItemIndexedValueHeader();
             for (int i = 0; i < targetData.maxLevel; i++) {
-                using (new EditorGUILayout.VerticalScope()) DrawItemIndexedValue(targetData.indexedValues[i]);
+                using (new EditorGUILayout.VerticalScope()) {
+                    var modified = DrawItemIndexedValueEditor(targetData.indexedValues[i]);
+                    targetData.indexedValues[i] = modified;
+                }
             }
         }
         
@@ -155,7 +158,7 @@ public class ItemDataContainerEditor : OdinEditor {
         }
     }
 
-    void DrawItemIndexedValue(ItemIndexedValue indexedValue) {
+    ItemIndexedValue DrawItemIndexedValueEditor(ItemIndexedValue indexedValue) {
         indexedValue.damage = EditorGUILayout.FloatField(indexedValue.damage);
         indexedValue.attackRange = EditorGUILayout.FloatField(indexedValue.attackRange);
         indexedValue.moveSpeed = EditorGUILayout.FloatField(indexedValue.moveSpeed);
@@ -163,5 +166,6 @@ public class ItemDataContainerEditor : OdinEditor {
         indexedValue.attackCount = EditorGUILayout.IntField(indexedValue.attackCount);
         indexedValue.penetration = EditorGUILayout.FloatField(indexedValue.penetration);
         indexedValue.objectSpeed = EditorGUILayout.FloatField(indexedValue.objectSpeed);
+        return indexedValue;
     }
 }
