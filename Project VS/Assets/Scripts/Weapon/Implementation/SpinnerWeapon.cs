@@ -46,11 +46,10 @@ public class SpinnerWeapon : WeaponBase {
     }
 
     private void SetDataByLevel() {
-        var data = Data.GetValue(Level);
-        ObjectSpeed = data.objectSpeed;
-        AttackRange = data.attackRange;
-        Damage = data.damage;
-        AttackCount = data.attackCount;
+        ObjectSpeed = Data.GetValue(ItemValueType.ObjectSpeed, Level);
+        AttackRange = Data.GetValue(ItemValueType.AttackRange, Level);
+        Damage = Data.GetValue(ItemValueType.Damage, Level);
+        AttackCount = Data.GetIntValue(ItemValueType.AttackCount, Level);
         
         CreateSpinners();
     }

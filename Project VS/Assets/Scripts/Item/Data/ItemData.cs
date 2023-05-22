@@ -13,23 +13,19 @@ public class ItemData {
     [SerializeField] public Sprite itemIcon;
     
     [SerializeField] public int maxLevel = Define.DataSetting.ItemMaxLevel;
-    [SerializeField] public List<ItemIndexedValue> indexedValues = new List<ItemIndexedValue>();
+    [SerializeField] public List<ItemDetailValue> detailValues = new List<ItemDetailValue>();
     [SerializeField] public List<string> descriptions = new List<string>();
-
-    public ItemIndexedValue GetValue(int oneBasedLevel) {
-        int zeroBasedLevel = oneBasedLevel - 1;
-
-        if (indexedValues == null || indexedValues.Count == 0) {
+    
+    public int GetIntValue(ItemValueType type, int oneBasedLevel) => Mathf.RoundToInt(GetValue(type, oneBasedLevel));
+    public float GetValue(ItemValueType type, int oneBasedLevel) {
+        var data = detailValues.FirstOrDefault(v => v.Type == type);
+        if (data == null) {
             Debugger.Error($"[ItemData.GetValue] {itemIndex} | indexedValues is empty!!");
-            return new ItemIndexedValue();
+            return default;
         }
 
-        if (zeroBasedLevel < 0 || zeroBasedLevel >= indexedValues.Count) {
-            Debugger.Warning($"[ItemData.GetValue] {itemIndex} | indexedValues not have {zeroBasedLevel} data. Return clamped value(0~{indexedValues.Count}).");
-            zeroBasedLevel = zeroBasedLevel.Clamp(0, indexedValues.Count - 1);
-        }
-
-        return indexedValues[zeroBasedLevel];
+        int zeroBasedIndex = oneBasedLevel - 1;
+        return data.GetValue(zeroBasedIndex);
     }
 
     public string GetDescription(int oneBasedLevel) {

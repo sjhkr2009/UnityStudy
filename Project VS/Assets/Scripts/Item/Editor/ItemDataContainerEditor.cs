@@ -9,12 +9,16 @@ public class ItemDataContainerEditor : OdinEditor {
     private static ItemIndex itemIndex = ItemIndex.None;
     
     private ItemData targetData;
-    private int targetLevelIndex;
+    private ItemValueType targetDataType;
     
     private bool showRawData;
-    private Vector2 scrollPos;
+    private Vector2 normalScrollPos;
+    private Vector2 rawDataScrollPos;
 
     private ItemIndex[] ItemIndexArray { get; set; }
+
+    private GUIStyle MiddleAlignLabel => new GUIStyle("label") { alignment = TextAnchor.MiddleCenter };
+    private GUIStyle RightAlignLabel => new GUIStyle("label") { alignment = TextAnchor.MiddleRight };
 
     public override void OnInspectorGUI() {
         var itemDataContainer = target as ItemDataContainer;
@@ -47,19 +51,23 @@ public class ItemDataContainerEditor : OdinEditor {
             bool isFirst = prevIndex == selectedIndex || prevIndex == ItemIndex.None;
             bool isLast = nextIndex == selectedIndex;
             GUILayout.Label($"{(isFirst ? "(None)" : " < " + prevIndex)}");
-            GUILayout.Label($"{(isLast ? "(None)" : nextIndex + " > ")}",
-                new GUIStyle("label") { alignment = TextAnchor.MiddleRight }
-            );
+            GUILayout.Label($"{(isLast ? "(None)" : nextIndex + " > ")}", RightAlignLabel);
         }
         
         EditorGUILayout.Space(20);
         if (targetData == null || selectedIndex != itemIndex) {
             itemIndex = selectedIndex;
+            normalScrollPos = Vector2.zero;
             ResetTargetData();
         }
 
         if (targetData != null) {
+            normalScrollPos = EditorGUILayout.BeginScrollView(normalScrollPos);
+            EditorGUILayout.LabelField($"[{targetData.itemIndex}]", MiddleAlignLabel);
+            GUILayout.Label(string.Empty, GUI.skin.horizontalSlider);
+            GUILayout.Space(20);
             DrawItemData();
+            EditorGUILayout.EndScrollView();
         } else if (itemIndex == ItemIndex.None) {
             EditorGUILayout.LabelField("추가하거나 수정할 아이템 데이터를 선택해주세요.");
         } else if (GUILayout.Button("Add Data")) {
@@ -88,7 +96,7 @@ public class ItemDataContainerEditor : OdinEditor {
 
         showRawData = EditorGUILayout.Foldout(showRawData, "Show Raw Data");
         if (showRawData) {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+            rawDataScrollPos = EditorGUILayout.BeginScrollView(rawDataScrollPos);
             base.OnInspectorGUI();
             EditorGUILayout.EndScrollView();
         }
@@ -101,71 +109,91 @@ public class ItemDataContainerEditor : OdinEditor {
 
     void DrawItemData() {
         if (targetData == null) return;
-        
-        EditorGUILayout.LabelField($"[{targetData.itemIndex}]");
-        
+
         targetData.itemName = EditorGUILayout.TextField("아이템 이름", targetData.itemName);
         targetData.itemType = (ItemType)EditorGUILayout.EnumPopup("타입", targetData.itemType);
         targetData.itemIcon = (Sprite)EditorGUILayout.ObjectField("아이콘", targetData.itemIcon, typeof(Sprite));
         
-        targetData.maxLevel = EditorGUILayout.IntField("최고레벨", targetData.maxLevel).Clamp(1, 10);
-        SetListCountByMaxLevel();
+        EditorGUILayout.Space(10);
+        GUILayout.Label(string.Empty, GUI.skin.horizontalSlider);
+        EditorGUILayout.Space(20);
+        
+        DrawDetailValueMetadata(targetData);
+        
+        GUILayout.Label("Data Type By Level");
+        foreach (var detailValue in targetData.detailValues) {
+            DrawItemIndexedValueEditor(detailValue);
+        }
+        
+        EditorGUILayout.Space(10);
+        GUILayout.Label(string.Empty, GUI.skin.horizontalSlider);
+        EditorGUILayout.Space(20);
 
+        DrawItemDescriptions(targetData);
+    }
+
+    void DrawDetailValueMetadata(ItemData drawTargetData) {
+        drawTargetData.maxLevel = EditorGUILayout.IntField("최고레벨", drawTargetData.maxLevel).Clamp(1, 10);
+        SetListCountByMaxLevel(drawTargetData);
+        
+        EditorGUILayout.LabelField("[세부 수치 설정]");
+        targetDataType = (ItemValueType)EditorGUILayout.EnumPopup("Editing...", targetDataType);
         using (new EditorGUILayout.HorizontalScope()) {
-            DrawItemIndexedValueHeader();
-            for (int i = 0; i < targetData.maxLevel; i++) {
-                using (new EditorGUILayout.VerticalScope()) {
-                    var modified = DrawItemIndexedValueEditor(targetData.indexedValues[i]);
-                    targetData.indexedValues[i] = modified;
+            if (GUILayout.Button("Add Data")) {
+                if (targetDataType == ItemValueType.Default) {
+                    EditorUtility.DisplayDialog("Warning", "추가할 데이터 타입을 선택해주세요.", "ㅇㅇ...");
+                } else if (drawTargetData.detailValues.Any(v => v.Type == targetDataType)) {
+                    EditorUtility.DisplayDialog("Warning", $"{targetDataType} 데이터가 이미 있습니다!", "ㅇㅇ!");
+                } else {
+                    var detailValue = ItemDetailValue.Create(targetDataType, drawTargetData.maxLevel);
+                    targetData.detailValues.Add(detailValue);
+                }
+            }
+            
+            if (GUILayout.Button("Remove Data")) {
+                if (targetDataType == ItemValueType.Default) {
+                    EditorUtility.DisplayDialog("Warning", "삭제할 데이터 타입을 선택해주세요.", "ㅇㅇ");
+                } else if (drawTargetData.detailValues.All(v => v.Type != targetDataType)) {
+                    EditorUtility.DisplayDialog("Warning", $"{targetDataType} 데이터가 없습니다.", "ㅇㅇ");
+                } else {
+                    var deleteTarget = drawTargetData.detailValues.First(v => v.Type == targetDataType); 
+                    targetData.detailValues.Remove(deleteTarget);
                 }
             }
         }
+    }
+
+    void SetListCountByMaxLevel(ItemData drawTargetData) {
+        foreach (var detailValue in drawTargetData.detailValues) {
+            detailValue.SetValueCount(drawTargetData.maxLevel);
+        }
         
-        EditorGUILayout.LabelField("[아이템 설명]");
+        while (drawTargetData.descriptions.Count < drawTargetData.maxLevel) {
+            drawTargetData.descriptions.Add(string.Empty);
+        }
+        while (drawTargetData.maxLevel < drawTargetData.descriptions.Count) {
+            drawTargetData.descriptions.RemoveAt(drawTargetData.descriptions.Count - 1);
+        }
+    }
+
+    void DrawItemIndexedValueEditor(ItemDetailValue detailValue) {
         using (new EditorGUILayout.HorizontalScope()) {
+            GUILayout.Label($"[{detailValue.Type}]");
             for (int i = 0; i < targetData.maxLevel; i++) {
-                if (GUILayout.Button($"Level {i + 1}")) targetLevelIndex = i;
+                var value = EditorGUILayout.FloatField(detailValue.GetValue(i));
+                detailValue.SetValue(i, value);
             }
         }
-        EditorGUILayout.LabelField($"[Level {targetLevelIndex} >> {targetLevelIndex + 1}] 업그레이드 설명");
-        targetData.descriptions[targetLevelIndex] = EditorGUILayout.TextArea(targetData.descriptions[targetLevelIndex]);
     }
 
-    void SetListCountByMaxLevel() {
-        while (targetData.indexedValues.Count < targetData.maxLevel) {
-            targetData.indexedValues.Add(new ItemIndexedValue());
+    void DrawItemDescriptions(ItemData drawTargetData) {
+        EditorGUILayout.LabelField("[아이템 설명]");
+        
+        for (int i = 0; i < drawTargetData.maxLevel; i++) {
+            EditorGUILayout.Space(3);
+            EditorGUILayout.LabelField($"[Level {i} >> {i + 1}] 업그레이드 설명");
+            drawTargetData.descriptions[i] = EditorGUILayout.TextArea(drawTargetData.descriptions[i]);
         }
-        while (targetData.maxLevel < targetData.indexedValues.Count) {
-            targetData.indexedValues.RemoveAt(targetData.indexedValues.Count - 1);
-        }
-        while (targetData.descriptions.Count < targetData.maxLevel) {
-            targetData.descriptions.Add(string.Empty);
-        }
-        while (targetData.maxLevel < targetData.descriptions.Count) {
-            targetData.descriptions.RemoveAt(targetData.descriptions.Count - 1);
-        }
-    }
-
-    void DrawItemIndexedValueHeader() {
-        using (new EditorGUILayout.VerticalScope()) {
-            GUILayout.Label("Damage");
-            GUILayout.Label("Attack Range");
-            GUILayout.Label("Move Speed");
-            GUILayout.Label("Attack Interval");
-            GUILayout.Label("Attack Count");
-            GUILayout.Label("Penetration");
-            GUILayout.Label("Object Speed");
-        }
-    }
-
-    ItemIndexedValue DrawItemIndexedValueEditor(ItemIndexedValue indexedValue) {
-        indexedValue.damage = EditorGUILayout.FloatField(indexedValue.damage);
-        indexedValue.attackRange = EditorGUILayout.FloatField(indexedValue.attackRange);
-        indexedValue.moveSpeed = EditorGUILayout.FloatField(indexedValue.moveSpeed);
-        indexedValue.attackInterval = EditorGUILayout.FloatField(indexedValue.attackInterval);
-        indexedValue.attackCount = EditorGUILayout.IntField(indexedValue.attackCount);
-        indexedValue.penetration = EditorGUILayout.FloatField(indexedValue.penetration);
-        indexedValue.objectSpeed = EditorGUILayout.FloatField(indexedValue.objectSpeed);
-        return indexedValue;
+        
     }
 }
