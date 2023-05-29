@@ -24,14 +24,8 @@ public class PlayerStatus {
         Initialize();
     }
 
-    ~PlayerStatus() {
-        Release();
-    }
-
     void Initialize() {
         UpdateStat();
-        
-        GameManager.OnUpdateItem += UpdateStat;
 
         OnAfterInitialize();
     }
@@ -40,12 +34,7 @@ public class PlayerStatus {
     void OnAfterInitialize() {
         ItemController.AddOrUpgradeItem(ItemIndex.WeaponSpinAround);
     }
-
-    public void Release() {
-        GameManager.OnUpdateItem -= UpdateStat;
-    }
-
-    private void UpdateStat() {
+    public void UpdateStat() {
         Speed = CharacterData.speed;
         AttackPower = CharacterData.attackPower;
         AttackRange = CharacterData.attackRange;

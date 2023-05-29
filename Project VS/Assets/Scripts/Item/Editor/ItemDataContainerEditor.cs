@@ -34,7 +34,7 @@ public class ItemDataContainerEditor : OdinEditor {
         
         using (new EditorGUILayout.HorizontalScope()) {
             if (GUILayout.Button("<<")) {
-                selectedIndex = (Enum.GetValues(typeof(ItemIndex)) as ItemIndex[]).First();
+                selectedIndex = (Enum.GetValues(typeof(ItemIndex)) as ItemIndex[])!.First();
             }
             if (GUILayout.Button("<")) {
                 selectedIndex = prevIndex;
@@ -43,7 +43,7 @@ public class ItemDataContainerEditor : OdinEditor {
                 selectedIndex = nextIndex;
             }
             if (GUILayout.Button(">>")) {
-                selectedIndex = (Enum.GetValues(typeof(ItemIndex)) as ItemIndex[]).Last();
+                selectedIndex = (Enum.GetValues(typeof(ItemIndex)) as ItemIndex[])!.Last();
             }
         }
 
@@ -112,7 +112,7 @@ public class ItemDataContainerEditor : OdinEditor {
 
         targetData.itemName = EditorGUILayout.TextField("아이템 이름", targetData.itemName);
         targetData.itemType = (ItemType)EditorGUILayout.EnumPopup("타입", targetData.itemType);
-        targetData.itemIcon = (Sprite)EditorGUILayout.ObjectField("아이콘", targetData.itemIcon, typeof(Sprite));
+        targetData.itemIcon = (Sprite)EditorGUILayout.ObjectField("아이콘", targetData.itemIcon, typeof(Sprite), false);
         
         EditorGUILayout.Space(10);
         GUILayout.Label(string.Empty, GUI.skin.horizontalSlider);

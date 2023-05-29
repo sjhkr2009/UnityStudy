@@ -51,10 +51,20 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
         }
     }
 
+    public override void OnPauseGame() {
+        base.OnPauseGame();
+        moveStrategy?.OnPauseGame();
+    }
+
+    public override void OnResumeGame() {
+        base.OnResumeGame();
+        moveStrategy?.OnResumeGame();
+    }
+
     void Dead() {
         Status.IsDead = true;
         view.OnDead();
         moveStrategy.OnDead();
-        GameManager.Instance.CallEnemyDead(Status);
+        GameManager.Controller?.CallEnemyDead(Status);
     }
 }

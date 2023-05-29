@@ -3,22 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class GameManager : Singleton<GameManager> {
+public sealed class GameManager : SingletonMonoBehavior<GameManager> {
     [SerializeField] private GameSetting setting;
-    
-    public static event Action OnGameStart;
-    public static event Action OnDeadEnemy;
-    public static event Action OnHitPlayer;
-    public static event Action OnLevelUp;
-    public static event Action OnPauseGame;
-    public static event Action OnResumeGame;
-    public static event Action OnSelectItem;
-    public static event Action OnUpdateItem;
-    public static event Action OnEverySecond;
-    public static event Action OnGameEnd;
 
     public GameSetting Setting => setting ??= GameSetting.Load();
-    
+
     public static GameController Controller { get; set; }
     public static PlayerController Player { get; set; }
     public static ItemController Item { get; set; }
@@ -30,48 +19,13 @@ public sealed class GameManager : Singleton<GameManager> {
     }
 
     public void StartGame() {
+        Controller?.Dispose();
+        
         Controller = new GameController(Setting);
         Controller.StartGame();
-        OnGameStart?.Invoke();
-        
-        InvokeRepeating(nameof(CallOnEverySecond), 0f, 1f);
-    }
-
-    void CallOnEverySecond() {
-        OnEverySecond?.Invoke();
     }
 
     private void Update() {
         Controller?.Update(Time.deltaTime);
-    }
-
-    public void CallLevelUp() {
-        OnLevelUp?.Invoke();
-    }
-    
-    public void CallSelectItem() {
-        OnSelectItem?.Invoke();
-    }
-
-    public void CallUpdateItem() {
-        OnUpdateItem?.Invoke();
-    }
-
-    public void CallPauseGame() {
-        OnPauseGame?.Invoke();
-    }
-
-    public void CallResumeGame() {
-        OnResumeGame?.Invoke();
-    }
-    
-    public void CallEnemyDead(EnemyStatus deadEnemy) {
-        Controller?.OnDeadEnemy(deadEnemy);
-        OnDeadEnemy?.Invoke();
-    }
-
-    public void CallEndGame() {
-        Controller.EndGame();
-        OnGameEnd?.Invoke();
     }
 }

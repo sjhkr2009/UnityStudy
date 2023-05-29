@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class Singleton<T> : MonoBehaviour where T : Component {
+public abstract class SingletonMonoBehavior<T> : MonoBehaviour where T : Component {
     private static T instance;
     public static T Instance {
         get => GetInstance();
@@ -20,12 +20,12 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component {
     protected virtual void Awake() {
         var my = GetComponent<T>();
         if (!my) {
-            Debugger.Error($"[Singleton.Awake] {gameObject.name} not have {typeof(T).Name} Component!");
+            Debugger.Error($"[SingletonMonoBehavior.Awake] {gameObject.name} not have {typeof(T).Name} Component!");
             return;
         }
 
         if (instance != null && instance != my) {
-            Debugger.Error($"[Singleton.Awake] Singleton already exist. {gameObject.name} will Destroy.");
+            Debugger.Error($"[SingletonMonoBehavior.Awake] Singleton already exist. {gameObject.name} will Destroy.");
             Destroy(my);
             return;
         }

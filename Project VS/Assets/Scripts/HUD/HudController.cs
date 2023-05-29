@@ -3,51 +3,52 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HudController : MonoBehaviour {
+public class HudController : GameListenerBehavior {
     [SerializeField] private GaugeWithText expDrawer;
     [SerializeField] private TMP_Text killDrawer;
     [SerializeField] private TMP_Text levelDrawer;
     [SerializeField] private TMP_Text timeDrawer;
 
-    private void OnEnable() {
-        GameManager.OnGameStart += UpdateAll;
-        GameManager.OnDeadEnemy += UpdateExp;
-        GameManager.OnDeadEnemy += UpdateKillCount;
-        GameManager.OnLevelUp += UpdateLevel;
-        GameManager.OnEverySecond += UpdateTimer;
+    void UpdateExp() {
+        var status = GameManager.Controller.GetCurrentStatus();
+        var exp = status.exp;
+        var requiredExp = status.requiredExp;
+        expDrawer.SetValue(exp, requiredExp);
     }
 
-    private void OnDisable() {
-        GameManager.OnGameStart -= UpdateAll;
-        GameManager.OnDeadEnemy -= UpdateExp;
-        GameManager.OnDeadEnemy -= UpdateKillCount;
-        GameManager.OnLevelUp -= UpdateLevel;
-        GameManager.OnEverySecond -= UpdateTimer;
+    void UpdateLevel() {
+        var status = GameManager.Controller.GetCurrentStatus();
+        levelDrawer.text = $"Lv.{status.level}";
+    }
+    
+    void UpdateKillCount() {
+        var status = GameManager.Controller.GetCurrentStatus();
+        killDrawer.text = status.killCount.ToString();
+    }
+    
+    void UpdateTimer() {
+        var status = GameManager.Controller.GetCurrentStatus();
+        var time = TimeSpan.FromSeconds(status.gameTime);
+        timeDrawer.text = time.ToString("mm':'ss");
     }
 
-    void UpdateAll() {
+    public override void OnGameStart() {
         UpdateExp();
         UpdateLevel();
         UpdateKillCount();
         UpdateTimer();
     }
 
-    void UpdateExp() {
-        var exp = GameManager.Controller.Exp;
-        var requiredExp = GameManager.Controller.RequiredExp;
-        expDrawer.SetValue(exp, requiredExp);
+    public override void OnDeadEnemy(EnemyStatus deadEnemy) {
+        UpdateExp();
+        UpdateKillCount();
     }
 
-    void UpdateLevel() {
-        levelDrawer.text = $"Lv.{GameManager.Controller.Level}";
+    public override void OnLevelUp() {
+        UpdateLevel();
     }
-    
-    void UpdateKillCount() {
-        killDrawer.text = GameManager.Controller.KillCount.ToString();
-    }
-    
-    void UpdateTimer() {
-        var time = TimeSpan.FromSeconds(GameManager.Controller.GameTime);
-        timeDrawer.text = time.ToString("mm':'ss");
+
+    public override void OnEverySecond() {
+        UpdateTimer();
     }
 }

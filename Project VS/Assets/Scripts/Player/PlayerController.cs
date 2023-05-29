@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : GameListenerBehavior {
     [SerializeField] private ItemController itemController;
 
     private PlayerStatus _playerStatus;
@@ -16,8 +16,6 @@ public class PlayerController : MonoBehaviour {
 
     private void Awake() {
         GameManager.Player = this;
-        GameManager.OnPauseGame += OnPauseGame;
-        GameManager.OnResumeGame += OnResumeGame;
         
         if (!itemController) itemController = GetComponentInChildren<ItemController>();
         
@@ -41,11 +39,15 @@ public class PlayerController : MonoBehaviour {
         viewController?.UpdateAnimator();
     }
 
-    protected virtual void OnPauseGame() {
+    public override void OnUpdateItem(ItemBase updatedItem) {
+        Status?.UpdateStat();
+    }
+
+    public override void OnPauseGame() {
         isPaused = true;
     }
     
-    protected virtual void OnResumeGame() {
+    public override void OnResumeGame() {
         isPaused = false;
     }
 
@@ -54,11 +56,5 @@ public class PlayerController : MonoBehaviour {
     void OnMove(InputValue inputValue) {
         // 세팅에 의해 normalized Vector2 값이 들어온다.
         _playerStatus.InputVector = inputValue.Get<Vector2>();
-    }
-
-    private void OnDestroy() {
-        GameManager.OnPauseGame -= OnPauseGame;
-        GameManager.OnResumeGame -= OnResumeGame;
-        _playerStatus.Release();
     }
 }

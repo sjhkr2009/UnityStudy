@@ -21,8 +21,6 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
     public void OnCreate() {
         Collider.enabled = true;
         Rigidbody.simulated = true;
-
-        GameManager.OnPauseGame += Stop;
     }
 
     public void Update() {
@@ -50,11 +48,9 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
     public void OnDead() {
         Collider.enabled = false;
         Rigidbody.simulated = false;
-        
-        GameManager.OnPauseGame -= Stop;
     }
 
-    void Stop() {
+    public void Stop() {
         Rigidbody.velocity = Vector2.zero;
     }
 
@@ -75,5 +71,13 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
         Rigidbody.AddForce(dir * power, ForceMode2D.Impulse);
         await UniTask.Delay(150);
         Status.IsMovable = true;
+    }
+
+    public void OnPauseGame() {
+        Stop();
+    }
+
+    public void OnResumeGame() {
+        
     }
 }

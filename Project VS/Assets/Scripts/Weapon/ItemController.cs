@@ -70,7 +70,7 @@ public class ItemController : MonoBehaviour {
     private void UpgradeItem(ItemBase item) {
         item.Upgrade();
         SendChangeItemToOther(item);
-        GameManager.Instance.CallUpdateItem();
+        GameManager.Controller?.CallUpdateItem(item);
     }
 
     private void SendChangeItemToOther(ItemBase updatedItem) {

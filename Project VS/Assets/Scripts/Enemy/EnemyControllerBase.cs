@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public abstract class EnemyControllerBase : MonoBehaviour, IPoolHandler {
+public abstract class EnemyControllerBase : GameListenerBehavior, IPoolHandler {
     [SerializeField] private EnemyStatData defaultStat = new EnemyStatData();
     [ShowInInspector, ReadOnly] public EnemyStatus Status { get; private set; }
     
@@ -12,9 +12,6 @@ public abstract class EnemyControllerBase : MonoBehaviour, IPoolHandler {
     protected IEnemyMoveStrategy moveStrategy;
 
     protected virtual void Awake() {
-        GameManager.OnPauseGame += OnPauseGame;
-        GameManager.OnResumeGame += OnResumeGame;
-        
         Status = new EnemyStatus(gameObject);
         OnInitialize();
     }
@@ -30,17 +27,17 @@ public abstract class EnemyControllerBase : MonoBehaviour, IPoolHandler {
         
         view?.Update();
     }
-    
-    protected virtual void OnPauseGame() {
+
+    public override void OnPauseGame() {
         isPaused = true;
     }
     
-    protected virtual void OnResumeGame() {
+    public override void OnResumeGame() {
         isPaused = false;
     }
     
     public virtual void OnInitialize() {
-        isPaused = GameManager.Controller.IsPause;
+        isPaused = GameManager.IsPause;
         Status.Initialize(defaultStat);
     }
 

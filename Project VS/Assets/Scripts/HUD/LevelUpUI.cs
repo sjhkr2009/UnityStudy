@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelUpUI : MonoBehaviour, IUiEventListener<ItemIndex> {
+public class LevelUpUI : GameListenerBehavior, IUiEventListener<ItemIndex> {
     // TODO : 업그레이드할 대상을 선정하는 로직 추가 필요
     [SerializeField] private List<ItemIndex> itemIndices = new List<ItemIndex>() {
         ItemIndex.WeaponSpinAround,
@@ -18,7 +18,6 @@ public class LevelUpUI : MonoBehaviour, IUiEventListener<ItemIndex> {
 
     private void Awake() {
         curtain.SetActive(false);
-        GameManager.OnLevelUp += Show;
     }
     
     public void Show() {
@@ -38,7 +37,12 @@ public class LevelUpUI : MonoBehaviour, IUiEventListener<ItemIndex> {
     
     public void InvokeEvent(ItemIndex itemIndex) {
         GameManager.Item.AddOrUpgradeItem(itemIndex);
-        GameManager.Instance.CallSelectItem();
+        
+        GameManager.Controller?.CallSelectItem();
         Abandon();
+    }
+
+    public override void OnLevelUp() {
+        Show();
     }
 }
