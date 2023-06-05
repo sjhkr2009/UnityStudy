@@ -6,7 +6,7 @@ using UnityEngine;
 
 [Serializable]
 public class ItemData {
-    [SerializeField] public ItemType itemType = ItemType.Unknown;
+    [SerializeField] public ItemType0 itemType = ItemType0.Unknown;
     [SerializeField] public ItemIndex itemIndex;
     
     [SerializeField] public string itemName;

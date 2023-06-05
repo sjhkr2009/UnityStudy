@@ -6,21 +6,21 @@ public class PlayerView {
     private static readonly int Dead = Animator.StringToHash("Dead");
     private static readonly int Speed = Animator.StringToHash("Speed");
     
-    private SpriteRenderer SpriteRenderer { get; }
+    private Transform RootTr { get; }
     private Animator Animator { get; }
     private PlayerStatus Status { get; }
     
-    public PlayerView(PlayerStatus status) {
-        var target = status.GameObject;
-        SpriteRenderer = target.GetOrAddComponent<SpriteRenderer>();
-        Animator = target.GetOrAddComponent<Animator>();
+    public PlayerView(PlayerController.ComponentHolder componentHolder, PlayerStatus status) {
+        RootTr = componentHolder.modelTransform;
+        Animator = componentHolder.animator;
         Status = status;
     }
 
     public void Render() {
         if (Status.InputVector == Vector2.zero) return;
 
-        SpriteRenderer.flipX = Status.InputVector.x < 0;
+        bool lookRight = Status.InputVector.x >= 0;
+        RootTr.localScale = new Vector3(lookRight ? 1 : -1, 1, 1);
     }
 
     public void UpdateAnimator() {

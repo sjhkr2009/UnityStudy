@@ -111,7 +111,7 @@ public class ItemDataContainerEditor : OdinEditor {
         if (targetData == null) return;
 
         targetData.itemName = EditorGUILayout.TextField("아이템 이름", targetData.itemName);
-        targetData.itemType = (ItemType)EditorGUILayout.EnumPopup("타입", targetData.itemType);
+        targetData.itemType = (ItemType0)EditorGUILayout.EnumPopup("타입", targetData.itemType);
         targetData.itemIcon = (Sprite)EditorGUILayout.ObjectField("아이콘", targetData.itemIcon, typeof(Sprite), false);
         
         EditorGUILayout.Space(10);

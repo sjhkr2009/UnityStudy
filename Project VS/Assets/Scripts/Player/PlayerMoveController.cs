@@ -11,8 +11,8 @@ public class PlayerMoveController {
     public Vector2 CurrentSpeed { get; private set; }
     public Vector2 DeltaMove { get; private set; }
 
-    public PlayerMoveController(PlayerStatus status) {
-        Rigidbody = status.GameObject.GetOrAddComponent<Rigidbody2D>();
+    public PlayerMoveController(PlayerController.ComponentHolder componentHolder, PlayerStatus status) {
+        Rigidbody = componentHolder.rigidbody;
         Status = status;
     }
 

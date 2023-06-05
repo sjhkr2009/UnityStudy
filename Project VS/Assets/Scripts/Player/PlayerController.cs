@@ -5,7 +5,16 @@ using UnityEngine.InputSystem;
 using UnityEngine.Scripting;
 
 public class PlayerController : GameListenerBehavior {
-    [SerializeField] private ItemController itemController;
+    [Serializable]
+    public class ComponentHolder {
+        public ItemController itemController;
+        public Animator animator;
+        public Collider2D collider;
+        public Rigidbody2D rigidbody;
+        public Transform modelTransform;
+    }
+    
+    [SerializeField] private ComponentHolder components;
 
     private PlayerStatus _playerStatus;
     public PlayerStatus Status => _playerStatus;
@@ -16,13 +25,11 @@ public class PlayerController : GameListenerBehavior {
 
     private void Awake() {
         GameManager.Player = this;
-        
-        if (!itemController) itemController = GetComponentInChildren<ItemController>();
-        
+
         var go = gameObject;
-        _playerStatus = new PlayerStatus(go, itemController);
-        moveController = new PlayerMoveController(Status);
-        viewController = new PlayerView(Status);
+        _playerStatus = new PlayerStatus(gameObject, components);
+        moveController = new PlayerMoveController(components, Status);
+        viewController = new PlayerView(components, Status);
     }
 
     private void FixedUpdate() {

@@ -16,10 +16,11 @@ public class PlayerStatus {
     public Vector2 DeltaMove { get; set; } = Vector2.zero;
     public bool IsDead { get; set; } = false;
 
-    public PlayerStatus(GameObject playerObject, ItemController itemController) {
-        GameObject = playerObject;
+    public PlayerStatus(GameObject go, PlayerController.ComponentHolder componentHolder) {
+        GameObject = go;
+        
         CharacterData = new CharacterData();
-        ItemController = itemController;
+        ItemController = componentHolder.itemController;
         
         Initialize();
     }
