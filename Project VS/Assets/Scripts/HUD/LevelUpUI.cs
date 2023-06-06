@@ -14,6 +14,8 @@ public class LevelUpUI : GameListenerBehavior, IUiEventListener<ItemIndex> {
     };
     
     [SerializeField] private GameObject curtain;
+    [SerializeField] private RectTransform buttonRoot;
+    
     private List<ItemUpgradeButton> upgradeButtons = new List<ItemUpgradeButton>();
 
     private void Awake() {
@@ -23,7 +25,7 @@ public class LevelUpUI : GameListenerBehavior, IUiEventListener<ItemIndex> {
     public void Show() {
         curtain.SetActive(true);
         for (int i = 0; i < itemIndices.Count; i++) {
-            var button = PoolManager.GetByType<ItemUpgradeButton>(transform);
+            var button = PoolManager.GetByType<ItemUpgradeButton>(buttonRoot);
             button.Initialize(this, itemIndices[i]);
             upgradeButtons.Add(button);
         }

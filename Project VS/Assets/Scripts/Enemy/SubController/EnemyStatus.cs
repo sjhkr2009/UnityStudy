@@ -13,6 +13,7 @@ public class EnemyStatus {
     public bool IsDead { get; set; }
     public bool IsMovable { get; set; }
     public float Speed { get; set; }
+    public float AttackDamage { get; set; }
 
     private float _hp;
     public float Hp {
@@ -36,6 +37,7 @@ public class EnemyStatus {
         Speed = statData.speed;
         Tier = statData.tier;
         Exp = statData.exp;
+        AttackDamage = statData.attackDamage;
     }
 
     public void SetMaxHp(int maxHp) {

@@ -6,6 +6,7 @@ public interface IGameListener {
     void OnGameStart();
     void OnDeadEnemy(EnemyStatus deadEnemy);
     void OnHitPlayer();
+    void OnDeadPlayer();
     void OnLevelUp();
     void OnPauseGame();
     void OnResumeGame();

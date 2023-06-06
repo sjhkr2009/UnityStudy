@@ -18,6 +18,7 @@ public static class Define {
         public const string Ground = "Ground";
         public const string ScreenArea = "ScreenArea";
         public const string Enemy = "Enemy";
+        public const string Player = "Player";
         public const string Projectile = "Projectile";
     }
      

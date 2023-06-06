@@ -17,6 +17,8 @@ public class PlayerMoveController {
     }
 
     public void Move() {
+        if (Status.IsDead) return;
+        
         var inputVector = Status.InputVector;
         var speed = Status.Speed;
         var acceleration = Status.Acceleration;

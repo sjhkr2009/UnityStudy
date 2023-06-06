@@ -34,7 +34,7 @@ public class PlayerController : GameListenerBehavior {
 
     private void FixedUpdate() {
         if (isPaused) return;
-        
+
         _playerStatus.DeltaMove = Vector2.zero;
         moveController?.Move();
     }
@@ -56,6 +56,23 @@ public class PlayerController : GameListenerBehavior {
     
     public override void OnResumeGame() {
         isPaused = false;
+    }
+
+    private void OnCollisionStay2D(Collision2D other) {
+        if (isPaused) return;
+        if (!Status.IsHittable()) return;
+        
+        var weapon = other.collider.GetComponent<IAttackableCollider>();
+        if (weapon == null || !weapon.IsValidTarget(gameObject)) return;
+        
+        // TODO: 데미지 구조체를 OnHit에 전달할 것
+        Status.Hit(weapon.Damage);
+        GameBroadcaster.CallHitPlayer();
+
+        if (Status.Hp <= 0) {
+            Status.IsDead = true;
+            GameBroadcaster.CallDeadPlayer();
+        }
     }
 
     /** PlayerInput 컴포넌트에 의해 매 프레임 자동으로 호출됩니다. */

@@ -2,9 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(Animator))]
-public class EnemyController : EnemyControllerBase, IRepositionTarget {
-    public Rigidbody2D target;
-
+public class EnemyController : EnemyControllerBase, IRepositionTarget, IAttackableCollider {
     public override void OnInitialize() {
         base.OnInitialize();
         view = new EnemyView(Status);
@@ -18,8 +16,7 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
 
     void SetTarget() {
         if (moveStrategy is ITargetTracker tracker) {
-            if (!target) target = GameManager.Player.GetComponent<Rigidbody2D>();
-            tracker.SetTarget(target);
+            tracker.SetTarget(GameManager.Player.GetComponent<Rigidbody2D>());
         }
     }
 
@@ -35,10 +32,9 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (!other.CompareTag(Define.Tag.Projectile) || Status.IsDead) return;
-        if (GameManager.IsPause) return;
+        if (isPaused || Status.IsDead) return;
         
-        var weapon = other.GetComponent<IWeaponCollider>();
+        var weapon = other.GetComponent<IAttackableCollider>();
         if (weapon == null || !weapon.IsValidTarget(gameObject)) return;
 
         Status.Hp -= weapon.Damage;
@@ -67,4 +63,10 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget {
         moveStrategy.OnDead();
         GameManager.Controller?.CallEnemyDead(Status);
     }
+
+    public bool IsValidTarget(GameObject target) {
+        return target.CompareTag(Define.Tag.Player);
+    }
+
+    public float Damage => Status.AttackDamage;
 }

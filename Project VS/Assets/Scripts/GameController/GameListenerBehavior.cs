@@ -5,16 +5,17 @@ using UnityEngine;
 
 public abstract class GameListenerBehavior : MonoBehaviour, IGameListener {
     protected virtual void Start() {
-        GameManager.Controller?.RegisterListener(this);
+        GameBroadcaster.RegisterListener(this);
     }
 
     protected virtual void OnDestroy() {
-        GameManager.Controller?.RemoveListener(this);
+        GameBroadcaster.RemoveListener(this);
     }
 
     public virtual void OnGameStart() { }
     public virtual void OnDeadEnemy(EnemyStatus deadEnemy) { }
     public virtual void OnHitPlayer() { }
+    public virtual void OnDeadPlayer() { }
     public virtual void OnLevelUp() { }
     public virtual void OnPauseGame() { }
     public virtual void OnResumeGame() { }

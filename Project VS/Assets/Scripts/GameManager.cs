@@ -19,10 +19,12 @@ public sealed class GameManager : SingletonMonoBehavior<GameManager> {
     }
 
     public void StartGame() {
-        Controller?.Dispose();
-        
         Controller = new GameController(Setting);
         Controller.StartGame();
+    }
+
+    public void QuitGame() {
+        Controller = null;
     }
 
     private void Update() {

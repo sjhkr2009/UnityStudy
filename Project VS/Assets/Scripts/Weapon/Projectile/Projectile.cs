@@ -4,7 +4,7 @@ using System.Linq;
 using Cinemachine;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour, IWeaponCollider {
+public class Projectile : MonoBehaviour, IAttackableCollider {
     [TagSelector] public string targetTag;
     
     public virtual bool IsValidTarget(GameObject target) {

@@ -3,13 +3,11 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class GameController : IDisposable {
+public class GameController {
     private GameSetting Setting { get; }
-    private GameBroadcaster Broadcaster { get; }
     
     public GameController(GameSetting setting) {
         Setting = setting;
-        Broadcaster = new GameBroadcaster();
     }
 
     public int Level { get; protected set; }
@@ -39,7 +37,7 @@ public class GameController : IDisposable {
         GameTime += deltaTime;
 
         if (Mathf.FloorToInt(prevGameTime) != Mathf.FloorToInt(GameTime)) {
-            Broadcaster?.CallOnEverySecond();
+            GameBroadcaster.CallOnEverySecond();
         }
         
         if (GameTime > Setting.maxGameTime) {
@@ -77,11 +75,11 @@ public class GameController : IDisposable {
         RequiredExp = Setting.GetRequiredExp(Level);
         
         PauseGame();
-        Broadcaster.CallLevelUp();
+        GameBroadcaster.CallLevelUp();
     }
 
     public void PauseGame() {
-        if (pauseCount == 0) Broadcaster.CallPauseGame();
+        if (pauseCount == 0) GameBroadcaster.CallPauseGame();
         pauseCount++;
     }
     
@@ -92,37 +90,25 @@ public class GameController : IDisposable {
         }
         
         pauseCount--;
-        if (pauseCount == 0) Broadcaster.CallResumeGame();
+        if (pauseCount == 0) GameBroadcaster.CallResumeGame();
     }
 
     public void CallUpdateItem(ItemBase updatedItem) {
-        Broadcaster.CallUpdateItem(updatedItem);
+        GameBroadcaster.CallUpdateItem(updatedItem);
     }
 
     public void CallEnemyDead(EnemyStatus deadEnemy) {
         OnDeadEnemy(deadEnemy);
-        Broadcaster.CallEnemyDead(deadEnemy);
+        GameBroadcaster.CallEnemyDead(deadEnemy);
     }
 
     public void CallSelectItem() {
         ResumeGame();
-        Broadcaster.CallSelectItem();
-    }
-    
-    public void RegisterListener(IGameListener listener) {
-        Broadcaster.RegisterListener(listener);
-    }
-
-    public void RemoveListener(IGameListener listener) {
-        Broadcaster.RemoveListener(listener);
+        GameBroadcaster.CallSelectItem();
     }
 
     public void EndGame() {
         PauseGame();
-        Broadcaster?.CallEndGame();
-    }
-
-    public void Dispose() {
-        Broadcaster?.Dispose();
+        GameBroadcaster.CallEndGame();
     }
 }
