@@ -14,7 +14,7 @@ public class DownloadController {
     private string LabelToDownload { get; set; }
     private long TotalSize { get; set; }
     public AsyncOperationHandle DownloadHandle { get; private set; }
-    
+
     public DownloadEvents InitializeSystem(string label, string url) {
         Events = new DownloadEvents();
 

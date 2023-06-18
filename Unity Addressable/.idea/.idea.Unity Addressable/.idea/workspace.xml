@@ -8,7 +8,13 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7432c8f0721447a28032cd0abd7d56e494e00/dd/f1d79af3/AddressablesPlayerBuildResult.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Editor/AddressableBuilder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.addressables@1.19.19/Editor/Build/AddressablesDataBuilders.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.addressables@1.19.19/Editor/Settings/AddressableAssetSettings.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.addressables@1.19.19/Runtime/Addressables.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.scriptablebuildpipeline@1.20.1/Editor/Shared/BuildContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.6.4/Editor/treeview/ItemGui/TimelineClipGUI.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -19,16 +25,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;rider.run.widget.enabled.cache&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Discover.Launch.Via.Unity": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "XThreadsFramesViewSplitterKey": "0.38567072",
+    "rider.run.widget.enabled.cache": "false",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2021.3.6f1\Editor\Unity.exe" />
@@ -48,10 +55,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="7348">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="7348" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -68,6 +75,7 @@
       <option name="presentableId" value="Default" />
       <updated>1668312130249</updated>
       <workItem from="1668312146451" duration="14687000" />
+      <workItem from="1686972830003" duration="10666000" />
     </task>
     <servers />
   </component>
@@ -84,58 +92,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/AddressableDownloader.cs</url>
-          <line>33</line>
-          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\AddressableDownloader.cs" initialLine="33" containingFunctionPresentation="method 'StartDownload'">
-            <startOffsets>
-              <option value="992" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1041" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/AddressableDownloader.cs</url>
-          <line>27</line>
-          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\AddressableDownloader.cs" initialLine="27" containingFunctionPresentation="method 'StartDownload'">
-            <startOffsets>
-              <option value="834" />
-            </startOffsets>
-            <endOffsets>
-              <option value="835" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/DownloadPopup.cs</url>
-          <line>34</line>
-          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\DownloadPopup.cs" initialLine="34" containingFunctionPresentation="method 'StartAsync'">
-            <startOffsets>
-              <option value="926" />
-            </startOffsets>
-            <endOffsets>
-              <option value="927" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/DownloadController.cs</url>
-          <line>43</line>
-          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\DownloadController.cs" initialLine="43" containingFunctionPresentation="lambda expression inside method 'UpdateCatalog'">
-            <startOffsets>
-              <option value="1676" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1711" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/DownloadPopup.cs</url>
           <line>94</line>
           <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\DownloadPopup.cs" initialLine="94" containingFunctionPresentation="method 'OnCatalogUpdated'">
@@ -147,32 +103,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/AddressableDownloader.cs</url>
-          <line>60</line>
-          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\AddressableDownloader.cs" initialLine="60" containingFunctionPresentation="method 'GoNext'">
-            <startOffsets>
-              <option value="1962" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1963" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/DownloadSystem/AddressableDownloader.cs</url>
-          <line>41</line>
-          <properties documentPath="C:\Users\sjhkr\OneDrive\Desktop\UnityStudy\Unity Addressable\Assets\Scripts\DownloadSystem\AddressableDownloader.cs" initialLine="41" containingFunctionPresentation="method 'OnExecute'">
-            <startOffsets>
-              <option value="1228" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1235" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

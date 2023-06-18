@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class AddressableLoader : MonoBehaviour  {
     /* 어드레서블 로드 플로우
@@ -28,32 +29,44 @@ public class AddressableLoader : MonoBehaviour  {
     async Task LoadAsync() {
         // 모든 비동기함수는 AsyncOperationHandle을 반환한다.
         // 코루틴일 경우 함수 자체를 yield return 하거나, Addressables.InitializeAsync().Completed에 콜백을 넣을 수 있다.
-        await Addressables.InitializeAsync().Task;
+        var initHandle = Addressables.InitializeAsync();
+        await initHandle.Task;
+        
+        // 프리팹 로드를 따로 하려면 이렇게 할 수 있음.
+        //var loadHandle = Addressables.LoadAssetAsync<GameObject>("Root/UI_NamePopup.prefab");
+        //await loadHandle.Task;
+        
+        // 내부에서 로드 후 InstantiateAsync을 수행한다. 
+        var createHandle = Addressables.InstantiateAsync("Root/UI_NamePopup.prefab");
 
-        var loadHandle = Addressables.LoadAssetAsync<GameObject>("NamePopup");
+        await createHandle.Task;
+
+        if (createHandle.Status != AsyncOperationStatus.Succeeded) {
+            Debug.LogError($"Fail to Object Instantiate: {createHandle.OperationException?.Message}");
+            return;
+        }
+
+        Debug.Log("프리팹이 생성되었습니다.");
+
+        var loadHandle = Addressables.LoadAssetAsync<TextAsset>("Root/MASTER/1.txt");
         await loadHandle.Task;
-        
-        // 레퍼런스 카운트의 증가/감소를 보기 위해 딜레이를 둔다. 원래는 대기할 필요 없음.
-        await Task.Delay(1000);
-        
-        GameObject createdObj = null;
-        var instHandle = Addressables.InstantiateAsync("NamePopup");
-        // 완료 시 콜백으로 반환값을 createdObj에 할당
-        instHandle.Completed += ret => createdObj = ret.Result;
 
-        await instHandle.Task;
+        if (loadHandle.Status != AsyncOperationStatus.Succeeded) {
+            Debug.LogError($"Fail to Object Instantiate: {loadHandle.OperationException?.Message}");
+            return;
+        }
+        
+        Debug.Log("텍스트 에셋이 로드되었습니다: " + loadHandle.Result.text);
 
-        for (int i = 0; i < 3; i++) {
-            Debug.Log($"Wait Destroy... {3 - i}sec");
+        for (int i = 0; i < 5; i++) {
+            Debug.Log($"Wait Destroy... {5 - i}sec");
             await Task.Delay(1000);
         }
         
         // 릴리즈는 대기할 필요 없음
-        Addressables.ReleaseInstance(createdObj);
-        
-        // 레퍼런스 카운트의 증가/감소를 보기 위해 딜레이를 둔다. 원래는 대기할 필요 없음.
-        await Task.Delay(1000);
-        Addressables.Release(loadHandle); // Load시 받은 핸들을 보관했다가 언로드 때 사용할 수 있다.
+        Addressables.ReleaseInstance(createHandle.Result); // 인스턴스화된 오브젝트를 파괴하고 메모리에서 해제한다.
+        Addressables.Release(createHandle); // Load시 받은 핸들을 보관했다가 언로드 때 사용할 수 있다. 로드된 프리팹은 여기서 해제된다.
+        Addressables.Release(loadHandle);
     }
     
     /* 어드레서블 다운로드

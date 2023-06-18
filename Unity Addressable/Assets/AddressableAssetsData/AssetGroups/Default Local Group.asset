@@ -17,8 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 04938c3c1cff5f14d9937d3ce9dd4d5d
   m_SerializeEntries:
-  - m_GUID: cc8deb18eb8561d4db08794ebc7ec907
-    m_Address: NamePopup
+  - m_GUID: ed9bb274f0d84e249b01aa00fff07707
+    m_Address: Root
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
