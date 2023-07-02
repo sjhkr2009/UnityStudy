@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = nameof(ItemDataContainer), menuName = "Custom/Create Weapon Data")]
-public class ItemDataContainer : ScriptableObject {
-    private static ItemDataContainer instance;
+[CreateAssetMenu(fileName = nameof(EquipmentDataContainer), menuName = "Custom/Create Weapon Data")]
+public class EquipmentDataContainer : ScriptableObject {
+    private static EquipmentDataContainer instance;
     
-    [SerializeField] public List<ItemData> dataContainer = new List<ItemData>();
+    [SerializeField] public List<EquipmentData> dataContainer = new List<EquipmentData>();
 
-    public ItemData GetData(ItemIndex itemIndex) {
+    public EquipmentData GetData(ItemIndex itemIndex) {
         return dataContainer.FirstOrDefault(d => itemIndex == d.itemIndex);
     }
 
-    private ItemData AddDataInternal(ItemIndex itemIndex) {
-        var data = new ItemData() { itemIndex = itemIndex };
+    private EquipmentData AddDataInternal(ItemIndex itemIndex) {
+        var data = new EquipmentData() { itemIndex = itemIndex };
         dataContainer.Add(data);
         return data;
     }
 
-    public ItemData AddData(ItemIndex itemIndex) {
+    public EquipmentData AddData(ItemIndex itemIndex) {
         if (dataContainer.Exists(d => d.itemIndex == itemIndex)) {
             Debugger.Warning($"{itemIndex} data already exist!");
             return GetData(itemIndex);
@@ -29,8 +29,8 @@ public class ItemDataContainer : ScriptableObject {
     }
 
     public void Validate(bool removeInvalidData) {
-        Dictionary<ItemIndex, ItemData> itemDatas = new Dictionary<ItemIndex, ItemData>();
-        List<ItemData> invalidData = new List<ItemData>();
+        Dictionary<ItemIndex, EquipmentData> itemDatas = new Dictionary<ItemIndex, EquipmentData>();
+        List<EquipmentData> invalidData = new List<EquipmentData>();
         int invalidIndex = 0;
 
         foreach (var itemData in dataContainer) {
@@ -63,17 +63,17 @@ public class ItemDataContainer : ScriptableObject {
         else Debugger.Log("All data is valid.");
     }
 
-    public static ItemData GetDataOrDefault(ItemIndex itemIndex) {
-        return GetInstance().GetData(itemIndex) ?? new ItemData() { itemIndex = itemIndex };
+    public static EquipmentData GetDataOrDefault(ItemIndex itemIndex) {
+        return GetInstance().GetData(itemIndex) ?? new EquipmentData() { itemIndex = itemIndex };
     }
 
-    private static ItemDataContainer GetInstance() {
+    private static EquipmentDataContainer GetInstance() {
         if (instance) return instance;
 
-        instance = Resources.Load<ItemDataContainer>(nameof(ItemDataContainer));
+        instance = Resources.Load<EquipmentDataContainer>(nameof(EquipmentDataContainer));
         if (!instance) {
             Debugger.Error("Cannot find 'ItemDataContainer' in Resources...");
-            instance = CreateInstance<ItemDataContainer>();
+            instance = CreateInstance<EquipmentDataContainer>();
         }
 
         return instance;

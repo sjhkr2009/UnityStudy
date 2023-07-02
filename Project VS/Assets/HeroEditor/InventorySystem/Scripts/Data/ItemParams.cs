@@ -14,7 +14,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Data
 	    public string Id;
         public int Level;
         public ItemRarity Rarity;
-        public ItemType Type;
+        public Enums.ItemType Type;
         public ItemClass Class;
         public List<ItemTag> Tags = new List<ItemTag>();
         public List<Property> Properties = new List<Property>();

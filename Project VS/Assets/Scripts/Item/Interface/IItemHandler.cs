@@ -3,6 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IItemHandler {
-    ItemData Data { get; }
+    EquipmentData Data { get; }
     int Level { get; }
 }

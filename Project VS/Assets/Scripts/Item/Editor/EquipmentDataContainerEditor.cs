@@ -4,12 +4,12 @@ using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ItemDataContainer))]
-public class ItemDataContainerEditor : OdinEditor {
+[CustomEditor(typeof(EquipmentDataContainer))]
+public class EquipmentDataContainerEditor : OdinEditor {
     private static ItemIndex itemIndex = ItemIndex.None;
     
-    private ItemData targetData;
-    private ItemValueType targetDataType;
+    private EquipmentData targetData;
+    private EquipmentValueType targetDataType;
     
     private bool showRawData;
     private Vector2 normalScrollPos;
@@ -20,14 +20,17 @@ public class ItemDataContainerEditor : OdinEditor {
     private GUIStyle MiddleAlignLabel => new GUIStyle("label") { alignment = TextAnchor.MiddleCenter };
     private GUIStyle RightAlignLabel => new GUIStyle("label") { alignment = TextAnchor.MiddleRight };
 
+    private const float DetailHeaderWidth = 150f;
+    private const float DetailFieldWidth = 50f;
+
     public override void OnInspectorGUI() {
-        var itemDataContainer = target as ItemDataContainer;
+        var itemDataContainer = target as EquipmentDataContainer;
         if (!itemDataContainer) return;
 
         ItemIndexArray ??= Enum.GetValues(typeof(ItemIndex)) as ItemIndex[];
 
         serializedObject.Update();
-        
+
         var selectedIndex = (ItemIndex)EditorGUILayout.EnumPopup("Item Index", itemIndex);
         var prevIndex = ItemIndexArray![(Array.IndexOf(ItemIndexArray, selectedIndex) - 1).ClampMin(0)];
         var nextIndex = ItemIndexArray![(Array.IndexOf(ItemIndexArray, selectedIndex) + 1).ClampMax(ItemIndexArray.Length - 1)];
@@ -103,7 +106,7 @@ public class ItemDataContainerEditor : OdinEditor {
     }
 
     void ResetTargetData() {
-        var itemDataContainer = (ItemDataContainer)target;
+        var itemDataContainer = (EquipmentDataContainer)target;
         targetData = itemDataContainer.dataContainer.FirstOrDefault(d => d.itemIndex == itemIndex);
     }
 
@@ -111,7 +114,7 @@ public class ItemDataContainerEditor : OdinEditor {
         if (targetData == null) return;
 
         targetData.itemName = EditorGUILayout.TextField("아이템 이름", targetData.itemName);
-        targetData.itemType = (ItemType0)EditorGUILayout.EnumPopup("타입", targetData.itemType);
+        targetData.equipmentType = (EquipmentType)EditorGUILayout.EnumPopup("타입", targetData.equipmentType);
         targetData.itemIcon = (Sprite)EditorGUILayout.ObjectField("아이콘", targetData.itemIcon, typeof(Sprite), false);
         
         EditorGUILayout.Space(10);
@@ -120,7 +123,13 @@ public class ItemDataContainerEditor : OdinEditor {
         
         DrawDetailValueMetadata(targetData);
         
-        GUILayout.Label("Data Type By Level");
+        EditorGUILayout.Space();
+        using (new EditorGUILayout.HorizontalScope()) {
+            GUILayout.Label($"[데이터 타입]", GUILayout.Width(DetailHeaderWidth));
+            for (int i = 0; i < targetData.maxLevel; i++) {
+                EditorGUILayout.LabelField($"Lv.{i + 1}", GUILayout.Width(DetailFieldWidth));
+            }
+        }
         foreach (var detailValue in targetData.detailValues) {
             DrawItemIndexedValueEditor(detailValue);
         }
@@ -132,26 +141,32 @@ public class ItemDataContainerEditor : OdinEditor {
         DrawItemDescriptions(targetData);
     }
 
-    void DrawDetailValueMetadata(ItemData drawTargetData) {
-        drawTargetData.maxLevel = EditorGUILayout.IntField("최고레벨", drawTargetData.maxLevel).Clamp(1, 10);
+    void DrawDetailValueMetadata(EquipmentData drawTargetData) {
+        using (new EditorGUILayout.HorizontalScope()) {
+            EditorGUILayout.LabelField($"최고레벨: {drawTargetData.maxLevel}", GUILayout.Width(150));
+            if (GUILayout.Button("+", GUILayout.Width(40))) drawTargetData.maxLevel++;
+            if (GUILayout.Button("-", GUILayout.Width(40))) drawTargetData.maxLevel--;
+            drawTargetData.maxLevel = drawTargetData.maxLevel.Clamp(1, 10);
+        }
+        
         SetListCountByMaxLevel(drawTargetData);
         
         EditorGUILayout.LabelField("[세부 수치 설정]");
-        targetDataType = (ItemValueType)EditorGUILayout.EnumPopup("Editing...", targetDataType);
+        targetDataType = (EquipmentValueType)EditorGUILayout.EnumPopup("    타입 추가/삭제 >>", targetDataType);
         using (new EditorGUILayout.HorizontalScope()) {
             if (GUILayout.Button("Add Data")) {
-                if (targetDataType == ItemValueType.Default) {
+                if (targetDataType == EquipmentValueType.Default) {
                     EditorUtility.DisplayDialog("Warning", "추가할 데이터 타입을 선택해주세요.", "ㅇㅇ...");
                 } else if (drawTargetData.detailValues.Any(v => v.Type == targetDataType)) {
                     EditorUtility.DisplayDialog("Warning", $"{targetDataType} 데이터가 이미 있습니다!", "ㅇㅇ!");
                 } else {
-                    var detailValue = ItemDetailValue.Create(targetDataType, drawTargetData.maxLevel);
+                    var detailValue = EquipmentDetailValue.Create(targetDataType, drawTargetData.maxLevel);
                     targetData.detailValues.Add(detailValue);
                 }
             }
             
             if (GUILayout.Button("Remove Data")) {
-                if (targetDataType == ItemValueType.Default) {
+                if (targetDataType == EquipmentValueType.Default) {
                     EditorUtility.DisplayDialog("Warning", "삭제할 데이터 타입을 선택해주세요.", "ㅇㅇ");
                 } else if (drawTargetData.detailValues.All(v => v.Type != targetDataType)) {
                     EditorUtility.DisplayDialog("Warning", $"{targetDataType} 데이터가 없습니다.", "ㅇㅇ");
@@ -162,8 +177,8 @@ public class ItemDataContainerEditor : OdinEditor {
             }
         }
     }
-
-    void SetListCountByMaxLevel(ItemData drawTargetData) {
+    
+    void SetListCountByMaxLevel(EquipmentData drawTargetData) {
         foreach (var detailValue in drawTargetData.detailValues) {
             detailValue.SetValueCount(drawTargetData.maxLevel);
         }
@@ -176,17 +191,17 @@ public class ItemDataContainerEditor : OdinEditor {
         }
     }
 
-    void DrawItemIndexedValueEditor(ItemDetailValue detailValue) {
+    void DrawItemIndexedValueEditor(EquipmentDetailValue detailValue) {
         using (new EditorGUILayout.HorizontalScope()) {
-            GUILayout.Label($"[{detailValue.Type}]");
+            GUILayout.Label($"[{detailValue.Type}]", GUILayout.Width(DetailHeaderWidth));
             for (int i = 0; i < targetData.maxLevel; i++) {
-                var value = EditorGUILayout.FloatField(detailValue.GetValue(i));
+                var value = EditorGUILayout.FloatField(detailValue.GetValue(i), GUILayout.Width(DetailFieldWidth));
                 detailValue.SetValue(i, value);
             }
         }
     }
 
-    void DrawItemDescriptions(ItemData drawTargetData) {
+    void DrawItemDescriptions(EquipmentData drawTargetData) {
         EditorGUILayout.LabelField("[아이템 설명]");
         
         for (int i = 0; i < drawTargetData.maxLevel; i++) {

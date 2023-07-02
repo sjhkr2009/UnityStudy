@@ -22,20 +22,20 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Helpers
                 {
                     switch (item.Params.Type)
                     {
-                        case ItemType.Helmet:
+                        case Enums.ItemType.Helmet:
                             var helmet = character.SpriteCollection.Helmet.Single(i => i.Id == item.Params.SpriteId);
 
                             character.Helmet = helmet.Sprite;
                             character.FullHair = helmet.Tags.Contains("FullHair");
                             break;
-                        case ItemType.Armor:
+                        case Enums.ItemType.Armor:
                             character.Armor = character.SpriteCollection.Armor.FindSpritesById(item.Params.SpriteId);
                             break;
-                        case ItemType.Shield:
+                        case Enums.ItemType.Shield:
                             character.Shield = character.SpriteCollection.Shield.FindSpriteById(item.Params.SpriteId);
                             character.WeaponType = WeaponType.Melee1H;
                             break;
-                        case ItemType.Weapon:
+                        case Enums.ItemType.Weapon:
 
                             switch (item.Params.Class)
                             {

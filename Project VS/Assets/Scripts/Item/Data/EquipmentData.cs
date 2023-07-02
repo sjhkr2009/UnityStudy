@@ -5,19 +5,19 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [Serializable]
-public class ItemData {
-    [SerializeField] public ItemType0 itemType = ItemType0.Unknown;
+public class EquipmentData {
+    [SerializeField] public EquipmentType equipmentType = EquipmentType.Unknown;
     [SerializeField] public ItemIndex itemIndex;
     
     [SerializeField] public string itemName;
     [SerializeField] public Sprite itemIcon;
     
     [SerializeField] public int maxLevel = Define.DataSetting.ItemMaxLevel;
-    [SerializeField] public List<ItemDetailValue> detailValues = new List<ItemDetailValue>();
+    [SerializeField] public List<EquipmentDetailValue> detailValues = new List<EquipmentDetailValue>();
     [SerializeField] public List<string> descriptions = new List<string>();
     
-    public int GetIntValue(ItemValueType type, int oneBasedLevel) => Mathf.RoundToInt(GetValue(type, oneBasedLevel));
-    public float GetValue(ItemValueType type, int oneBasedLevel) {
+    public int GetIntValue(EquipmentValueType type, int oneBasedLevel) => Mathf.RoundToInt(GetValue(type, oneBasedLevel));
+    public float GetValue(EquipmentValueType type, int oneBasedLevel) {
         var data = detailValues.FirstOrDefault(v => v.Type == type);
         if (data == null) {
             Debugger.Error($"[ItemData.GetValue] {itemIndex} | indexedValues is empty!!");

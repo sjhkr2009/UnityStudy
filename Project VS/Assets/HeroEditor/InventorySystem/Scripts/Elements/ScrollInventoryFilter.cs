@@ -15,12 +15,12 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Elements
 
         public void OnSelect(bool value)
         {
-            var types = new List<ItemType>();
+            var types = new List<Enums.ItemType>();
 
-            if (Weapon.isOn) types.Add(ItemType.Weapon);
-            if (Armor.isOn) types.Add(ItemType.Armor);
-            if (Helmet.isOn) types.Add(ItemType.Helmet);
-            if (Shield.isOn) types.Add(ItemType.Shield);
+            if (Weapon.isOn) types.Add(Enums.ItemType.Weapon);
+            if (Armor.isOn) types.Add(Enums.ItemType.Armor);
+            if (Helmet.isOn) types.Add(Enums.ItemType.Helmet);
+            if (Shield.isOn) types.Add(Enums.ItemType.Shield);
             
             ScrollInventory.SetTypeFilter(types);
         }

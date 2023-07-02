@@ -36,11 +36,11 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
     }
     
     private void SetDataByLevel() {
-        Damage = Data.GetValue(ItemValueType.Damage, Level);
-        AttackInterval = Data.GetValue(ItemValueType.AttackInterval, Level);
-        AttackRange = Data.GetValue(ItemValueType.AttackRange, Level);
-        Penetration = Data.GetIntValue(ItemValueType.Penetration, Level);
-        BulletSpeed = Data.GetValue(ItemValueType.ObjectSpeed, Level);
+        Damage = Data.GetValue(EquipmentValueType.Damage, Level);
+        AttackInterval = Data.GetValue(EquipmentValueType.AttackInterval, Level);
+        AttackRange = Data.GetValue(EquipmentValueType.AttackRange, Level);
+        Penetration = Data.GetIntValue(EquipmentValueType.Penetration, Level);
+        BulletSpeed = Data.GetValue(EquipmentValueType.ObjectSpeed, Level);
     }
     
     protected virtual void Fire() {

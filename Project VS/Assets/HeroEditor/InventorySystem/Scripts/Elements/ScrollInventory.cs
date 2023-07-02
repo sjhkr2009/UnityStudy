@@ -27,19 +27,19 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Elements
 
         public Action OnRefresh;
 
-        private static readonly List<ItemType> TypePriority = new List<ItemType>
+        private static readonly List<Enums.ItemType> TypePriority = new List<Enums.ItemType>
         {
-            ItemType.Currency,
-            ItemType.Supply,
-            ItemType.Weapon,
-            ItemType.Armor,
-            ItemType.Helmet,
-            ItemType.Shield,
-            ItemType.Backpack,
-            ItemType.Jewelry,
-            ItemType.Loot,
-            ItemType.Recipe,
-            ItemType.Material
+            Enums.ItemType.Currency,
+            Enums.ItemType.Supply,
+            Enums.ItemType.Weapon,
+            Enums.ItemType.Armor,
+            Enums.ItemType.Helmet,
+            Enums.ItemType.Shield,
+            Enums.ItemType.Backpack,
+            Enums.ItemType.Jewelry,
+            Enums.ItemType.Loot,
+            Enums.ItemType.Recipe,
+            Enums.ItemType.Material
 		};
 
         private readonly List<InventoryItem> _itemInstances = new List<InventoryItem>(); // Reusing instances to reduce Instantiate() calls.
@@ -78,12 +78,12 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Elements
 
 		public void SetTypeFilter(string input)
         {
-            var type = input.ToEnum<ItemType>();
+            var type = input.ToEnum<Enums.ItemType>();
 
-			SetTypeFilter(new List<ItemType> { type });
+			SetTypeFilter(new List<Enums.ItemType> { type });
         }
 
-		public void SetTypeFilter(List<ItemType> types)
+		public void SetTypeFilter(List<Enums.ItemType> types)
         {
             FilterFunc = item => types.Contains(item.Params.Type);
 			Refresh(null, force: true);

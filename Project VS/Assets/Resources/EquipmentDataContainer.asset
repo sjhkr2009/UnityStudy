@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cff97662844d7c54ba3ac6cfddae1ac9, type: 3}
-  m_Name: ItemDataContainer
+  m_Name: EquipmentDataContainer
   m_EditorClassIdentifier: 
   dataContainer:
   - itemType: 1

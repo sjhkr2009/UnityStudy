@@ -109,7 +109,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Elements
 
             dict.Add("ItemInfo.Weight", $"{item.Params.Weight / 10f:0.##} kg");
 
-            if (Price && item.Params.Type != ItemType.Currency)
+            if (Price && item.Params.Type != Enums.ItemType.Currency)
             {
                 dict.Add("ItemInfo.Price", $"{item.Params.Price} gold");
             }
@@ -122,7 +122,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Elements
         {
             if (!Price) return;
 
-            if (item.Params.Type == ItemType.Currency)
+            if (item.Params.Type == Enums.ItemType.Currency)
             {
                 Price.text = null;
             }

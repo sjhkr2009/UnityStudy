@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
     public List<EnemySpawnSetting> spawnSettings;
-    [SerializeField] private Transform[] spawnPoint;
+    
     [SerializeField] private float globalSpawnDelay = 0.2f;
+    
+    const float DistanceFromBorder = 1.0f; // 카메라 바깥 테두리에서 이 거리만큼 떨어진 곳에 소환됩니다
     
     private Timer timer;
     private float lastSpawnTime;
     private HashSet<int> spawnableTypes;
 
+    private Camera _mainCamera;
+    private Camera MainCamera => _mainCamera ? _mainCamera : _mainCamera = Camera.main;
+
     private void Start() {
-        if (spawnPoint == null || spawnPoint.Length == 0) {
-            Debugger.Error($"[EnemySpawner.Start] SpawnPoint is Empty!!");
-            spawnPoint = new[] { transform };
-        }
         timer = Timer.StartNew();
         lastSpawnTime = 0f;
 
@@ -62,7 +63,7 @@ public class EnemySpawner : MonoBehaviour {
             return;
         }
         
-        enemy.transform.position = spawnPoint.PickRandom().position;
+        enemy.transform.position = GetRandomSpawnPos();
         if (setting.useCustomStat) {
             enemy.Status.Initialize(setting.stat);
         }
@@ -75,6 +76,39 @@ public class EnemySpawner : MonoBehaviour {
         if (!spawnableTypes.Contains(setting.enemyType)) return false;
 
         return true;
+    }
+    
+    /** 카메라 영역의 테두리에서 일정 거리 밖의 좌표를 구합니다. */
+    private Vector3 GetRandomSpawnPos() {
+        var cam = MainCamera;
+        
+        var center = cam.transform.position;
+        
+        float cameraHeight, cameraWidth;
+        if (cam.aspect < 1f) {
+            cameraHeight = cam.orthographicSize * 2f;
+            cameraWidth = cameraHeight * cam.aspect;
+        } else {
+            cameraWidth = cam.orthographicSize * 2f;
+            cameraHeight = cameraWidth * cam.aspect;
+        }
+        
+        bool isTopOrDown = Random.value < (cameraWidth / (cameraHeight + cameraWidth));
+        var distX = (cameraWidth * 0.5f) + DistanceFromBorder;
+        var distY = (cameraHeight * 0.5f) + DistanceFromBorder;
+        
+        if (isTopOrDown) {
+            distX = Random.Range(-distX, distX);
+            distY = Random.value < 0.5f ? distY : -distY;
+        } else {
+            distX = Random.value < 0.5f ? distX : -distX;
+            distY = Random.Range(-distY, distY);
+        }
+
+        return new Vector3(
+            center.x + distX,
+            center.y + distY
+        );
     }
 
     EnemySpawnSetting PickSpawnSetting(IEnumerable<EnemySpawnSetting> settings) {

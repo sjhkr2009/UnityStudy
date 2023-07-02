@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType0 {
+public enum EquipmentType {
     Unknown,
     WeaponMelee,
     WeaponRange,

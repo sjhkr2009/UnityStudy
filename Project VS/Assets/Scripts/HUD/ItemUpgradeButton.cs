@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
 public class ItemUpgradeButton : MonoBehaviour, IPoolHandler {
-    private ItemData data;
+    private EquipmentData data;
 
     [SerializeField] private Image iconImage;
     [SerializeField] private TMP_Text titleText;
@@ -20,7 +20,7 @@ public class ItemUpgradeButton : MonoBehaviour, IPoolHandler {
     }
 
     public void Initialize(IUiEventListener<ItemIndex> listener, ItemIndex itemIndex) {
-        data = ItemDataContainer.GetDataOrDefault(itemIndex);
+        data = EquipmentDataContainer.GetDataOrDefault(itemIndex);
         this.listener = listener;
         UpdateData();
     }

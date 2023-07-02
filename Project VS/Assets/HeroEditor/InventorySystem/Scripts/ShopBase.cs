@@ -104,11 +104,11 @@ namespace Assets.HeroEditor.InventorySystem.Scripts
 
             switch (item.Params.Type)
             {
-                case ItemType.Weapon:
-                case ItemType.Armor:
-                case ItemType.Helmet:
-                case ItemType.Shield:
-                case ItemType.Backpack: return 3;
+                case Enums.ItemType.Weapon:
+                case Enums.ItemType.Armor:
+                case Enums.ItemType.Helmet:
+                case Enums.ItemType.Shield:
+                case Enums.ItemType.Backpack: return 3;
                 default: return 2;
             }
         }
@@ -247,7 +247,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts
 
         private void InitBuy()
         {
-            BuyButton.SetActive(SelectedItem.Params.Type != ItemType.Currency && SelectedItem.Count > 0 && !SelectedItem.Params.Tags.Contains(ItemTag.NotForSale) && !SelectedItem.Params.Tags.Contains(ItemTag.Quest) && CanBuy);
+            BuyButton.SetActive(SelectedItem.Params.Type != Enums.ItemType.Currency && SelectedItem.Count > 0 && !SelectedItem.Params.Tags.Contains(ItemTag.NotForSale) && !SelectedItem.Params.Tags.Contains(ItemTag.Quest) && CanBuy);
             SellButton.SetActive(false);
             //BuyButton.interactable = GetCurrency(PlayerInventory, CurrencyId) >= SelectedItem.Params.Price;
         }

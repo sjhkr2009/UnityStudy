@@ -57,7 +57,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Elements
         {
             BagSize = size;
 
-            var supplies = GetComponentsInChildren<ItemSlot>(true).Where(i => i.Types.Contains(ItemType.Supply)).ToList();
+            var supplies = GetComponentsInChildren<ItemSlot>(true).Where(i => i.Types.Contains(Enums.ItemType.Supply)).ToList();
 
             for (var i = 0; i < supplies.Count; i++)
             {
@@ -124,9 +124,9 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Elements
 
         private Item FindItem(ItemSlot slot)
         {
-            if (slot.Types.Contains(ItemType.Shield))
+            if (slot.Types.Contains(Enums.ItemType.Shield))
             {
-                var copy = Items.SingleOrDefault(i => i.Params.Type == ItemType.Weapon && (i.IsTwoHanded || i.IsFirearm));
+                var copy = Items.SingleOrDefault(i => i.Params.Type == Enums.ItemType.Weapon && (i.IsTwoHanded || i.IsFirearm));
 
                 if (copy != null)
                 {

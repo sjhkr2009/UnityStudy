@@ -43,16 +43,16 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Data
         public ItemIcon Icon => ItemCollection.Active.GetItemIcon(this);
 
         public int Hash => $"{Id}.{Modifier?.Id}.{Modifier?.Level}".GetHashCode();
-        public bool IsEquipment => Params.Type == ItemType.Armor || Params.Type == ItemType.Helmet || Params.Type == ItemType.Weapon || Params.Type == ItemType.Shield;
-        public bool IsWeapon => Params.Type == ItemType.Weapon;
-        public bool IsShield => Params.Type == ItemType.Shield;
+        public bool IsEquipment => Params.Type == Enums.ItemType.Armor || Params.Type == Enums.ItemType.Helmet || Params.Type == Enums.ItemType.Weapon || Params.Type == Enums.ItemType.Shield;
+        public bool IsWeapon => Params.Type == Enums.ItemType.Weapon;
+        public bool IsShield => Params.Type == Enums.ItemType.Shield;
         public bool IsDagger => Params.Class == ItemClass.Dagger;
         public bool IsSword => Params.Class == ItemClass.Sword;
         public bool IsAxe => Params.Class == ItemClass.Axe;
         public bool IsWand => Params.Class == ItemClass.Wand;
         public bool IsBlunt => Params.Class == ItemClass.Blunt;
         public bool IsLance => Params.Class == ItemClass.Lance;
-        public bool IsMelee => Params.Type == ItemType.Weapon && Params.Class != ItemClass.Bow;
+        public bool IsMelee => Params.Type == Enums.ItemType.Weapon && Params.Class != ItemClass.Bow;
         public bool IsBow => Params.Class == ItemClass.Bow;
         public bool IsFirearm => Params.Class == ItemClass.Firearm;
         public bool IsOneHanded => !IsTwoHanded;

@@ -15,7 +15,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts.Elements
         public Image Background;
         public Sprite ActiveSprite;
         public Sprite LockedSprite;
-        public List<ItemType> Types;
+        public List<Enums.ItemType> Types;
         public List<ItemClass> Classes;
 
         public bool Locked

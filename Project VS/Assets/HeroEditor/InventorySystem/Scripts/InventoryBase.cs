@@ -169,7 +169,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts
 
         public void Use()
         {
-            var sound = SelectedItem.Params.Type == ItemType.Coupon ? EquipSound : UseSound;
+            var sound = SelectedItem.Params.Type == Enums.ItemType.Coupon ? EquipSound : UseSound;
 
             if (SelectedItem.Count == 1)
             {
@@ -218,7 +218,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts
                 UseButton.SetActive(CanUse());
             }
 
-            var receipt = SelectedItem != null && SelectedItem.Params.Type == ItemType.Recipe;
+            var receipt = SelectedItem != null && SelectedItem.Params.Type == Enums.ItemType.Recipe;
 
             if (CraftButton != null) CraftButton.SetActive(false);
             if (LearnButton != null) LearnButton.SetActive(false);
@@ -253,7 +253,7 @@ namespace Assets.HeroEditor.InventorySystem.Scripts
 
         private bool CanUse()
         {
-            return SelectedItem.Params.Class == ItemClass.Booster || SelectedItem.Params.Type == ItemType.Coupon;
+            return SelectedItem.Params.Class == ItemClass.Booster || SelectedItem.Params.Type == Enums.ItemType.Coupon;
         }
 
         private bool CanCraft(List<Item> materials)

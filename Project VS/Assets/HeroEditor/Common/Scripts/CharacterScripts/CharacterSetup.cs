@@ -205,10 +205,10 @@ namespace Assets.HeroEditor.Common.Scripts.CharacterScripts
 
             switch (itemParams.Type)
             {
-                case ItemType.Helmet: Equip(item.Sprite, EquipmentPart.Helmet); break;
-                case ItemType.Armor: Equip(item.Sprite, EquipmentPart.Armor); break;
-                case ItemType.Shield: Equip(item.Sprite, EquipmentPart.Shield); break;
-                case ItemType.Weapon:
+                case InventorySystem.Scripts.Enums.ItemType.Helmet: Equip(item.Sprite, EquipmentPart.Helmet); break;
+                case InventorySystem.Scripts.Enums.ItemType.Armor: Equip(item.Sprite, EquipmentPart.Armor); break;
+                case InventorySystem.Scripts.Enums.ItemType.Shield: Equip(item.Sprite, EquipmentPart.Shield); break;
+                case InventorySystem.Scripts.Enums.ItemType.Weapon:
                 {
                     switch (itemParams.Class)
                     {

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public abstract class ItemBase : IItemHandler {
     public abstract ItemIndex Index { get; }
-    public ItemData Data { get; protected set; }
+    public EquipmentData Data { get; protected set; }
     public virtual int Level { get; set; }
 
     public virtual void Initialize(ItemController controller) {
-        Data = ItemDataContainer.GetDataOrDefault(Index);
+        Data = EquipmentDataContainer.GetDataOrDefault(Index);
         Level = 1;
     }
 
