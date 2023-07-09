@@ -4,6 +4,7 @@ using UnityEngine;
 
 // Temp: 아치형 텍스트 연구중...
 public class ArchText : MonoBehaviour {
+    public float maxAngle = 30f;
 
     public TMP_Text textComponent;
 
@@ -12,9 +13,7 @@ public class ArchText : MonoBehaviour {
         textComponent.ForceMeshUpdate();
     
         var textInfo = textComponent.textInfo;
-        float radius = 5f;
-        float maxAngle = 30f;
-        
+
         float centerX = (textInfo.characterCount - 1) * 0.5f;
         if (centerX == 0) return;
         
@@ -32,44 +31,36 @@ public class ArchText : MonoBehaviour {
             
             var charCenter = (vertices[charInfo.vertexIndex] + vertices[charInfo.vertexIndex + 2]) * 0.5f;
             
-            var distFromCenter = Mathf.Abs(i - centerX);
-            var distFromEndPoint = textInfo.characterCount - distFromCenter;
+            var distFromCenter = centerX - i;
+            
+            var targetAngle = distFromCenter * angleDiff;
+            Debug.Log($"[{i}] Angle: {targetAngle}");
+            var rotatedCenter = GetRotatedPosition(centerPos, charCenter, targetAngle);
 
             for (int k = 0; k < 4; k++) {
                 var vertexIndex = charInfo.vertexIndex + k;
                 var vertex = vertices[vertexIndex];
 
-                // 끝 부분과의 거리에 따라 y 좌표 조정
-                //var height = distFromEndPoint * radius;
-                //var posDiff = Vector3.up * height;
-
                 // 각도 조정
-                var targetAngle = distFromCenter * angleDiff * (i < centerX ? 1 : -1);
-                var rotatedCenter = GetRotatedPosition(centerPos, charCenter, targetAngle);
-                Debugger.Log($"[Rotate] Pos {charCenter} -> {rotatedCenter}");
                 var rotatedPoint = RotatePoint(vertex, rotatedCenter, targetAngle);
-
-                vertices[vertexIndex] = rotatedPoint;// + posDiff;
+                Debug.Log($"[{i}] Rotate: {vertex} ---({rotatedCenter})---> {rotatedPoint}");
+                vertices[vertexIndex] = rotatedPoint;
             }
         }
     
         textComponent.UpdateVertexData();
     }
-
-    private Vector3 RotatePoint(Vector3 point, Vector3 center, float angle) {
+    
+    private Vector2 RotatePoint(Vector2 point, Vector2 center, float angle) {
         float radians = angle * Mathf.Deg2Rad;
         float cos = Mathf.Cos(radians);
         float sin = Mathf.Sin(radians);
+        
+        Vector2 distance = point - center;
+        float rotatedX = distance.x * cos - distance.y * sin;
+        float rotatedY = distance.x * sin + distance.y * cos;
 
-        float x = point.x - center.x;
-        float y = point.y - center.y;
-        float z = point.z - center.z;
-
-        // 중심을 기준으로 회전 변환
-        float rotatedX = x * cos - y * sin;
-        float rotatedY = x * sin + y * cos;
-
-        return new Vector3(rotatedX + center.x, rotatedY + center.y, z + center.z);
+        return center + new Vector2(rotatedX, rotatedY);
     }
 
     private Vector2 GetRotatedPosition(Vector2 center, Vector2 edge, float angle) {
@@ -89,4 +80,12 @@ public class ArchText : MonoBehaviour {
         );
         return rotatedPoint;
     }
+    
+    /*
+    private Vector3 RotatePoint(Vector3 point, Vector3 center, float angle)
+    {
+        Vector3 rotatedVector = Quaternion.Euler(0f, 0f, angle) * (point - center);
+        return rotatedVector + center;
+    }
+    */
 }

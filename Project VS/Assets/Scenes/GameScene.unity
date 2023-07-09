@@ -5695,7 +5695,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -172}
+  m_AnchoredPosition: {x: 0, y: -182}
   m_SizeDelta: {x: 400, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1178263118
@@ -5710,6 +5710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e94f9b977093d8342933892976fe020a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAngle: 30
   textComponent: {fileID: 1178263119}
 --- !u!114 &1178263119
 MonoBehaviour:
@@ -5731,7 +5732,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TEST Test Script~~
+  m_text: This is Showing like Arc
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b48025ba7dbf70b44aa88a8d06556fd9, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 1f555a6e8558a2e40bd329c873e545cc, type: 2}
@@ -5758,7 +5759,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.7
+  m_fontSize: 32.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
