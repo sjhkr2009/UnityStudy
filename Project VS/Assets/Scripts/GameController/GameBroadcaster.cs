@@ -34,8 +34,8 @@ public static class GameBroadcaster {
         Listeners.ForEach(l => l.OnSelectItem());
     }
 
-    public static void CallUpdateItem(ItemBase updatedItem) {
-        Listeners.ForEach(l => l.OnUpdateItem(updatedItem));
+    public static void CallUpdateItem(AbilityBase updatedAbility) {
+        Listeners.ForEach(l => l.OnUpdateItem(updatedAbility));
     }
 
     public static void CallPauseGame() {

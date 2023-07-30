@@ -5,18 +5,18 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelUpUI : GameListenerBehavior, IUiEventListener<ItemIndex> {
+public class LevelUpUI : GameListenerBehavior, IUiEventListener<AbilityIndex> {
     // TODO : 업그레이드할 대상을 선정하는 로직 추가 필요
-    [SerializeField] private List<ItemIndex> itemIndices = new List<ItemIndex>() {
-        ItemIndex.WeaponSpinAround,
-        ItemIndex.WeaponAutoGun,
-        ItemIndex.NormalShoes
+    [SerializeField] private List<AbilityIndex> itemIndices = new List<AbilityIndex>() {
+        AbilityIndex.WeaponSpinAround,
+        AbilityIndex.WeaponAutoGun,
+        AbilityIndex.SkillFireball
     };
     
     [SerializeField] private GameObject curtain;
     [SerializeField] private RectTransform buttonRoot;
     
-    private List<ItemUpgradeButton> upgradeButtons = new List<ItemUpgradeButton>();
+    private List<AbilityUpgradeButton> upgradeButtons = new List<AbilityUpgradeButton>();
 
     private void Awake() {
         curtain.SetActive(false);
@@ -25,7 +25,7 @@ public class LevelUpUI : GameListenerBehavior, IUiEventListener<ItemIndex> {
     public void Show() {
         curtain.SetActive(true);
         for (int i = 0; i < itemIndices.Count; i++) {
-            var button = PoolManager.GetByType<ItemUpgradeButton>(buttonRoot);
+            var button = PoolManager.GetByType<AbilityUpgradeButton>(buttonRoot);
             button.Initialize(this, itemIndices[i]);
             upgradeButtons.Add(button);
         }
@@ -37,8 +37,8 @@ public class LevelUpUI : GameListenerBehavior, IUiEventListener<ItemIndex> {
         upgradeButtons.Clear();
     }
     
-    public void InvokeEvent(ItemIndex itemIndex) {
-        GameManager.Item.AddOrUpgradeItem(itemIndex);
+    public void InvokeEvent(AbilityIndex abilityIndex) {
+        GameManager.Item.AddOrUpgradeItem(abilityIndex);
         
         GameManager.Controller?.CallSelectItem();
         Abandon();

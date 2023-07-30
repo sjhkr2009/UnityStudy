@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 8093984544697862965}
   - component: {fileID: 8093984544697862970}
   m_Layer: 5
-  m_Name: ItemUpgradeButton
+  m_Name: AbilityUpgradeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

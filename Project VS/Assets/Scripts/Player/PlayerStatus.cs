@@ -43,7 +43,7 @@ public class PlayerStatus {
 
     // TODO: 캐릭터에 따라 초기에 몇 가지 업그레이드를 가지고 시작하는 경우 이곳에서 처리. 많아질 경우 PlayerStatus를 추상화해서 클래스 단위로 분리할 수 있음. 
     void OnAfterInitialize() {
-        ItemController.AddOrUpgradeItem(ItemIndex.WeaponSpinAround);
+        ItemController.AddOrUpgradeItem(AbilityIndex.WeaponSpinAround);
     }
     public void UpdateStat() {
         MaxHp = CharacterData.maxHp;

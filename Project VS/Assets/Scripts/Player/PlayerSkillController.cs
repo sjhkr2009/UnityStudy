@@ -29,7 +29,7 @@ public class PlayerSkillController {
         Status = status;
         Transform = componentHolder.modelTransform;
         skill1 = new FireballSkill();
-        skill2 = new BigFireballSkill();
+        skill2 = new FireballSkill();
     }
 
     public void OnUpdate(float deltaTime) {
@@ -60,7 +60,7 @@ public class PlayerSkillController {
     
     public void OnUseSkill2() {
         if (!CanUseSkill2) return;
-
+        
         skill2.Run(Transform.position, Status.ShowDirection);
         RemainCooldown2 = Cooldown2;
     }

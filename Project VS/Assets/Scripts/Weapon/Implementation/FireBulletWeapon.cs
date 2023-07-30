@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FireBulletWeapon : WeaponBase, IBulletCreator {
-    public override ItemIndex Index => ItemIndex.WeaponAutoGun;
+    public override AbilityIndex Index => AbilityIndex.WeaponAutoGun;
     public override Transform Transform { get; set; }
     
     public string bulletPrefabName = "Bullet01";
@@ -36,11 +36,11 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
     }
     
     private void SetDataByLevel() {
-        Damage = Data.GetValue(EquipmentValueType.Damage, Level);
-        AttackInterval = Data.GetValue(EquipmentValueType.AttackInterval, Level);
-        AttackRange = Data.GetValue(EquipmentValueType.AttackRange, Level);
-        Penetration = Data.GetIntValue(EquipmentValueType.Penetration, Level);
-        BulletSpeed = Data.GetValue(EquipmentValueType.ObjectSpeed, Level);
+        Damage = Data.GetValue(AbilityValueType.Damage, Level);
+        AttackInterval = Data.GetValue(AbilityValueType.AttackInterval, Level);
+        AttackRange = Data.GetValue(AbilityValueType.AttackRange, Level);
+        Penetration = Data.GetIntValue(AbilityValueType.Penetration, Level);
+        BulletSpeed = Data.GetValue(AbilityValueType.ObjectSpeed, Level);
     }
     
     protected virtual void Fire() {

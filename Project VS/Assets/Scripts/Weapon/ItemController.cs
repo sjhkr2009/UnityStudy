@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Scanner))]
 public class ItemController : MonoBehaviour {
     public Scanner Scanner { get; private set; }
-    public List<ItemBase> Items { get; } = new List<ItemBase>();
+    public List<AbilityBase> Items { get; } = new List<AbilityBase>();
 
     private void Awake() {
         Scanner = GetComponent<Scanner>();
@@ -13,7 +13,7 @@ public class ItemController : MonoBehaviour {
         GameManager.EnemyScanner = Scanner;
     }
 
-    public Transform CreateDummyTransform(ItemBase item) => CreateDummyTransform(item?.GetType().Name);
+    public Transform CreateDummyTransform(AbilityBase ability) => CreateDummyTransform(ability?.GetType().Name);
     private Transform CreateDummyTransform(string dummyObjectName) {
         if (string.IsNullOrEmpty(dummyObjectName)) {
             Debugger.Error("[ItemController.CreateDummyTransform] Parameter is Empty!!");
@@ -26,13 +26,13 @@ public class ItemController : MonoBehaviour {
         return dummy;
     }
 
-    private void AddItem(ItemBase item) {
-        item.Initialize(this);
-        Items.Add(item);
-        SendChangeItemToOther(item);
+    private void AddItem(AbilityBase ability) {
+        ability.Initialize(this);
+        Items.Add(ability);
+        SendChangeItemToOther(ability);
     }
     
-    public bool RemoveItem<T>() where T : ItemBase {
+    public bool RemoveItem<T>() where T : AbilityBase {
         var target = Items.FirstOrDefault(i => i is T);
         if (target == null) {
             Debugger.Error($"[ItemController.RemoveItem] Cannot Find: {typeof(T).Name}");
@@ -44,41 +44,41 @@ public class ItemController : MonoBehaviour {
         return true;
     }
 
-    public T GetItem<T>() where T : ItemBase {
+    public T GetItem<T>() where T : AbilityBase {
         return Items.FirstOrDefault(w => w is T) as T;
     }
     
-    public ItemBase GetItem(ItemIndex itemIndex) {
-        return Items.FirstOrDefault(w => w.Index == itemIndex);
+    public AbilityBase GetItem(AbilityIndex abilityIndex) {
+        return Items.FirstOrDefault(w => w.Index == abilityIndex);
     }
 
-    public ItemBase AddOrUpgradeItem(ItemIndex itemIndex) {
-        var item = GetItem(itemIndex);
+    public AbilityBase AddOrUpgradeItem(AbilityIndex abilityIndex) {
+        var item = GetItem(abilityIndex);
         if (item != null) {
             UpgradeItem(item);
             return item;
         }
         
         // TODO: 모든 무기 정보를 가진 데이터를 만들어서 WeaponIndex와 구현 클래스를 연결할 것 
-        item = ItemFactory.Create(itemIndex);
+        item = AbilityFactory.Create(abilityIndex);
         AddItem(item);
         return item;
     }
 
-    private void UpgradeItem(ItemBase item) {
-        item.Upgrade();
-        SendChangeItemToOther(item);
-        GameManager.Controller?.CallUpdateItem(item);
+    private void UpgradeItem(AbilityBase ability) {
+        ability.Upgrade();
+        SendChangeItemToOther(ability);
+        GameManager.Controller?.CallUpdateItem(ability);
     }
 
-    private void SendChangeItemToOther(ItemBase updatedItem) {
+    private void SendChangeItemToOther(AbilityBase updatedAbility) {
         Items.ForEach(w => {
-            if (w != updatedItem) w.OnChangeOtherItem(updatedItem);
+            if (w != updatedAbility) w.OnChangeOtherAbility(updatedAbility);
         });
     }
 
-    public int GetLevel(ItemIndex itemIndex) {
-        return Items.FirstOrDefault(i => i.Index == itemIndex)?.Level ?? 0;
+    public int GetLevel(AbilityIndex abilityIndex) {
+        return Items.FirstOrDefault(i => i.Index == abilityIndex)?.Level ?? 0;
     }
 
     private void Update() {

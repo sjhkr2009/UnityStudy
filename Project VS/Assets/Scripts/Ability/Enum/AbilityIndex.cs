@@ -1,10 +1,8 @@
-public enum ItemIndex {
+public enum AbilityIndex {
     None,
     
     WeaponSpinAround = 10000,
     WeaponAutoGun = 11000,
     
-    NormalShoes = 20000,
-    
-    NormalGlove = 30000,
+    SkillFireball = 20000,
 }

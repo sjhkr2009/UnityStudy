@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpinnerWeapon : WeaponBase {
-    public override ItemIndex Index => ItemIndex.WeaponSpinAround;
+    public override AbilityIndex Index => AbilityIndex.WeaponSpinAround;
     public override Transform Transform { get; set; }
 
     public string spinnerPrefabName = "Bullet00";
@@ -46,10 +46,10 @@ public class SpinnerWeapon : WeaponBase {
     }
 
     private void SetDataByLevel() {
-        ObjectSpeed = Data.GetValue(EquipmentValueType.ObjectSpeed, Level);
-        AttackRange = Data.GetValue(EquipmentValueType.AttackRange, Level);
-        Damage = Data.GetValue(EquipmentValueType.Damage, Level);
-        AttackCount = Data.GetIntValue(EquipmentValueType.AttackCount, Level);
+        ObjectSpeed = Data.GetValue(AbilityValueType.ObjectSpeed, Level);
+        AttackRange = Data.GetValue(AbilityValueType.AttackRange, Level);
+        Damage = Data.GetValue(AbilityValueType.Damage, Level);
+        AttackCount = Data.GetIntValue(AbilityValueType.AttackCount, Level);
         
         CreateSpinners();
     }

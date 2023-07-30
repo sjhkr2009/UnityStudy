@@ -50,7 +50,7 @@ public class PlayerController : GameListenerBehavior {
         View?.UpdateAnimator();
     }
 
-    public override void OnUpdateItem(ItemBase updatedItem) {
+    public override void OnUpdateItem(AbilityBase updatedAbility) {
         Status.UpdateStat();
     }
 

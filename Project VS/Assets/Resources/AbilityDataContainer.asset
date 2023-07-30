@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cff97662844d7c54ba3ac6cfddae1ac9, type: 3}
-  m_Name: EquipmentDataContainer
+  m_Name: AbilityDataContainer
   m_EditorClassIdentifier: 
   dataContainer:
-  - itemType: 1
-    itemIndex: 10000
+  - abilityType: 2
+    abilityIndex: 10000
     itemName: "\uC0BD"
     itemIcon: {fileID: -181907988, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
     maxLevel: 5
@@ -54,8 +54,8 @@ MonoBehaviour:
     - "\uAC1C\uC218\uAC00 \uC99D\uAC00\uD558\uACE0 \uBC94\uC704\uC640 \uB370\uBBF8\uC9C0\uAC00
       \uC99D\uAC00\uD569\uB2C8\uB2E4."
     - "\uBAA8\uB4E0 \uB2A5\uB825\uC774 \uD5A5\uC0C1\uB429\uB2C8\uB2E4."
-  - itemType: 2
-    itemIndex: 11000
+  - abilityType: 2
+    abilityIndex: 11000
     itemName: "\uC5FD\uCD1D"
     itemIcon: {fileID: -205726582, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
     maxLevel: 5
@@ -101,41 +101,23 @@ MonoBehaviour:
     - 
     - 
     - 
-  - itemType: 4
-    itemIndex: 20000
-    itemName: "\uC2E0\uBC1C"
-    itemIcon: {fileID: -966295699, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-    maxLevel: 5
+  - abilityType: 4
+    abilityIndex: 20000
+    itemName: "\uD30C\uC774\uC5B4\uBCFC"
+    itemIcon: {fileID: -1002307068, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+    maxLevel: 1
     detailValues:
-    - type: 3
+    - type: 1
       values:
-      - 1.1
-      - 1.2
-      - 1.3
-      - 1.4
-      - 1.5
-    descriptions:
-    - "\uBC14\uB2E5\uC744 \uC870\uC2EC\uD558\uC138\uC694!"
-    - 
-    - 
-    - 
-    - 
-  - itemType: 3
-    itemIndex: 30000
-    itemName: "\uC7A5\uAC11"
-    itemIcon: {fileID: 927338625, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-    maxLevel: 5
-    detailValues:
+      - 20
     - type: 2
       values:
-      - 1.1
-      - 1.2
-      - 1.3
-      - 1.4
-      - 1.5
+      - 10
+    - type: 3
+      values:
+      - 15
+    - type: 6
+      values:
+      - 999
     descriptions:
-    - "\uAD73\uC740\uC0B4\uC744 \uB9C9\uC544\uC90D\uB2C8\uB2E4."
-    - 
-    - 
-    - 
-    - 
+    - "\uD30C\uC774\uC5B4\uBCFC\uC744 \uBC1C\uC0AC\uD569\uB2C8\uB2E4"

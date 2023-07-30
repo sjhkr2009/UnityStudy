@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ItemBase : IItemHandler {
-    public abstract ItemIndex Index { get; }
-    public EquipmentData Data { get; protected set; }
+public abstract class AbilityBase : IItemHandler {
+    public abstract AbilityIndex Index { get; }
+
+    protected AbilityData _data; 
+    public AbilityData Data => _data ??= AbilityDataContainer.GetDataOrDefault(Index);
     public virtual int Level { get; set; }
 
     public virtual void Initialize(ItemController controller) {
-        Data = EquipmentDataContainer.GetDataOrDefault(Index);
         Level = 1;
     }
 
@@ -17,5 +18,5 @@ public abstract class ItemBase : IItemHandler {
     }
     public virtual void OnEveryFrame(float deltaTime) { }
     public virtual void Abandon() { }
-    public virtual void OnChangeOtherItem(ItemBase changedItem) { }
+    public virtual void OnChangeOtherAbility(AbilityBase changedAbility) { }
 }

@@ -13,7 +13,7 @@ public interface IGameListener {
     void OnSelectItem();
     void OnSkill1();
     void OnSkill2();
-    void OnUpdateItem(ItemBase updatedItem);
+    void OnUpdateItem(AbilityBase updatedAbility);
     void OnEverySecond();
     void OnGameEnd();
 }

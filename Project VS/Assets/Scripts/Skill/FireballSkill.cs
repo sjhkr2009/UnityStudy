@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class FireballSkill : SkillBase {
+    public override AbilityIndex Index => AbilityIndex.SkillFireball;
+    
     public override float OriginCooldown { get; } = 3f;
 
     public override UniTask Run(Vector2 usePoint, Vector2 direction) {
@@ -13,11 +13,11 @@ public class FireballSkill : SkillBase {
         bulletTr.position = usePoint;
         bulletTr.rotation = Quaternion.FromToRotation(Vector3.up, dir); // y축을 기준으로 dir을 바라봄
         var param = new ProjectileParam {
-            damage = 3,
-            range = 10,
-            penetration = 1,
+            damage = Data.GetValue(AbilityValueType.Damage),
+            range = Data.GetValue(AbilityValueType.AttackRange),
+            penetration = Data.GetValue(AbilityValueType.Penetration),
             direction = direction,
-            speed = 8,
+            speed = Data.GetValue(AbilityValueType.MoveSpeed),
             startPoint = usePoint
         };
         bulletTr.GetComponent<Bullet>().Initialize(param);

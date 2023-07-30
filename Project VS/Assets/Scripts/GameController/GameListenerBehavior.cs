@@ -22,7 +22,7 @@ public abstract class GameListenerBehavior : MonoBehaviour, IGameListener {
     public virtual void OnSelectItem() { }
     public virtual void OnSkill1() { }
     public virtual void OnSkill2() { }
-    public virtual void OnUpdateItem(ItemBase updatedItem) { }
+    public virtual void OnUpdateItem(AbilityBase updatedAbility) { }
     public virtual void OnEverySecond() { }
     public virtual void OnGameEnd() { }
 }

@@ -4,14 +4,14 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class EquipmentDetailValue {
-    [SerializeField] private EquipmentValueType type;
+public class AbilityDetailValue {
+    [SerializeField] private AbilityValueType type;
     [SerializeField] private List<float> values;
     
-    private EquipmentDetailValue(){}
+    private AbilityDetailValue(){}
 
-    public static EquipmentDetailValue Create(EquipmentValueType type, int count) {
-        var value = new EquipmentDetailValue() {
+    public static AbilityDetailValue Create(AbilityValueType type, int count) {
+        var value = new AbilityDetailValue() {
             type = type
         };
         value.SetValueCount(count);
@@ -30,7 +30,7 @@ public class EquipmentDetailValue {
         }
     }
 
-    public EquipmentValueType Type => type;
+    public AbilityValueType Type => type;
     public float GetValue(int index) {
         if (values == null || values.Count == 0) {
             Debugger.Error($"[ItemDetailValue.GetValue] {type} value is empty!");
