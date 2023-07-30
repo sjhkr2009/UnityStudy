@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Sirenix.OdinInspector;
-using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(Scanner))]
 public class ItemController : MonoBehaviour {
     public Scanner Scanner { get; private set; }
     public List<ItemBase> Items { get; } = new List<ItemBase>();
@@ -13,6 +10,7 @@ public class ItemController : MonoBehaviour {
     private void Awake() {
         Scanner = GetComponent<Scanner>();
         GameManager.Item = this;
+        GameManager.EnemyScanner = Scanner;
     }
 
     public Transform CreateDummyTransform(ItemBase item) => CreateDummyTransform(item?.GetType().Name);

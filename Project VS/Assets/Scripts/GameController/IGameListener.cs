@@ -11,6 +11,8 @@ public interface IGameListener {
     void OnPauseGame();
     void OnResumeGame();
     void OnSelectItem();
+    void OnSkill1();
+    void OnSkill2();
     void OnUpdateItem(ItemBase updatedItem);
     void OnEverySecond();
     void OnGameEnd();

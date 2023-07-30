@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Cinemachine;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour, IAttackableCollider {
+public class Projectile : GameListenerBehavior, IAttackableCollider, IPoolHandler {
     [TagSelector] public string targetTag;
+    
+    public float Damage { get; set; }
     
     public virtual bool IsValidTarget(GameObject target) {
         if (string.IsNullOrEmpty(targetTag)) {
@@ -15,9 +13,13 @@ public class Projectile : MonoBehaviour, IAttackableCollider {
         return target.CompareTag(targetTag);
     }
 
-    public float Damage { get; set; }
-
     public virtual void Initialize(ProjectileParam param) {
         Damage = param.damage;
     }
+
+    public void OnInitialize() {
+        transform.ResetTransform();
+    }
+
+    public void OnRelease() { }
 }

@@ -22,6 +22,7 @@ public class PlayerStatus {
     public float Acceleration { get; set; } = 20f;
     public Vector2 InputVector { get; set; } = Vector2.zero;
     public Vector2 DeltaMove { get; set; } = Vector2.zero;
+    public Vector2 ShowDirection { get; set; } = Vector2.right;
     public bool IsDead { get; set; } = false;
     public int LockHitCount { get; set; } = 0;
 
@@ -75,7 +76,7 @@ public class PlayerStatus {
     public void Hit(float damage) {
         Hp -= damage;
         LockHitCount++;
-        UniTask.Delay(500).ContinueWith(() => LockHitCount--).Forget();
+        UniTask.Delay(200).ContinueWith(() => LockHitCount--).Forget();
     }
 }
 

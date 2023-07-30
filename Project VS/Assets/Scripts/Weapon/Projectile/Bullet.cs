@@ -9,6 +9,8 @@ public class Bullet : Projectile, IPoolHandler {
     private Rigidbody2D rigid;
     private Vector3 startPoint;
 
+    private Vector2 tempVelocity = Vector2.zero;
+
     private void Awake() {
         rigid = GetComponent<Rigidbody2D>();
     }
@@ -35,11 +37,25 @@ public class Bullet : Projectile, IPoolHandler {
         }
     }
 
+    public override void OnPauseGame() {
+        if (!gameObject.activeSelf) return;
+        
+        tempVelocity = rigid.velocity;
+        rigid.velocity = Vector2.zero;
+    }
+
+    public override void OnResumeGame() {
+        if (!gameObject.activeSelf) return;
+        
+        rigid.velocity = tempVelocity;
+    }
+
     public void OnInitialize() {
         
     }
 
     public void OnRelease() {
         rigid.velocity = Vector2.zero;
+        tempVelocity = Vector2.zero;
     }
 }

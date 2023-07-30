@@ -20,6 +20,8 @@ public abstract class GameListenerBehavior : MonoBehaviour, IGameListener {
     public virtual void OnPauseGame() { }
     public virtual void OnResumeGame() { }
     public virtual void OnSelectItem() { }
+    public virtual void OnSkill1() { }
+    public virtual void OnSkill2() { }
     public virtual void OnUpdateItem(ItemBase updatedItem) { }
     public virtual void OnEverySecond() { }
     public virtual void OnGameEnd() { }

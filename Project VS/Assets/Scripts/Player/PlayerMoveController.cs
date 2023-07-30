@@ -35,5 +35,9 @@ public class PlayerMoveController {
         var moveDelta = (speed * Time.fixedDeltaTime) * CurrentSpeed;
         Rigidbody.MovePosition(Rigidbody.position + moveDelta);
         Status.DeltaMove = moveDelta;
+
+        if (!Mathf.Approximately(inputVector.magnitude, 0f)) {
+            Status.ShowDirection = inputVector.normalized;
+        }
     }
 }

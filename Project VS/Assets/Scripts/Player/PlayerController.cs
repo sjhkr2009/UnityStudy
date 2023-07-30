@@ -15,39 +15,43 @@ public class PlayerController : GameListenerBehavior {
     }
     
     [SerializeField] private ComponentHolder components;
-
-    private PlayerStatus _playerStatus;
-    public PlayerStatus Status => _playerStatus;
+    
+    public PlayerStatus Status { get; private set; }
     protected bool isPaused = false;
     
-    private PlayerMoveController moveController;
-    private PlayerView viewController;
+    public PlayerMoveController MoveController  { get; private set; }
+    public PlayerSkillController SkillController  { get; private set; }
+    public PlayerView View  { get; private set; }
 
     private void Awake() {
         GameManager.Player = this;
+        
+        Status = new PlayerStatus(gameObject, components);
+        MoveController = new PlayerMoveController(components, Status);
+        SkillController = new PlayerSkillController(components, Status);
+        View = new PlayerView(components, Status);
+    }
 
-        var go = gameObject;
-        _playerStatus = new PlayerStatus(gameObject, components);
-        moveController = new PlayerMoveController(components, Status);
-        viewController = new PlayerView(components, Status);
+    private void Update() {
+        SkillController?.OnUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate() {
         if (isPaused) return;
 
-        _playerStatus.DeltaMove = Vector2.zero;
-        moveController?.Move();
+        Status.DeltaMove = Vector2.zero;
+        MoveController?.Move();
     }
 
     private void LateUpdate() {
         if (isPaused) return;
         
-        viewController?.Render();
-        viewController?.UpdateAnimator();
+        View?.Render();
+        View?.UpdateAnimator();
     }
 
     public override void OnUpdateItem(ItemBase updatedItem) {
-        Status?.UpdateStat();
+        Status.UpdateStat();
     }
 
     public override void OnPauseGame() {
@@ -56,6 +60,14 @@ public class PlayerController : GameListenerBehavior {
     
     public override void OnResumeGame() {
         isPaused = false;
+    }
+
+    public override void OnSkill1() {
+        SkillController.OnUseSkill1();
+    }
+    
+    public override void OnSkill2() {
+        SkillController.OnUseSkill2();
     }
 
     private void OnCollisionStay2D(Collision2D other) {
@@ -79,6 +91,6 @@ public class PlayerController : GameListenerBehavior {
     [Preserve]
     void OnMove(InputValue inputValue) {
         // 세팅에 의해 normalized Vector2 값이 들어온다.
-        _playerStatus.InputVector = inputValue.Get<Vector2>();
+        Status.InputVector = inputValue.Get<Vector2>();
     }
 }

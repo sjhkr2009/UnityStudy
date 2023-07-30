@@ -57,6 +57,14 @@ public static class GameBroadcaster {
     public static void CallEnemyDead(EnemyStatus deadEnemy) {
         Listeners.ForEach(l => l.OnDeadEnemy(deadEnemy));
     }
+    
+    public static void CallSkill1() {
+        Listeners.ForEach(l => l.OnSkill1());
+    }
+    
+    public static void CallSkill2() {
+        Listeners.ForEach(l => l.OnSkill2());
+    }
 
     public static void CallEndGame() {
         Listeners.ForEach(l => l.OnGameEnd());
