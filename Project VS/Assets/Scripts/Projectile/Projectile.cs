@@ -17,9 +17,9 @@ public class Projectile : GameListenerBehavior, IAttackableCollider, IPoolHandle
         Damage = param.damage;
     }
 
-    public void OnInitialize() {
+    public virtual void OnInitialize() {
         transform.ResetTransform();
     }
 
-    public void OnRelease() { }
+    public virtual void OnRelease() { }
 }

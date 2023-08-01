@@ -110,14 +110,8 @@ MonoBehaviour:
     - type: 1
       values:
       - 20
-    - type: 2
-      values:
-      - 10
     - type: 3
       values:
       - 15
-    - type: 6
-      values:
-      - 999
     descriptions:
     - "\uD30C\uC774\uC5B4\uBCFC\uC744 \uBC1C\uC0AC\uD569\uB2C8\uB2E4"

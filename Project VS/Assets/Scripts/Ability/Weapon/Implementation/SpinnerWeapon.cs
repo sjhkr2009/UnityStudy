@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpinnerWeapon : WeaponBase {
+public class SpinnerWeapon : AbilityBase, IWeaponAbility {
     public override AbilityIndex Index => AbilityIndex.WeaponSpinAround;
-    public override Transform Transform { get; set; }
+    public Transform Transform { get; set; }
 
     public string spinnerPrefabName = "Bullet00";
     
     private List<Transform> spinners = new List<Transform>();
+    
+    public float Damage { get; set; }
+    public float ObjectSpeed { get; set; }
+    public float AttackRange { get; set; }
+    public int AttackCount { get; set; }
 
-    public override void Initialize(ItemController controller) {
+    public override void Initialize(AbilityController controller) {
         base.Initialize(controller);
         
         Transform = controller.CreateDummyTransform(this);
@@ -27,7 +32,7 @@ public class SpinnerWeapon : WeaponBase {
             var param = new ProjectileParam() { damage = Damage };
             spinner.GetComponent<Projectile>().Initialize(param);
             spinners.Add(spinner);
-            spinner.localScale = Vector3.one * base.AttackRange;
+            spinner.localScale = Vector3.one * AttackRange;
 
             var rotation = Vector3.forward * 360f * i / AttackCount;
             spinner.Rotate(rotation);
@@ -35,7 +40,7 @@ public class SpinnerWeapon : WeaponBase {
         }
     }
 
-    public override void OnEveryFrame(float deltaTime) {
+    public void OnEveryFrame(float deltaTime) {
         Transform.Rotate(Vector3.back * (ObjectSpeed * deltaTime));
     }
 

@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 public class PlayerController : GameListenerBehavior {
     [Serializable]
     public class ComponentHolder {
-        public ItemController itemController;
+        public AbilityController abilityController;
         public Animator animator;
         public Collider2D collider;
         public Rigidbody2D rigidbody;

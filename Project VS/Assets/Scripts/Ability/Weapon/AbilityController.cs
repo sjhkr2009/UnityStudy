@@ -3,13 +3,19 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Scanner))]
-public class ItemController : MonoBehaviour {
+public class AbilityController : MonoBehaviour {
     public Scanner Scanner { get; private set; }
-    public List<AbilityBase> Items { get; } = new List<AbilityBase>();
+    private List<AbilityBase> _allAbilities { get; } = new List<AbilityBase>();
+    private List<IWeaponAbility> _weapons { get; } = new List<IWeaponAbility>();
+    private List<ISkillAbility> _skills { get; } = new List<ISkillAbility>();
+    
+    public IReadOnlyList<AbilityBase> AllAbilities => _allAbilities;
+    public IReadOnlyList<IWeaponAbility> Weapons => _weapons;
+    public IReadOnlyList<ISkillAbility> Skills => _skills;
 
     private void Awake() {
         Scanner = GetComponent<Scanner>();
-        GameManager.Item = this;
+        GameManager.Ability = this;
         GameManager.EnemyScanner = Scanner;
     }
 
@@ -28,28 +34,32 @@ public class ItemController : MonoBehaviour {
 
     private void AddItem(AbilityBase ability) {
         ability.Initialize(this);
-        Items.Add(ability);
+        _allAbilities.Add(ability);
+        if (ability is ISkillAbility skill) _skills.Add(skill);
+        if (ability is IWeaponAbility weapon) _weapons.Add(weapon);
         SendChangeItemToOther(ability);
     }
     
     public bool RemoveItem<T>() where T : AbilityBase {
-        var target = Items.FirstOrDefault(i => i is T);
+        var target = AllAbilities.FirstOrDefault(i => i is T);
         if (target == null) {
             Debugger.Error($"[ItemController.RemoveItem] Cannot Find: {typeof(T).Name}");
             return false;
         }
         
         target.Abandon();
-        Items.Remove(target);
+        _allAbilities.Remove(target);
+        if (target is ISkillAbility skill) _skills.Remove(skill);
+        if (target is IWeaponAbility weapon) _weapons.Remove(weapon);
         return true;
     }
 
     public T GetItem<T>() where T : AbilityBase {
-        return Items.FirstOrDefault(w => w is T) as T;
+        return AllAbilities.FirstOrDefault(w => w is T) as T;
     }
     
     public AbilityBase GetItem(AbilityIndex abilityIndex) {
-        return Items.FirstOrDefault(w => w.Index == abilityIndex);
+        return AllAbilities.FirstOrDefault(w => w.Index == abilityIndex);
     }
 
     public AbilityBase AddOrUpgradeItem(AbilityIndex abilityIndex) {
@@ -68,23 +78,23 @@ public class ItemController : MonoBehaviour {
     private void UpgradeItem(AbilityBase ability) {
         ability.Upgrade();
         SendChangeItemToOther(ability);
-        GameManager.Controller?.CallUpdateItem(ability);
+        GameBroadcaster.CallUpdateItem(ability);
     }
 
     private void SendChangeItemToOther(AbilityBase updatedAbility) {
-        Items.ForEach(w => {
+        AllAbilities.ForEach(w => {
             if (w != updatedAbility) w.OnChangeOtherAbility(updatedAbility);
         });
     }
 
     public int GetLevel(AbilityIndex abilityIndex) {
-        return Items.FirstOrDefault(i => i.Index == abilityIndex)?.Level ?? 0;
+        return AllAbilities.FirstOrDefault(i => i.Index == abilityIndex)?.Level ?? 0;
     }
 
     private void Update() {
         if (GameManager.IsPause) return;
         
         var deltaTime = Time.deltaTime;
-        Items.ForEach(w => w.OnEveryFrame(deltaTime));
+        Weapons.ForEach(w => w.OnEveryFrame(deltaTime));
     }
 }

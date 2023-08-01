@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireBulletWeapon : WeaponBase, IBulletCreator {
+public class FireBulletWeapon : AbilityBase, IWeaponAbility, IBulletCreator {
     public override AbilityIndex Index => AbilityIndex.WeaponAutoGun;
-    public override Transform Transform { get; set; }
+    public Transform Transform { get; set; }
     
     public string bulletPrefabName = "Bullet01";
     
+    public float Damage { get; set; }
+    public float AttackInterval { get; set; }
+    public float AttackRange { get; set; }
     public float BulletSpeed { get; set; }
     public float Penetration { get; set; }
 
     protected float fireTimer;
     protected Scanner scanner;
     
-    public override void Initialize(ItemController controller) {
+    public override void Initialize(AbilityController controller) {
         base.Initialize(controller);
 
         SetDataByLevel();
@@ -22,14 +25,14 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
         scanner = controller.Scanner;
     }
 
-    public override void OnEveryFrame(float deltaTime) {
+    public void OnEveryFrame(float deltaTime) {
         fireTimer += deltaTime;
         if (fireTimer > AttackInterval) {
             fireTimer = 0f;
             Fire();
         }
     }
-
+    
     public override void Upgrade() {
         base.Upgrade();
         SetDataByLevel();
@@ -51,12 +54,8 @@ public class FireBulletWeapon : WeaponBase, IBulletCreator {
 
         var targetPos = scanner.NearestTarget.position;
         var dir = (targetPos - Transform.position).normalized;
-        
-        var bulletTr = PoolManager.Get(bulletPrefabName).transform;
-        bulletTr.position = Transform!.position;
-        bulletTr.rotation = Quaternion.FromToRotation(Vector3.up, dir); // y축을 기준으로 dir을 바라봄
-        
-        bulletTr.GetComponent<Bullet>().Initialize(CreateParam(dir));
+
+        ProjectileSpawner.Spawn(bulletPrefabName, CreateParam(dir));
     }
 
     private ProjectileParam CreateParam(Vector3 direction) {

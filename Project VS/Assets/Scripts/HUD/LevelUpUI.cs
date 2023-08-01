@@ -38,7 +38,7 @@ public class LevelUpUI : GameListenerBehavior, IUiEventListener<AbilityIndex> {
     }
     
     public void InvokeEvent(AbilityIndex abilityIndex) {
-        GameManager.Item.AddOrUpgradeItem(abilityIndex);
+        GameManager.Ability.AddOrUpgradeItem(abilityIndex);
         
         GameManager.Controller?.CallSelectItem();
         Abandon();

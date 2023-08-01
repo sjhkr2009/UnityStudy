@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class PlayerStatus {
     public GameObject GameObject { get; }
-    public CharacterData CharacterData { get; }
-    public ItemController ItemController { get; }
+    private CharacterData _characterData { get; }
+    public CharacterData ClonedOriginStat => _characterData.Clone();
+    public AbilityController AbilityController { get; }
     
     public float MaxHp { get; private set; }
     private float _hp;
@@ -29,8 +30,8 @@ public class PlayerStatus {
     public PlayerStatus(GameObject go, PlayerController.ComponentHolder componentHolder) {
         GameObject = go;
         
-        CharacterData = new CharacterData();
-        ItemController = componentHolder.itemController;
+        _characterData = new CharacterData();
+        AbilityController = componentHolder.abilityController;
         
         Initialize();
     }
@@ -43,27 +44,21 @@ public class PlayerStatus {
 
     // TODO: 캐릭터에 따라 초기에 몇 가지 업그레이드를 가지고 시작하는 경우 이곳에서 처리. 많아질 경우 PlayerStatus를 추상화해서 클래스 단위로 분리할 수 있음. 
     void OnAfterInitialize() {
-        ItemController.AddOrUpgradeItem(AbilityIndex.WeaponSpinAround);
+        Hp = MaxHp;
+        LockHitCount = 0;
     }
     public void UpdateStat() {
-        MaxHp = CharacterData.maxHp;
-        Hp = MaxHp;
-        Speed = CharacterData.speed;
-        AttackPower = CharacterData.attackPower;
-        AttackRange = CharacterData.attackRange;
-        LockHitCount = 0;
-        
-        foreach (var item in ItemController.Items) {
-            if (item is ISpeedModifier speedModifier) {
-                Speed = speedModifier.ModifySpeed(Speed);
-            }
-            if (item is IAttackPowerModifier powerModifier) {
-                AttackPower = powerModifier.ModifyAttackPower(AttackPower);
-            }
-            if (item is IAttackRangeModifier rangeModifier) {
-                AttackRange = rangeModifier.ModifyAttackRange(AttackRange);
+        var clonedData = ClonedOriginStat;
+        foreach (var ability in AbilityController.AllAbilities) {
+            if (ability is IPlayerStatModifier modifier) {
+                modifier.ApplyModify(clonedData);
             }
         }
+        MaxHp = clonedData.maxHp;
+        if (Hp > MaxHp) Hp = MaxHp;
+        Speed = clonedData.speed;
+        AttackPower = clonedData.attackPower;
+        AttackRange = clonedData.attackRange;
     }
 
     public bool IsHittable() {
@@ -87,4 +82,16 @@ public class CharacterData {
     public float acceleration = 20f;
     public float attackPower = 1f;
     public float attackRange = 1f;
+    public float skillHaste = 1f;
+
+    public CharacterData Clone() {
+        return new CharacterData() {
+            maxHp = maxHp,
+            speed = speed,
+            acceleration = acceleration,
+            attackPower = attackPower,
+            attackRange = attackRange,
+            skillHaste = skillHaste
+        };
+    }
 }

@@ -34,7 +34,7 @@ public class AbilityUpgradeButton : MonoBehaviour, IPoolHandler {
         iconImage.sprite = data.itemIcon;
         titleText.text = data.itemName;
 
-        int level = GameManager.Item.GetLevel(data.abilityIndex);
+        int level = GameManager.Ability.GetLevel(data.abilityIndex);
         descText.text = data.GetDescription(level + 1);
         levelText.text = level <= 0 ? "New!" : $"Lv.{level} >> Lv.{level + 1}";
     }

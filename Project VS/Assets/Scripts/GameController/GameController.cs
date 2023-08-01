@@ -93,10 +93,6 @@ public class GameController {
         if (pauseCount == 0) GameBroadcaster.CallResumeGame();
     }
 
-    public void CallUpdateItem(AbilityBase updatedAbility) {
-        GameBroadcaster.CallUpdateItem(updatedAbility);
-    }
-
     public void CallEnemyDead(EnemyStatus deadEnemy) {
         OnDeadEnemy(deadEnemy);
         GameBroadcaster.CallEnemyDead(deadEnemy);

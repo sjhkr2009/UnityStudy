@@ -679,7 +679,7 @@ GameObject:
   - component: {fileID: 473104622}
   - component: {fileID: 473104623}
   m_Layer: 0
-  m_Name: ItemController
+  m_Name: AbilityController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -724,7 +724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca07ef3092967a14c9af7d48375b15b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scanRange: 5
+  scanRange: 7
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -14992,7 +14992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   components:
-    itemController: {fileID: 473104622}
+    abilityController: {fileID: 473104622}
     animator: {fileID: 1045761708}
     collider: {fileID: 1602985785}
     rigidbody: {fileID: 1602985784}

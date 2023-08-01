@@ -7,8 +7,8 @@ public class PlayerSkillController {
     private float _remainCooldown1 = 0f;
     private float _remainCooldown2 = 0f;
 
-    private SkillBase skill1;
-    private SkillBase skill2;
+    private ISkillAbility skill1;
+    private ISkillAbility skill2;
 
     public float RemainCooldown1 {
         get => _remainCooldown1;

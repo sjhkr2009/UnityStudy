@@ -10,7 +10,7 @@ public sealed class GameManager : SingletonMonoBehavior<GameManager> {
 
     public static GameController Controller { get; set; }
     public static PlayerController Player { get; set; }
-    public static ItemController Item { get; set; }
+    public static AbilityController Ability { get; set; }
     public static Scanner EnemyScanner { get; set; }
     public static bool IsPause => Controller == null || Controller.IsPause;
 
