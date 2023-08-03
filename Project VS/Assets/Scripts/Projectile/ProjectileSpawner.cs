@@ -1,11 +1,10 @@
 using UnityEngine;
 
 public static class ProjectileSpawner {
-    public static Projectile Spawn(string prefabName, float damage, Vector2 spawnPoint, Vector2 direction, float speed = 10f) {
-        var param = ProjectileParam.CreateDefault();
+    public static Projectile SpawnStraight(string prefabName, float damage, Vector2 spawnPoint, Vector2 direction, float speed = 10f) {
+        var param = ProjectileParam.CreateStraightDefault(spawnPoint);
         param.damage = damage;
         param.speed = speed;
-        param.startPoint = spawnPoint;
         param.direction = direction;
         return Spawn(prefabName, param);
     }

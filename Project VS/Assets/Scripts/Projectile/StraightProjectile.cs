@@ -19,7 +19,7 @@ public class StraightProjectile : Projectile {
     public override void Initialize(ProjectileParam param) {
         base.Initialize(param);
         
-        penetration = param.penetration;
+        penetration = param.penetration <= 0 ? 9999 : param.penetration;
         range = param.range;
         lifeTime = param.lifeTime;
         startPoint = param.startPoint;
@@ -33,10 +33,18 @@ public class StraightProjectile : Projectile {
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        // 충돌로 관통력이 0이 되면 파괴됩니다. 원래부터 관통력이 0 이하면 무시합니다. 
-        if (!other.CompareTag(Define.Tag.Enemy) || penetration <= 0) return;
+    protected override void OnTriggerEnter2D(Collider2D other) {
+        // 충돌로 관통력이 0 미만이 되면 파괴됩니다.
+        Debug.Log($"Hit! {other.name}");
+        if (penetration <= 0) return;
+        if (!IsValidTarget(other.gameObject)) return;
 
+        var damageHandler = other.GetComponent<IDamagableEntity>();
+        if (damageHandler == null) return;
+        var result = damageHandler.OnAttacked(this);
+
+        if (!result.isHit) return;
+        
         penetration--;
         if (penetration <= 0) PoolManager.Abandon(gameObject);
     }

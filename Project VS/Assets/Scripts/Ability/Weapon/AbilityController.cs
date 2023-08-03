@@ -93,6 +93,10 @@ public class AbilityController : MonoBehaviour {
 
     private void Update() {
         if (GameManager.IsPause) return;
+
+        if (Input.GetKeyDown(KeyCode.Semicolon)) {
+            AddOrUpgradeItem(AbilityIndex.WeaponAreaStrike);
+        }
         
         var deltaTime = Time.deltaTime;
         Weapons.ForEach(w => w.OnEveryFrame(deltaTime));

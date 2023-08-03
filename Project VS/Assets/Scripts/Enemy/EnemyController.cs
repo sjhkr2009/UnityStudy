@@ -1,8 +1,17 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(Animator))]
-public class EnemyController : EnemyControllerBase, IRepositionTarget, IAttackableCollider {
+public class EnemyController : EnemyControllerBase, IRepositionTarget, IAttackableCollider, IDamagableEntity {
+    private Collider2D _collider;
+    public Collider2D GetCollider => _collider;
+
+    protected override void Awake() {
+        _collider = GetComponent<Collider2D>();
+        base.Awake();
+    }
+
     public override void OnInitialize() {
         base.OnInitialize();
         view = new EnemyView(Status);
@@ -31,20 +40,11 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget, IAttackab
         transform.Translate(moveDelta);
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (isPaused || Status.IsDead) return;
-        
-        var weapon = other.GetComponent<IAttackableCollider>();
-        if (weapon == null || !weapon.IsValidTarget(gameObject)) return;
+    private void OnCollisionStay2D(Collision2D other) {
+        if (!other.gameObject.CompareTag(Define.Tag.Player)) return;
 
-        Status.Hp -= weapon.Damage;
-        
-        if (Status.Hp <= 0) {
-            Dead();
-        } else {
-            view.OnHit();
-            moveStrategy.OnHit();
-        }
+        var damagable = other.gameObject.GetComponent<IDamagableEntity>();
+        damagable?.OnAttacked(this);
     }
 
     public override void OnPauseGame() {
@@ -64,9 +64,25 @@ public class EnemyController : EnemyControllerBase, IRepositionTarget, IAttackab
         GameManager.Controller?.CallEnemyDead(Status);
     }
 
-    public bool IsValidTarget(GameObject target) {
-        return target.CompareTag(Define.Tag.Player);
+    public DamageData GetDamageData() {
+        return new DamageData(Status.AttackDamage);
+    }
+    
+    public AttackResult OnAttacked(IAttackableCollider attacker) {
+        if (isPaused || Status.IsDead) return AttackResult.None;
+        
+        ApplyDamage(attacker.GetDamageData());
+        return Status.IsDead ? AttackResult.Dead : AttackResult.Hit;
     }
 
-    public float Damage => Status.AttackDamage;
+    void ApplyDamage(DamageData data) {
+        Status.Hp -= data.damage;
+        
+        if (Status.Hp <= 0) {
+            Dead();
+        } else {
+            view.OnHit();
+            moveStrategy.OnHit();
+        }
+    }
 }

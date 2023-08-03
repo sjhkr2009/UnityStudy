@@ -11,12 +11,21 @@ public struct ProjectileParam {
     public float lifeTime;
     public float penetration;
 
-    public static ProjectileParam CreateDefault() {
+    public static ProjectileParam CreateStraightDefault(Vector3 startPoint) {
         return new ProjectileParam() {
+            startPoint = startPoint,
             range = 20f,
             lifeTime = 10f,
             penetration = -1,
             speed = 10f
+        };
+    }
+    
+    public static ProjectileParam CreateOnceAttackDefault(Vector3 startPoint) {
+        return new ProjectileParam() {
+            startPoint = startPoint,
+            range = 1f,
+            lifeTime = 2f
         };
     }
 }

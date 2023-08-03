@@ -59,14 +59,12 @@ public class FireBulletWeapon : AbilityBase, IWeaponAbility, IBulletCreator {
     }
 
     private ProjectileParam CreateParam(Vector3 direction) {
-        var param = new ProjectileParam {
-            damage = Damage,
-            range = AttackRange,
-            penetration = Penetration,
-            direction = direction,
-            speed = BulletSpeed,
-            startPoint = Transform.position
-        };
+        var param = ProjectileParam.CreateStraightDefault(Transform.position);
+        param.damage = Damage;
+        param.range = AttackRange;
+        param.penetration = Penetration;
+        param.direction = direction;
+        param.speed = BulletSpeed;
 
         return param;
     }

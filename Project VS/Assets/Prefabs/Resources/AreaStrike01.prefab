@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5152610850586996389}
   - component: {fileID: 7386413034737411913}
-  - component: {fileID: 8569955255585547553}
+  - component: {fileID: 2183579399841018739}
   - component: {fileID: 8400075439234615891}
-  - component: {fileID: 2292238786211817323}
+  - component: {fileID: 2664505927986310495}
   m_Layer: 0
-  m_Name: Bullet01
+  m_Name: AreaStrike01
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: -1627906025
   m_SortingLayer: 2
   m_SortingOrder: 5
-  m_Sprite: {fileID: -537537479, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
+  m_Sprite: {fileID: 154122315, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8569955255585547553
+--- !u!114 &2183579399841018739
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4815081653036898063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cab9d4911691c44aabee7f1276dfc50, type: 3}
+  m_Script: {fileID: 11500000, guid: a4541b81285172440821e6a7fdf39303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Enemy
@@ -114,9 +114,9 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.22222222, y: 0.44444445}
+  m_Size: {x: 0.4, y: 0.4}
   m_Direction: 0
---- !u!50 &2292238786211817323
+--- !u!50 &2664505927986310495
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -124,16 +124,16 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4815081653036898063}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting;
 
-public class PlayerController : GameListenerBehavior {
+public class PlayerController : GameListenerBehavior, IDamagableEntity {
     [Serializable]
     public class ComponentHolder {
         public AbilityController abilityController;
@@ -70,27 +70,31 @@ public class PlayerController : GameListenerBehavior {
         SkillController.OnUseSkill2();
     }
 
-    private void OnCollisionStay2D(Collision2D other) {
-        if (isPaused) return;
-        if (!Status.IsHittable()) return;
-        
-        var weapon = other.collider.GetComponent<IAttackableCollider>();
-        if (weapon == null || !weapon.IsValidTarget(gameObject)) return;
-        
-        // TODO: 데미지 구조체를 OnHit에 전달할 것
-        Status.Hit(weapon.Damage);
-        GameBroadcaster.CallHitPlayer();
-
-        if (Status.Hp <= 0) {
-            Status.IsDead = true;
-            GameBroadcaster.CallDeadPlayer();
-        }
-    }
-
     /** PlayerInput 컴포넌트에 의해 매 프레임 자동으로 호출됩니다. */
     [Preserve]
     void OnMove(InputValue inputValue) {
         // 세팅에 의해 normalized Vector2 값이 들어온다.
         Status.InputVector = inputValue.Get<Vector2>();
+    }
+
+    public AttackResult OnAttacked(IAttackableCollider attacker) {
+        if (attacker == null) return AttackResult.None;
+        if (isPaused) return AttackResult.None;
+        if (!Status.IsHittable()) return AttackResult.None;
+        
+        ApplyDamage(attacker.GetDamageData());
+
+        if (Status.Hp <= 0) {
+            Status.IsDead = true;
+            GameBroadcaster.CallDeadPlayer();
+            return AttackResult.Dead;
+        }
+        
+        return AttackResult.Hit;
+    }
+
+    void ApplyDamage(DamageData data) {
+        Status.Hit(data.damage);
+        GameBroadcaster.CallHitPlayer();
     }
 }

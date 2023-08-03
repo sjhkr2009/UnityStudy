@@ -191,7 +191,6 @@ MonoBehaviour:
     attackDamage: 2
     speed: 2
     hp: 15
-  target: {fileID: 0}
 --- !u!95 &6091537602426877108
 Animator:
   serializedVersion: 4

@@ -115,3 +115,33 @@ MonoBehaviour:
       - 15
     descriptions:
     - "\uD30C\uC774\uC5B4\uBCFC\uC744 \uBC1C\uC0AC\uD569\uB2C8\uB2E4"
+  - abilityType: 2
+    abilityIndex: 12000
+    itemName: "\uBA54\uD14C\uC624"
+    itemIcon: {fileID: 154122315, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
+    maxLevel: 3
+    detailValues:
+    - type: 1
+      values:
+      - 20
+      - 25
+      - 30
+    - type: 2
+      values:
+      - 3
+      - 5
+      - 10
+    - type: 7
+      values:
+      - 0.5
+      - 0.2
+      - 0
+    - type: 4
+      values:
+      - 3
+      - 2
+      - 1
+    descriptions:
+    - "\uC77C\uC815 \uC8FC\uAE30\uB85C \uBD88\uB369\uC774\uB97C \uC18C\uD658\uD569\uB2C8\uB2E4"
+    - "\uBD88\uB369\uC774\uAC00 \uB354 \uAC15\uD574\uC9D1\uB2C8\uB2E4"
+    - "\uAC81\uB098\uC384"

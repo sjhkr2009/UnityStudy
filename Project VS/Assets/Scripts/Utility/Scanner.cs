@@ -11,6 +11,7 @@ public class Scanner : MonoBehaviour {
     private RaycastHit2D[] targets;
     private Transform _nearestTarget;
     public Transform NearestTarget => _nearestTarget;
+    public Transform RandomTarget => targets?.PickRandom().transform;
 
     private void FixedUpdate() {
         if (targetLayer <= 0) {
