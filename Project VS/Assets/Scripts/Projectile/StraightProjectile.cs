@@ -35,7 +35,6 @@ public class StraightProjectile : Projectile {
 
     protected override void OnTriggerEnter2D(Collider2D other) {
         // 충돌로 관통력이 0 미만이 되면 파괴됩니다.
-        Debug.Log($"Hit! {other.name}");
         if (penetration <= 0) return;
         if (!IsValidTarget(other.gameObject)) return;
 
