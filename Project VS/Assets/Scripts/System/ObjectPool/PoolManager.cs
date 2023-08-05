@@ -73,6 +73,11 @@ public static class PoolManager {
     }
     
     public static GameObject Get(string name, Transform parent = null, bool stayTransform = false) {
+        if (string.IsNullOrEmpty(name)) {
+            Debugger.Error($"[PoolManager.Get] Object Name Cannot null or Empty!!");
+            return null;
+        }
+        
         GameObject item = null;
         if (Pools.TryGetValue(name, out var poolInfo)) {
             item = poolInfo.GetItem();

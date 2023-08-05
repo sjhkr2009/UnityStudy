@@ -19,6 +19,7 @@ public abstract class GameListenerBehavior : MonoBehaviour, IGameListener {
     public virtual void OnLevelUp() { }
     public virtual void OnPauseGame() { }
     public virtual void OnResumeGame() { }
+    public virtual void OnGainDropItem(DropItemIndex dropItemIndex) { }
     public virtual void OnSelectItem() { }
     public virtual void OnSkill1() { }
     public virtual void OnSkill2() { }

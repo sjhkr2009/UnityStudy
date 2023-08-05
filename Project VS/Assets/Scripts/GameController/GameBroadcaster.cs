@@ -33,6 +33,10 @@ public static class GameBroadcaster {
     public static void CallSelectItem() {
         Listeners.ForEach(l => l.OnSelectItem());
     }
+    
+    public static void OnGainDropItem(DropItemIndex dropItemIndex) {
+        Listeners.ForEach(l => l.OnGainDropItem(dropItemIndex));
+    }
 
     public static void CallUpdateItem(AbilityBase updatedAbility) {
         Listeners.ForEach(l => l.OnUpdateItem(updatedAbility));

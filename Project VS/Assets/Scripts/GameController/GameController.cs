@@ -47,8 +47,7 @@ public class GameController {
 
     private void OnDeadEnemy(EnemyStatus deadEnemy) {
         KillCount++;
-        var gainExp = Setting.GetGainExp(deadEnemy);
-        GainExp(gainExp);
+        DropItemManager.SpawnByDropTable(deadEnemy.DropTables, deadEnemy.Transform.position);
     }
 
     public CurrentGameStatus GetCurrentStatus() {
@@ -61,7 +60,7 @@ public class GameController {
         };
     }
 
-    private void GainExp(int value) {
+    public void GainExp(int value) {
         Exp += value;
         
         if (Exp >= RequiredExp) {

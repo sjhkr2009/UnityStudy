@@ -28,14 +28,4 @@ public class GameSetting : ScriptableObject {
         int index = (currentLevel - 1).Clamp(0, expByLevel.Count - 1);
         return expByLevel[index];
     }
-
-    public int GetGainExp(EnemyStatus targetEnemy) {
-        var gainExp = targetEnemy.Exp;
-        if (gainExp <= 0) {
-            Debugger.Log($"[GameSetting.GetGainExp] Enemy exp <= 0 | {targetEnemy.GameObject.name}({targetEnemy.Tier})");
-            return 1;
-        }
-        
-        return gainExp;
-    }
 }

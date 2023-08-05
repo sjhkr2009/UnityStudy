@@ -10,6 +10,7 @@ public interface IGameListener {
     void OnLevelUp();
     void OnPauseGame();
     void OnResumeGame();
+    void OnGainDropItem(DropItemIndex dropItemIndex);
     void OnSelectItem();
     void OnSkill1();
     void OnSkill2();

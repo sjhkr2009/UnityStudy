@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class EnemyStatus {
     public GameObject GameObject { get; }
+    public Transform Transform { get; }
 
     public Direction CurrentDirection { get; set; } = Direction.None;
     
     public EnemyTier Tier { get; set; }
-    public int Exp { get; set; }
     
     public bool IsDead { get; set; }
     public bool IsMovable { get; set; }
     public float Speed { get; set; }
     public float AttackDamage { get; set; }
-
+    public List<DropTable> DropTables { get; private set; }
+    
     private float _hp;
     public float Hp {
         get => _hp;
@@ -25,6 +26,7 @@ public class EnemyStatus {
 
     public EnemyStatus(GameObject enemyObject) {
         GameObject = enemyObject;
+        Transform = GameObject.transform;
     }
 
     public void Initialize(EnemyStatData statData) {
@@ -36,8 +38,8 @@ public class EnemyStatus {
         Hp = statData.hp;
         Speed = statData.speed;
         Tier = statData.tier;
-        Exp = statData.exp;
         AttackDamage = statData.attackDamage;
+        DropTables = statData.dropTables;
     }
 
     public void SetMaxHp(int maxHp) {
