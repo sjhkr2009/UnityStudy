@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
-public struct EnemyStatData {
+public class EnemyStatData {
+    public EnemyIndex enemyIndex;
     public EnemyTier tier;
     public float attackDamage;
     public float speed;

@@ -14,7 +14,7 @@ public class EnemyStatus {
     public bool IsMovable { get; set; }
     public float Speed { get; set; }
     public float AttackDamage { get; set; }
-    public List<DropTable> DropTables { get; private set; }
+    public IReadOnlyList<DropTable> DropTables { get; private set; }
     
     private float _hp;
     public float Hp {

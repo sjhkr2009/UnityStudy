@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public static class GameBroadcaster {
     private static LinkedList<IGameListener> Listeners { get; } = new LinkedList<IGameListener>();
-    
+
     public static void RegisterListener(IGameListener listener) {
         if (Listeners.Contains(listener)) {
             Debugger.Error($"[GameBroadcaster.RegisterListener] {listener.GetType().Name} already registered!!");
@@ -20,6 +20,10 @@ public static class GameBroadcaster {
         }
         
         Listeners.Remove(listener);
+    }
+    
+    public static void CallOnGameStart() {
+        Listeners.ForEach(l => l.OnGameStart());
     }
     
     public static void CallOnEverySecond() {

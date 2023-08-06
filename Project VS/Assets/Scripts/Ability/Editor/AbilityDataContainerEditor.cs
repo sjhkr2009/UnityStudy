@@ -26,6 +26,10 @@ public class AbilityDataContainerEditor : OdinEditor {
     public override void OnInspectorGUI() {
         var itemDataContainer = target as AbilityDataContainer;
         if (!itemDataContainer) return;
+        
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject(itemDataContainer), typeof(MonoScript), true);
+        EditorGUI.EndDisabledGroup();
 
         ItemIndexArray ??= Enum.GetValues(typeof(AbilityIndex)) as AbilityIndex[];
 

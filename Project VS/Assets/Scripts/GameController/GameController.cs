@@ -19,28 +19,30 @@ public class GameController {
     private int pauseCount = 0;
 
     private float prevGameTime;
-    public float GameTime { get; protected set; }
+    public float PlayingTimeSecond { get; protected set; }
 
     public void StartGame() {
         Level = 1;
         KillCount = 0;
         prevGameTime = 0f;
-        GameTime = 0f;
+        PlayingTimeSecond = 0f;
         pauseCount = 0;
         RequiredExp = Setting.GetRequiredExp(Level);
+        
+        GameBroadcaster.CallOnGameStart();
     }
 
     public void Update(float deltaTime) {
         if (IsPause) return;
 
-        prevGameTime = GameTime;
-        GameTime += deltaTime;
+        prevGameTime = PlayingTimeSecond;
+        PlayingTimeSecond += deltaTime;
 
-        if (Mathf.FloorToInt(prevGameTime) != Mathf.FloorToInt(GameTime)) {
+        if (Mathf.FloorToInt(prevGameTime) != Mathf.FloorToInt(PlayingTimeSecond)) {
             GameBroadcaster.CallOnEverySecond();
         }
         
-        if (GameTime > Setting.maxGameTime) {
+        if (PlayingTimeSecond > Setting.maxGameTime) {
             EndGame();
         }
     }
@@ -56,7 +58,7 @@ public class GameController {
             killCount = KillCount,
             exp = Exp,
             requiredExp = RequiredExp,
-            gameTime = GameTime
+            gameTime = PlayingTimeSecond
         };
     }
 

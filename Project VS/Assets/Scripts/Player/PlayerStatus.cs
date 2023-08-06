@@ -77,7 +77,7 @@ public class PlayerStatus {
 
 // TODO: 캐릭터가 추가되면 아이템처럼 데이터를 분리할 것
 public class CharacterData {
-    public float maxHp = 10f;
+    public float maxHp = 200f;
     public float speed = 3f;
     public float acceleration = 20f;
     public float attackPower = 1f;

@@ -6,7 +6,7 @@ using UnityEngine;
 public static class DropItemManager {
     public static HashSet<DropItemBehavior> SpawnedDropItems { get; } = new HashSet<DropItemBehavior>();
 
-    public static void SpawnByDropTable(List<DropTable> dropTables, Vector2 position) {
+    public static void SpawnByDropTable(IEnumerable<DropTable> dropTables, Vector2 position) {
         var dropItemIndices = dropTables.SelectMany(dropTable => dropTable.Get()).ToList();
 
         foreach (var dropItemIndex in dropItemIndices) {

@@ -3,7 +3,6 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 public abstract class EnemyControllerBase : GameListenerBehavior, IPoolHandler {
-    [SerializeField] private EnemyStatData defaultStat = new EnemyStatData();
     [ShowInInspector, ReadOnly] public EnemyStatus Status { get; private set; }
     
     protected bool isPaused = false;
@@ -38,8 +37,10 @@ public abstract class EnemyControllerBase : GameListenerBehavior, IPoolHandler {
     
     public virtual void OnInitialize() {
         isPaused = GameManager.IsPause;
-        Status.Initialize(defaultStat);
+        EnemySpawnManager.SpawnedEnemies.Add(this);
     }
 
-    public virtual void OnRelease() { }
+    public virtual void OnRelease() {
+        EnemySpawnManager.SpawnedEnemies.Remove(this);
+    }
 }

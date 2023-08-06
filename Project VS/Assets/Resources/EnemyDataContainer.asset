@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1a50dbf1c62c4d499ffb4465d1995e8, type: 3}
+  m_Name: EnemyDataContainer
+  m_EditorClassIdentifier: 
+  statDatas:
+  - enemyIndex: 1
+    tier: 0
+    attackDamage: 10
+    speed: 1
+    hp: 10
+    mass: 1
+    dropTables:
+    - allowMultipleDrops: 0
+      dropProbabilities:
+      - itemIndex: 1
+        probability: 70
+      - itemIndex: 2
+        probability: 3
+  - enemyIndex: 2
+    tier: 0
+    attackDamage: 30
+    speed: 1.2
+    hp: 30
+    mass: 1.5
+    dropTables:
+    - allowMultipleDrops: 0
+      dropProbabilities:
+      - itemIndex: 1
+        probability: 80
+      - itemIndex: 2
+        probability: 7
+      - itemIndex: 3
+        probability: 1
+  - enemyIndex: 3
+    tier: 0
+    attackDamage: 50
+    speed: 1
+    hp: 50
+    mass: 2
+    dropTables:
+    - allowMultipleDrops: 0
+      dropProbabilities:
+      - itemIndex: 1
+        probability: 80
+      - itemIndex: 2
+        probability: 12
+      - itemIndex: 3
+        probability: 3
+  - enemyIndex: 4
+    tier: 0
+    attackDamage: 50
+    speed: 1.5
+    hp: 100
+    mass: 1.5
+    dropTables:
+    - allowMultipleDrops: 0
+      dropProbabilities:
+      - itemIndex: 2
+        probability: 90
+      - itemIndex: 3
+        probability: 10
+  - enemyIndex: 1000
+    tier: 3
+    attackDamage: 100
+    speed: 1
+    hp: 5000
+    mass: 3
+    dropTables:
+    - allowMultipleDrops: 0
+      dropProbabilities:
+      - itemIndex: 3
+        probability: 100
+    - allowMultipleDrops: 0
+      dropProbabilities:
+      - itemIndex: 3
+        probability: 100
+    - allowMultipleDrops: 0
+      dropProbabilities:
+      - itemIndex: 3
+        probability: 100

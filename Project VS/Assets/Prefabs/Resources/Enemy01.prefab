@@ -101,19 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffce280dcaf2cf841af012954f86a946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultStat:
-    tier: 1
-    attackDamage: 1
-    speed: 1
-    hp: 10
-    mass: 0
-    dropTables:
-    - allowMultipleDrops: 0
-      dropProbabilities:
-      - itemIndex: 1
-        probability: 70
-      - itemIndex: 2
-        probability: 3
 --- !u!95 &7357179588326481342
 Animator:
   serializedVersion: 4

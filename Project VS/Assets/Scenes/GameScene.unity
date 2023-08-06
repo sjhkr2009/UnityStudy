@@ -524,29 +524,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe7a8e8cc3e58314c9fb67ba6a697d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnSettings:
-  - prefabName: Enemy01
-    spawnCooldown: 2
-    enemyType: 0
-    useCustomStat: 0
-    stat:
-      tier: 0
-      attackDamage: 0
-      speed: 0
-      hp: 0
-      mass: 0
-      dropTables: []
-  - prefabName: Enemy02
-    spawnCooldown: 1
-    enemyType: 0
-    useCustomStat: 0
-    stat:
-      tier: 0
-      attackDamage: 0
-      speed: 0
-      hp: 0
-      mass: 0
-      dropTables: []
   globalSpawnDelay: 0.2
 --- !u!1 &379561639
 GameObject:
