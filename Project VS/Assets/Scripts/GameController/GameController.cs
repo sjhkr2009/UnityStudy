@@ -1,7 +1,12 @@
-using System;
-using System.Linq;
-using Cysharp.Threading.Tasks;
+using System.Runtime.Versioning;
+using DG.Tweening;
 using UnityEngine;
+
+public enum GameResult {
+    None,
+    Success,
+    Die
+}
 
 public class GameController {
     private GameSetting Setting { get; }
@@ -43,7 +48,7 @@ public class GameController {
         }
         
         if (PlayingTimeSecond > Setting.maxGameTime) {
-            EndGame();
+            EndGame(GameResult.Success);
         }
     }
 
@@ -64,8 +69,8 @@ public class GameController {
 
     public void GainExp(int value) {
         Exp += value;
-        
-        if (Exp >= RequiredExp) {
+
+        while (Exp >= RequiredExp) {
             LevelUp();
         }
     }
@@ -80,7 +85,10 @@ public class GameController {
     }
 
     public void PauseGame() {
-        if (pauseCount == 0) GameBroadcaster.CallPauseGame();
+        if (pauseCount == 0) {
+            GameBroadcaster.CallPauseGame();
+            DOTween.timeScale = 0f;
+        }
         pauseCount++;
     }
     
@@ -91,7 +99,10 @@ public class GameController {
         }
         
         pauseCount--;
-        if (pauseCount == 0) GameBroadcaster.CallResumeGame();
+        if (pauseCount == 0) {
+            GameBroadcaster.CallResumeGame();
+            DOTween.timeScale = 1f;
+        }
     }
 
     public void CallEnemyDead(EnemyStatus deadEnemy) {
@@ -104,8 +115,17 @@ public class GameController {
         GameBroadcaster.CallSelectItem();
     }
 
-    public void EndGame() {
+    public void EndGame(GameResult result) {
         PauseGame();
-        GameBroadcaster.CallEndGame();
+        GameBroadcaster.CallEndGame(result);
+    }
+
+    public void Dispose() {
+        Level = 1;
+        KillCount = 0;
+        prevGameTime = 0f;
+        PlayingTimeSecond = 0f;
+        pauseCount = 0;
+        RequiredExp = Setting.GetRequiredExp(Level);
     }
 }

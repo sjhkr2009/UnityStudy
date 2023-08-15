@@ -5,6 +5,8 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 public static class PoolManager {
+    private static HashSet<GameObject> CreatedObjects { get; } = new HashSet<GameObject>();
+
     class PoolInfo {
         public GameObject Origin { get; }
         private Queue<GameObject> Pool { get; }
@@ -35,6 +37,7 @@ public static class PoolManager {
             GameObject item = (Pool.Count > 0) ? Pool.Dequeue() : CreateItem();
             item.SetActive(true);
             if (HasHandler) item.GetComponent<IPoolHandler>()?.OnInitialize();
+            CreatedObjects.Add(item);
             return item;
         }
 
@@ -42,6 +45,7 @@ public static class PoolManager {
             if (HasHandler) item.GetComponent<IPoolHandler>()?.OnRelease();
             item.SetActive(false);
             item.transform.SetParent(PoolParent);
+            CreatedObjects.Remove(item);
             Pool.Enqueue(item);
         }
         
@@ -111,5 +115,15 @@ public static class PoolManager {
         
         Debugger.Error($"[PoolManager.Abandon] Cannot Find PoolInfo of '{item.name}'!!");
         Object.Destroy(item);
+    }
+
+    public static void AbandonAll() {
+        List<GameObject> targets = new List<GameObject>();
+        CreatedObjects.ForEach(obj => {
+            if (obj) targets.Add(obj);
+        });
+        
+        targets.ForEach(Abandon);
+        CreatedObjects.Clear();
     }
 }

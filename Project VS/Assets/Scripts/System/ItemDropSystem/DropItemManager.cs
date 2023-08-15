@@ -44,7 +44,36 @@ public static class DropItemManager {
             DropItemIndex.SmallSoul => "SmallSoul",
             DropItemIndex.MiddleSoul => "MiddleSoul",
             DropItemIndex.BigSoul => "BigSoul",
+            DropItemIndex.Magnetic => "Magnetic",
             _ => string.Empty
         };
+    }
+
+    public static void GainAllByMagnetic() {
+        SpawnedDropItems.ForEach(item => {
+            if (item.CanGainByMagnetic()) item.AnimateGain();
+        });
+    }
+
+    public static void GainItem(DropItemIndex itemIndex) {
+        if (itemIndex == DropItemIndex.Magnetic) {
+            GainAllByMagnetic();
+        } else {
+            GameManager.Controller.GainExp(itemIndex.GetItemExp());
+        }
+        
+        GameBroadcaster.CallGainDropItem(itemIndex);
+    }
+
+    public static void Clear() {
+        var clearList = new List<GameObject>();
+        
+        // Abandon 과정에서 HashSet에서 요소가 제거되므로, 다른 리스트에 복사해두고 릴리즈한다
+        SpawnedDropItems.ForEach(item => {
+            if (item) clearList.Add(item.gameObject);
+        });
+        clearList.ForEach(PoolManager.Abandon);
+        
+        SpawnedDropItems.Clear();
     }
 }

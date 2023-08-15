@@ -1,3 +1,6 @@
+using UnityEngine;
+
 public interface IDamagableEntity {
-    public AttackResult OnAttacked(IAttackableCollider attacker);
+    public GameObject gameObject { get; }
+    public AttackResult OnAttacked(IAttackableCollider attacker, Vector2 attackPos);
 }

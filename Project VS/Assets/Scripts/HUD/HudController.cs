@@ -3,11 +3,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HudController : GameListenerBehavior {
+public class HudController : GameListenerBehaviour {
     [SerializeField] private GaugeWithText expDrawer;
     [SerializeField] private TMP_Text killDrawer;
     [SerializeField] private TMP_Text levelDrawer;
     [SerializeField] private TMP_Text timeDrawer;
+
+    private void Awake() {
+        expDrawer.SetValue(0, 1);
+        killDrawer.text = "0";
+        levelDrawer.text = "1";
+        timeDrawer.text = "00:00";
+    }
 
     void UpdateExp() {
         var status = GameManager.Controller.GetCurrentStatus();
@@ -18,7 +25,7 @@ public class HudController : GameListenerBehavior {
 
     void UpdateLevel() {
         var status = GameManager.Controller.GetCurrentStatus();
-        levelDrawer.text = $"Lv.{status.level}";
+        levelDrawer.text = $"{status.level}";
     }
     
     void UpdateKillCount() {
@@ -40,8 +47,11 @@ public class HudController : GameListenerBehavior {
     }
 
     public override void OnDeadEnemy(EnemyStatus deadEnemy) {
-        UpdateExp();
         UpdateKillCount();
+    }
+
+    public override void OnGainDropItem(DropItemIndex dropItemIndex) {
+        UpdateExp();
     }
 
     public override void OnLevelUp() {

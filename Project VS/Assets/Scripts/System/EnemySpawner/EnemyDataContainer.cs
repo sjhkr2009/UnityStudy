@@ -10,17 +10,24 @@ public class EnemyDataContainer : ScriptableObject {
     public List<EnemyStatData> statDatas = new List<EnemyStatData>();
 
     public void Initialize() {
-        if (statDatas?.Count > 0) {
-            Debugger.Warning("[EnemyDataContainer.Initialize] statDatas already exist!");
-            return;
+        HashSet<EnemyIndex> indices = new HashSet<EnemyIndex>();
+        List<EnemyStatData> duplicatedData = new List<EnemyStatData>();
+        foreach (var statData in statDatas) {
+            if (indices.Add(statData.enemyIndex)) continue;
+            
+            duplicatedData.Add(statData);
         }
         
-        statDatas = new List<EnemyStatData>();
+        duplicatedData.ForEach(d => statDatas.Remove(d));
+        
         foreach (EnemyIndex enemyIndex in Enum.GetValues(typeof(EnemyIndex))) {
             if (enemyIndex == EnemyIndex.None) continue;
+            if (statDatas.Any(d => d.enemyIndex == enemyIndex)) continue;
 
             statDatas.Add(new EnemyStatData() { enemyIndex = enemyIndex });
         }
+        
+        statDatas.Sort((d1, d2) => d1.enemyIndex - d2.enemyIndex);
     }
 
     public static EnemyStatData GetStatData(EnemyIndex enemyIndex) {

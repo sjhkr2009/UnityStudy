@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyStatus {
     public GameObject GameObject { get; }
     public Transform Transform { get; }
+    public Rigidbody2D Rigidbody { get; }
 
     public Direction CurrentDirection { get; set; } = Direction.None;
     
@@ -27,6 +28,7 @@ public class EnemyStatus {
     public EnemyStatus(GameObject enemyObject) {
         GameObject = enemyObject;
         Transform = GameObject.transform;
+        Rigidbody = GameObject.GetComponent<Rigidbody2D>();
     }
 
     public void Initialize(EnemyStatData statData) {
@@ -40,6 +42,15 @@ public class EnemyStatus {
         Tier = statData.tier;
         AttackDamage = statData.attackDamage;
         DropTables = statData.dropTables;
+        Rigidbody.mass = statData.mass;
+    }
+
+    public void IncreaseStat(float multiple) {
+        MaxHp *= Mathf.Pow(multiple, 1.6f).ClampMin(1f);
+        Speed *= multiple.ClampMin(1f);
+        AttackDamage *= multiple.ClampMin(1f);
+        Rigidbody.mass = (Rigidbody.mass + 5f) * multiple;
+        Hp = MaxHp;
     }
 
     public void SetMaxHp(int maxHp) {

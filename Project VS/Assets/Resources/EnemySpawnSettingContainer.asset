@@ -15,9 +15,165 @@ MonoBehaviour:
   spawnSettings:
   - enemyIndex: 1
     spawnStartTimeSecond: 0
-    spawnEndTimeSecond: 60
-    spawnCooldown: 1
+    spawnEndTimeSecond: 15
+    spawnCooldown: 0.8
+  - enemyIndex: 1
+    spawnStartTimeSecond: 15
+    spawnEndTimeSecond: 30
+    spawnCooldown: 0.5
+  - enemyIndex: 1
+    spawnStartTimeSecond: 50
+    spawnEndTimeSecond: 65
+    spawnCooldown: 0.15
+  - enemyIndex: 3
+    spawnStartTimeSecond: 65
+    spawnEndTimeSecond: 75
+    spawnCooldown: 0.8
+  - enemyIndex: 3
+    spawnStartTimeSecond: 75
+    spawnEndTimeSecond: 90
+    spawnCooldown: 0.5
+  - enemyIndex: 3
+    spawnStartTimeSecond: 90
+    spawnEndTimeSecond: 130
+    spawnCooldown: 0.1
   - enemyIndex: 2
-    spawnStartTimeSecond: 10
+    spawnStartTimeSecond: 130
+    spawnEndTimeSecond: 140
+    spawnCooldown: 0.7
+  - enemyIndex: 2
+    spawnStartTimeSecond: 140
+    spawnEndTimeSecond: 160
+    spawnCooldown: 0.4
+  - enemyIndex: 2
+    spawnStartTimeSecond: 160
+    spawnEndTimeSecond: 200
+    spawnCooldown: 0.1
+  - enemyIndex: 4
+    spawnStartTimeSecond: 200
+    spawnEndTimeSecond: 210
+    spawnCooldown: 0.7
+  - enemyIndex: 4
+    spawnStartTimeSecond: 210
+    spawnEndTimeSecond: 230
+    spawnCooldown: 0.5
+  - enemyIndex: 4
+    spawnStartTimeSecond: 230
+    spawnEndTimeSecond: 270
+    spawnCooldown: 0.1
+  - enemyIndex: 4
+    spawnStartTimeSecond: 270
+    spawnEndTimeSecond: 320
+    spawnCooldown: 0.1
+  - enemyIndex: 3
+    spawnStartTimeSecond: 270
+    spawnEndTimeSecond: 320
+    spawnCooldown: 0.1
+  - enemyIndex: 1000
+    spawnStartTimeSecond: 90
     spawnEndTimeSecond: 360
-    spawnCooldown: 2
+    spawnCooldown: 10
+  - enemyIndex: 5
+    spawnStartTimeSecond: 90
+    spawnEndTimeSecond: 360
+    spawnCooldown: 1
+  - enemyIndex: 6
+    spawnStartTimeSecond: 120
+    spawnEndTimeSecond: 360
+    spawnCooldown: 1
+  - enemyIndex: 1001
+    spawnStartTimeSecond: 180
+    spawnEndTimeSecond: 360
+    spawnCooldown: 60
+  - enemyIndex: 1
+    spawnStartTimeSecond: 30
+    spawnEndTimeSecond: 50
+    spawnCooldown: 0.3
+  - enemyIndex: 2
+    spawnStartTimeSecond: 155
+    spawnEndTimeSecond: 200
+    spawnCooldown: 0.1
+  - enemyIndex: 5
+    spawnStartTimeSecond: 320
+    spawnEndTimeSecond: 335
+    spawnCooldown: 0.7
+  - enemyIndex: 5
+    spawnStartTimeSecond: 335
+    spawnEndTimeSecond: 355
+    spawnCooldown: 0.4
+  - enemyIndex: 5
+    spawnStartTimeSecond: 355
+    spawnEndTimeSecond: 410
+    spawnCooldown: 0.1
+  - enemyIndex: 6
+    spawnStartTimeSecond: 410
+    spawnEndTimeSecond: 425
+    spawnCooldown: 0.7
+  - enemyIndex: 6
+    spawnStartTimeSecond: 425
+    spawnEndTimeSecond: 450
+    spawnCooldown: 0.4
+  - enemyIndex: 6
+    spawnStartTimeSecond: 450
+    spawnEndTimeSecond: 500
+    spawnCooldown: 0.1
+  - enemyIndex: 2
+    spawnStartTimeSecond: 340
+    spawnEndTimeSecond: 400
+    spawnCooldown: 0.1
+  - enemyIndex: 3
+    spawnStartTimeSecond: 420
+    spawnEndTimeSecond: 490
+    spawnCooldown: 0.1
+  - enemyIndex: 1001
+    spawnStartTimeSecond: 360
+    spawnEndTimeSecond: 600
+    spawnCooldown: 100
+  - enemyIndex: 1000
+    spawnStartTimeSecond: 400
+    spawnEndTimeSecond: 600
+    spawnCooldown: 60
+  - enemyIndex: 1000
+    spawnStartTimeSecond: 400
+    spawnEndTimeSecond: 600
+    spawnCooldown: 60
+  - enemyIndex: 5
+    spawnStartTimeSecond: 500
+    spawnEndTimeSecond: 600
+    spawnCooldown: 0.1
+  - enemyIndex: 6
+    spawnStartTimeSecond: 500
+    spawnEndTimeSecond: 600
+    spawnCooldown: 0.1
+  - enemyIndex: 1
+    spawnStartTimeSecond: 600
+    spawnEndTimeSecond: 9999
+    spawnCooldown: 0.01
+  - enemyIndex: 2
+    spawnStartTimeSecond: 600
+    spawnEndTimeSecond: 9999
+    spawnCooldown: 0.01
+  - enemyIndex: 3
+    spawnStartTimeSecond: 600
+    spawnEndTimeSecond: 9999
+    spawnCooldown: 0.01
+  - enemyIndex: 4
+    spawnStartTimeSecond: 600
+    spawnEndTimeSecond: 9999
+    spawnCooldown: 0.01
+  - enemyIndex: 5
+    spawnStartTimeSecond: 600
+    spawnEndTimeSecond: 9999
+    spawnCooldown: 0.01
+  - enemyIndex: 6
+    spawnStartTimeSecond: 600
+    spawnEndTimeSecond: 9999
+    spawnCooldown: 0.01
+  - enemyIndex: 1000
+    spawnStartTimeSecond: 600
+    spawnEndTimeSecond: 9999
+    spawnCooldown: 5
+  - enemyIndex: 1001
+    spawnStartTimeSecond: 600
+    spawnEndTimeSecond: 9999
+    spawnCooldown: 5

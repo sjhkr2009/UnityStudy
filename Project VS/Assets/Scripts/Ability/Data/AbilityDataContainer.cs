@@ -63,8 +63,14 @@ public class AbilityDataContainer : ScriptableObject {
         else Debugger.Log("All data is valid.");
     }
 
-    public static AbilityData GetDataOrDefault(AbilityIndex abilityIndex) {
-        return GetInstance().GetData(abilityIndex) ?? new AbilityData() { abilityIndex = abilityIndex };
+    public static AbilityData LoadData(AbilityIndex abilityIndex) {
+        var data = GetInstance().GetData(abilityIndex);
+        if (data == null) {
+            Debugger.Error($"[AbilityDataContainer.LoadData] {abilityIndex} 무기에 대한 데이터가 없습니다!");
+            return new AbilityData() { abilityIndex = abilityIndex };
+        }
+
+        return data;
     }
 
     private static AbilityDataContainer GetInstance() {

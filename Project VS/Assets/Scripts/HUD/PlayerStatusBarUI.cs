@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerStatusBarUI : GameListenerBehavior {
+public class PlayerStatusBarUI : GameListenerBehaviour {
     [SerializeField] private Slider hpBar;
 
     public override void OnGameStart() {

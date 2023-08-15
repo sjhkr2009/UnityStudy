@@ -29,7 +29,7 @@ public class SpinnerWeapon : AbilityBase, IWeaponAbility {
         
         for (int i = 0; i < AttackCount; i++) {
             var spinner = PoolManager.Get(spinnerPrefabName, Transform).transform;
-            var param = new ProjectileParam() { damage = Damage };
+            var param = new ProjectileParam() { damage = Damage  * GameManager.Player.Status.AttackPower };
             spinner.GetComponent<Projectile>().Initialize(param);
             spinners.Add(spinner);
             spinner.localScale = Vector3.one * AttackRange;

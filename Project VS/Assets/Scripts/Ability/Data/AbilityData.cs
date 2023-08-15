@@ -6,13 +6,13 @@ using UnityEngine;
 
 [Serializable]
 public class AbilityData {
-    [SerializeField] public AbilityType abilityType = AbilityType.Unknown;
     [SerializeField] public AbilityIndex abilityIndex;
     
     [SerializeField] public string itemName;
     [SerializeField] public Sprite itemIcon;
+    [SerializeField] public List<Sprite> iconsByLevel = new List<Sprite>();
     
-    [SerializeField] public int maxLevel = Define.DataSetting.ItemMaxLevel;
+    [SerializeField] public int maxLevel = Define.DataSetting.ItemDefaultMaxLevel;
     [SerializeField] public List<AbilityDetailValue> detailValues = new List<AbilityDetailValue>();
     [SerializeField] public List<string> descriptions = new List<string>();
     
@@ -26,6 +26,15 @@ public class AbilityData {
 
         int zeroBasedIndex = oneBasedLevel - 1;
         return data.GetValue(zeroBasedIndex);
+    }
+
+    public Sprite GetIcon(int oneBasedLevel) {
+        if (iconsByLevel == null || iconsByLevel.Count == 0) return itemIcon;
+
+        var icon = iconsByLevel[(oneBasedLevel - 1).Clamp(0, iconsByLevel.Count - 1)];
+        if (icon == null) return itemIcon;
+
+        return icon;
     }
 
     public string GetDescription(int oneBasedLevel) {

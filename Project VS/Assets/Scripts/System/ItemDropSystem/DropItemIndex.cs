@@ -3,4 +3,5 @@ public enum DropItemIndex {
     SmallSoul,
     MiddleSoul,
     BigSoul,
+    Magnetic
 }

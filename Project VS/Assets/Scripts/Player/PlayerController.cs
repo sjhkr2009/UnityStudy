@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting;
 
-public class PlayerController : GameListenerBehavior, IDamagableEntity {
+public class PlayerController : GameListenerBehaviour, IDamagableEntity {
     [Serializable]
     public class ComponentHolder {
         public AbilityController abilityController;
@@ -11,6 +11,9 @@ public class PlayerController : GameListenerBehavior, IDamagableEntity {
         public Collider2D collider;
         public Rigidbody2D rigidbody;
         public Transform modelTransform;
+        public Transform spiritTransform;
+        public Transform spiritDestination;
+        public Joystick joystick;
     }
     
     [SerializeField] private ComponentHolder components;
@@ -32,6 +35,7 @@ public class PlayerController : GameListenerBehavior, IDamagableEntity {
     }
 
     private void Update() {
+        Status.InputVector = components.joystick.Direction;
         SkillController?.OnUpdate(Time.deltaTime);
     }
 
@@ -73,15 +77,16 @@ public class PlayerController : GameListenerBehavior, IDamagableEntity {
     [Preserve]
     void OnMove(InputValue inputValue) {
         // 세팅에 의해 normalized Vector2 값이 들어온다.
-        Status.InputVector = inputValue.Get<Vector2>();
+        components.joystick.Input = inputValue.Get<Vector2>();
     }
 
-    public AttackResult OnAttacked(IAttackableCollider attacker) {
+    public AttackResult OnAttacked(IAttackableCollider attacker, Vector2 attackPos) {
         if (attacker == null) return AttackResult.None;
         if (isPaused) return AttackResult.None;
         if (!Status.IsHittable()) return AttackResult.None;
-        
-        ApplyDamage(attacker.GetDamageData());
+
+        var data = new DamageData(attacker, this, attackPos);
+        ApplyDamage(data);
 
         if (Status.Hp <= 0) {
             Status.IsDead = true;
@@ -90,6 +95,10 @@ public class PlayerController : GameListenerBehavior, IDamagableEntity {
         }
         
         return AttackResult.Hit;
+    }
+
+    public override void OnDeadPlayer() {
+        GameManager.Controller.PauseGame();
     }
 
     void ApplyDamage(DamageData data) {

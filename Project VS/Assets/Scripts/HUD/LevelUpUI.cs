@@ -1,32 +1,45 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelUpUI : GameListenerBehavior, IUiEventListener<AbilityIndex> {
-    // TODO : 업그레이드할 대상을 선정하는 로직 추가 필요
-    [SerializeField] private List<AbilityIndex> itemIndices = new List<AbilityIndex>() {
-        AbilityIndex.WeaponSpinAround,
-        AbilityIndex.WeaponAutoGun,
-        AbilityIndex.SkillFireball
-    };
-    
+public class LevelUpUI : GameListenerBehaviour, IUiEventListener<AbilityIndex> {
     [SerializeField] private GameObject curtain;
     [SerializeField] private RectTransform buttonRoot;
     
     private List<AbilityUpgradeButton> upgradeButtons = new List<AbilityUpgradeButton>();
+    private int waitingLevelUp = 0;
+    private bool isShowing = false;
 
     private void Awake() {
         curtain.SetActive(false);
     }
-    
-    public void Show() {
+
+    private void Show() {
+        waitingLevelUp--;
+        if (isShowing) {
+            Debugger.Error("[LevelUpUI.Show] Call Duplicated!");
+            return;
+        }
+
+        isShowing = true;
+        
         curtain.SetActive(true);
-        for (int i = 0; i < itemIndices.Count; i++) {
+        var cardIndices = CardManager.GetAvailableCardList();
+
+        if (cardIndices == null || cardIndices.Count == 0) {
+            curtain.SetActive(false);
+            GameManager.Controller.ResumeGame();
+            isShowing = false;
+            return;
+        }
+
+        for (int i = 0; i < cardIndices.Count; i++) {
             var button = PoolManager.GetByType<AbilityUpgradeButton>(buttonRoot);
-            button.Initialize(this, itemIndices[i]);
+            button.Initialize(this, cardIndices[i]);
             upgradeButtons.Add(button);
         }
     }
@@ -35,16 +48,22 @@ public class LevelUpUI : GameListenerBehavior, IUiEventListener<AbilityIndex> {
         curtain.SetActive(false);
         upgradeButtons.ForEach(b => PoolManager.Abandon(b.gameObject));
         upgradeButtons.Clear();
+        isShowing = false;
     }
     
     public void InvokeEvent(AbilityIndex abilityIndex) {
         GameManager.Ability.AddOrUpgradeItem(abilityIndex);
-        
         GameManager.Controller?.CallSelectItem();
         Abandon();
     }
 
     public override void OnLevelUp() {
-        Show();
+        waitingLevelUp++;
+    }
+
+    private void Update() {
+        if (waitingLevelUp > 0 && !isShowing) {
+            Show();
+        }
     }
 }

@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class PlayerStatus {
     public GameObject GameObject { get; }
-    private CharacterData _characterData { get; }
-    public CharacterData ClonedOriginStat => _characterData.Clone();
+    private PlayerStatData PlayerStatusData { get; }
+    public PlayerStatData ClonedOriginStat => PlayerStatusData.Clone();
     public AbilityController AbilityController { get; }
     
     public float MaxHp { get; private set; }
@@ -19,8 +19,11 @@ public class PlayerStatus {
     public float Speed { get; private set; }
     public float AttackRange { get; private set; }
     public float AttackPower { get; private set; }
+    public float AttackSpeed { get; private set; }
+    public float SkillHaste { get; private set; }
+    public float Critical { get; private set; }
     
-    public float Acceleration { get; set; } = 20f;
+    public float Acceleration { get; set; } = 50f;
     public Vector2 InputVector { get; set; } = Vector2.zero;
     public Vector2 DeltaMove { get; set; } = Vector2.zero;
     public Vector2 ShowDirection { get; set; } = Vector2.right;
@@ -29,8 +32,8 @@ public class PlayerStatus {
 
     public PlayerStatus(GameObject go, PlayerController.ComponentHolder componentHolder) {
         GameObject = go;
-        
-        _characterData = new CharacterData();
+
+        PlayerStatusData = PlayerStatDataContainer.LoadData();
         AbilityController = componentHolder.abilityController;
         
         Initialize();
@@ -46,6 +49,8 @@ public class PlayerStatus {
     void OnAfterInitialize() {
         Hp = MaxHp;
         LockHitCount = 0;
+
+        GameManager.Ability.AddOrUpgradeItem(AbilityIndex.WeaponAutoGun);
     }
     public void UpdateStat() {
         var clonedData = ClonedOriginStat;
@@ -59,6 +64,13 @@ public class PlayerStatus {
         Speed = clonedData.speed;
         AttackPower = clonedData.attackPower;
         AttackRange = clonedData.attackRange;
+        AttackSpeed = clonedData.attackSpeed;
+        SkillHaste = clonedData.skillCoolTimeRate;
+        Critical = clonedData.criticalRate;
+    }
+
+    public void HealHp(float value) {
+        Hp += value;
     }
 
     public bool IsHittable() {
@@ -71,27 +83,6 @@ public class PlayerStatus {
     public void Hit(float damage) {
         Hp -= damage;
         LockHitCount++;
-        UniTask.Delay(200).ContinueWith(() => LockHitCount--).Forget();
-    }
-}
-
-// TODO: 캐릭터가 추가되면 아이템처럼 데이터를 분리할 것
-public class CharacterData {
-    public float maxHp = 200f;
-    public float speed = 3f;
-    public float acceleration = 20f;
-    public float attackPower = 1f;
-    public float attackRange = 1f;
-    public float skillHaste = 1f;
-
-    public CharacterData Clone() {
-        return new CharacterData() {
-            maxHp = maxHp,
-            speed = speed,
-            acceleration = acceleration,
-            attackPower = attackPower,
-            attackRange = attackRange,
-            skillHaste = skillHaste
-        };
+        UniTask.Delay(330).ContinueWith(() => LockHitCount--).Forget();
     }
 }

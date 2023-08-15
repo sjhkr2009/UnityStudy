@@ -53,4 +53,8 @@ public static class CustomUtility {
         var index = Random.Range(0, count);
         return container.ElementAt(index);
     }
+    
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection) {
+        return collection.OrderBy(_ => Random.value);
+    }
 }

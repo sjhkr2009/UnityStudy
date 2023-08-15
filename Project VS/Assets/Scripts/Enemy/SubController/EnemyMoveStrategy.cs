@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -23,7 +21,7 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
         Rigidbody.simulated = true;
     }
 
-    public void Update() {
+    public void OnUpdate(float deltaTime) {
         if (Status.IsDead) return;
         if (!Status.IsMovable) return;
         
@@ -33,7 +31,7 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
         }
 
         Vector2 dirVec = Target.position - Rigidbody.position;
-        Vector2 deltaVector = dirVec.normalized * (Speed * Time.deltaTime);
+        Vector2 deltaVector = dirVec.normalized * (Speed * deltaTime);
         
         Rigidbody.MovePosition(Rigidbody.position + deltaVector);
         Rigidbody.velocity = Vector2.zero; //
@@ -41,7 +39,8 @@ public class EnemyMoveStrategy : IEnemyMoveStrategy, ITargetTracker {
         UpdateDirection(Status);
     }
 
-    public void OnHit() {
+    public void OnHit(AbilityBase hitAbility) {
+        if (hitAbility != null && hitAbility.IgnoreKnockBack) return;
         KnockBack(3f).Forget();
     }
 

@@ -40,7 +40,10 @@ public class StraightProjectile : Projectile {
 
         var damageHandler = other.GetComponent<IDamagableEntity>();
         if (damageHandler == null) return;
-        var result = damageHandler.OnAttacked(this);
+        var attackPos = other.bounds.ClosestPoint(transform.position);
+        var result = damageHandler.OnAttacked(this, attackPos);
+        OnAttack?.Invoke(attackPos);
+        ShowHitEffect();
 
         if (!result.isHit) return;
         
@@ -53,8 +56,10 @@ public class StraightProjectile : Projectile {
 
         elapsedTimeFromSpawned += Time.deltaTime;
         if (elapsedTimeFromSpawned > lifeTime) {
+            OnAttack?.Invoke(transform.position);
             PoolManager.Abandon(gameObject);
         } else if (Vector2.Distance(startPoint, transform.position) > range) {
+            OnAttack?.Invoke(transform.position);
             PoolManager.Abandon(gameObject);
         }
     }

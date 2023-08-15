@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireBulletWeapon : AbilityBase, IWeaponAbility, IBulletCreator {
+public class FireBulletWeapon : AbilityBase, IWeaponAbility {
     public override AbilityIndex Index => AbilityIndex.WeaponAutoGun;
-    public Transform Transform { get; set; }
     
     public string bulletPrefabName = "Bullet01";
+
+    public override bool InvokeOnHit => true;
     
     public float Damage { get; set; }
     public float AttackInterval { get; set; }
@@ -21,18 +22,23 @@ public class FireBulletWeapon : AbilityBase, IWeaponAbility, IBulletCreator {
         base.Initialize(controller);
 
         SetDataByLevel();
-        Transform = controller.transform;
         scanner = controller.Scanner;
     }
 
     public void OnEveryFrame(float deltaTime) {
-        fireTimer += deltaTime;
+        var elapsedTime = deltaTime * GameManager.Player.Status.AttackSpeed;
+
+        fireTimer += elapsedTime;
+
         if (fireTimer > AttackInterval) {
             fireTimer = 0f;
             Fire();
         }
     }
-    
+
+    public override void OnChangeOtherAbility(AbilityBase changedAbility) {
+    }
+
     public override void Upgrade() {
         base.Upgrade();
         SetDataByLevel();
@@ -51,16 +57,17 @@ public class FireBulletWeapon : AbilityBase, IWeaponAbility, IBulletCreator {
         if (!player) return;
 
         if (!scanner.NearestTarget) return;
-
+        
+        var fireTr = GameManager.Ability.FireTransform;
         var targetPos = scanner.NearestTarget.position;
-        var dir = (targetPos - Transform.position).normalized;
+        var dir = (targetPos - fireTr.position).normalized;
 
-        ProjectileSpawner.Spawn(bulletPrefabName, CreateParam(dir));
+        ProjectileSpawner.Spawn(bulletPrefabName, CreateParam(fireTr.position, dir));
     }
 
-    private ProjectileParam CreateParam(Vector3 direction) {
-        var param = ProjectileParam.CreateStraightDefault(Transform.position);
-        param.damage = Damage;
+    public ProjectileParam CreateParam(Vector2 startPos, Vector3 direction) {
+        var param = ProjectileParam.CreateStraightDefault(this, startPos);
+        param.damage = Damage * GameManager.Player.Status.AttackPower;
         param.range = AttackRange;
         param.penetration = Penetration;
         param.direction = direction;

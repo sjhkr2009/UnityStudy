@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public abstract class EnemyControllerBase : GameListenerBehavior, IPoolHandler {
+public abstract class EnemyControllerBase : GameListenerBehaviour, IPoolHandler {
     [ShowInInspector, ReadOnly] public EnemyStatus Status { get; private set; }
-    
-    protected bool isPaused = false;
-    
+    [SerializeField] protected EnemyMoveComponentBase moveComponent;
+
     protected IEnemyView view;
     protected IEnemyMoveStrategy moveStrategy;
 
@@ -16,27 +15,24 @@ public abstract class EnemyControllerBase : GameListenerBehavior, IPoolHandler {
     }
 
     protected virtual void FixedUpdate() {
-        if (isPaused) return;
+        if (GameManager.IsPause) return;
         
-        moveStrategy?.Update();
+        moveStrategy?.OnUpdate(Time.fixedDeltaTime);
     }
 
     protected virtual void LateUpdate() {
-        if (isPaused) return;
+        if (GameManager.IsPause) return;
         
-        view?.Update();
+        view?.OnUpdate(Time.deltaTime);
     }
 
     public override void OnPauseGame() {
-        isPaused = true;
     }
     
     public override void OnResumeGame() {
-        isPaused = false;
     }
     
     public virtual void OnInitialize() {
-        isPaused = GameManager.IsPause;
         EnemySpawnManager.SpawnedEnemies.Add(this);
     }
 

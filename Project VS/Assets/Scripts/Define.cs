@@ -19,6 +19,7 @@ public static class Define {
         public const string ScreenArea = "ScreenArea";
         public const string Enemy = "Enemy";
         public const string Player = "Player";
+        public const string ItemGainer = "ItemGainer";
         public const string Projectile = "Projectile";
     }
      
@@ -27,10 +28,10 @@ public static class Define {
     }
     
     public static class EnvironmentSetting {
-        public const int TileMapSize = 20;
+        public const int TileMapSize = 40;
     }
 
     public static class DataSetting {
-        public const int ItemMaxLevel = 5;
+        public const int ItemDefaultMaxLevel = 1;
     }
 }

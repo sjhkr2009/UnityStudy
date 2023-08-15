@@ -19,17 +19,22 @@ public class PlayerSkillController {
         private set => _remainCooldown2 = value.ClampMin(0f);
     }
 
-    public float Cooldown1 => skill1.OriginCooldown;
-    public float Cooldown2 => skill2.OriginCooldown;
+    public float Cooldown1 => skill1?.OriginCooldown ?? 0f;
+    public float Cooldown2 => skill2?.OriginCooldown ?? 0f;
 
-    public bool CanUseSkill1 => Mathf.Approximately(RemainCooldown1, 0f);
-    public bool CanUseSkill2 => Mathf.Approximately(RemainCooldown2, 0f);
+    public bool CanUseSkill1 => skill1 != null && Mathf.Approximately(RemainCooldown1, 0f);
+    public bool CanUseSkill2 => skill2 != null && Mathf.Approximately(RemainCooldown2, 0f);
 
     public PlayerSkillController(PlayerController.ComponentHolder componentHolder, PlayerStatus status) {
         Status = status;
-        Transform = componentHolder.modelTransform;
-        skill1 = new FireballSkill();
-        skill2 = new FireballSkill();
+        Transform = componentHolder.spiritTransform;
+    }
+
+    public void SetSkill1(ISkillAbility skillAbility) {
+        skill1 = skillAbility;
+    }
+    public void SetSkill2(ISkillAbility skillAbility) {
+        skill2 = skillAbility;
     }
 
     public void OnUpdate(float deltaTime) {
@@ -55,13 +60,13 @@ public class PlayerSkillController {
         if (!CanUseSkill1) return;
         
         skill1.Run(Transform.position, Status.ShowDirection);
-        RemainCooldown1 = Cooldown1;
+        RemainCooldown1 = Cooldown1 * GameManager.Player.Status.SkillHaste;
     }
     
     public void OnUseSkill2() {
         if (!CanUseSkill2) return;
         
         skill2.Run(Transform.position, Status.ShowDirection);
-        RemainCooldown2 = Cooldown2;
+        RemainCooldown2 = Cooldown2 * GameManager.Player.Status.SkillHaste;
     }
 }

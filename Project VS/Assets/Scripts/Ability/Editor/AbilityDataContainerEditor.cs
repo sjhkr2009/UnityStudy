@@ -5,13 +5,14 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(AbilityDataContainer))]
-public class AbilityDataContainerEditor : OdinEditor {
+public class AbilityDataContainerEditor : Editor {
     private static AbilityIndex _abilityIndex = AbilityIndex.None;
     
     private AbilityData targetData;
     private AbilityValueType targetDataType;
     
     private bool showRawData;
+    private bool showMultiIcon;
     private Vector2 normalScrollPos;
     private Vector2 rawDataScrollPos;
 
@@ -75,6 +76,10 @@ public class AbilityDataContainerEditor : OdinEditor {
             GUILayout.Space(20);
             DrawItemData();
             EditorGUILayout.EndScrollView();
+            
+            showMultiIcon = EditorGUILayout.Foldout(showMultiIcon, "레벨별 아이콘 설정하기");
+            if (showMultiIcon) DrawIconByLevel(targetData);
+            
         } else if (_abilityIndex == AbilityIndex.None) {
             EditorGUILayout.LabelField("추가하거나 수정할 아이템 데이터를 선택해주세요.");
         } else if (GUILayout.Button("Add Data")) {
@@ -118,9 +123,8 @@ public class AbilityDataContainerEditor : OdinEditor {
         if (targetData == null) return;
 
         targetData.itemName = EditorGUILayout.TextField("아이템 이름", targetData.itemName);
-        targetData.abilityType = (AbilityType)EditorGUILayout.EnumFlagsField("타입", targetData.abilityType);
         targetData.itemIcon = (Sprite)EditorGUILayout.ObjectField("아이콘", targetData.itemIcon, typeof(Sprite), false);
-        
+
         EditorGUILayout.Space(10);
         GUILayout.Label(string.Empty, GUI.skin.horizontalSlider);
         EditorGUILayout.Space(20);
@@ -193,6 +197,13 @@ public class AbilityDataContainerEditor : OdinEditor {
         while (drawTargetData.maxLevel < drawTargetData.descriptions.Count) {
             drawTargetData.descriptions.RemoveAt(drawTargetData.descriptions.Count - 1);
         }
+        
+        while (drawTargetData.iconsByLevel.Count < drawTargetData.maxLevel) {
+            drawTargetData.iconsByLevel.Add(drawTargetData.itemIcon);
+        }
+        while (drawTargetData.maxLevel < drawTargetData.iconsByLevel.Count) {
+            drawTargetData.iconsByLevel.RemoveAt(drawTargetData.iconsByLevel.Count - 1);
+        }
     }
 
     void DrawItemIndexedValueEditor(AbilityDetailValue detailValue) {
@@ -214,5 +225,15 @@ public class AbilityDataContainerEditor : OdinEditor {
             drawTargetData.descriptions[i] = EditorGUILayout.TextArea(drawTargetData.descriptions[i]);
         }
         
+    }
+    
+    void DrawIconByLevel(AbilityData drawTargetData) {
+        EditorGUILayout.LabelField("[레벨별 아이콘]");
+        using (new EditorGUILayout.HorizontalScope()) {
+            for (int i = 0; i < drawTargetData.maxLevel; i++) {
+                drawTargetData.iconsByLevel[i] = (Sprite)EditorGUILayout.ObjectField(drawTargetData.iconsByLevel[i], typeof(Sprite), false);
+                if (drawTargetData.iconsByLevel[i] == null) drawTargetData.iconsByLevel[i] = drawTargetData.itemIcon;
+            }
+        }
     }
 }

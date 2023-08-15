@@ -1,8 +1,11 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemyView : IEnemyView {
-    private SpriteRenderer SpriteRenderer { get; }
+    private SortingGroup SortingGroup { get; }
+    private Transform ViewRoot { get; }
     private Animator Animator { get; }
     private EnemyStatus Status { get; }
     
@@ -11,26 +14,27 @@ public class EnemyView : IEnemyView {
 
     public EnemyView(EnemyStatus status) {
         Status = status;
-        SpriteRenderer = Status.GameObject.GetComponent<SpriteRenderer>();
+        SortingGroup = Status.GameObject.GetComponent<SortingGroup>();
+        ViewRoot = Status.GameObject.transform;
         Animator = Status.GameObject.GetComponent<Animator>();
     }
 
     public void OnCreate() {
-        SpriteRenderer.sortingOrder = 2;
+        SortingGroup.sortingOrder = 2;
         Animator.SetBool(Dead, false);
     }
 
-    public void Update() {
-        if (Status.CurrentDirection == Direction.Right) SpriteRenderer.flipX = true;
-        else if (Status.CurrentDirection == Direction.Left) SpriteRenderer.flipX = false;
+    public void OnUpdate(float deltaTime) {
+        if (Status.CurrentDirection == Direction.Right) ViewRoot.localScale = Vector3.one;
+        else if (Status.CurrentDirection == Direction.Left) ViewRoot.localScale = new Vector3(-1f, 1f, 1f);
     }
 
-    public void OnHit() {
+    public void OnHit(AbilityBase hitAbility) {
         Animator.SetTrigger(Hit);
     }
 
     public void OnDead() {
-        SpriteRenderer.sortingOrder = 1;
+        SortingGroup.sortingOrder = 1;
         Animator.SetBool(Dead, true);
         DeadWithAnimation().Forget();
     }

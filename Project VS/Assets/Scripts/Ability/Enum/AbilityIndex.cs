@@ -3,7 +3,9 @@ public enum AbilityIndex {
     
     WeaponSpinAround = 10000,
     WeaponAutoGun = 11000,
-    WeaponAreaStrike = 12000,
+    WeaponRandomAreaStrike = 12000,
     
     SkillFireball = 20000,
+    SkillPeriodicLaser = 20100,
+    SkillChargeExplosion = 25000
 }

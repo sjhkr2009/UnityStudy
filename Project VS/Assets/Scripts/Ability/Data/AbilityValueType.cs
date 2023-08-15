@@ -10,5 +10,8 @@ public enum AbilityValueType {
     AttackInterval,
     AttackCount,
     Penetration,
-    ObjectSpeed
+    ObjectSpeed,
+    CoolDown,
+    AttackDuration,
+    CommonStat,
 }

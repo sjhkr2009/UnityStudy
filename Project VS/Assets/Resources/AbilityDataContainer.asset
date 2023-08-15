@@ -13,135 +13,528 @@ MonoBehaviour:
   m_Name: AbilityDataContainer
   m_EditorClassIdentifier: 
   dataContainer:
-  - abilityType: 2
-    abilityIndex: 10000
-    itemName: "\uC0BD"
-    itemIcon: {fileID: -181907988, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-    maxLevel: 5
+  - abilityIndex: 10000
+    itemName: Soul Around
+    itemIcon: {fileID: 21300000, guid: b5c75a92a385f4054a2fa4f704185261, type: 3}
+    iconsByLevel:
+    - {fileID: -181907988, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+    - {fileID: -181907988, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+    - {fileID: -181907988, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+    maxLevel: 3
     detailValues:
     - type: 1
       values:
       - 5
       - 10
-      - 10
-      - 15
       - 20
     - type: 2
       values:
       - 1
       - 1
       - 1
-      - 1.2
-      - 1.5
     - type: 5
       values:
       - 3
-      - 3
+      - 4
       - 5
-      - 7
-      - 10
     - type: 7
       values:
-      - 150
+      - 120
       - 150
       - 210
-      - 210
-      - 270
     descriptions:
-    - "\uB545\uC744 \uD314 \uB54C\uB9CC \uC4F0\uB294 \uAC74 \uC544\uB2D9\uB2C8\uB2E4."
-    - "\uB370\uBBF8\uC9C0\uAC00 \uB450 \uBC30\uB85C \uC99D\uAC00\uD569\uB2C8\uB2E4."
-    - "\uAC1C\uC218\uAC00 \uC99D\uAC00\uD558\uACE0 \uC18D\uB3C4\uAC00 \uBE68\uB77C\uC9D1\uB2C8\uB2E4."
-    - "\uAC1C\uC218\uAC00 \uC99D\uAC00\uD558\uACE0 \uBC94\uC704\uC640 \uB370\uBBF8\uC9C0\uAC00
-      \uC99D\uAC00\uD569\uB2C8\uB2E4."
-    - "\uBAA8\uB4E0 \uB2A5\uB825\uC774 \uD5A5\uC0C1\uB429\uB2C8\uB2E4."
-  - abilityType: 2
-    abilityIndex: 11000
-    itemName: "\uC5FD\uCD1D"
-    itemIcon: {fileID: -205726582, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-    maxLevel: 5
+    - Round
+    - Round and Round
+    - Spin Round and Round
+  - abilityIndex: 11000
+    itemName: Fireball
+    itemIcon: {fileID: 21300000, guid: 03e5066de683941b0a57967241c14c6d, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: fd8238757369448cdb6c81ea8cbc9d92, type: 3}
+    maxLevel: 1
     detailValues:
     - type: 1
       values:
       - 5
-      - 10
-      - 15
-      - 15
-      - 25
     - type: 2
       values:
-      - 10
-      - 10
-      - 10
-      - 10
       - 20
     - type: 4
       values:
       - 0.5
-      - 0.5
-      - 0.4
-      - 0.2
-      - 0.1
     - type: 6
       values:
       - 1
-      - 3
-      - 3
-      - 3
-      - 10
     - type: 7
       values:
       - 7
-      - 7
-      - 7.5
-      - 10
+    descriptions:
+    - Auto Fireball
+  - abilityIndex: 20000
+    itemName: Basic Skill
+    itemIcon: {fileID: 21300000, guid: 1cbc2d77fa8a448f885d2698fcf4cd08, type: 3}
+    iconsByLevel:
+    - {fileID: -1002307068, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 30
+    - type: 3
+      values:
       - 15
     descriptions:
-    - "\uC870\uC900\uC774 \uD544\uC694 \uC5C6\uC2B5\uB2C8\uB2E4."
-    - 
-    - 
-    - 
-    - 
-  - abilityType: 4
-    abilityIndex: 20000
-    itemName: "\uD30C\uC774\uC5B4\uBCFC"
-    itemIcon: {fileID: -1002307068, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+    - Big Fireball
+  - abilityIndex: 12000
+    itemName: Meteor
+    itemIcon: {fileID: 21300000, guid: 4ca7838601ffa4c41af7f602d4c51107, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 4ca7838601ffa4c41af7f602d4c51107, type: 3}
+    - {fileID: 21300000, guid: d553d8e014d0041cbb3a192f20ff71a0, type: 3}
+    maxLevel: 2
+    detailValues:
+    - type: 1
+      values:
+      - 20
+      - 20
+    - type: 4
+      values:
+      - 10
+      - 10
+    - type: 5
+      values:
+      - 10
+      - 20
+    descriptions:
+    - Meteor attack is added
+    - Meteo falls double amount
+  - abilityIndex: 13000
+    itemName: Fire Boom
+    itemIcon: {fileID: 21300000, guid: cb82bafe24b2a4b9cb265c3f829644ad, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: cb82bafe24b2a4b9cb265c3f829644ad, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 10
+    descriptions:
+    - Explosion on Basic Attack
+  - abilityIndex: 1000
+    itemName: Attack Power Up
+    itemIcon: {fileID: 21300000, guid: a99916b1d78964941a99f7f3a30b26ba, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: a99916b1d78964941a99f7f3a30b26ba, type: 3}
+    - {fileID: 21300000, guid: a99916b1d78964941a99f7f3a30b26ba, type: 3}
+    - {fileID: 21300000, guid: a99916b1d78964941a99f7f3a30b26ba, type: 3}
+    maxLevel: 3
+    detailValues:
+    - type: 1
+      values:
+      - 2
+      - 3
+      - 4
+    descriptions:
+    - Fireball becomes stronger
+    - Fireball becomes stronger
+    - Fireball becomes stronger
+  - abilityIndex: 14000
+    itemName: Rotating Fire
+    itemIcon: {fileID: 21300000, guid: b5c75a92a385f4054a2fa4f704185261, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: b5c75a92a385f4054a2fa4f704185261, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 2.5
+    - type: 7
+      values:
+      - 300
+    - type: 2
+      values:
+      - 2
+    - type: 5
+      values:
+      - 1
+    descriptions:
+    - Rotating fire attack is added.
+  - abilityIndex: 17000
+    itemName: Fire Boom
+    itemIcon: {fileID: 21300000, guid: cb82bafe24b2a4b9cb265c3f829644ad, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: cb82bafe24b2a4b9cb265c3f829644ad, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 30
+    - type: 2
+      values:
+      - 10
+    - type: 4
+      values:
+      - 3
+    - type: 6
+      values:
+      - 1
+    - type: 7
+      values:
+      - 8
+    descriptions:
+    - Explosive attack is added.
+  - abilityIndex: 17200
+    itemName: Aftershocks
+    itemIcon: {fileID: 21300000, guid: 2614f21354a584896ad69397a214d1b4, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 2614f21354a584896ad69397a214d1b4, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 2
+      values:
+      - 15
+    descriptions:
+    - The explosion attack gets bigger
+  - abilityIndex: 17100
+    itemName: Firework
+    itemIcon: {fileID: 21300000, guid: 17017c409bbcc45b58bc305ceb31374e, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 17017c409bbcc45b58bc305ceb31374e, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 3
+    - type: 4
+      values:
+      - 2
+    - type: 7
+      values:
+      - 3
+    descriptions:
+    - Burning area attack is added
+  - abilityIndex: 11100
+    itemName: Fireball
+    itemIcon: {fileID: 21300000, guid: 1cbc2d77fa8a448f885d2698fcf4cd08, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 1cbc2d77fa8a448f885d2698fcf4cd08, type: 3}
+    - {fileID: 21300000, guid: d263b1864bb1941c8b5118bef2ca84ec, type: 3}
+    maxLevel: 2
+    detailValues:
+    - type: 1
+      values:
+      - 10
+      - 20
+    - type: 4
+      values:
+      - 5
+      - 5
+    - type: 2
+      values:
+      - 20
+      - 20
+    - type: 6
+      values:
+      - 1
+      - 1
+    - type: 7
+      values:
+      - 15
+      - 15
+    - type: 5
+      values:
+      - 12
+      - 36
+    descriptions:
+    - Sometimes, spreading fireball attacks every corner
+    - Spread much more fireball around
+  - abilityIndex: 20100
+    itemName: Kwang
+    itemIcon: {fileID: 21300000, guid: 31f80f8590ee5437e96a535020e9db48, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: cafa3200c43f9412fbeb9ef1e52bace1, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 200
+    descriptions:
+    - Mr. Kwang!
+  - abilityIndex: 1001
+    itemName: Attack Speed Up
+    itemIcon: {fileID: 21300000, guid: a51a97c48b56f46f387cdebb4c9967b0, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: a51a97c48b56f46f387cdebb4c9967b0, type: 3}
+    - {fileID: 21300000, guid: a51a97c48b56f46f387cdebb4c9967b0, type: 3}
+    - {fileID: 21300000, guid: a51a97c48b56f46f387cdebb4c9967b0, type: 3}
+    maxLevel: 3
+    detailValues:
+    - type: 4
+      values:
+      - 0.5
+      - 1
+      - 1.5
+    descriptions:
+    - 'Fireball attacking gets faster '
+    - Fireball attacking gets faster
+    - Fireball attacking gets faster
+  - abilityIndex: 1002
+    itemName: Move Speed Up
+    itemIcon: {fileID: 21300000, guid: 7602e680f7ac14b1ea9cc8eb2ba7b7e2, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 7602e680f7ac14b1ea9cc8eb2ba7b7e2, type: 3}
+    - {fileID: 21300000, guid: 7602e680f7ac14b1ea9cc8eb2ba7b7e2, type: 3}
+    - {fileID: 21300000, guid: 7602e680f7ac14b1ea9cc8eb2ba7b7e2, type: 3}
+    maxLevel: 3
+    detailValues:
+    - type: 3
+      values:
+      - 1
+      - 2
+      - 3
+    descriptions:
+    - The running speed is increasing
+    - The running speed is increasing
+    - The running speed is increasing
+  - abilityIndex: 1004
+    itemName: Power Overwhelming
+    itemIcon: {fileID: 21300000, guid: 31f80f8590ee5437e96a535020e9db48, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 31f80f8590ee5437e96a535020e9db48, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 8
+      values:
+      - 0.3
+    descriptions:
+    - You can use your skills more often.
+  - abilityIndex: 1005
+    itemName: Maximized
+    itemIcon: {fileID: 21300000, guid: f930d98bdb7a14e6ea3db2c04947d233, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: f930d98bdb7a14e6ea3db2c04947d233, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 4
+      values:
+      - 0.2
+    - type: 1
+      values:
+      - 1.5
+    descriptions:
+    - Increasing attack damage, but attack power gets lower
+  - abilityIndex: 17700
+    itemName: Double Combo
+    itemIcon: {fileID: 21300000, guid: ec056054dd1bd43c892ae4ad6957df8e, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: ec056054dd1bd43c892ae4ad6957df8e, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 0.8
+    descriptions:
+    - Normal attack becomes two shots
+  - abilityIndex: 1003
+    itemName: HP Up
+    itemIcon: {fileID: 21300000, guid: bed681c2920e64e2dbb50ed4c058e873, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: bed681c2920e64e2dbb50ed4c058e873, type: 3}
+    - {fileID: 21300000, guid: bed681c2920e64e2dbb50ed4c058e873, type: 3}
+    - {fileID: 21300000, guid: bed681c2920e64e2dbb50ed4c058e873, type: 3}
+    maxLevel: 3
+    detailValues:
+    - type: 10
+      values:
+      - 2
+      - 3
+      - 4
+    descriptions:
+    - Health increases
+    - Health increases
+    - Health increases
+  - abilityIndex: 17800
+    itemName: Multishots
+    itemIcon: {fileID: 21300000, guid: fd8238757369448cdb6c81ea8cbc9d92, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: fd8238757369448cdb6c81ea8cbc9d92, type: 3}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 5
+    - type: 7
+      values:
+      - 7.5
+    - type: 4
+      values:
+      - 3
+    descriptions:
+    - Sometimes attacks 2 additional attack
+  - abilityIndex: 20200
+    itemName: Laser
+    itemIcon: {fileID: 21300000, guid: cafa3200c43f9412fbeb9ef1e52bace1, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: cafa3200c43f9412fbeb9ef1e52bace1, type: 3}
     maxLevel: 1
     detailValues:
     - type: 1
       values:
       - 20
-    - type: 3
+    - type: 4
       values:
-      - 15
+      - 0.1
+    - type: 9
+      values:
+      - 5
     descriptions:
-    - "\uD30C\uC774\uC5B4\uBCFC\uC744 \uBC1C\uC0AC\uD569\uB2C8\uB2E4"
-  - abilityType: 2
-    abilityIndex: 12000
-    itemName: "\uBA54\uD14C\uC624"
-    itemIcon: {fileID: 154122315, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
+    - Burn Everything
+  - abilityIndex: 18100
+    itemName: Thunder
+    itemIcon: {fileID: 21300000, guid: d58801d9a26fc42dd833853b78065f1d, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: d58801d9a26fc42dd833853b78065f1d, type: 3}
+    - {fileID: 21300000, guid: a91714587d54e40508643d23b91d1715, type: 3}
+    - {fileID: 21300000, guid: c8a9fee7faf034ced9c984c45fb28641, type: 3}
     maxLevel: 3
     detailValues:
     - type: 1
       values:
-      - 20
-      - 25
-      - 30
-    - type: 2
-      values:
-      - 3
-      - 5
-      - 10
-    - type: 7
-      values:
-      - 0.5
-      - 0.2
-      - 0
+      - 1
+      - 2
+      - 4
     - type: 4
       values:
-      - 3
-      - 2
-      - 1
+      - 20
+      - 20
+      - 20
     descriptions:
-    - "\uC77C\uC815 \uC8FC\uAE30\uB85C \uBD88\uB369\uC774\uB97C \uC18C\uD658\uD569\uB2C8\uB2E4"
-    - "\uBD88\uB369\uC774\uAC00 \uB354 \uAC15\uD574\uC9D1\uB2C8\uB2E4"
-    - "\uAC81\uB098\uC384"
+    - Fireball makes lightning with a low probability
+    - Lightning attack twice at once
+    - Lightning attack twice for each time
+  - abilityIndex: 1010
+    itemName: Sniping
+    itemIcon: {fileID: 21300000, guid: 03e5066de683941b0a57967241c14c6d, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 03e5066de683941b0a57967241c14c6d, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Speed gets much slower, but much stronger
+  - abilityIndex: 13100
+    itemName: Additional Splash
+    itemIcon: {fileID: 21300000, guid: 089bf9936efa346e6a22e4be373ff326, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 089bf9936efa346e6a22e4be373ff326, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Splash back to basic attack!
+  - abilityIndex: 15000
+    itemName: Flame Aura Upgrade 1
+    itemIcon: {fileID: 21300000, guid: beb18079c27fc441bb82a9ddae33030f, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: beb18079c27fc441bb82a9ddae33030f, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Number of rotating fire increase and faster.
+  - abilityIndex: 16000
+    itemName: Flame aura Upgrade 2
+    itemIcon: {fileID: 21300000, guid: dadd7125fa3a3467e913f685e2532d89, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: dadd7125fa3a3467e913f685e2532d89, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Rotating fire makes explosion damage
+  - abilityIndex: 17300
+    itemName: Blue Fire Boom
+    itemIcon: {fileID: 21300000, guid: 2614f21354a584896ad69397a214d1b4, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 2614f21354a584896ad69397a214d1b4, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Explosion attack turns blue and becomes stronger
+  - abilityIndex: 17400
+    itemName: Bloom Once More
+    itemIcon: {fileID: 21300000, guid: 70586953d0df04652aaad60489afaa5a, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 70586953d0df04652aaad60489afaa5a, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Explosion attack explodes once more.
+  - abilityIndex: 17500
+    itemName: Aftershocks
+    itemIcon: {fileID: 21300000, guid: c23ab63081c7f4ea3b4dd45406117cd2, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: c23ab63081c7f4ea3b4dd45406117cd2, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Explosion attack burns area attack from now
+  - abilityIndex: 17600
+    itemName: Mysterious Spell
+    itemIcon: {fileID: 21300000, guid: fbcf5b3457d7c4e4f8c12af1e67770ba, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: fbcf5b3457d7c4e4f8c12af1e67770ba, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Attacking enemy makes skill faster
+  - abilityIndex: 17900
+    itemName: Multishots Upgrade
+    itemIcon: {fileID: 21300000, guid: 9038d2dc2fa054e8f83d28fcf5e698ab, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 9038d2dc2fa054e8f83d28fcf5e698ab, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Add two more additional attack
+  - abilityIndex: 18000
+    itemName: Blue Multishots
+    itemIcon: {fileID: 21300000, guid: 9038d2dc2fa054e8f83d28fcf5e698ab, type: 3}
+    iconsByLevel:
+    - {fileID: 21300000, guid: 9038d2dc2fa054e8f83d28fcf5e698ab, type: 3}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - The auxiliary attack turns blue and becomes stronger.
+  - abilityIndex: 12100
+    itemName: Sniping Laser
+    itemIcon: {fileID: 21300000, guid: 03e5066de683941b0a57967241c14c6d, type: 3}
+    iconsByLevel:
+    - {fileID: 0}
+    maxLevel: 1
+    detailValues:
+    - type: 1
+      values:
+      - 20
+    - type: 4
+      values:
+      - 1
+    - type: 2
+      values:
+      - 20
+    descriptions:
+    - Shoot All.
+  - abilityIndex: 17750
+    itemName: Upsize
+    itemIcon: {fileID: 21300000, guid: 4c60e0b2d3cf84924ae3260b0fb33069, type: 3}
+    iconsByLevel:
+    - {fileID: 0}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Normal attack gets much stronger, but gets slower
+  - abilityIndex: 18200
+    itemName: Planarian
+    itemIcon: {fileID: 21300000, guid: 8aa5f57ca1ae1497785d1a1aa9f35b17, type: 3}
+    iconsByLevel:
+    - {fileID: 0}
+    maxLevel: 1
+    detailValues: []
+    descriptions:
+    - Basic attack split by 3

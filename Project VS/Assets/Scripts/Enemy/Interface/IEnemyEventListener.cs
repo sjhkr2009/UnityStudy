@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IEnemyEventListener {
     void OnCreate();
-    void Update();
-    void OnHit();
+    void OnUpdate(float deltaTime);
+    void OnHit(AbilityBase hitAbility);
     void OnDead();
 }

@@ -16,7 +16,7 @@ MonoBehaviour:
   - enemyIndex: 1
     tier: 0
     attackDamage: 10
-    speed: 1
+    speed: 2
     hp: 10
     mass: 1
     dropTables:
@@ -28,10 +28,10 @@ MonoBehaviour:
         probability: 3
   - enemyIndex: 2
     tier: 0
-    attackDamage: 30
-    speed: 1.2
-    hp: 30
-    mass: 1.5
+    attackDamage: 15
+    speed: 1.5
+    hp: 50
+    mass: 2
     dropTables:
     - allowMultipleDrops: 0
       dropProbabilities:
@@ -43,10 +43,10 @@ MonoBehaviour:
         probability: 1
   - enemyIndex: 3
     tier: 0
-    attackDamage: 50
-    speed: 1
-    hp: 50
-    mass: 2
+    attackDamage: 10
+    speed: 2
+    hp: 10
+    mass: 3
     dropTables:
     - allowMultipleDrops: 0
       dropProbabilities:
@@ -58,10 +58,10 @@ MonoBehaviour:
         probability: 3
   - enemyIndex: 4
     tier: 0
-    attackDamage: 50
-    speed: 1.5
+    attackDamage: 12
+    speed: 2
     hp: 100
-    mass: 1.5
+    mass: 1
     dropTables:
     - allowMultipleDrops: 0
       dropProbabilities:
@@ -69,12 +69,26 @@ MonoBehaviour:
         probability: 90
       - itemIndex: 3
         probability: 10
+  - enemyIndex: 5
+    tier: 0
+    attackDamage: 15
+    speed: 1.5
+    hp: 200
+    mass: 3
+    dropTables: []
+  - enemyIndex: 6
+    tier: 0
+    attackDamage: 20
+    speed: 1
+    hp: 500
+    mass: 5
+    dropTables: []
   - enemyIndex: 1000
     tier: 3
-    attackDamage: 100
-    speed: 1
-    hp: 5000
-    mass: 3
+    attackDamage: 30
+    speed: 1.5
+    hp: 1000
+    mass: 5
     dropTables:
     - allowMultipleDrops: 0
       dropProbabilities:
@@ -87,4 +101,29 @@ MonoBehaviour:
     - allowMultipleDrops: 0
       dropProbabilities:
       - itemIndex: 3
+        probability: 100
+    - allowMultipleDrops: 0
+      dropProbabilities:
+      - itemIndex: 4
+        probability: 25
+  - enemyIndex: 1001
+    tier: 3
+    attackDamage: 50
+    speed: 2
+    hp: 7500
+    mass: 50
+    dropTables:
+    - allowMultipleDrops: 1
+      dropProbabilities:
+      - itemIndex: 3
+        probability: 100
+      - itemIndex: 3
+        probability: 100
+      - itemIndex: 3
+        probability: 100
+      - itemIndex: 3
+        probability: 100
+      - itemIndex: 3
+        probability: 100
+      - itemIndex: 4
         probability: 100

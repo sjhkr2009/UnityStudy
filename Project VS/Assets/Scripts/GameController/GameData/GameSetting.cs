@@ -1,8 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using InternalData;
-using Newtonsoft.Json;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = nameof(GameSetting), menuName = "Custom/Create GameSetting")]

@@ -6,11 +6,12 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
 public class AbilityUpgradeButton : MonoBehaviour, IPoolHandler {
-    private AbilityData data;
+    private CardData data;
 
+    [SerializeField] private Sprite[] frameSprites;
+    [SerializeField] private Image frameImage;
     [SerializeField] private Image iconImage;
     [SerializeField] private TMP_Text titleText;
-    [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text descText;
 
     private IUiEventListener<AbilityIndex> listener;
@@ -19,8 +20,8 @@ public class AbilityUpgradeButton : MonoBehaviour, IPoolHandler {
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
-    public void Initialize(IUiEventListener<AbilityIndex> listener, AbilityIndex abilityIndex) {
-        data = AbilityDataContainer.GetDataOrDefault(abilityIndex);
+    public void Initialize(IUiEventListener<AbilityIndex> listener, CardData cardData) {
+        data = cardData;
         this.listener = listener;
         UpdateData();
     }
@@ -30,13 +31,22 @@ public class AbilityUpgradeButton : MonoBehaviour, IPoolHandler {
             Debugger.Error("[AbilityUpgradeButton.UpdateData] ItemUpgradeButton not initialized");
             return;
         }
-        
-        iconImage.sprite = data.itemIcon;
-        titleText.text = data.itemName;
 
-        int level = GameManager.Ability.GetLevel(data.abilityIndex);
-        descText.text = data.GetDescription(level + 1);
-        levelText.text = level <= 0 ? "New!" : $"Lv.{level} >> Lv.{level + 1}";
+        switch (data.cardTier) {
+            case CardTier.SILVER:
+                frameImage.sprite = frameSprites[0];
+                break;
+            case CardTier.GOLD:
+                frameImage.sprite = frameSprites[1];
+                break;
+            case CardTier.PLATINUM:
+                frameImage.sprite = frameSprites[2];
+                break;
+        }
+        
+        iconImage.sprite = data.cardIcon;
+        titleText.text = data.cardName;
+        descText.text = data.cardDescription;
     }
 
     private void OnClick() {
@@ -44,7 +54,9 @@ public class AbilityUpgradeButton : MonoBehaviour, IPoolHandler {
             Debugger.Error("[AbilityUpgradeButton.OnClick] ItemUpgradeButton not initialized");
             return;
         }
-        listener?.InvokeEvent(data.abilityIndex);
+        
+        CardManager.CurrentSelectedCard.Add(data);
+        listener?.InvokeEvent(data.MyAbility);
     }
 
     public void OnInitialize() { }
