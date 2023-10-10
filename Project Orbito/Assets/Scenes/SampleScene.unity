@@ -616,7 +616,7 @@ Transform:
   m_GameObject: {fileID: 1665726252}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.79, y: 0, z: 0}
+  m_LocalPosition: {x: 0.25, y: 0, z: 1.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -635,12 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56da9ce605224f342895bc5a5e87aad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originOrbitalRadius: 3
-  radiusChangeSpeed: 0.05
-  maxAngulerSpeed: 150
-  minRadius: 1
-  speedReduction: 3
-  orbitalSpeedFactor: 1
+  maxAngulerSpeed: 180
   center: {fileID: 7396590804794284085}
 --- !u!1001 &7396590804794284084
 PrefabInstance:
@@ -663,7 +658,7 @@ PrefabInstance:
     - target: {fileID: 2736905652499751683, guid: 8c2403f33205f87469b9713f90a9a415,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.04
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2736905652499751683, guid: 8c2403f33205f87469b9713f90a9a415,
         type: 3}
