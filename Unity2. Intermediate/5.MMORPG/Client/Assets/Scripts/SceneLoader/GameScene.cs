@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using Define;
 using UnityEngine;
 
-public class GameScene : BaseScene
-{
+public class GameScene : BaseScene {
     protected override void Init() {
         base.Init();
         SceneType = Scene.Game;

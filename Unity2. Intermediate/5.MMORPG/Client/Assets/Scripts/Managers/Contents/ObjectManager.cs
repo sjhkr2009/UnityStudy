@@ -21,7 +21,7 @@ public class ObjectManager {
         foreach (var gameObject in _objects) {
             var controller = gameObject.GetComponent<BaseController>();
             if (controller == null) continue;
-            if (controller.cellPos == cellPos) return gameObject;
+            if (controller.CellDestinationPos == cellPos) return gameObject;
         }
 
         return null;

@@ -5,12 +5,12 @@ using Define;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class BaseController : MonoBehaviour
-{
-    [BoxGroup("Components"), SerializeField] protected Animator animator;
-    [BoxGroup("Components"), SerializeField] protected SpriteRenderer spriteRenderer;
+public class BaseController : MonoBehaviour {
+    [BoxGroup("Components"), SerializeField, AutoAssignComponent] protected Animator animator;
+    [BoxGroup("Components"), SerializeField, AutoAssignComponent] protected SpriteRenderer spriteRenderer;
+    
     [ShowInInspector] public virtual float Speed { get; protected set; } = 5;
-    [ReadOnly] public Vector3Int cellPos { get; protected set; } = Vector3Int.zero;
+    [ReadOnly] public Vector3Int CellDestinationPos { get; protected set; } = Vector3Int.zero;
     
     protected virtual Grid GridMap => Director.Map.CurrentGrid;
     public MoveDir CurrentDir { get; private set; } = MoveDir.None;
@@ -37,12 +37,12 @@ public class BaseController : MonoBehaviour
     }
 
     public void SetPositionInstant(Vector3Int destPos) {
-        cellPos = destPos;
-        transform.position = GridMap.CellToWorld(cellPos) + (Vector3.right * 0.5f);
+        CellDestinationPos = destPos;
+        transform.position = GridMap.CellToWorld(CellDestinationPos) + (Vector3.right * 0.5f);
     }
 
     protected virtual void UpdateController() {
-        UpdateTargetPos();
+        UpdateDestination();
         UpdatePosition();
     }
 
@@ -78,7 +78,7 @@ public class BaseController : MonoBehaviour
     protected virtual void UpdateSkillAnimation(){}
     protected virtual void UpdateDieAnimation(){}
 
-    void UpdateTargetPos() {
+    void UpdateDestination() {
         if (State != CreatureState.Idle || CurrentDir == MoveDir.None) return;
 
         Vector3Int deltaPos = Vector3Int.zero;
@@ -102,16 +102,16 @@ public class BaseController : MonoBehaviour
         State = CreatureState.Moving;
         
         // 갈 수 없는 영역이거나 다른 오브젝트가 있다면 이동 불가
-        if (Director.Map.CanGo(cellPos + deltaPos) == false) return;
-        if (ReferenceEquals(Director.Object.Find(cellPos + deltaPos), null) == false) return;
+        if (Director.Map.CanGo(CellDestinationPos + deltaPos) == false) return;
+        if (ReferenceEquals(Director.Object.Find(CellDestinationPos + deltaPos), null) == false) return;
 
-        cellPos += deltaPos;
+        CellDestinationPos += deltaPos;
     }
 
     void UpdatePosition() {
         if (State != CreatureState.Moving) return;
 
-        Vector3 destPos = GridMap.CellToWorld(cellPos) + (Vector3.right * 0.5f);
+        Vector3 destPos = GridMap.CellToWorld(CellDestinationPos) + (Vector3.right * 0.5f);
         Vector3 targetVector = destPos - transform.position;
         float moveDistanceInFrame = Speed * Time.deltaTime;
         

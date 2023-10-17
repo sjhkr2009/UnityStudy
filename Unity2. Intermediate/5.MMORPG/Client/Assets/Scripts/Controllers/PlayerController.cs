@@ -10,7 +10,7 @@ using Object = System.Object;
 public class PlayerController : BaseController {
     protected override void Init() {
         base.Init();
-        transform.position = GridMap.CellToWorld(cellPos);
+        transform.position = GridMap.CellToWorld(CellDestinationPos);
     }
 
     private void Update() {
@@ -23,8 +23,7 @@ public class PlayerController : BaseController {
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
     }
 
-    void UpdateDirInput()
-    {
+    void UpdateDirInput() {
         if (Input.GetKey(KeyCode.W)) {
             SetDirection(MoveDir.Up);
         } else if (Input.GetKey(KeyCode.S)) {
@@ -39,7 +38,6 @@ public class PlayerController : BaseController {
     }
 
     protected override void UpdateIdleAnimation() {
-        spriteRenderer.flipX = false;
         switch (PrevDir) {
             case MoveDir.Up:
                 animator.Play("idle_back");
@@ -49,6 +47,7 @@ public class PlayerController : BaseController {
                 break;
             case MoveDir.Right:
                 animator.Play("idle_right");
+                spriteRenderer.flipX = false;
                 break;
             case MoveDir.Left:
                 animator.Play("idle_right");
@@ -61,7 +60,6 @@ public class PlayerController : BaseController {
     }
 
     protected override void UpdateMovingAnimation() {
-        spriteRenderer.flipX = false;
         switch (CurrentDir) {
             case MoveDir.Up:
                 animator.Play("walk_back");
@@ -71,6 +69,7 @@ public class PlayerController : BaseController {
                 break;
             case MoveDir.Right:
                 animator.Play("walk_right");
+                spriteRenderer.flipX = false;
                 break;
             case MoveDir.Left:
                 animator.Play("walk_right");

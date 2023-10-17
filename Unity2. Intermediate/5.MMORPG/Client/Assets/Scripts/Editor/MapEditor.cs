@@ -4,22 +4,15 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 
 #endif
 
-public class MapEditor
-{
+public class MapEditor {
 #if UNITY_EDITOR
-    // 단축키는 MenuItem의 마지막에 띄어쓰기 후 붙일 수 있으며, 컨트롤(command)/알트(option)/쉬프트가 각각 %, #, & 로 표현된다.
-    [MenuItem("Custom Tools/Hello World %#&h")]
-    private static void HelloWorld() {
-        if (EditorUtility.DisplayDialog("Hello World", "Create?", "OK", "No")) {
-            new GameObject("Hello World");
-        }
-    }
-    
+    // 컨트롤(command), 알트(option), 쉬프트 == %, #, &
     [MenuItem("Custom Tools/Generate Map %m")]
     private static void GenerateMapInfo() {
         GameObject[] maps = Resources.LoadAll<GameObject>("Prefabs/Map");
@@ -27,6 +20,7 @@ public class MapEditor
         foreach (var map in maps) {
             var mapBound = CustomUtility.FindChild<Tilemap>(map, "Tilemap_Base", true).cellBounds;
             Tilemap collisionMap = CustomUtility.FindChild<Tilemap>(map, "Tilemap_Collision", true);
+            // FIXME: 세팅했다 지웠던 타일까지 cellBound 범위로 잡히는 경우가 있음. https://forum.unity.com/threads/tilemap-compressbounds.859426/ 이것과 관련된 듯한데, 확인 필요
             WriteMapInfo(collisionMap, mapBound.xMin, mapBound.xMax, mapBound.yMin, mapBound.yMax, map.name);
         }
     }
@@ -38,8 +32,9 @@ public class MapEditor
         string directory = "Assets/Resources/Map/";
         if (Directory.Exists(directory) == false)
             Directory.CreateDirectory(directory);
-        
-        using (var writer = File.CreateText($"{directory}{saveFileName}.txt")) {
+
+        string filePath = $"{directory}{saveFileName}.txt";
+        using (var writer = File.CreateText(filePath)) {
             writer.WriteLine(xMin);
             writer.WriteLine(xMax);
             writer.WriteLine(yMin);
@@ -53,13 +48,9 @@ public class MapEditor
                 writer.WriteLine();
             }
         }
+        
+        AssetDatabase.ImportAsset(filePath);
     }
-
-    static void WriteMapInfo(Tilemap map, string saveFileName = null) {
-        var bound = map.cellBounds;
-        WriteMapInfo(map, bound.xMin, bound.xMax, bound.yMin, bound.yMax);
-    }
-    
 #endif
 }
 
