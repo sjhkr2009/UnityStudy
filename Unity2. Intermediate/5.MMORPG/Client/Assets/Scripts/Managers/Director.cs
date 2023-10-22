@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Director : MonoBehaviour
-{
+public class Director : MonoBehaviour {
 	static Director _instance;
 	public static Director Instance { get { Init(); return _instance; } }
 

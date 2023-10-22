@@ -23,6 +23,13 @@ public class GameScene : BaseScene {
                 y = Random.Range(-10, 10)
             };
 
+            while (Director.Map.CanGo(pos)) {
+                pos = new Vector3Int() {
+                    x = Random.Range(-25, 25),
+                    y = Random.Range(-15, 15)
+                };
+            }
+
             var controller = monster.GetComponent<MonsterController>();
             controller.SetPositionInstant(pos);
             

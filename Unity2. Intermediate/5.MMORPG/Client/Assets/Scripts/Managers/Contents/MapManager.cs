@@ -46,7 +46,7 @@ public class MapManager {
         MinX = int.Parse(reader.ReadLine());
         MaxX = int.Parse(reader.ReadLine());
         MinY = int.Parse(reader.ReadLine());
-        MaxY = int.Parse(reader.ReadLine());
+        MaxY = int.Parse(reader.ReadLine()) + 1; // MaxY에서 1을 뺐으니 다시 더해준다. 어떤 이슈인지는 MapEditor.GenerateMapInfo 참고.
 
         int yCount = MaxY - MinY + 1;
         int xCount = MaxX - MinX + 1;

@@ -5,21 +5,22 @@ using Define;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class BaseController : MonoBehaviour {
-    [BoxGroup("Components"), SerializeField, AutoAssignComponent] protected Animator animator;
-    [BoxGroup("Components"), SerializeField, AutoAssignComponent] protected SpriteRenderer spriteRenderer;
+public abstract class BaseController : MonoBehaviour {
+    [SerializeField, AutoAssignComponent] protected Animator animator;
+    [SerializeField, AutoAssignComponent] protected SpriteRenderer spriteRenderer;
     
     [ShowInInspector] public virtual float Speed { get; protected set; } = 5;
-    [ReadOnly] public Vector3Int CellDestinationPos { get; protected set; } = Vector3Int.zero;
-    
+    [ReadOnly] public Vector3Int CellPos { get; set; } = Vector3Int.zero;
+
+    protected virtual Vector3 Offset => Vector3.right * 0.5f;
     protected virtual Grid GridMap => Director.Map.CurrentGrid;
-    public MoveDir CurrentDir { get; private set; } = MoveDir.None;
-    public MoveDir PrevDir { get; private set; } = MoveDir.None;
+    public MoveDir CurrentDir { get; set; } = MoveDir.None;
+    public MoveDir LastDir { get; protected set; } = MoveDir.None;
     
     private CreatureState _state = CreatureState.Idle;
     public CreatureState State {
         get => _state;
-        set {
+        protected set {
             if (_state == value) return;
 
             _state = value;
@@ -31,55 +32,98 @@ public class BaseController : MonoBehaviour {
         Init();
     }
 
-    protected virtual void Init() {
-        if (animator == null) animator = GetComponent<Animator>();
-        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+    protected virtual void Init() { }
+    
+    protected virtual void Update() {
+        UpdateController();
     }
 
-    public void SetPositionInstant(Vector3Int destPos) {
-        CellDestinationPos = destPos;
-        transform.position = GridMap.CellToWorld(CellDestinationPos) + (Vector3.right * 0.5f);
+    public virtual void SetPositionInstant(Vector3Int destPos) {
+        CellPos = destPos;
+        transform.position = GridMap.CellToWorld(CellPos) + Offset;
     }
 
     protected virtual void UpdateController() {
-        UpdateDestination();
-        UpdatePosition();
+        switch (State) {
+            case CreatureState.Idle:
+                UpdateOnIdle();
+                break;
+            case CreatureState.Moving:
+                UpdateOnMoving();
+                break;
+            case CreatureState.Skill:
+                UpdateOnSkill();
+                break;
+            case CreatureState.Die:
+                UpdateOnDead();
+                break;
+        }
     }
 
-    protected virtual void SetDirection(MoveDir direction) {
+    public virtual void SetDirection(MoveDir direction) {
         if (CurrentDir == direction) return;
 
         CurrentDir = direction;
-        UpdateAnimation();
 
         if (direction != MoveDir.None)
-            PrevDir = direction;
+            LastDir = direction;
     }
 
-    protected void UpdateAnimation() {
+    public Vector3Int GetFrontCellPos() {
+        var cellPos = CellPos;
+
+        switch (LastDir) {
+            case MoveDir.Up:
+                cellPos += Vector3Int.up;
+                break;
+            case MoveDir.Down:
+                cellPos += Vector3Int.down;
+                break;
+            case MoveDir.Right:
+                cellPos += Vector3Int.right;
+                break;
+            case MoveDir.Left:
+                cellPos += Vector3Int.left;
+                break;
+        }
+
+        return cellPos;
+    }
+
+    protected virtual void UpdateAnimation() {
         switch (State) {
             case CreatureState.Idle:
-                UpdateIdleAnimation();
+                SetIdleAnimation();
                 break;
             case CreatureState.Moving:
-                UpdateMovingAnimation();
+                SetMovingAnimation();
                 break;
             case CreatureState.Skill:
-                UpdateSkillAnimation();
+                SetSkillAnimation();
                 break;
             case CreatureState.Die:
-                UpdateDieAnimation();
+                SetDieAnimation();
                 break;
         }
     }
     
-    protected virtual void UpdateIdleAnimation(){}
-    protected virtual void UpdateMovingAnimation(){}
-    protected virtual void UpdateSkillAnimation(){}
-    protected virtual void UpdateDieAnimation(){}
+    protected virtual void SetIdleAnimation(){}
+    protected virtual void SetMovingAnimation(){}
+    protected virtual void SetSkillAnimation(){}
+    protected virtual void SetDieAnimation(){}
 
-    void UpdateDestination() {
-        if (State != CreatureState.Idle || CurrentDir == MoveDir.None) return;
+    protected virtual void UpdateOnIdle() {
+        UpdateDestination();
+    }
+
+    protected virtual void UpdateOnMoving() {
+        UpdatePosition();
+    }
+    protected virtual void UpdateOnSkill(){}
+    protected virtual void UpdateOnDead(){}
+
+    protected void UpdateDestination() {
+        if (CurrentDir == MoveDir.None) return;
 
         Vector3Int deltaPos = Vector3Int.zero;
         switch (CurrentDir) {
@@ -102,16 +146,14 @@ public class BaseController : MonoBehaviour {
         State = CreatureState.Moving;
         
         // 갈 수 없는 영역이거나 다른 오브젝트가 있다면 이동 불가
-        if (Director.Map.CanGo(CellDestinationPos + deltaPos) == false) return;
-        if (ReferenceEquals(Director.Object.Find(CellDestinationPos + deltaPos), null) == false) return;
+        if (Director.Map.CanGo(CellPos + deltaPos) == false) return;
+        if (ReferenceEquals(Director.Object.Find(CellPos + deltaPos), null) == false) return;
 
-        CellDestinationPos += deltaPos;
+        CellPos += deltaPos;
     }
 
     void UpdatePosition() {
-        if (State != CreatureState.Moving) return;
-
-        Vector3 destPos = GridMap.CellToWorld(CellDestinationPos) + (Vector3.right * 0.5f);
+        Vector3 destPos = GridMap.CellToWorld(CellPos) + Offset;
         Vector3 targetVector = destPos - transform.position;
         float moveDistanceInFrame = Speed * Time.deltaTime;
         
