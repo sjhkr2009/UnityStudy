@@ -23,7 +23,7 @@ public class GameScene : BaseScene {
                 y = Random.Range(-10, 10)
             };
 
-            while (Director.Map.CanGo(pos)) {
+            while (Director.Map.CanGo(pos) == false) {
                 pos = new Vector3Int() {
                     x = Random.Range(-25, 25),
                     y = Random.Range(-15, 15)

@@ -61,7 +61,8 @@ public class ArrowController : BaseController {
 
         if (!hasNoObject) {
             Debug.Log($"Arrow Attacked : {frontObj.name}");
-            // TODO: 맞은 대상 피격처리
+            var monster = frontObj.GetComponent<MonsterController>();
+            if (monster) monster.OnDamaged();
         }
 
         if (!canGoArea || !hasNoObject) {

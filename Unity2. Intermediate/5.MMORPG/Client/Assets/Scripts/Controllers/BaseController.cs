@@ -165,4 +165,15 @@ public abstract class BaseController : MonoBehaviour {
             transform.position += targetVector.normalized * moveDistanceInFrame;
         }
     }
+
+    // TODO: 공격 및 피격자에 따라 다르게 처리할 수 있도록, 공격/피격 인터페이스 및 데미지 정보 추가할 것
+    public virtual void OnDamaged() {
+        var eff = Director.Resource.Instantiate("Effect/DieEffect");
+        eff.transform.position = transform.position;
+        eff.GetComponent<Animator>().Play("default");
+        Director.Resource.Destroy(eff, 0.5f);
+            
+        Director.Object.Remove(gameObject);
+        Director.Resource.Destroy(gameObject);
+    }
 }
