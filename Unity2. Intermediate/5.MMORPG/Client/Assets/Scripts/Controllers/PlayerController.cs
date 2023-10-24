@@ -38,10 +38,6 @@ public class PlayerController : BaseController {
                 UpdateDirectionInput();
                 UpdateBehaviorInput();
                 break;
-            case CreatureState.Skill:
-                break;
-            case CreatureState.Die:
-                break;
         }
     }
 
@@ -57,9 +53,15 @@ public class PlayerController : BaseController {
         } else {
             SetDirection(MoveDir.None);
         }
+        
+        if (CurrentDir != MoveDir.None) {
+            State = CreatureState.Moving;
+        }
     }
+
+    protected override void UpdateOnIdle() { }
     
-    void UpdateBehaviorInput() { 
+    void UpdateBehaviorInput() {
         // TODO: 임시로 현재 테스트중인 스킬이 나가게 한다. 추후 입력 타입에 대해 수정 필요.
         if (Input.GetKey(KeyCode.Space)) {
             skillRoutine = StartCoroutine(nameof(ArrowAttack));

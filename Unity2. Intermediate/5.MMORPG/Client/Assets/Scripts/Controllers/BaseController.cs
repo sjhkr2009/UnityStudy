@@ -17,8 +17,8 @@ public abstract class BaseController : MonoBehaviour {
     public MoveDir CurrentDir { get; set; } = MoveDir.None;
     public MoveDir LastDir { get; protected set; } = MoveDir.None;
     
-    private CreatureState _state = CreatureState.Idle;
-    public CreatureState State {
+    protected CreatureState _state = CreatureState.Idle;
+    public virtual CreatureState State {
         get => _state;
         protected set {
             if (_state == value) return;
@@ -64,6 +64,7 @@ public abstract class BaseController : MonoBehaviour {
         if (CurrentDir == direction) return;
 
         CurrentDir = direction;
+        UpdateAnimation();
 
         if (direction != MoveDir.None)
             LastDir = direction;
@@ -112,9 +113,7 @@ public abstract class BaseController : MonoBehaviour {
     protected virtual void SetSkillAnimation(){}
     protected virtual void SetDieAnimation(){}
 
-    protected virtual void UpdateOnIdle() {
-        UpdateDestination();
-    }
+    protected virtual void UpdateOnIdle() { }
 
     protected virtual void UpdateOnMoving() {
         UpdatePosition();
@@ -122,27 +121,13 @@ public abstract class BaseController : MonoBehaviour {
     protected virtual void UpdateOnSkill(){}
     protected virtual void UpdateOnDead(){}
 
-    protected void UpdateDestination() {
-        if (CurrentDir == MoveDir.None) return;
-
-        Vector3Int deltaPos = Vector3Int.zero;
-        switch (CurrentDir) {
-            case MoveDir.Up:
-                deltaPos = Vector3Int.up;
-                break;
-            case MoveDir.Down:
-                deltaPos = Vector3Int.down;
-                break;
-            case MoveDir.Right:
-                deltaPos = Vector3Int.right;
-                break;
-            case MoveDir.Left:
-                deltaPos = Vector3Int.left;
-                break;
-            default:
-                throw new ArgumentException($"Invalid Position: {CurrentDir}");
+    protected virtual void MoveToNextPos() {
+        if (CurrentDir == MoveDir.None) {
+            State = CreatureState.Idle;
+            return;
         }
-        
+
+        Vector3Int deltaPos = GetDeltaPos(CurrentDir);
         State = CreatureState.Moving;
         
         // 갈 수 없는 영역이거나 다른 오브젝트가 있다면 이동 불가
@@ -150,6 +135,16 @@ public abstract class BaseController : MonoBehaviour {
         if (ReferenceEquals(Director.Object.Find(CellPos + deltaPos), null) == false) return;
 
         CellPos += deltaPos;
+    }
+
+    protected Vector3Int GetDeltaPos(MoveDir direction) {
+        switch (CurrentDir) {
+            case MoveDir.Up: return Vector3Int.up;
+            case MoveDir.Down: return Vector3Int.down;
+            case MoveDir.Right: return Vector3Int.right;
+            case MoveDir.Left: return Vector3Int.left;
+            default: return Vector3Int.zero;
+        }
     }
 
     void UpdatePosition() {
@@ -160,7 +155,7 @@ public abstract class BaseController : MonoBehaviour {
         // 움직일 거리가 1프레임에 이동하는 거리보다 짧다면 도착한 것으로 간주한다.
         if (targetVector.magnitude < moveDistanceInFrame) {
             transform.position = destPos;
-            State = CreatureState.Idle;
+            MoveToNextPos();
         } else {
             transform.position += targetVector.normalized * moveDistanceInFrame;
         }

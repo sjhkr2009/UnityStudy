@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class ArrowController : BaseController {
     protected override Vector3 Offset => new Vector3(0.5f, -0.3f);
-    
+    public override float Speed { get; protected set; } = 15f;
+
     public override void SetDirection(MoveDir direction) {
         base.SetDirection(direction);
         
@@ -15,8 +16,6 @@ public class ArrowController : BaseController {
         transform.rotation = Quaternion.identity;
         
         switch (CurrentDir) {
-            case MoveDir.Up:
-                break;
             case MoveDir.Down:
                 spriteRenderer.flipY = true;
                 break;
@@ -27,13 +26,13 @@ public class ArrowController : BaseController {
                 transform.rotation = Quaternion.Euler(Vector3.forward * 90f);
                 break;
         }
+
+        State = CreatureState.Moving;
     }
 
     protected override void UpdateAnimation() { }
 
-    protected override void UpdateOnIdle() {
-        if (CurrentDir == MoveDir.None) return;
-
+    protected override void MoveToNextPos() {
         Vector3Int deltaPos = Vector3Int.zero;
         switch (CurrentDir) {
             case MoveDir.Up:
