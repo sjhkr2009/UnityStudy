@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,16 @@ public class ObjectManager {
             var controller = gameObject.GetComponent<BaseController>();
             if (controller == null) continue;
             if (controller.CellPos == cellPos) return gameObject;
+        }
+
+        return null;
+    }
+
+    public T FindIf<T>(Func<T, bool> condition) where T : Component {
+        foreach (var gameObject in _objects) {
+            var component = gameObject.GetComponent<T>();
+            if (!component) continue;
+            if (condition.Invoke(component)) return component;
         }
 
         return null;

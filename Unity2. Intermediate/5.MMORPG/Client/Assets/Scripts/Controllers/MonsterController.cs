@@ -5,7 +5,14 @@ using UnityEngine;
 
 public class MonsterController : BaseController {
     private Coroutine aiPatrol;
+    private Coroutine aiSearch;
+    WaitForSeconds searchInterval = new WaitForSeconds(1);
+
     private Vector3Int destPos;
+    private BaseController target;
+    private float searchRange = 5f;
+
+    public override float Speed { get; protected set; } = 2f;
 
     public override CreatureState State {
         get => _state;
@@ -24,12 +31,24 @@ public class MonsterController : BaseController {
         if (aiPatrol == null) {
             aiPatrol = StartCoroutine(nameof(AiPatrol));
         }
+        
+        if (aiSearch == null) {
+            aiSearch = StartCoroutine(nameof(AiSearch));
+        }
     }
 
     protected override void MoveToNextPos() {
-        // TODO: destPos까지 가는 길찾기 알고리즘으로 대체할 것
+        if (target) destPos = target.CellPos;
 
-        var destDir = destPos - CellPos;
+        var path = Director.Map.FindPath(CellPos, destPos, true);
+        // 길을 못 찾았거나, 대상이 너무 멀어지면 중단
+        if (path.Count <= 1 || path.Count > 10) {
+            target = null;
+            State = CreatureState.Idle;
+            return;
+        }
+
+        var destDir = path[1] - CellPos;
 
         if (destDir.x > 0) CurrentDir = MoveDir.Right;
         else if (destDir.x < 0) CurrentDir = MoveDir.Left;
@@ -72,10 +91,28 @@ public class MonsterController : BaseController {
         State = CreatureState.Idle;
     }
 
+    IEnumerator AiSearch() {
+        while (true) {
+            yield return searchInterval;
+
+            if (target) continue;
+
+            target = Director.Object.FindIf<BaseController>(controller => {
+                var distance = (controller.CellPos - CellPos).magnitude;
+                return distance < searchRange;
+            });
+        }
+    }
+
     void StopAiCoroutines() {
         if (aiPatrol != null) {
             StopCoroutine(aiPatrol);
             aiPatrol = null;
+        }
+        
+        if (aiSearch != null) {
+            StopCoroutine(aiSearch);
+            aiSearch = null;
         }
     }
 }
