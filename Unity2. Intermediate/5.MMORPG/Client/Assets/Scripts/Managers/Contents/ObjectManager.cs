@@ -27,6 +27,16 @@ public class ObjectManager {
 
         return null;
     }
+    
+    public T Find<T>(Vector3Int cellPos) where T : BaseController {
+        foreach (var gameObject in _objects) {
+            var controller = gameObject.GetComponent<T>();
+            if (controller == null) continue;
+            if (controller.CellPos == cellPos) return controller;
+        }
+
+        return null;
+    }
 
     public T FindIf<T>(Func<T, bool> condition) where T : Component {
         foreach (var gameObject in _objects) {

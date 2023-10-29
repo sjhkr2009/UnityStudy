@@ -1,17 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Define;
+using DG.Tweening;
 using UnityEngine;
 
 public class MonsterController : BaseController {
     private Coroutine aiPatrol;
     private Coroutine aiSearch;
-    WaitForSeconds searchInterval = new WaitForSeconds(1);
+    private Coroutine aiAttack;
+    
+    WaitForSeconds searchInterval = new WaitForSeconds(1f);
+    WaitForSeconds attackInterval = new WaitForSeconds(0.5f);
 
     private Vector3Int destPos;
     private BaseController target;
     private float searchRange = 5f;
+    private float skillRange = 5f;
 
+    private bool hasRangedSkill = false;
+    
     public override float Speed { get; protected set; } = 2f;
 
     public override CreatureState State {
@@ -23,6 +30,14 @@ public class MonsterController : BaseController {
             UpdateAnimation();
             StopAiCoroutines();
         }
+    }
+
+    protected override void Init() {
+        base.Init();
+
+        hasRangedSkill = Random.value < 0.5f;
+        skillRange = hasRangedSkill ? 7f : 1f;
+        attackInterval = new WaitForSeconds(hasRangedSkill ? 1f : 0.5f);
     }
 
     protected override void UpdateOnIdle() {
@@ -38,7 +53,18 @@ public class MonsterController : BaseController {
     }
 
     protected override void MoveToNextPos() {
-        if (target) destPos = target.CellPos;
+        if (target) {
+            destPos = target.CellPos;
+            
+            // 타겟과의 거리가 일정 미만이고, X,Y축 중 하나가 동일할 경우 공격
+            var dir = (destPos - CellPos);
+            if (dir.magnitude <= skillRange && dir.x * dir.y == 0) {
+                SetLookDirection(destPos);
+                State = CreatureState.Skill;
+                aiAttack = StartCoroutine(hasRangedSkill ? nameof(AiRangeAttack) : nameof(AiMeleeAttack));
+                return;
+            }
+        }
 
         var path = Director.Map.FindPath(CellPos, destPos, true);
         // 길을 못 찾았거나, 대상이 너무 멀어지면 중단
@@ -47,15 +73,8 @@ public class MonsterController : BaseController {
             State = CreatureState.Idle;
             return;
         }
-
-        var destDir = path[1] - CellPos;
-
-        if (destDir.x > 0) CurrentDir = MoveDir.Right;
-        else if (destDir.x < 0) CurrentDir = MoveDir.Left;
-        else if (destDir.y > 0) CurrentDir = MoveDir.Up;
-        else if (destDir.y < 0) CurrentDir = MoveDir.Down;
-        else CurrentDir = MoveDir.None;
-
+        
+        SetLookDirection(path[1]);
         if (CurrentDir == MoveDir.None) {
             State = CreatureState.Idle;
             return;
@@ -103,6 +122,31 @@ public class MonsterController : BaseController {
             });
         }
     }
+    
+    IEnumerator AiMeleeAttack() {
+        var attackTarget = Director.Object.Find<BaseController>(GetFrontCellPos());
+        if (attackTarget) {
+            attackTarget.OnDamaged();
+        }
+
+        yield return attackInterval;
+        State = CreatureState.Moving;
+    }
+    
+    IEnumerator AiRangeAttack() {
+        var arrow = Director.Resource.Instantiate("Arrow").GetComponent<ArrowController>();
+        arrow.SetDirection(LastDir);
+        arrow.SetPositionInstant(CellPos);
+
+        yield return attackInterval;
+        State = CreatureState.Moving;
+    }
+
+    protected override void SetSkillAnimation() {
+        base.SetSkillAnimation();
+
+        transform.DOShakePosition(0.3f);
+    }
 
     void StopAiCoroutines() {
         if (aiPatrol != null) {
@@ -113,6 +157,11 @@ public class MonsterController : BaseController {
         if (aiSearch != null) {
             StopCoroutine(aiSearch);
             aiSearch = null;
+        }
+
+        if (aiAttack != null) {
+            StopCoroutine(aiAttack);
+            aiAttack = null;
         }
     }
 }

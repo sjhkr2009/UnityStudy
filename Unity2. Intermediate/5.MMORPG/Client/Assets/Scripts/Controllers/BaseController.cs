@@ -14,8 +14,8 @@ public abstract class BaseController : MonoBehaviour {
 
     protected virtual Vector3 Offset => Vector3.right * 0.5f;
     protected virtual Grid GridMap => Director.Map.CurrentGrid;
-    public MoveDir CurrentDir { get; set; } = MoveDir.None;
-    public MoveDir LastDir { get; protected set; } = MoveDir.None;
+    public MoveDir CurrentDir { get; private set; } = MoveDir.None;
+    public MoveDir LastDir { get; private set; } = MoveDir.None;
     
     protected CreatureState _state = CreatureState.Idle;
     public virtual CreatureState State {
@@ -69,6 +69,8 @@ public abstract class BaseController : MonoBehaviour {
         if (direction != MoveDir.None)
             LastDir = direction;
     }
+
+    public void SetLookDirection(Vector3Int lookPosition) => SetDirection(GetLookDirection(lookPosition));
 
     public Vector3Int GetFrontCellPos() {
         var cellPos = CellPos;
@@ -135,6 +137,24 @@ public abstract class BaseController : MonoBehaviour {
         if (ReferenceEquals(Director.Object.Find(CellPos + deltaPos), null) == false) return;
 
         CellPos += deltaPos;
+    }
+    
+    protected virtual MoveDir GetLookDirection(Vector3Int lookPosition) {
+        var dir = lookPosition - CellPos;
+        var distX = Mathf.Abs(lookPosition.x - CellPos.x);
+        var distY = Mathf.Abs(lookPosition.y - CellPos.y);
+
+        if (distX > distY) {
+            // right or left
+            if (dir.x > 0) return MoveDir.Right;
+            if (dir.x < 0) return MoveDir.Left;
+        } else if (distX < distY) {
+            // up or down
+            if (dir.y > 0) return MoveDir.Up;
+            if (dir.y < 0) return MoveDir.Down;
+        }
+        
+        return MoveDir.None;
     }
 
     protected Vector3Int GetDeltaPos(MoveDir direction) {
