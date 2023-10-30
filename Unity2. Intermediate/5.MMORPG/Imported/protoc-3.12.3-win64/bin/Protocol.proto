@@ -1,0 +1,32 @@
+syntax = "proto3";
+package tutorial;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+enum MsgId {
+  PERSON = 0;
+  C_CHAT = 1;
+  S_CHAT = 2;
+  S_ENTER_GAME = 3;
+}
+
+message C_Chat {
+  string context = 1;
+}
+
+message S_Chat {
+  string context = 1;
+}
+
+message S_EnterGame {
+  string context = 1;
+}
+
+message Person {
+  int32 packetHeader = 1;
+  string name = 2;
+  int32 id = 3;
+  string email = 4;
+}

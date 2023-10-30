@@ -1,67 +1,60 @@
+using Google.Protobuf;
+using Google.Protobuf.Protocol;
+using ServerCore;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ServerCore;
 
-public class PacketManager
-{
+class PacketManager {
 	#region Singleton
-	static PacketManager _instance = new PacketManager();
-	public static PacketManager Instance => _instance;
 
-	private PacketManager()
-	{
+	static PacketManager _instance = new PacketManager();
+
+	public static PacketManager Instance {
+		get { return _instance; }
+	}
+
+	#endregion
+
+	PacketManager() {
 		Register();
 	}
-	#endregion
-	
-	Dictionary<ushort, Func<PacketSession, ArraySegment<byte>, IPacket>> _makePktFunc = new Dictionary<ushort, Func<PacketSession, ArraySegment<byte>, IPacket>>();
-	Dictionary<ushort, Action<PacketSession, IPacket>> _handler = new Dictionary<ushort, Action<PacketSession, IPacket>>();
 
-	public void Register()
-	{
-		_makePktFunc.Add((ushort)PacketID.C_LeaveGame, MakePacket<C_LeaveGame>);
-		_handler.Add((ushort)PacketID.C_LeaveGame, PacketHandler.C_LeaveGameHandler);
-		_makePktFunc.Add((ushort)PacketID.C_Move, MakePacket<C_Move>);
-		_handler.Add((ushort)PacketID.C_Move, PacketHandler.C_MoveHandler);
+	Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> _onRecv =
+		new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
 
+	Dictionary<ushort, Action<PacketSession, IMessage>> _handler =
+		new Dictionary<ushort, Action<PacketSession, IMessage>>();
+
+	public void Register() {
+		_onRecv.Add((ushort)MsgId.CChat, MakePacket<C_Chat>);
+		_handler.Add((ushort)MsgId.CChat, PacketHandler.C_ChatHandler);
 	}
 
-	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer, Action<PacketSession, IPacket> onReceiveCallback = null)
-	{
+	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer) {
 		ushort count = 0;
 
 		ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
-		count += sizeof(ushort);
+		count += 2;
 		ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
-		count += sizeof(ushort);
+		count += 2;
 
-		Func<PacketSession, ArraySegment<byte>, IPacket> func = null;
-		if (_makePktFunc.TryGetValue(id, out func))
-		{
-			IPacket packet = func.Invoke(session, buffer);
-			
-			// 따로 정의된 콜백 함수가 있으면 실행, 아니라면 패킷을 핸들로 바로 넘겨준다.
-			if (onReceiveCallback != null)
-				onReceiveCallback.Invoke(session, packet);
-			else
-				HandlePacket(session, packet);
-		}
+		Action<PacketSession, ArraySegment<byte>, ushort> action = null;
+		if (_onRecv.TryGetValue(id, out action))
+			action.Invoke(session, buffer, id);
 	}
 
-	T MakePacket<T>(PacketSession session, ArraySegment<byte> buffer) where T : IPacket, new()
-	{
-		T packet = new T();
-		packet.DeSerialize(buffer);
-
-		// MakePacket에서는 패킷 조립만 하고, 실행하는 부분은 아래의 HandlePacket으로 분리한다.
-
-		return packet;
+	void MakePacket<T>(PacketSession session, ArraySegment<byte> buffer, ushort id) where T : IMessage, new() {
+		T pkt = new T();
+		pkt.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
+		Action<PacketSession, IMessage> action = null;
+		if (_handler.TryGetValue(id, out action))
+			action.Invoke(session, pkt);
 	}
-	public void HandlePacket(PacketSession session, IPacket packet)
-	{
-		Action<PacketSession, IPacket> action = null;
-		if (_handler.TryGetValue(packet.Protocol, out action))
-			action(session, packet);
+
+	public Action<PacketSession, IMessage> GetPacketHandler(ushort id) {
+		Action<PacketSession, IMessage> action = null;
+		if (_handler.TryGetValue(id, out action))
+			return action;
+		return null;
 	}
 }
