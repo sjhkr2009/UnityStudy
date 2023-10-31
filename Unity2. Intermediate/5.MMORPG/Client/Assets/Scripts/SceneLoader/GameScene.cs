@@ -9,7 +9,7 @@ public class GameScene : BaseScene {
         SceneType = Scene.Game;
         
         Director.Map.LoadMap(1);
-
+/*
         GameObject player = Director.Resource.Instantiate("Player");
         Director.Object.Add(player);
         
@@ -34,7 +34,7 @@ public class GameScene : BaseScene {
             controller.SetPositionInstant(pos);
             
             Director.Object.Add(monster);
-        }
+        }*/
     }
 
     public override void Clear() {

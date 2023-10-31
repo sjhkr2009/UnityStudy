@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class Director : MonoBehaviour {
 	static Director _instance;
-	public static Director Instance { get { Init(); return _instance; } }
+
+	public static Director Instance {
+		get {
+			Init();
+			return _instance;
+		}
+	}
 
 	#region Common
 
@@ -16,7 +22,7 @@ public class Director : MonoBehaviour {
 	private UiManager _ui = new UiManager();
 	private SceneManagerEx _scene = new SceneManagerEx();
 	private SoundManager _sound = new SoundManager();
-	
+
 	public static DataManager Data => Instance._data;
 	public static InputManager Input => Instance._input;
 	public static PoolManager Pool => Instance._pool;
@@ -24,28 +30,29 @@ public class Director : MonoBehaviour {
 	public static UiManager UI => Instance._ui;
 	public static SceneManagerEx Scene => Instance._scene;
 	public static SoundManager Sound => Instance._sound;
-	
+
 	#endregion
 
 	#region Contents
 
 	private MapManager _map = new MapManager();
 	private ObjectManager _object = new ObjectManager();
+	private NetworkManager _network = new NetworkManager();
 
 	public static MapManager Map => Instance._map;
 	public static ObjectManager Object => Instance._object;
-	
+	public static NetworkManager Network => Instance._network;
+
 	#endregion
 
 	void Start() => Init();
-	static void Init()
-	{
+
+	static void Init() {
 		if (_instance != null)
 			return;
 
 		GameObject go = GameObject.Find(Define.DefaultName.GameManager);
-		if (go == null)
-		{
+		if (go == null) {
 			go = new GameObject(Define.DefaultName.GameManager);
 			go.AddComponent<Director>();
 		}
@@ -56,10 +63,10 @@ public class Director : MonoBehaviour {
 		_instance._data.Init(); // First Order
 		_instance._pool.Init();
 		_instance._sound.Init();
+		_instance._network.Init();
 	}
 
-	public static void Clear()
-	{
+	public static void Clear() {
 		Sound.Clear();
 		Input.Clear();
 		Scene.Clear();
@@ -69,10 +76,8 @@ public class Director : MonoBehaviour {
 		Pool.Clear();
 	}
 
-	public void Update()
-	{
+	public void Update() {
 		Input.OnUpdate();
+		_network.Init();
 	}
-
-	
 }
