@@ -11,6 +11,9 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Server/JobTimer.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -76,6 +79,9 @@
       <updated>1698664220168</updated>
       <workItem from="1698664238543" duration="211000" />
       <workItem from="1698664465689" duration="4001000" />
+      <workItem from="1699266507139" duration="1743000" />
+      <workItem from="1699269395096" duration="362000" />
+      <workItem from="1699269782236" duration="952000" />
     </task>
     <servers />
   </component>

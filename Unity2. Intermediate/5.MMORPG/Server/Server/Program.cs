@@ -32,6 +32,7 @@ namespace Server {
 
 		static void Example() {
 			// 구글 Protobuf 튜토리얼을 활용한 예제 (https://protobuf.dev/getting-started/csharptutorial/)
+			// 실제 사용은 ClientSession.OnConnected 참고
 			Person person = new Person() {
 				Id = 1234,
 				Name = "John Doe",

@@ -78,6 +78,6 @@ public class Director : MonoBehaviour {
 
 	public void Update() {
 		Input.OnUpdate();
-		_network.Init();
+		_network.Update();
 	}
 }
