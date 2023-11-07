@@ -15,7 +15,7 @@ public abstract class BaseController : MonoBehaviour {
     protected virtual Vector3 Offset => Vector3.right * 0.5f;
     protected virtual Grid GridMap => Director.Map.CurrentGrid;
     public MoveDir CurrentDir { get; private set; } = MoveDir.None;
-    public MoveDir LastDir { get; private set; } = MoveDir.None;
+    public MoveDir LastDir { get; private set; } = MoveDir.Up;
     
     protected CreatureState _state = CreatureState.Idle;
     public virtual CreatureState State {

@@ -35,9 +35,9 @@ public class MonsterController : BaseController {
     protected override void Init() {
         base.Init();
 
-        hasRangedSkill = Random.value < 0.5f;
+        hasRangedSkill = Random.value < 0f;
         skillRange = hasRangedSkill ? 7f : 1f;
-        attackInterval = new WaitForSeconds(hasRangedSkill ? 1f : 0.5f);
+        attackInterval = new WaitForSeconds(hasRangedSkill ? 1f : 0.7f);
     }
 
     protected override void UpdateOnIdle() {
@@ -116,7 +116,7 @@ public class MonsterController : BaseController {
 
             if (target) continue;
 
-            target = Director.Object.FindIf<BaseController>(controller => {
+            target = Director.Object.FindIf<PlayerController>(controller => {
                 var distance = (controller.CellPos - CellPos).magnitude;
                 return distance < searchRange;
             });
@@ -145,7 +145,7 @@ public class MonsterController : BaseController {
     protected override void SetSkillAnimation() {
         base.SetSkillAnimation();
 
-        transform.DOShakePosition(0.3f);
+        transform.DOShakePosition(0.3f, 0.5f, 4, 10f);
     }
 
     void StopAiCoroutines() {
