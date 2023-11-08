@@ -12,12 +12,10 @@ namespace Server {
 			Console.WriteLine($"OnConnected : {endPoint}");
 
 			// PROTO Test
-			S_Chat chat = new S_Chat() {
-				Context = "안녕하세요"
-			};
-
-			Send(chat);
+			// S_Chat chat = new S_Chat() { Context = "안녕하세요" };
+			//Send(chat);
 			
+			// TODO: EnterGame 메시지로 대체
 
 			//S_Chat chat2 = new S_Chat();
 			//chat2.MergeFrom(sendBuffer, 4, sendBuffer.Length - 4);
@@ -33,10 +31,14 @@ namespace Server {
 				return;
 			} 
 			
+			// 보낼 정보의 크기에, 메타 정보를 넣기 위해 4바이트를 추가
 			ushort size = (ushort)packet.CalculateSize();
 			byte[] sendBuffer = new byte[size + 4];
-			Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
 			
+			// sendBuffer의 첫 2바이트는 버퍼 크기를 쓰고...
+			Array.Copy(BitConverter.GetBytes((ushort)(size + 4)), 0, sendBuffer, 0, sizeof(ushort));
+			
+			// 그 다음 2바이트는 프로토콜 ID를, 그 이후에 보낼 정보를 기입한다.
 			Array.Copy(BitConverter.GetBytes((ushort)msgId), 0, sendBuffer, 2, sizeof(ushort));
 			Array.Copy(packet.ToByteArray(), 0, sendBuffer, 4, size);
 			

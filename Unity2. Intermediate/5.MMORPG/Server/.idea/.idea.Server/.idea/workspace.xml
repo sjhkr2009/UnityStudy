@@ -12,6 +12,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../Imported/protoc-3.12.3-win64/bin/Protocol.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Server/JobTimer.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -82,6 +83,8 @@
       <workItem from="1699266507139" duration="1743000" />
       <workItem from="1699269395096" duration="362000" />
       <workItem from="1699269782236" duration="3333000" />
+      <workItem from="1699446951621" duration="803000" />
+      <workItem from="1699447801274" duration="661000" />
     </task>
     <servers />
   </component>
