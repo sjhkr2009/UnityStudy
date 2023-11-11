@@ -3,25 +3,24 @@ using ServerCore;
 using System.Net;
 using Google.Protobuf.Protocol;
 using Google.Protobuf;
+using Server.Game;
 
 namespace Server {
-	class ClientSession : PacketSession {
+	public class ClientSession : PacketSession {
+		public Player MyPlayer { get; set; }
 		public int SessionId { get; set; }
 
 		public override void OnConnected(EndPoint endPoint) {
 			Console.WriteLine($"OnConnected : {endPoint}");
 
 			// PROTO Test
-			// S_Chat chat = new S_Chat() { Context = "안녕하세요" };
-			//Send(chat);
-			
-			// TODO: EnterGame 메시지로 대체
+			MyPlayer = PlayerManager.Create();
+			MyPlayer.Info.Name = $"Player{MyPlayer.Info.PlayerId:0000}";
+			MyPlayer.Info.PosX = 0;
+			MyPlayer.Info.PosY = 0;
+			MyPlayer.Session = this;
 
-			//S_Chat chat2 = new S_Chat();
-			//chat2.MergeFrom(sendBuffer, 4, sendBuffer.Length - 4);
-			//////////////////////////
-			//////////////////////////
-			//Program.Room.Push(() => Program.Room.Enter(this));
+			RoomManager.First().EnterGame(MyPlayer);
 		}
 
 		public void Send(IMessage packet) {
@@ -50,6 +49,7 @@ namespace Server {
 		}
 
 		public override void OnDisconnected(EndPoint endPoint) {
+			RoomManager.Find(MyPlayer.Room.RoomId)?.LeaveGame(MyPlayer.Info.PlayerId);
 			SessionManager.Instance.Remove(this);
 
 			Console.WriteLine($"OnDisconnected : {endPoint}");

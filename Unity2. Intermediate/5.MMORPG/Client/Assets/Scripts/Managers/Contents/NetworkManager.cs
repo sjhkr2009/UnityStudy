@@ -6,17 +6,14 @@ using System.Net;
 using UnityEngine;
 using Google.Protobuf;
 
-public class NetworkManager
-{
+public class NetworkManager {
 	ServerSession _session = new ServerSession();
 
-	public void Send(ArraySegment<byte> sendBuff)
-	{
+	public void Send(ArraySegment<byte> sendBuff) {
 		_session.Send(sendBuff);
 	}
 
-	public void Init()
-	{
+	public void Init() {
 		// DNS (Domain Name System)
 		string host = Dns.GetHostName();
 		IPHostEntry ipHost = Dns.GetHostEntry(host);
@@ -30,15 +27,12 @@ public class NetworkManager
 			1);
 	}
 
-	public void Update()
-	{
+	public void Update() {
 		List<PacketMessage> list = PacketQueue.Instance.PopAll();
-		foreach (PacketMessage packet in list)
-		{
+		foreach (PacketMessage packet in list) {
 			Action<PacketSession, IMessage> handler = PacketManager.Instance.GetPacketHandler(packet.Id);
 			if (handler != null)
 				handler.Invoke(_session, packet.Message);
-		}	
+		}
 	}
-
 }

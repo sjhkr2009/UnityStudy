@@ -5,25 +5,24 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
-public class ServerSession : PacketSession
-{
-	public override void OnConnected(EndPoint endPoint)
-	{
+public class ServerSession : PacketSession {
+	public override void OnConnected(EndPoint endPoint) {
 		Debug.Log($"OnConnected : {endPoint}");
+
+		PacketManager.Instance.CustomHandler = (ss, msg, id) => {
+			PacketQueue.Instance.Push(id, msg);
+		};
 	}
 
-	public override void OnDisconnected(EndPoint endPoint)
-	{
+	public override void OnDisconnected(EndPoint endPoint) {
 		Debug.Log($"OnDisconnected : {endPoint}");
 	}
 
-	public override void OnRecvPacket(ArraySegment<byte> buffer)
-	{
+	public override void OnRecvPacket(ArraySegment<byte> buffer) {
 		PacketManager.Instance.OnRecvPacket(this, buffer);
 	}
 
-	public override void OnSend(int numOfBytes)
-	{
+	public override void OnSend(int numOfBytes) {
 		//Console.WriteLine($"Transferred bytes: {numOfBytes}");
 	}
 }

@@ -28,6 +28,8 @@ class PacketManager
 
 	Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
 	Dictionary<ushort, Action<PacketSession, IMessage>> _handler = new Dictionary<ushort, Action<PacketSession, IMessage>>();
+
+	public Action<PacketSession, IMessage, ushort> CustomHandler {{ get; set; }}
 		
 	public void Register()
 	{{{0}
@@ -51,9 +53,15 @@ class PacketManager
 	{{
 		T pkt = new T();
 		pkt.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
-		Action<PacketSession, IMessage> action = null;
-		if (_handler.TryGetValue(id, out action))
-			action.Invoke(session, pkt);
+		
+		// 네트워크 스레드에서 실행됨에 유의할 것. 유니티 API는 대부분 메인 스레드에서만 호출 가능하므로, 이런 동작이 있다면 PacketQueue에 넣고 다음 실행될 Update문에서 NetworkManager에서 실행하게 한다. 
+		if (CustomHandler != null) {{
+			CustomHandler.Invoke(session, pkt, id);
+		}} else {{
+			Action<PacketSession, IMessage> action = null;
+			if (_handler.TryGetValue(id, out action))
+				action.Invoke(session, pkt);
+		}}
 	}}
 
 	public Action<PacketSession, IMessage> GetPacketHandler(ushort id)

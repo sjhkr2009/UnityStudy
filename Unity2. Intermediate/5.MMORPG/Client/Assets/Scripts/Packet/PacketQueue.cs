@@ -4,31 +4,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PacketMessage
-{
+public class PacketMessage {
 	public ushort Id { get; set; }
 	public IMessage Message { get; set; }
 }
 
-public class PacketQueue
-{
+public class PacketQueue {
+	private PacketQueue(){}
 	public static PacketQueue Instance { get; } = new PacketQueue();
 
 	Queue<PacketMessage> _packetQueue = new Queue<PacketMessage>();
 	object _lock = new object();
 
-	public void Push(ushort id, IMessage packet)
-	{
-		lock (_lock)
-		{
+	public void Push(ushort id, IMessage packet) {
+		lock (_lock) {
 			_packetQueue.Enqueue(new PacketMessage() { Id = id, Message = packet });
 		}
 	}
 
-	public PacketMessage Pop()
-	{
-		lock (_lock)
-		{
+	public PacketMessage Pop() {
+		lock (_lock) {
 			if (_packetQueue.Count == 0)
 				return null;
 
@@ -36,12 +31,10 @@ public class PacketQueue
 		}
 	}
 
-	public List<PacketMessage> PopAll()
-	{
+	public List<PacketMessage> PopAll() {
 		List<PacketMessage> list = new List<PacketMessage>();
 
-		lock (_lock)
-		{
+		lock (_lock) {
 			while (_packetQueue.Count > 0)
 				list.Add(_packetQueue.Dequeue());
 		}

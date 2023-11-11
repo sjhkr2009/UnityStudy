@@ -6,6 +6,8 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 public abstract class BaseController : MonoBehaviour {
+    [ShowInInspector, ReadOnly] public int Id { get; set; }
+    
     [SerializeField, AutoAssignComponent] protected Animator animator;
     [SerializeField, AutoAssignComponent] protected SpriteRenderer spriteRenderer;
     
@@ -188,7 +190,7 @@ public abstract class BaseController : MonoBehaviour {
         eff.GetComponent<Animator>().Play("default");
         Director.Resource.Destroy(eff, 0.5f);
             
-        Director.Object.Remove(gameObject);
+        Director.Object.Remove(Id);
         Director.Resource.Destroy(gameObject);
     }
 }
