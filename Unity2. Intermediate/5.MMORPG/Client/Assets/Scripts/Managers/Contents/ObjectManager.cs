@@ -15,7 +15,7 @@ public class ObjectManager {
 
         var controller = gameObject.GetComponent<BaseController>();
         controller.Id = info.PlayerId;
-        controller.CellPos = new Vector3Int(info.PosX, info.PosY, 0);
+        controller.CellPos = new Vector3Int(info.PosInfo.PosX, info.PosInfo.PosY, 0);
         
         if (isMyPlayer) {
             MyPlayer = gameObject.GetComponent<MyPlayerController>();

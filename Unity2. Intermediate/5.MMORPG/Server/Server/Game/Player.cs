@@ -6,5 +6,5 @@ public class Player {
     public GameRoom Room { get; set; }
     public ClientSession Session { get; set; }
 
-    public PlayerInfo Info { get; set; } = new PlayerInfo();
+    public PlayerInfo Info { get; set; } = new PlayerInfo() { PosInfo = new PositionInfo() };
 }

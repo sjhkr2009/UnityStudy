@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Google.Protobuf;
 using Google.Protobuf.Protocol;
 
 namespace Server.Game; 
@@ -51,6 +52,12 @@ public class GameRoom {
             // 다른 플레이어들에게 퇴장하는 플레이어 정보 전송
             S_Despawn despawnPacket = new S_Despawn() { PlayerIds = { leavePlayer.Info.PlayerId } };
             players.ForEach(p => p.Session.Send(despawnPacket));
+        }
+    }
+
+    public void Broadcast(IMessage packet) {
+        lock (_lock) {
+            players.ForEach(p => p.Session.Send(packet));
         }
     }
 }

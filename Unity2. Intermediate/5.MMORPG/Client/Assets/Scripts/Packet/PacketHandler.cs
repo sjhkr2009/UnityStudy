@@ -9,7 +9,7 @@ class PacketHandler {
 	public static void S_MoveHandler(PacketSession session, IMessage packet) {
 		S_Move chatPacket = packet as S_Move;
 
-		Debug.Log($"[S_MoveHandler] {chatPacket?.PlayerId} : ({chatPacket?.PosX},{chatPacket?.PosY})");
+		Debug.Log($"[S_MoveHandler] {chatPacket?.PlayerId} : ({chatPacket?.PosInfo.PosX},{chatPacket?.PosInfo.PosY})");
 	}
 
 	public static void S_EnterGameHandler(PacketSession session, IMessage packet) {

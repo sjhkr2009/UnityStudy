@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Define
-{
+namespace Define {
 	public enum MoveDir {
 		None,
 		Up,
@@ -11,73 +10,64 @@ namespace Define
 		Right,
 		Left
 	}
-	
-	public enum ObjectType
-	{
+
+	public enum ObjectType {
 		Unknown,
 		Player,
 		Monster
 	}
 
-	public enum Layer
-	{
+	public enum Layer {
 		IgnoreRaycast = 8,
 		Wall = 9,
 		Ground = 10,
 		Block = 11,
 		Monster = 12
 	}
-	
-	public enum Scene
-	{
+
+	public enum Scene {
 		Unknown,
 		Login,
 		Lobby,
 		Game
 	}
-	
-	public enum Sound
-	{
+
+	public enum Sound {
 		Bgm,
 		Effect,
 		Count
 	}
 
-	public enum UiEvent
-	{
+	public enum UiEvent {
 		Click,
 		Drag
 	}
 
-	public enum CameraMode
-	{
+	public enum CameraMode {
 		QuarterView
 	}
 
-	public enum MouseEvent
-	{
+	public enum MouseEvent {
 		Press,
 		PointerDown,
 		PointerUp,
 		Click
 	}
 
-	public enum CreatureState
-	{
-		Die = -1,
+	public enum CreatureState {
 		Idle,
 		Moving,
-		Skill
+		Skill,
+		Die,
 	}
 
-	public abstract class DefaultSetting
-	{
+	public abstract class DefaultSetting {
 		public static int UiOrder => 10;
 		public static int PoolCount => 10;
 		public static float ClickSensitivity => 0.33f;
 	}
-	public abstract class ResourcesPath
-	{
+
+	public abstract class ResourcesPath {
 		public const string EventSystem = "UI/EventSystem";
 
 		public const string Data = "Data/";
@@ -96,10 +86,10 @@ namespace Define
 
 		public static string ToAudio(string path) => $"{AudioClip}{path}";
 		public const string AudioClip = "Sounds/";
-		
+
 	}
-	public abstract class DefaultName
-	{
+
+	public abstract class DefaultName {
 		public const string GameManager = "@GameManager";
 		public const string EventSystem = "@EventSystem";
 		public const string SceneManager = "@Scene";

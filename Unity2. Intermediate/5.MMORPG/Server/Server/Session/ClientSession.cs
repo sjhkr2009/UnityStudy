@@ -16,8 +16,10 @@ namespace Server {
 			// PROTO Test
 			MyPlayer = PlayerManager.Create();
 			MyPlayer.Info.Name = $"Player{MyPlayer.Info.PlayerId:0000}";
-			MyPlayer.Info.PosX = 0;
-			MyPlayer.Info.PosY = 0;
+			MyPlayer.Info.PosInfo.State = CreatureState.Idle;
+			MyPlayer.Info.PosInfo.MoveDir = MoveDir.None;
+			MyPlayer.Info.PosInfo.PosX = 0;
+			MyPlayer.Info.PosInfo.PosY = 0;
 			MyPlayer.Session = this;
 
 			RoomManager.First().EnterGame(MyPlayer);
