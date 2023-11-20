@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Define;
+using Google.Protobuf.Protocol;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -12,20 +12,40 @@ public abstract class BaseController : MonoBehaviour {
     [SerializeField, AutoAssignComponent] protected SpriteRenderer spriteRenderer;
     
     [ShowInInspector] public virtual float Speed { get; protected set; } = 5;
-    [ReadOnly] public Vector3Int CellPos { get; set; } = Vector3Int.zero;
+
+    [ReadOnly]
+    public Vector3Int CellPos {
+        get => new Vector3Int(PositionInfo.PosX, PositionInfo.PosY, 0);
+        set {
+            PositionInfo.PosX = value.x;
+            PositionInfo.PosY = value.y;
+        }
+    }
+
+    private PositionInfo _positionInfo = new PositionInfo();
+
+    public PositionInfo PositionInfo {
+        get => _positionInfo;
+        set {
+            if (_positionInfo.Equals(value)) return;
+
+            _positionInfo = value;
+            UpdateAnimation();
+        }
+    }
 
     protected virtual Vector3 Offset => Vector3.right * 0.5f;
     protected virtual Grid GridMap => Director.Map.CurrentGrid;
-    public MoveDir CurrentDir { get; private set; } = MoveDir.None;
+
+    public MoveDir CurrentDir => PositionInfo.MoveDir;
     public MoveDir LastDir { get; private set; } = MoveDir.Up;
     
-    protected CreatureState _state = CreatureState.Idle;
     public virtual CreatureState State {
-        get => _state;
+        get => PositionInfo.State;
         protected set {
-            if (_state == value) return;
+            if (PositionInfo.State == value) return;
 
-            _state = value;
+            PositionInfo.State = value;
             UpdateAnimation();
         }
     }
@@ -65,7 +85,7 @@ public abstract class BaseController : MonoBehaviour {
     public virtual void SetDirection(MoveDir direction) {
         if (CurrentDir == direction) return;
 
-        CurrentDir = direction;
+        PositionInfo.MoveDir = direction;
         UpdateAnimation();
 
         if (direction != MoveDir.None)

@@ -7,9 +7,15 @@ using UnityEngine;
 
 class PacketHandler {
 	public static void S_MoveHandler(PacketSession session, IMessage packet) {
-		S_Move chatPacket = packet as S_Move;
+		S_Move movePacket = packet as S_Move;
+		ServerSession serverSession = session as ServerSession;
 
-		Debug.Log($"[S_MoveHandler] {chatPacket?.PlayerId} : ({chatPacket?.PosInfo.PosX},{chatPacket?.PosInfo.PosY})");
+		if (movePacket == null) return;
+
+		var player = Director.Object.Find<BaseController>(movePacket.PlayerId);
+		if (!player) return;
+
+		player.PositionInfo = movePacket.PosInfo;
 	}
 
 	public static void S_EnterGameHandler(PacketSession session, IMessage packet) {

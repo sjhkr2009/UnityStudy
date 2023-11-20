@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using UnityEngine;
-using Define;
+﻿using UnityEngine;
+using Google.Protobuf.Protocol;
 
 public class MyPlayerController : PlayerController {
     protected override void Update() {
@@ -51,6 +47,20 @@ public class MyPlayerController : PlayerController {
         // TODO: 임시로 현재 테스트중인 스킬이 나가게 한다. 추후 입력 타입에 대해 수정 필요.
         if (Input.GetKey(KeyCode.Space)) {
             skillRoutine = StartCoroutine(nameof(ArrowAttack));
+        }
+    }
+
+    protected override void MoveToNextPos() {
+        var prevState = State;
+        var prevPos = CellPos;
+
+        base.MoveToNextPos();
+
+        if (prevState != State || prevPos != CellPos) {
+            C_Move movePacket = new C_Move() {
+                PosInfo = PositionInfo
+            };
+            Director.Network.Send(movePacket);
         }
     }
 }

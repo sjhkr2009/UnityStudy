@@ -9,8 +9,8 @@ using Google.Protobuf;
 public class NetworkManager {
 	ServerSession _session = new ServerSession();
 
-	public void Send(ArraySegment<byte> sendBuff) {
-		_session.Send(sendBuff);
+	public void Send(IMessage packet) {
+		_session.Send(packet);
 	}
 
 	public void Init() {

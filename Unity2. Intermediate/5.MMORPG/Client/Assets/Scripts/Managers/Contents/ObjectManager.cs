@@ -15,7 +15,7 @@ public class ObjectManager {
 
         var controller = gameObject.GetComponent<BaseController>();
         controller.Id = info.PlayerId;
-        controller.CellPos = new Vector3Int(info.PosInfo.PosX, info.PosInfo.PosY, 0);
+        controller.PositionInfo = info.PosInfo;
         
         if (isMyPlayer) {
             MyPlayer = gameObject.GetComponent<MyPlayerController>();
@@ -41,25 +41,13 @@ public class ObjectManager {
         _objects.Clear();
     }
 
-    public GameObject Find(Vector3Int cellPos) {
-        foreach (var gameObject in _objects.Values) {
-            var controller = gameObject.GetComponent<BaseController>();
-            if (controller == null) continue;
-            if (controller.CellPos == cellPos) return gameObject;
-        }
-
-        return null;
+    public GameObject Find(int id) {
+        return _objects.TryGetValue(id, out var gameObject) ? gameObject : null;
     }
     
-    public T Find<T>(Vector3Int cellPos) where T : BaseController {
-        foreach (var gameObject in _objects.Values) {
-            var controller = gameObject.GetComponent<T>();
-            if (controller == null) continue;
-            if (controller.CellPos == cellPos) return controller;
-        }
-
-        return null;
-    }
+    public GameObject Find(Vector3Int cellPos) => Find<BaseController>(cellPos)?.gameObject;
+    public T Find<T>(Vector3Int cellPos) where T : BaseController => FindIf<T>(c => c.CellPos == cellPos);
+    public T Find<T>(int id) where T : Component => Find(id)?.GetComponent<T>();
 
     public T FindIf<T>(Func<T, bool> condition) where T : Component {
         foreach (var gameObject in _objects.Values) {

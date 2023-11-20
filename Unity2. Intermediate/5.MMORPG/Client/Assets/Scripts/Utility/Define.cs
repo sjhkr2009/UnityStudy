@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Define {
-	public enum MoveDir {
-		None,
-		Up,
-		Down,
-		Right,
-		Left
-	}
-
 	public enum ObjectType {
 		Unknown,
 		Player,
@@ -52,13 +44,6 @@ namespace Define {
 		PointerDown,
 		PointerUp,
 		Click
-	}
-
-	public enum CreatureState {
-		Idle,
-		Moving,
-		Skill,
-		Die,
 	}
 
 	public abstract class DefaultSetting {

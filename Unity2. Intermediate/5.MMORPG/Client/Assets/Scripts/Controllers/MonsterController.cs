@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Define;
 using DG.Tweening;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 
 public class MonsterController : BaseController {
@@ -22,11 +23,11 @@ public class MonsterController : BaseController {
     public override float Speed { get; protected set; } = 2f;
 
     public override CreatureState State {
-        get => _state;
+        get => PositionInfo.State;
         protected set {
-            if (_state == value) return;
+            if (PositionInfo.State == value) return;
 
-            _state = value;
+            PositionInfo.State = value;
             UpdateAnimation();
             StopAiCoroutines();
         }
