@@ -12,13 +12,16 @@ public abstract class BaseController : MonoBehaviour {
     [SerializeField, AutoAssignComponent] protected SpriteRenderer spriteRenderer;
     
     [ShowInInspector] public virtual float Speed { get; protected set; } = 5;
+    [ShowInInspector] protected bool IsDirty { get; set; } = false;
 
     [ReadOnly]
     public Vector3Int CellPos {
         get => new Vector3Int(PositionInfo.PosX, PositionInfo.PosY, 0);
         set {
+            if (PositionInfo.PosX == value.x && PositionInfo.PosY == value.y) return;
             PositionInfo.PosX = value.x;
             PositionInfo.PosY = value.y;
+            IsDirty = true;
         }
     }
 
@@ -29,8 +32,9 @@ public abstract class BaseController : MonoBehaviour {
         set {
             if (_positionInfo.Equals(value)) return;
 
-            _positionInfo = value;
-            UpdateAnimation();
+            CellPos = new Vector3Int(value.PosX, value.PosY, 0);
+            State = value.State;
+            SetDirection(value.MoveDir);
         }
     }
 
@@ -47,6 +51,7 @@ public abstract class BaseController : MonoBehaviour {
 
             PositionInfo.State = value;
             UpdateAnimation();
+            IsDirty = true;
         }
     }
         
@@ -54,7 +59,13 @@ public abstract class BaseController : MonoBehaviour {
         Init();
     }
 
-    protected virtual void Init() { }
+    protected virtual void Init() {
+        // 서버에서 PositionInfo값을 받지 않아도 기본 상태 세팅. (서버에서 디폴트값과 동일한 패킷을 전송하면 클라에서 빈 값으로 인식할 수 있음) 
+        State = CreatureState.Idle;
+        CellPos = Vector3Int.zero;
+        SetDirection(MoveDir.None);
+        UpdateAnimation();
+    }
     
     protected virtual void Update() {
         UpdateController();
@@ -90,6 +101,8 @@ public abstract class BaseController : MonoBehaviour {
 
         if (direction != MoveDir.None)
             LastDir = direction;
+        
+        IsDirty = true;
     }
 
     public void SetLookDirection(Vector3Int lookPosition) => SetDirection(GetLookDirection(lookPosition));
@@ -146,19 +159,7 @@ public abstract class BaseController : MonoBehaviour {
     protected virtual void UpdateOnDead(){}
 
     protected virtual void MoveToNextPos() {
-        if (CurrentDir == MoveDir.None) {
-            State = CreatureState.Idle;
-            return;
-        }
-
-        Vector3Int deltaPos = GetDeltaPos(CurrentDir);
-        State = CreatureState.Moving;
         
-        // 갈 수 없는 영역이거나 다른 오브젝트가 있다면 이동 불가
-        if (Director.Map.CanGo(CellPos + deltaPos) == false) return;
-        if (ReferenceEquals(Director.Object.Find(CellPos + deltaPos), null) == false) return;
-
-        CellPos += deltaPos;
     }
     
     protected virtual MoveDir GetLookDirection(Vector3Int lookPosition) {
@@ -180,7 +181,7 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected Vector3Int GetDeltaPos(MoveDir direction) {
-        switch (CurrentDir) {
+        switch (direction) {
             case MoveDir.Up: return Vector3Int.up;
             case MoveDir.Down: return Vector3Int.down;
             case MoveDir.Right: return Vector3Int.right;

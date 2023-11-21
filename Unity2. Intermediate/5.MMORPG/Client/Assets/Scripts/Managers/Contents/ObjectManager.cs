@@ -28,16 +28,18 @@ public class ObjectManager {
         Remove(MyPlayer.Id);
         MyPlayer = null;
     }
-    
-    public void Add(int id, GameObject gameObject) {
-        _objects.Add(id, gameObject);
-    }
 
     public void Remove(int id) {
+        var gameObject = Find(id);
+        if (gameObject) {
+            Director.Resource.Destroy(gameObject);
+        }
+        
         _objects.Remove(id);
     }
 
     public void Clear(GameObject gameObject) {
+        _objects.Values.ForEach(obj => Director.Resource.Destroy(obj));
         _objects.Clear();
     }
 

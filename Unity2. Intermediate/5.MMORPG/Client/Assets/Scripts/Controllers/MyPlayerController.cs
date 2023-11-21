@@ -51,16 +51,29 @@ public class MyPlayerController : PlayerController {
     }
 
     protected override void MoveToNextPos() {
-        var prevState = State;
-        var prevPos = CellPos;
+        Vector3Int deltaPos = GetDeltaPos(CurrentDir);
+        if (deltaPos == Vector3Int.zero) {
+            State = CreatureState.Idle;
+        } else {
+            State = CreatureState.Moving;
+            
+            // 갈 수 없는 영역이거나 다른 오브젝트가 있다면 이동 불가
+            if (Director.Map.CanGo(CellPos + deltaPos) == false) return;
+            if (ReferenceEquals(Director.Object.Find(CellPos + deltaPos), null) == false) return;
 
-        base.MoveToNextPos();
-
-        if (prevState != State || prevPos != CellPos) {
-            C_Move movePacket = new C_Move() {
-                PosInfo = PositionInfo
-            };
-            Director.Network.Send(movePacket);
+            CellPos += deltaPos;
         }
+
+        SendPacketIfDirty();
+    }
+
+    void SendPacketIfDirty() {
+        if (!IsDirty) return;
+        
+        C_Move movePacket = new C_Move() {
+            PosInfo = PositionInfo
+        };
+        Director.Network.Send(movePacket);
+        IsDirty = false;
     }
 }
