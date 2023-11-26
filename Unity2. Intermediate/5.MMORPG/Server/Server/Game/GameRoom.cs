@@ -60,4 +60,47 @@ public class GameRoom {
             players.ForEach(p => p.Session.Send(packet));
         }
     }
+
+    public void HandleMove(Player player, C_Move movePacket) {
+        if (player == null) return;
+
+        lock (_lock) {
+            // 서버상의 좌표 이동
+            var info = player.Info;
+            info.PosInfo = movePacket.PosInfo;
+		
+            // 타 플레이어들에게 전송
+            var resPacket = new S_Move();
+            resPacket.PlayerId = player.Info.PlayerId;
+            resPacket.PosInfo = movePacket.PosInfo;
+
+            Broadcast(resPacket);
+        }
+    }
+    
+    public void HandleSkill(Player player, C_Skill skillPacket) {
+        if (player == null) return;
+
+        lock (_lock) {
+            var info = player.Info;
+            if (info.PosInfo.State == CreatureState.Idle) return;
+            
+            // TODO: 스킬 사용 가능여부 체크 (유효성 검사)
+            // ...
+            
+            // 통과 시 스킬 사용처리
+            info.PosInfo.State = CreatureState.Skill;
+		
+            // 타 플레이어들에게 전송
+            var resPacket = new S_Skill() {
+                Info = new SkillInfo()
+            };
+            resPacket.PlayerId = info.PlayerId;
+            resPacket.Info.SkillId = 1; // 스킬 정보는 보통 json이나 xml 등의 외부 파일에서 따로 관리한다. 여기선 임의로 1을 넣음.
+
+            Broadcast(resPacket);
+            
+            // TODO: 데미지 판정
+        }
+    }
 }
