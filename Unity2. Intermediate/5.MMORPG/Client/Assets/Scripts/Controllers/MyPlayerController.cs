@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using Google.Protobuf.Protocol;
 
 public class MyPlayerController : PlayerController {
+    private WaitForSeconds globalSkillCooldown = new WaitForSeconds(0.1f);
+    private bool isSkillGlobalCooldown = false; 
+    
     protected override void Update() {
         CheckInput();
         UpdateController();
@@ -45,9 +49,22 @@ public class MyPlayerController : PlayerController {
     
     void UpdateBehaviorInput() {
         // TODO: 임시로 현재 테스트중인 스킬이 나가게 한다. 추후 입력 타입에 대해 수정 필요.
-        if (Input.GetKey(KeyCode.Space)) {
-            skillRoutine = StartCoroutine(nameof(ArrowAttack));
+        if (!isSkillGlobalCooldown && Input.GetKey(KeyCode.Space)) {
+            
+            C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+            skill.Info.SkillId = 1;
+            Director.Network.Send(skill);
+            
+            // 잦은 패킷전송 방지를 위해 일정 시간 인풋을 막는다.
+            StartCoroutine(nameof(GlobalSkillCoolTime));
         }
+    }
+
+    IEnumerator GlobalSkillCoolTime() {
+        isSkillGlobalCooldown = true;
+        yield return globalSkillCooldown;
+        isSkillGlobalCooldown = false;
+
     }
 
     protected override void MoveToNextPos() {
@@ -67,7 +84,7 @@ public class MyPlayerController : PlayerController {
         SendPacketIfDirty();
     }
 
-    void SendPacketIfDirty() {
+    protected override void SendPacketIfDirty() {
         if (!IsDirty) return;
         
         C_Move movePacket = new C_Move() {

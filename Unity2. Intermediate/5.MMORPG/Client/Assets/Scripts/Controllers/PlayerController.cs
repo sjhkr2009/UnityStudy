@@ -15,14 +15,14 @@ public class PlayerController : BaseController {
     protected IEnumerator BasicAttack() {
         _rangedSkill = false;
         State = CreatureState.Skill;
-        var obj = Director.Object.Find(GetFrontCellPos());
-        if (obj) {
-            Debug.Log($"Attack: {obj.name}");
-        }
         
+        // TODO: 피격 판정은 서버에 위임 
+        
+        // 쿨타임은 클라/서버 양쪽에서 체크해야 한다. 서버는 신뢰성을 위해, 클라는 리소스 낭비 및 과도한 패킷 전송 방지를 위해서다.
         yield return basicAttackCooldown;
         State = CreatureState.Idle;
         skillRoutine = null;
+        SendPacketIfDirty();
     }
     
     protected IEnumerator ArrowAttack() {
@@ -35,6 +35,7 @@ public class PlayerController : BaseController {
         yield return arrowAttackCooldown;
         State = CreatureState.Idle;
         skillRoutine = null;
+        SendPacketIfDirty();
     }
 
     protected override void SetIdleAnimation() {
@@ -96,5 +97,15 @@ public class PlayerController : BaseController {
                 spriteRenderer.flipX = true;
                 break;
         }
+    }
+
+    public void UseSkill(int skillId) {
+        if (skillId == 1) {
+            skillRoutine = StartCoroutine(nameof(BasicAttack));
+        }
+    }
+    
+    protected virtual void SendPacketIfDirty() {
+        // temp: 일반 플레이어는 패킷을 받아 연출을 보여주므로, 패킷 전송은 일반적으로 불필요함.
     }
 }

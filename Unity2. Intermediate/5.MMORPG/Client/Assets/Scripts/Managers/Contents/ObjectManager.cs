@@ -16,6 +16,7 @@ public class ObjectManager {
         var controller = gameObject.GetComponent<BaseController>();
         controller.Id = info.PlayerId;
         controller.PositionInfo = info.PosInfo;
+        controller.SyncPositionInfo();
         
         if (isMyPlayer) {
             MyPlayer = gameObject.GetComponent<MyPlayerController>();

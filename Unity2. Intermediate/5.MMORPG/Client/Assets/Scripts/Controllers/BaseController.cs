@@ -71,6 +71,10 @@ public abstract class BaseController : MonoBehaviour {
         UpdateController();
     }
 
+    public void SyncPositionInfo() {
+        transform.position = GridMap.CellToWorld(CellPos) + Offset;
+    }
+
     public virtual void SetPositionInstant(Vector3Int destPos) {
         CellPos = destPos;
         transform.position = GridMap.CellToWorld(CellPos) + Offset;

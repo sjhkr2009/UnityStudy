@@ -17,6 +17,18 @@ class PacketHandler {
 
 		player.PositionInfo = movePacket.PosInfo;
 	}
+	
+	public static void S_SkillHandler(PacketSession session, IMessage packet) {
+		S_Skill skillPacket = packet as S_Skill;
+		ServerSession serverSession = session as ServerSession;
+
+		if (skillPacket == null) return;
+
+		var player = Director.Object.Find<PlayerController>(skillPacket.PlayerId);
+		if (!player) return;
+
+		player.UseSkill(skillPacket.Info.SkillId);
+	}
 
 	public static void S_EnterGameHandler(PacketSession session, IMessage packet) {
 		S_EnterGame enterGamePacket = packet as S_EnterGame;
