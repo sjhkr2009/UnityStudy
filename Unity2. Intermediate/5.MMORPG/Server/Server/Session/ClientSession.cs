@@ -17,7 +17,7 @@ namespace Server {
 			MyPlayer = PlayerManager.Create();
 			MyPlayer.Info.Name = $"Player{MyPlayer.Info.PlayerId:0000}";
 			MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-			MyPlayer.Info.PosInfo.MoveDir = MoveDir.None;
+			MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
 			MyPlayer.Info.PosInfo.PosX = 0;
 			MyPlayer.Info.PosInfo.PosY = 0;
 			MyPlayer.Session = this;

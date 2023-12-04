@@ -4,7 +4,9 @@ using Google.Protobuf.Protocol;
 
 public class MyPlayerController : PlayerController {
     private WaitForSeconds globalSkillCooldown = new WaitForSeconds(0.1f);
-    private bool isSkillGlobalCooldown = false; 
+    private bool isSkillGlobalCooldown = false;
+
+    private bool moveKeyPressed;
     
     protected override void Update() {
         CheckInput();
@@ -30,6 +32,8 @@ public class MyPlayerController : PlayerController {
     }
     
     void UpdateDirectionInput() {
+        moveKeyPressed = true;
+        
         if (Input.GetKey(KeyCode.W)) {
             SetDirection(MoveDir.Up);
         } else if (Input.GetKey(KeyCode.S)) {
@@ -39,10 +43,10 @@ public class MyPlayerController : PlayerController {
         } else if (Input.GetKey(KeyCode.A)) {
             SetDirection(MoveDir.Left);
         } else {
-            SetDirection(MoveDir.None);
+            moveKeyPressed = false;
         }
         
-        if (CurrentDir != MoveDir.None) {
+        if (moveKeyPressed) {
             State = CreatureState.Moving;
         }
     }

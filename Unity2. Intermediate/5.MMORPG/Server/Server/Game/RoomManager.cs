@@ -9,8 +9,9 @@ public static class RoomManager {
     private static Dictionary<int, GameRoom> rooms = new Dictionary<int, GameRoom>();
     private static int nextRoomId = 1;
 
-    public static GameRoom Create() {
+    public static GameRoom Create(int mapId) {
         GameRoom gameRoom = new GameRoom();
+        gameRoom.Initialize(mapId);
         
         lock (_lock) {
             gameRoom.RoomId = nextRoomId;

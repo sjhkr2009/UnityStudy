@@ -76,10 +76,6 @@ public class MonsterController : BaseController {
         }
         
         SetLookDirection(path[1]);
-        if (CurrentDir == MoveDir.None) {
-            State = CreatureState.Idle;
-            return;
-        }
 
         var deltaPos = GetDeltaPos(CurrentDir);
         var nextPos = CellPos + deltaPos;
@@ -136,7 +132,7 @@ public class MonsterController : BaseController {
     
     IEnumerator AiRangeAttack() {
         var arrow = Director.Resource.Instantiate("Arrow").GetComponent<ArrowController>();
-        arrow.SetDirection(LastDir);
+        arrow.SetDirection(CurrentDir);
         arrow.SetPositionInstant(CellPos);
 
         yield return attackInterval;

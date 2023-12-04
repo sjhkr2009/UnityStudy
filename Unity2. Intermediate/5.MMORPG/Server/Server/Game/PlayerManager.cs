@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Server.Game; 
+namespace Server.Game;
 
 public static class PlayerManager {
     private static object _lock = new object();

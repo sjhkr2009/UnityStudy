@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.Game.Utility;
 
 namespace Server.Game; 
 
@@ -9,13 +11,19 @@ public class GameRoom {
     private object _lock = new object();
     public int RoomId { get; set; }
 
-    private List<Player> players = new List<Player>();
+    private Dictionary<int, Player> players = new();
+
+    private Map map = new Map();
+    
+    public void Initialize(int mapId) {
+        map.LoadMap(mapId);
+    }
 
     public void EnterGame(Player newPlayer) {
         if (newPlayer == null) return;
 
         lock (_lock) {
-            players.Add(newPlayer);
+            players.Add(newPlayer.Info.PlayerId, newPlayer);
             newPlayer.Room = this;
             
             // 본인한테 입장 패킷 및 다른 사람들 정보 전송
@@ -25,13 +33,13 @@ public class GameRoom {
             newPlayer.Session.Send(myEnterPacket);
             
             S_Spawn mySpawnPacket = new S_Spawn() {
-                Players = { players.Except(new[] { newPlayer }).Select(otherPlayer => otherPlayer.Info) }
+                Players = { players.Values.Except(new[] { newPlayer }).Select(otherPlayer => otherPlayer.Info) }
             };
             newPlayer.Session.Send(mySpawnPacket);
             
             // 다른 플레이어들에게 입장한 플레이어 정보 전송
             S_Spawn otherSpawnPacket = new S_Spawn() { Players = { newPlayer.Info } };
-            players.ForEach(p => {
+            players.Values.ForEach(p => {
                 if (p != newPlayer) p.Session.Send(otherSpawnPacket);
             });
         }
@@ -39,10 +47,10 @@ public class GameRoom {
 
     public void LeaveGame(int playerId) {
         lock (_lock) {
-            var leavePlayer = players.Find(p => p.Info.PlayerId == playerId);
+            players.TryGetValue(playerId, out var leavePlayer);
             if (leavePlayer == null) return;
 
-            players.Remove(leavePlayer);
+            players.Remove(playerId);
             leavePlayer.Room = null;
             
             // 본인한테 퇴장 패킷 전송
@@ -51,13 +59,13 @@ public class GameRoom {
             
             // 다른 플레이어들에게 퇴장하는 플레이어 정보 전송
             S_Despawn despawnPacket = new S_Despawn() { PlayerIds = { leavePlayer.Info.PlayerId } };
-            players.ForEach(p => p.Session.Send(despawnPacket));
+            players.Values.ForEach(p => p.Session.Send(despawnPacket));
         }
     }
 
     public void Broadcast(IMessage packet) {
         lock (_lock) {
-            players.ForEach(p => p.Session.Send(packet));
+            players.Values.ForEach(p => p.Session.Send(packet));
         }
     }
 
@@ -65,14 +73,23 @@ public class GameRoom {
         if (player == null) return;
 
         lock (_lock) {
-            // 서버상의 좌표 이동
-            var info = player.Info;
-            info.PosInfo = movePacket.PosInfo;
+            // 검증
+            var playerInfo = player.Info;
+            var destPos = movePacket.PosInfo;
+            
+            // 위치 이동 시 갈 수 있는 지역인지 확인한다. 
+            if (destPos.PosX != playerInfo.PosInfo.PosX || destPos.PosY != playerInfo.PosInfo.PosY) {
+                if (!map.CanGo(new Vector2Int(destPos.PosX, destPos.PosY))) return;
+            }
+
+            playerInfo.PosInfo.State = destPos.State;
+            playerInfo.PosInfo.MoveDir = destPos.MoveDir;
+            map.ApplyMove(player, new Vector2Int(destPos.PosX, destPos.PosY));
 		
             // 타 플레이어들에게 전송
             var resPacket = new S_Move();
             resPacket.PlayerId = player.Info.PlayerId;
-            resPacket.PosInfo = movePacket.PosInfo;
+            resPacket.PosInfo = destPos;
 
             Broadcast(resPacket);
         }
@@ -100,7 +117,12 @@ public class GameRoom {
 
             Broadcast(resPacket);
             
-            // TODO: 데미지 판정
+            // 데미지 판정
+            Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+            Player target = map.Find(skillPos);
+            if (target != null) {
+                Console.WriteLine($"Player Hit: {target.Info.Name}");
+            }
         }
     }
 }

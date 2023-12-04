@@ -42,7 +42,6 @@ public abstract class BaseController : MonoBehaviour {
     protected virtual Grid GridMap => Director.Map.CurrentGrid;
 
     public MoveDir CurrentDir => PositionInfo.MoveDir;
-    public MoveDir LastDir { get; private set; } = MoveDir.Up;
     
     public virtual CreatureState State {
         get => PositionInfo.State;
@@ -63,7 +62,7 @@ public abstract class BaseController : MonoBehaviour {
         // 서버에서 PositionInfo값을 받지 않아도 기본 상태 세팅. (서버에서 디폴트값과 동일한 패킷을 전송하면 클라에서 빈 값으로 인식할 수 있음) 
         State = CreatureState.Idle;
         CellPos = Vector3Int.zero;
-        SetDirection(MoveDir.None);
+        SetDirection(MoveDir.Down);
         UpdateAnimation();
     }
     
@@ -102,9 +101,6 @@ public abstract class BaseController : MonoBehaviour {
 
         PositionInfo.MoveDir = direction;
         UpdateAnimation();
-
-        if (direction != MoveDir.None)
-            LastDir = direction;
         
         IsDirty = true;
     }
@@ -114,7 +110,7 @@ public abstract class BaseController : MonoBehaviour {
     public Vector3Int GetFrontCellPos() {
         var cellPos = CellPos;
 
-        switch (LastDir) {
+        switch (CurrentDir) {
             case MoveDir.Up:
                 cellPos += Vector3Int.up;
                 break;
@@ -181,7 +177,7 @@ public abstract class BaseController : MonoBehaviour {
             if (dir.y < 0) return MoveDir.Down;
         }
         
-        return MoveDir.None;
+        return MoveDir.Down;
     }
 
     protected Vector3Int GetDeltaPos(MoveDir direction) {

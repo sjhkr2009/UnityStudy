@@ -12,6 +12,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b6719a2618ce3b542679c5ed23a4e8f1f64ba1e94aed5ffe3e5b8c892285b/PriorityQueue.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../MyRepos/code_sample/PriorityQueue.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Imported/protoc-3.12.3-win64/bin/Protocol.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PacketGenerator/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Server/JobTimer.cs" root0="FORCE_HIGHLIGHTING" />
@@ -92,6 +94,7 @@
       <workItem from="1700560660724" duration="962000" />
       <workItem from="1700650149141" duration="3759000" />
       <workItem from="1701166888558" duration="596000" />
+      <workItem from="1701253886817" duration="10831000" />
     </task>
     <servers />
   </component>

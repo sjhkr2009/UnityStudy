@@ -14,7 +14,7 @@ namespace Server {
 		}
 
 		static void Main(string[] args) {
-			RoomManager.Create();
+			RoomManager.Create(1);
 			
 			// DNS (Domain Name System)
 			string host = Dns.GetHostName();

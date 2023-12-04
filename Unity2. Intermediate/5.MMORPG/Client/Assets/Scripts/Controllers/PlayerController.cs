@@ -29,7 +29,7 @@ public class PlayerController : BaseController {
         _rangedSkill = true;
         State = CreatureState.Skill;
         var arrow = Director.Resource.Instantiate("Arrow").GetComponent<ArrowController>();
-        arrow.SetDirection(LastDir);
+        arrow.SetDirection(CurrentDir);
         arrow.SetPositionInstant(CellPos);
 
         yield return arrowAttackCooldown;
@@ -39,7 +39,7 @@ public class PlayerController : BaseController {
     }
 
     protected override void SetIdleAnimation() {
-        switch (LastDir) {
+        switch (CurrentDir) {
             case MoveDir.Up:
                 animator.Play("idle_back");
                 break;
