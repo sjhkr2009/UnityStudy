@@ -12,7 +12,7 @@ public static class PlayerManager {
         Player player = new Player();
         
         lock (_lock) {
-            player.Info.PlayerId = nextPlayerId;
+            player.Info.ObjectId = nextPlayerId;
             players.Add(nextPlayerId, player);
             nextPlayerId++;
         }

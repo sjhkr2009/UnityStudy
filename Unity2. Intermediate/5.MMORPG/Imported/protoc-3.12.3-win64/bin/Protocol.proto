@@ -30,8 +30,15 @@ enum CreatureState {
   DIE = 3;
 }
 
+enum GameObjectType {
+  NONE = 0;
+  PLAYER = 1;
+  MONSTER = 2;
+  PROJECTILE = 3;
+}
+
 message S_EnterGame {
-  PlayerInfo player = 1;
+  ObjectInfo player = 1;
 }
 
 message S_LeaveGame {
@@ -39,7 +46,7 @@ message S_LeaveGame {
 }
 
 message S_Spawn {
-  repeated PlayerInfo players = 1;
+  repeated ObjectInfo objects = 1;
 }
 
 message S_Despawn {
@@ -64,8 +71,8 @@ message S_Skill {
   SkillInfo info = 2;
 }
 
-message PlayerInfo {
-  int32 playerId = 1;
+message ObjectInfo {
+  int32 objectId = 1;
   string name = 2;
   PositionInfo posInfo = 3;
 }

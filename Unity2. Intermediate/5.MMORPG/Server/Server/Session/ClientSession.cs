@@ -15,7 +15,7 @@ namespace Server {
 
 			// PROTO Test
 			MyPlayer = PlayerManager.Create();
-			MyPlayer.Info.Name = $"Player{MyPlayer.Info.PlayerId:0000}";
+			MyPlayer.Info.Name = $"Player{MyPlayer.Info.ObjectId:0000}";
 			MyPlayer.Info.PosInfo.State = CreatureState.Idle;
 			MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;
 			MyPlayer.Info.PosInfo.PosX = 0;
@@ -51,7 +51,7 @@ namespace Server {
 		}
 
 		public override void OnDisconnected(EndPoint endPoint) {
-			RoomManager.Find(MyPlayer.Room.RoomId)?.LeaveGame(MyPlayer.Info.PlayerId);
+			RoomManager.Find(MyPlayer.Room.RoomId)?.LeaveGame(MyPlayer.Info.ObjectId);
 			SessionManager.Instance.Remove(this);
 
 			Console.WriteLine($"OnDisconnected : {endPoint}");

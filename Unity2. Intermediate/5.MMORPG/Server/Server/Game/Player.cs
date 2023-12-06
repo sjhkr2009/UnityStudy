@@ -14,7 +14,7 @@ public class Player {
             Info.PosInfo.PosY = value.y;
         }
     }
-    public PlayerInfo Info { get; set; } = new PlayerInfo() { PosInfo = new PositionInfo() };
+    public ObjectInfo Info { get; set; } = new ObjectInfo() { PosInfo = new PositionInfo() };
     
     public Vector2Int GetFrontCellPos(MoveDir dir) {
         var cellPos = CellPos;
