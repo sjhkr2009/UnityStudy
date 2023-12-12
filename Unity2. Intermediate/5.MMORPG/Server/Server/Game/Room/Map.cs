@@ -211,4 +211,8 @@ public class Map {
 		var pos = Cell2ZeroBasedPos(cellPos);
 		return players[pos.Y, pos.X];
 	}
+
+	public void ApplyLeave(GameObject gameObject) {
+		// TODO
+	}
 }

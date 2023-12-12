@@ -14,7 +14,7 @@ namespace Server {
 			Console.WriteLine($"OnConnected : {endPoint}");
 
 			// PROTO Test
-			MyPlayer = ObjectManager.Create();
+			MyPlayer = ObjectManager.Create<Player>();
 			MyPlayer.Info.Name = $"Player{MyPlayer.Info.ObjectId:0000}";
 			MyPlayer.Info.PosInfo.State = CreatureState.Idle;
 			MyPlayer.Info.PosInfo.MoveDir = MoveDir.Down;

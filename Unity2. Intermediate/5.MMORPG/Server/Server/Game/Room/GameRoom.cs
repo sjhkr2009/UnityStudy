@@ -12,6 +12,8 @@ public class GameRoom {
     public int RoomId { get; set; }
 
     private Dictionary<int, Player> players = new();
+    private Dictionary<int, Monster> monsters = new();
+    private Dictionary<int, Projectile> projectiles = new();
 
     private Map map = new Map();
     
@@ -19,47 +21,68 @@ public class GameRoom {
         map.LoadMap(mapId);
     }
 
-    public void EnterGame(Player newPlayer) {
-        if (newPlayer == null) return;
+    public void EnterGame(GameObject gameObject) {
+        if (gameObject == null) return;
+
+        var type = gameObject.GetObjectType();
 
         lock (_lock) {
-            players.Add(newPlayer.Info.ObjectId, newPlayer);
-            newPlayer.Room = this;
+            gameObject.Room = this;
             
-            // 본인한테 입장 패킷 및 다른 사람들 정보 전송
-            S_EnterGame myEnterPacket = new S_EnterGame {
-                Player = newPlayer.Info
-            };
-            newPlayer.Session.Send(myEnterPacket);
+            if (type == GameObjectType.Player && gameObject is Player player) {
+                players.Add(gameObject.Id, player);
+                
+                // 플레이어라면 본인한테 입장 패킷 및 다른 사람들 정보 전송
+                S_EnterGame myEnterPacket = new S_EnterGame {
+                    Player = gameObject.Info
+                };
+                player.Session.Send(myEnterPacket);
             
-            S_Spawn mySpawnPacket = new S_Spawn() {
-                Objects = { players.Values.Except(new[] { newPlayer }).Select(otherPlayer => otherPlayer.Info) }
-            };
-            newPlayer.Session.Send(mySpawnPacket);
-            
-            // 다른 플레이어들에게 입장한 플레이어 정보 전송
-            S_Spawn otherSpawnPacket = new S_Spawn() { Objects = { newPlayer.Info } };
+                S_Spawn mySpawnPacket = new S_Spawn() {
+                    Objects = { players.Values.Except(new[] { gameObject }).Select(otherPlayer => otherPlayer.Info) }
+                };
+                player.Session.Send(mySpawnPacket);
+            } else if (type == GameObjectType.Monster && gameObject is Monster monster) {
+                monsters.Add(monster.Id, monster);
+            } else if (type == GameObjectType.Projectile && gameObject is Projectile projectile) {
+                projectiles.Add(projectile.Id, projectile);
+            }
+
+            // 다른 플레이어들에게 입장한 오브젝트 정보 전송
+            S_Spawn otherSpawnPacket = new S_Spawn() { Objects = { gameObject.Info } };
             players.Values.ForEach(p => {
-                if (p != newPlayer) p.Session.Send(otherSpawnPacket);
+                if (p.Id != gameObject.Id) p.Session.Send(otherSpawnPacket);
             });
         }
     }
 
-    public void LeaveGame(int playerId) {
-        lock (_lock) {
-            players.TryGetValue(playerId, out var leavePlayer);
-            if (leavePlayer == null) return;
+    public void LeaveGame(int objectId) {
+        var type = ObjectManager.GetObjectTypeBy(objectId);
 
-            players.Remove(playerId);
-            leavePlayer.Room = null;
+        lock (_lock) {
+            if (type == GameObjectType.Player) {
+                if (!players.Remove(objectId, out var leavePlayer)) return;
+                
+                leavePlayer.Room = null;
+                map.ApplyLeave(leavePlayer);
             
-            // 본인한테 퇴장 패킷 전송
-            S_LeaveGame leavePacket = new S_LeaveGame();
-            leavePlayer.Session.Send(leavePacket);
-            
+                // 본인한테 퇴장 패킷 전송
+                S_LeaveGame leavePacket = new S_LeaveGame();
+                leavePlayer.Session.Send(leavePacket);
+            } else if (type == GameObjectType.Monster) {
+                if (!monsters.Remove(objectId, out var leaveMonster)) return;
+                
+                leaveMonster.Room = null;
+                map.ApplyLeave(leaveMonster);
+            } else if (type == GameObjectType.Projectile) {
+                if (!projectiles.Remove(objectId, out var leaveProjectile)) return;
+                
+                leaveProjectile.Room = null;
+            }
+
             // 다른 플레이어들에게 퇴장하는 플레이어 정보 전송
-            S_Despawn despawnPacket = new S_Despawn() { PlayerIds = { leavePlayer.Info.ObjectId } };
-            players.Values.ForEach(p => p.Session.Send(despawnPacket));
+            S_Despawn despawnPacket = new S_Despawn() { PlayerIds = { objectId } };
+            players.Values.Where(p => p.Id != objectId).ForEach(p => p.Session.Send(despawnPacket));
         }
     }
 
@@ -127,7 +150,16 @@ public class GameRoom {
                 }
             } else if (skillPacket.Info.SkillId == 2) {
                 // 2번 스킬 - 원거리 투사체
+                var arrow = ObjectManager.Create<Arrow>();
+                if (arrow == null) return;
+
+                arrow.Owner = player;
+                arrow.PosInfo.State = CreatureState.Moving;
+                arrow.PosInfo.MoveDir = player.PosInfo.MoveDir;
+                arrow.PosInfo.PosX = player.PosInfo.PosX;
+                arrow.PosInfo.PosY = player.PosInfo.PosY;
                 
+                EnterGame(arrow);
             }
             
             
