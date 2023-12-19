@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server.Game;
@@ -26,10 +27,14 @@ namespace Server {
 			Console.WriteLine("Listening...");
 
 			//FlushRoom();
-			JobTimer.Instance.Push(FlushRoom);
+			//JobTimer.Instance.Push(FlushRoom);
 
 			while (true) {
-				JobTimer.Instance.Flush();
+				//JobTimer.Instance.Flush();
+				
+				// TODO: 일단 0.1초마다 반복, 추후 별도의 Task로 뺄 것 
+				RoomManager.Find(1).Update();
+				Thread.Sleep(100);
 			}
 		}
 	}

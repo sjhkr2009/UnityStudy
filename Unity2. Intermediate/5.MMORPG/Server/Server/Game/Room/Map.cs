@@ -14,7 +14,7 @@ public class Map {
 	public int SizeY => MaxY - MinY + 1;
 
 	private bool[,] collisionData;
-	private Player[,] players;
+	private GameObject[,] objects;
 
 	private static string GetMapName(int id) => $"Map_{id:000}";
 	private const string DefaultPathPrefix = "../../../../../Imported/MapData";
@@ -37,7 +37,7 @@ public class Map {
 		int yCount = MaxY - MinY + 1;
 		int xCount = MaxX - MinX + 1;
 		collisionData = new bool[yCount, xCount];
-		players = new Player[yCount, xCount];
+		objects = new Player[yCount, xCount];
 
 		for (int y = 0; y < yCount; y++) {
 			string line = reader.ReadLine();
@@ -63,7 +63,7 @@ public class Map {
 		int y = MaxY - cellPos.y;
 
 		bool existCollision = collisionData[y, x];
-		bool blockByPlayer = checkPlayers && players[y, x] != null; 
+		bool blockByPlayer = checkPlayers && objects[y, x] != null; 
 		return !existCollision && !blockByPlayer;
 	}
 
@@ -180,20 +180,15 @@ public class Map {
 	#endregion
 	
 	/** 맵에 충돌 정보를 갱신하고, 서버상의 좌표를 이동시킨다 */
-	public bool ApplyMove(Player player, Vector2Int destCellPos) {
-		if (!CanGo(destCellPos, true)) return false;
+	public bool ApplyMove(GameObject gameObject, Vector2Int destCellPos) {
+		ApplyLeave(gameObject);
 		
-		var curCellPos = player.Info.PosInfo;
-		if (!IsValidCellPos(curCellPos.PosX, curCellPos.PosY)) return false;
-
-		var curPos = Cell2ZeroBasedPos(curCellPos.PosX, curCellPos.PosY);
-		if (players[curPos.Y, curPos.X] == player) {
-			players[curPos.Y, curPos.X] = null;
-		}
+		if (!CanGo(destCellPos, true)) return false;
 
 		var destPos = Cell2ZeroBasedPos(destCellPos);
-		players[destPos.Y, destPos.X] = player;
+		objects[destPos.Y, destPos.X] = gameObject;
 
+		var curCellPos = gameObject.Info.PosInfo;
 		curCellPos.PosX = destCellPos.x;
 		curCellPos.PosY = destCellPos.y;
 		return true;
@@ -205,14 +200,19 @@ public class Map {
 		return true;
 	}
 
-	public Player Find(Vector2Int cellPos) {
+	public GameObject Find(Vector2Int cellPos) {
 		if (!IsValidCellPos(cellPos.x, cellPos.y)) return null;
 
 		var pos = Cell2ZeroBasedPos(cellPos);
-		return players[pos.Y, pos.X];
+		return objects[pos.Y, pos.X];
 	}
 
-	public void ApplyLeave(GameObject gameObject) {
-		// TODO
+	public bool ApplyLeave(GameObject gameObject) {
+		var posInfo = gameObject.PosInfo;
+		if (!IsValidCellPos(posInfo.PosX, posInfo.PosY)) return false;
+		
+		var pos = Cell2ZeroBasedPos(posInfo.PosX, posInfo.PosY);
+		objects[pos.Y, pos.X] = null;
+		return true;
 	}
 }

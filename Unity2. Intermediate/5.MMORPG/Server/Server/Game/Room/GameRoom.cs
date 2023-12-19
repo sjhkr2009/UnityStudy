@@ -15,10 +15,10 @@ public class GameRoom {
     private Dictionary<int, Monster> monsters = new();
     private Dictionary<int, Projectile> projectiles = new();
 
-    private Map map = new Map();
+    public Map Map { get; private set; } = new Map();
     
     public void Initialize(int mapId) {
-        map.LoadMap(mapId);
+        Map.LoadMap(mapId);
     }
 
     public void EnterGame(GameObject gameObject) {
@@ -64,7 +64,7 @@ public class GameRoom {
                 if (!players.Remove(objectId, out var leavePlayer)) return;
                 
                 leavePlayer.Room = null;
-                map.ApplyLeave(leavePlayer);
+                Map.ApplyLeave(leavePlayer);
             
                 // 본인한테 퇴장 패킷 전송
                 S_LeaveGame leavePacket = new S_LeaveGame();
@@ -73,7 +73,7 @@ public class GameRoom {
                 if (!monsters.Remove(objectId, out var leaveMonster)) return;
                 
                 leaveMonster.Room = null;
-                map.ApplyLeave(leaveMonster);
+                Map.ApplyLeave(leaveMonster);
             } else if (type == GameObjectType.Projectile) {
                 if (!projectiles.Remove(objectId, out var leaveProjectile)) return;
                 
@@ -83,6 +83,14 @@ public class GameRoom {
             // 다른 플레이어들에게 퇴장하는 플레이어 정보 전송
             S_Despawn despawnPacket = new S_Despawn() { PlayerIds = { objectId } };
             players.Values.Where(p => p.Id != objectId).ForEach(p => p.Session.Send(despawnPacket));
+        }
+    }
+
+    public void Update() {
+        lock (_lock) {
+            foreach (var projectile in projectiles.Values) {
+                projectile.Update();
+            }
         }
     }
 
@@ -102,16 +110,16 @@ public class GameRoom {
             
             // 위치 이동 시 갈 수 있는 지역인지 확인한다. 
             if (destPos.PosX != playerInfo.PosInfo.PosX || destPos.PosY != playerInfo.PosInfo.PosY) {
-                if (!map.CanGo(new Vector2Int(destPos.PosX, destPos.PosY))) return;
+                if (!Map.CanGo(new Vector2Int(destPos.PosX, destPos.PosY))) return;
             }
 
             playerInfo.PosInfo.State = destPos.State;
             playerInfo.PosInfo.MoveDir = destPos.MoveDir;
-            map.ApplyMove(player, new Vector2Int(destPos.PosX, destPos.PosY));
+            Map.ApplyMove(player, new Vector2Int(destPos.PosX, destPos.PosY));
 		
             // 타 플레이어들에게 전송
             var resPacket = new S_Move();
-            resPacket.PlayerId = player.Info.ObjectId;
+            resPacket.ObjectId = player.Info.ObjectId;
             resPacket.PosInfo = destPos;
 
             Broadcast(resPacket);
@@ -135,7 +143,7 @@ public class GameRoom {
             var resPacket = new S_Skill() {
                 Info = new SkillInfo()
             };
-            resPacket.PlayerId = info.ObjectId;
+            resPacket.ObjectId = info.ObjectId;
             resPacket.Info.SkillId = 1; // 스킬 정보는 보통 json이나 xml 등의 외부 파일에서 따로 관리한다. 여기선 임의로 1을 넣음.
 
             Broadcast(resPacket);
@@ -144,9 +152,9 @@ public class GameRoom {
             if (skillPacket.Info.SkillId == 1) {
                 // 1번 스킬 - 근접 공격
                 Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-                Player target = map.Find(skillPos);
+                var target = Map.Find(skillPos);
                 if (target != null) {
-                    Console.WriteLine($"Player Hit: {target.Info.Name}");
+                    Console.WriteLine($"GameObject Hit: {target.Info.Name}");
                 }
             } else if (skillPacket.Info.SkillId == 2) {
                 // 2번 스킬 - 원거리 투사체
