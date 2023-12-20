@@ -81,7 +81,7 @@ public class GameRoom {
             }
 
             // 다른 플레이어들에게 퇴장하는 플레이어 정보 전송
-            S_Despawn despawnPacket = new S_Despawn() { PlayerIds = { objectId } };
+            S_Despawn despawnPacket = new S_Despawn() { ObjectIds = { objectId } };
             players.Values.Where(p => p.Id != objectId).ForEach(p => p.Session.Send(despawnPacket));
         }
     }

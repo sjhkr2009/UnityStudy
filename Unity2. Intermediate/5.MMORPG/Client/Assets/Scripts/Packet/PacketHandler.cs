@@ -12,7 +12,7 @@ class PacketHandler {
 
 		if (movePacket == null) return;
 
-		var player = Director.Object.Find<BaseController>(movePacket.PlayerId);
+		var player = Director.Object.Find<BaseController>(movePacket.ObjectId);
 		if (!player) return;
 
 		player.PositionInfo = movePacket.PosInfo;
@@ -24,7 +24,7 @@ class PacketHandler {
 
 		if (skillPacket == null) return;
 
-		var player = Director.Object.Find<PlayerController>(skillPacket.PlayerId);
+		var player = Director.Object.Find<PlayerController>(skillPacket.ObjectId);
 		if (!player) return;
 
 		player.UseSkill(skillPacket.Info.SkillId);
@@ -34,7 +34,7 @@ class PacketHandler {
 		S_EnterGame enterGamePacket = packet as S_EnterGame;
 		if (enterGamePacket == null) return;
 		
-		Director.Object.AddPlayer(enterGamePacket.Player, true);
+		Director.Object.Add(enterGamePacket.Player, true);
 		Debug.Log($"[S_EnterGameHandler] Entered : {enterGamePacket?.Player.Name}");
 	}
 	
@@ -42,22 +42,22 @@ class PacketHandler {
 		S_Spawn spawnPacket = packet as S_Spawn;
 		if (spawnPacket == null) return;
 
-		foreach (var playerInfo in spawnPacket.Players) {
-			Director.Object.AddPlayer(playerInfo);
+		foreach (var info in spawnPacket.Objects) {
+			Director.Object.Add(info);
 		}
 		
-		Debug.Log($"[S_SpawnHandler] Others : {spawnPacket?.Players}");
+		Debug.Log($"[S_SpawnHandler] Others : {spawnPacket?.Objects}");
 	}
 	
 	public static void S_DespawnHandler(PacketSession session, IMessage packet) {
 		S_Despawn despawnPacket = packet as S_Despawn;
 		if (despawnPacket == null) return;
 
-		foreach (var playerId in despawnPacket.PlayerIds) {
-			Director.Object.Remove(playerId);
+		foreach (var id in despawnPacket.ObjectIds) {
+			Director.Object.Remove(id);
 		}
 		
-		Debug.Log($"[S_DespawnHandler] Remain : {despawnPacket?.PlayerIds}");
+		Debug.Log($"[S_DespawnHandler] Remain : {despawnPacket?.ObjectIds}");
 	}
 	
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet) {

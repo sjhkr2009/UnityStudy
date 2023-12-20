@@ -7,20 +7,48 @@ using UnityEngine;
 public class ObjectManager {
     public MyPlayerController MyPlayer { get; set; }
     private Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
+    
+    public void Add(ObjectInfo info, bool isMyPlayer = false) {
+        var objectType = info.ObjectId.GetObjectType();
 
-    public void AddPlayer(PlayerInfo info, bool isMyPlayer = false) {
+        switch (objectType) {
+            case GameObjectType.Player:
+                AddPlayer(info, isMyPlayer);
+                break;
+            case GameObjectType.Monster:
+                break;
+            case GameObjectType.Projectile:
+                AddProjectile(info);
+                break;
+        }
+    }
+
+    private void AddPlayer(ObjectInfo info, bool isMyPlayer) {
         var gameObject = Director.Resource.Instantiate(isMyPlayer ? "MyPlayer" : "Player");
         gameObject.name = info.Name;
-        _objects.Add(info.PlayerId, gameObject);
+        _objects.Add(info.ObjectId, gameObject);
 
         var controller = gameObject.GetComponent<BaseController>();
-        controller.Id = info.PlayerId;
+        controller.Id = info.ObjectId;
         controller.PositionInfo = info.PosInfo;
         controller.SyncPositionInfo();
         
         if (isMyPlayer) {
             MyPlayer = gameObject.GetComponent<MyPlayerController>();
         }
+    }
+
+    private void AddProjectile(ObjectInfo info) {
+        // TODO: 다양한 투사체에 대응하도록 구분할 것. 일단 전부 화살로 간주함.
+        
+        var gameObject = Director.Resource.Instantiate("Arrow");
+        gameObject.name = "Arrow";
+        _objects.Add(info.ObjectId, gameObject);
+
+        var controller = gameObject.GetComponent<BaseController>();
+        controller.SetDirection(info.PosInfo.MoveDir);
+        controller.CellPos = info.PosInfo.ToVector3Int();
+        controller.SyncPositionInfo();
     }
 
     public void RemoveMyPlayer() {

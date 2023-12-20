@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -31,5 +32,14 @@ public static class CustomExtension {
 			action?.Invoke(element);
 		}
 		return container;
+	}
+
+	public static GameObjectType GetObjectType(this int objectId) {
+		int type = (objectId >> 24) & 0x7F;
+		return (GameObjectType)type;
+	}
+
+	public static Vector3Int ToVector3Int(this PositionInfo posInfo) {
+		return new Vector3Int(posInfo.PosX, posInfo.PosY, 0);
 	}
 }

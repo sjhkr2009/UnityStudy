@@ -29,44 +29,4 @@ public class ArrowController : BaseController {
     }
 
     protected override void UpdateAnimation() { }
-
-    protected override void MoveToNextPos() {
-        Vector3Int deltaPos = Vector3Int.zero;
-        switch (CurrentDir) {
-            case MoveDir.Up:
-                deltaPos = Vector3Int.up;
-                break;
-            case MoveDir.Down:
-                deltaPos = Vector3Int.down;
-                break;
-            case MoveDir.Right:
-                deltaPos = Vector3Int.right;
-                break;
-            case MoveDir.Left:
-                deltaPos = Vector3Int.left;
-                break;
-            default:
-                throw new ArgumentException($"Invalid Position: {CurrentDir}");
-        }
-        
-        State = CreatureState.Moving;
-        
-        // override: 충돌 시 이벤트 전달 및 파괴처리
-        bool canGoArea = Director.Map.CanGo(CellPos + deltaPos);
-        var frontObj = Director.Object.Find(CellPos + deltaPos);
-        bool hasNoObject = ReferenceEquals(frontObj, null);
-
-        if (!hasNoObject) {
-            Debug.Log($"Arrow Attacked : {frontObj.name}");
-            var monster = frontObj.GetComponent<MonsterController>();
-            if (monster) monster.OnDamaged();
-        }
-
-        if (!canGoArea || !hasNoObject) {
-            Director.Resource.Destroy(gameObject);
-            return;
-        }
-
-        CellPos += deltaPos;
-    }
 }
