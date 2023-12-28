@@ -37,6 +37,12 @@ enum GameObjectType {
   PROJECTILE = 3;
 }
 
+enum SkillType {
+  SKILL_DEFAULT = 0;
+  SKILL_AUTO = 1;
+  SKILL_PROJECTILE = 2;
+}
+
 message S_EnterGame {
   ObjectInfo player = 1;
 }

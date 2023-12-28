@@ -1,20 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Data;
 using UnityEngine;
 
 // 해당 클래스는 저장하고 있는 자료들을 Value로, 자료를 식별할 수 있는 요소를 Key로 설정하여 DIctionary를 반환해야 합니다.
-public interface ILoader<Key, Value>
-{
+public interface ILoader<Key, Value> {
 	Dictionary<Key, Value> LoadData();
 }
 
-public class DataManager
-{
-	//example: public Dictionary<int, Data.Stat> StatDict { get; private set; }
+public static class DataManager {
+	public static Dictionary<int, Stat> StatDict { get; private set; }
+	public static Dictionary<int, Skill> SkillDict { get; private set; }
 
-    public void Init()
-	{
-		//example: StatDict = LoadJson<Data.StatData, int, Data.Stat>("StatData").LoadData();
+	public static void Init() {
+		StatDict = LoadJson<StatData, int, Stat>("StatData").LoadData();
+		SkillDict = LoadJson<SkillData, int, Skill>("SkillData").LoadData();
 	}
 
 	/// <summary>
@@ -26,11 +26,10 @@ public class DataManager
 	/// <typeparam name="Value">Json에서 자료를 읽어올 클래스.</typeparam>
 	/// <param name="path"></param>
 	/// <returns></returns>
-	Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
-	{
+	static Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value> {
 		if (!path.Contains(Define.ResourcesPath.Data))
 			path = $"{Define.ResourcesPath.Data}{path}";
-		
+
 		TextAsset textAsset = Director.Resource.Load<TextAsset>(path);
 		return JsonUtility.FromJson<Loader>(textAsset.text);
 	}

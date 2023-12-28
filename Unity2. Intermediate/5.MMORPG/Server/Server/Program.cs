@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.Data;
 using Server.Game;
 using ServerCore;
 
@@ -15,6 +16,9 @@ namespace Server {
 		}
 
 		static void Main(string[] args) {
+			ConfigManager.LoadConfig();
+			DataManager.Init();
+			
 			RoomManager.Create(1);
 			
 			// DNS (Domain Name System)

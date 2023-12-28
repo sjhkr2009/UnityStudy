@@ -16,7 +16,7 @@ public class PlayerController : BaseController {
         _rangedSkill = false;
         State = CreatureState.Skill;
         
-        // TODO: 피격 판정은 서버에 위임 
+        // 피격 판정은 서버에 위임 
         
         // 쿨타임은 클라/서버 양쪽에서 체크해야 한다. 서버는 신뢰성을 위해, 클라는 리소스 낭비 및 과도한 패킷 전송 방지를 위해서다.
         yield return basicAttackCooldown;
@@ -28,9 +28,8 @@ public class PlayerController : BaseController {
     protected IEnumerator ArrowAttack() {
         _rangedSkill = true;
         State = CreatureState.Skill;
-        var arrow = Director.Resource.Instantiate("Arrow").GetComponent<ArrowController>();
-        arrow.SetDirection(CurrentDir);
-        arrow.SetPositionInstant(CellPos);
+        
+        // 화살 생성은 서버에서 수행
 
         yield return arrowAttackCooldown;
         State = CreatureState.Idle;
@@ -102,6 +101,9 @@ public class PlayerController : BaseController {
     public void UseSkill(int skillId) {
         if (skillId == 1) {
             skillRoutine = StartCoroutine(nameof(BasicAttack));
+        }
+        else if (skillId == 2) {
+            skillRoutine = StartCoroutine(nameof(ArrowAttack));
         }
     }
     
