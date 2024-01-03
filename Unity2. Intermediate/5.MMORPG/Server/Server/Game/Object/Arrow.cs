@@ -9,9 +9,11 @@ public class Arrow : Projectile {
     private long nextMoveTick = 0;
     public override void Update() {
         if (Owner == null || Room == null) return;
+        if (Data == null) return;
         if (nextMoveTick >= Environment.TickCount64) return;
 
-        nextMoveTick = Environment.TickCount64 + 50;
+        var tick = (long)(1000 / Data.Projectile.speed);
+        nextMoveTick = Environment.TickCount64 + tick;
 
         var destPos = GetFrontCellPos();
         if (Room.Map.CanGo(destPos)) {
