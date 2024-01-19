@@ -11,10 +11,17 @@ public class GameObject {
     public GameObjectType ObjectType { get; protected set; }
     public GameRoom Room { get; set; }
     public ObjectInfo Info { get; set; } = new ObjectInfo() { PosInfo = new PositionInfo() };
-    
+
     public int Id {
         get => Info.ObjectId;
         set => Info.ObjectId = value;
+    }
+
+    public StatInfo Stat => Info.StatInfo;
+
+    public float Speed {
+        get => Stat.Speed;
+        set => Stat.Speed = value;
     }
     
     public PositionInfo PosInfo => Info.PosInfo;

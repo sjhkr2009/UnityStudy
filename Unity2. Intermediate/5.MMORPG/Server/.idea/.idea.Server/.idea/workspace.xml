@@ -16,6 +16,9 @@
     <setting file="file://$PROJECT_DIR$/../../../../MyRepos/code_sample/PriorityQueue.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Imported/protoc-3.12.3-win64/bin/Protocol.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PacketGenerator/bin/ClientPacketManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Server/Data/ConfigManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Server/Data/Data.Contents.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Server/Data/DataManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Server/JobTimer.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -102,6 +105,7 @@
       <workItem from="1703586055530" duration="1699000" />
       <workItem from="1703759740329" duration="3718000" />
       <workItem from="1704276475737" duration="1340000" />
+      <workItem from="1704362009485" duration="4333000" />
     </task>
     <servers />
   </component>
