@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CustomMaterial
-  m_Shader: {fileID: 4800000, guid: d41e5c05ea4b7e141b0ddd02ca1b7efd, type: 3}
+  m_Name: Outline
+  m_Shader: {fileID: 4800000, guid: 9fa185bfc2ba87e4086c06a9ef727389, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -87,7 +87,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Thickness: 0.0495
+    - _Thickness: 0.007
     - _Transparency: 0.579
     - _UVSec: 0
     - _Value: 0.639

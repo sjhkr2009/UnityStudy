@@ -1,4 +1,4 @@
-Shader "Unlit/CustomMaterial"
+Shader "Unlit/Desolve"
 {
     Properties
     {
@@ -7,12 +7,12 @@ Shader "Unlit/CustomMaterial"
         _Opacity ("Opacity", Range(0,1)) = 0.5 // Range()로 특정 범위의 숫자를 받을 수 있음
         _NoiseScale ("Noise Scale", Range(0.1, 5)) = 1
         _OutlineThickness ("Outline Thickness", Range(0, 0.1)) = 0.1
-        [HDR] _OutlineColor("Outline Color", Color) = (1,1,1,1)
+        [HDR] _OutlineColor("Outline Color", Color) = (1,1,1,1) // Post Processing 사용 시 HDR Color여야 함. 아니라면 떼도 무관.
     }
     SubShader
     {
         Tags { 
-            "RenderType"="Transparent" // 투명
+            "RenderType"="Transparent" // 투명 (불투명은 Opaque)
             "IgnoreProjector"="True"
             "Queue"="Transparent" // 불투명 효과는(아마 뒤의 요소를 안 그려도 되므로...?) 투명 효과와 렌더링 순서가 다르다. 그리는 순서를 투명 타입으로 한다.
             "PreviewType"="Plane"
@@ -69,8 +69,10 @@ Shader "Unlit/CustomMaterial"
                 // col.a *= noise.r;
 
                 // 이걸 이용해서, 노이즈 밝기가 일정 값 이상일 때 원본 이미지를 안 보이게 그린다.
-                // 위에서 선언한 Opacity 값을 서서히 줄여서 랜덤하게 사라지는(Desolve) 효과를 구현할 수 있다.
-                col.a *= step(noise.r, _Opacity);
+                // step 함수를 사용한다. step(a, b)는 a < b면 1, 그 외에는 0을 반환한다.
+                col.a *= step(noise.r, _Opacity); // (noise.r < _Opacity ? 1 : 0) 와 동일한 의미
+
+                // 이제 위에서 선언한 Opacity 값을 서서히 줄여서 랜덤하게 사라지는(Desolve) 효과를 구현할 수 있다.
 
                 // 사라질 때 외곽선을 추가한다. 외곽선은 (큰 이미지 - 작은 이미지) 로 생성할 수 있다. _Opacity 값에서 _Opacity보다 약간 작은 값을 빼면 아웃라인 영역이다.
                 float outline = step(noise.r, _Opacity) - step(noise.r, _Opacity - _OutlineThickness);
