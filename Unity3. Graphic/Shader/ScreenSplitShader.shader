@@ -2,9 +2,10 @@ Shader "Custom/ScreenSplitShader" {
     Properties {
         _MainTex ("Base (RGB)", 2D) = "white" {}
         
-        _OffsetX ("Offset X", Float) = 5.0
-        _OffsetY ("Offset Y", Float) = 0
+        _OffsetX ("Offset X", float) = 5.0
+        _OffsetY ("Offset Y", float) = 0
         _SplitPoint ("Split Point", Range(0, 1)) = 0.5
+        _Angle ("Angle", Range(-45, 45)) = 0
         
         _BorderWidth ("Border Width", Range(0, 0.5)) = 0.01
         _BorderColor ("Border Color", Color) = (0,0,0,1)
@@ -12,8 +13,7 @@ Shader "Custom/ScreenSplitShader" {
     SubShader {
         Tags { "RenderType"="Opaque" }
         LOD 100
-
-        // 현재 화면 캡처
+        
         GrabPass {
             "_GrabTexture"
         }
@@ -38,6 +38,7 @@ Shader "Custom/ScreenSplitShader" {
             sampler2D _GrabTexture;
             float _OffsetX;
             float _OffsetY;
+            float _Angle;
             float _SplitPoint;
             float _BorderWidth;
             half4 _BorderColor;
@@ -50,15 +51,19 @@ Shader "Custom/ScreenSplitShader" {
             }
 
             fixed4 frag (v2f i) : SV_Target {
-                // 화면 해상도에 따라 오프셋 조정
+                float radians = _Angle * (UNITY_PI / 180.0);
+                
+                float slope = tan(radians);
+                float leftY = _SplitPoint - 0.5 * slope;
+                
+                float distFromBorder = abs(i.uv.y - (slope * i.uv.x + leftY));
+                if (distFromBorder < _BorderWidth) return _BorderColor;
+                
+                bool isAboveLine = i.uv.y > (slope * i.uv.x + leftY);
                 float offsetX = _OffsetX / _ScreenParams.y;
                 float offsetY = _OffsetY / _ScreenParams.y;
-
-                float borderMin = _SplitPoint - _BorderWidth;
-                float borderMax = _SplitPoint + _BorderWidth;
-                if (i.uv.y > borderMin && i.uv.y < borderMax) return _BorderColor;
                 
-                if (i.uv.y > _SplitPoint) {
+                if (isAboveLine) {
                     i.uv.x += offsetX;
                     i.uv.y += offsetY;
                 } else {
