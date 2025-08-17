@@ -11,10 +11,11 @@ public class TextUIPingPong : MonoBehaviour {
     public float stopTimeOnEdge = 1.5f;
     public bool unscaledTime = true;
     public bool showOnEditor;
+    
+    public float CurrentOffset { get; private set; }
 
     TextMeshProUGUI textComponent;
     RectTransform rectTr;
-    float currentOffset;
 
     bool hasData;
     bool isActive;
@@ -29,7 +30,6 @@ public class TextUIPingPong : MonoBehaviour {
 
     int moveDir = 1;
     float pauseTime = 0f;
-    float appliedOffset = 0f;
 
     bool lockedAutoSize;
     float cachedFontSize;
@@ -45,8 +45,10 @@ public class TextUIPingPong : MonoBehaviour {
         ApplyOffset(offsetMin);
 
 #if UNITY_EDITOR
-        if (!Application.isPlaying)
+        if (!Application.isPlaying) {
+            UnityEditor.EditorApplication.update -= EditorUpdate;
             UnityEditor.EditorApplication.update += EditorUpdate;
+        }
 #endif
     }
 
@@ -96,10 +98,13 @@ public class TextUIPingPong : MonoBehaviour {
 
         if (!showOnEditor)
         {
-            ResetLocalData();
+            SetDisable();
             return;
         }
 
+        if (!hasData)
+            RefreshData();
+        
         OnUpdate(Time.unscaledDeltaTime);
         UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
         UnityEditor.SceneView.RepaintAll();
@@ -114,25 +119,25 @@ public class TextUIPingPong : MonoBehaviour {
             return;
 
         if (pauseTime > 0f) {
-            ApplyOffset(currentOffset);
+            ApplyOffset(CurrentOffset);
             pauseTime -= deltaTime;
             return;
         }
 
-        currentOffset += moveDir * moveSpeed * deltaTime;
+        var targetOffset = CurrentOffset + (moveDir * moveSpeed * deltaTime);
 
-        if (currentOffset >= offsetMax) {
-            currentOffset = offsetMax;
+        if (targetOffset >= offsetMax) {
+            targetOffset = offsetMax;
             moveDir = -1;
             pauseTime = stopTimeOnEdge;
         }
-        else if (currentOffset <= offsetMin) {
-            currentOffset = offsetMin;
+        else if (targetOffset <= offsetMin) {
+            targetOffset = offsetMin;
             moveDir = 1;
             pauseTime = stopTimeOnEdge;
         }
 
-        ApplyOffset(currentOffset);
+        ApplyOffset(targetOffset);
     }
 
     void RefreshData() {
@@ -155,7 +160,7 @@ public class TextUIPingPong : MonoBehaviour {
         textComponent.ForceMeshUpdate();
 
         offsetMin = 0f;
-        appliedOffset = offsetMin;
+        CurrentOffset = offsetMin;
 
         hasData = true;
 
@@ -185,7 +190,7 @@ public class TextUIPingPong : MonoBehaviour {
         }
 
         offsetMax = Mathf.Max(offsetMin, textWidth - rectWidth);
-        currentOffset = Mathf.Clamp(currentOffset, offsetMin, offsetMax);
+        CurrentOffset = Mathf.Clamp(CurrentOffset, offsetMin, offsetMax);
 
         if (offsetMax <= Tolerance) {
             SetDisable();
@@ -197,18 +202,22 @@ public class TextUIPingPong : MonoBehaviour {
 
     void SetDisable() {
         isActive = false;
+        
         ApplyOffset(offsetMin);
-        textComponent.alignment = cachedAlignment;
+        ResetLocalData();
     }
 
     void ApplyOffset(float offset) {
         if (!hasData)
             return;
 
+        if (Mathf.Approximately(offset, CurrentOffset))
+            return;
+
         var info = textComponent.textInfo;
         int meshCount = info.meshInfo.Length;
 
-        var deltaOffset = appliedOffset - offset;
+        var deltaOffset = CurrentOffset - offset;
         var shift = Vector3.right * deltaOffset;
 
         for (int i = 0; i < meshCount; i++) {
@@ -219,13 +228,11 @@ public class TextUIPingPong : MonoBehaviour {
             int len = dst.Length;
             for (int v = 0; v < len; v++)
                 dst[v] += shift;
-
-            var mesh = info.meshInfo[i].mesh;
-            mesh.vertices = dst;
-            textComponent.UpdateGeometry(mesh, i);
         }
+        
+        textComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
 
-        appliedOffset = offset;
+        CurrentOffset = offset;
     }
 
     float CalcWidthAtMinSize(float fontSize) {
