@@ -4,9 +4,9 @@ using UnityEngine;
 
 [RequireComponent(typeof(TextMeshProUGUI), typeof(RectTransform))]
 [ExecuteAlways]
-public class TextUIPingPong : MonoBehaviour {
+public class TMPPingPong : MonoBehaviour {
     const float Tolerance = 0.5f;
-    
+
     public float moveSpeed = 60f;
     public float stopTimeOnEdge = 1.5f;
     public bool unscaledTime = true;
@@ -15,17 +15,21 @@ public class TextUIPingPong : MonoBehaviour {
     RectTransform rectTr;
     float currentOffset;
 
+    bool hasData;
     bool isActive;
-    
+
     float offsetMin;
     float offsetMax;
     string cachedText;
     float cachedRectWidth;
+    TextWrappingModes cachedWrapMode;
+    TextOverflowModes cachedOverflowMode;
+    TextAlignmentOptions cachedAlignment;
 
     int moveDir = 1;
     float pauseTime = 0f;
     float appliedOffset = 0f;
-    
+
     bool lockedAutoSize;
     float cachedFontSize;
     bool isAutoSize;
@@ -38,7 +42,7 @@ public class TextUIPingPong : MonoBehaviour {
     void OnEnable() {
         RefreshData();
         ApplyOffset(offsetMin);
-        
+
 #if UNITY_EDITOR
         if (!Application.isPlaying)
             UnityEditor.EditorApplication.update += EditorUpdate;
@@ -48,7 +52,7 @@ public class TextUIPingPong : MonoBehaviour {
     void OnDisable() {
         ApplyOffset(offsetMin);
         RestoreAutoSize();
-        
+
 #if UNITY_EDITOR
         if (!Application.isPlaying)
             UnityEditor.EditorApplication.update -= EditorUpdate;
@@ -79,7 +83,7 @@ public class TextUIPingPong : MonoBehaviour {
     void LateUpdate() {
         if (!Application.isPlaying)
             return;
-        
+
         var deltaTime = unscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
         OnUpdate(deltaTime);
     }
@@ -88,7 +92,7 @@ public class TextUIPingPong : MonoBehaviour {
 #if UNITY_EDITOR
         if (Application.isPlaying)
             return;
-        
+
         OnUpdate(Time.unscaledDeltaTime);
         UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
         UnityEditor.SceneView.RepaintAll();
@@ -126,7 +130,14 @@ public class TextUIPingPong : MonoBehaviour {
 
     void RefreshData() {
         ResetLocalData();
-        
+
+        if (!textComponent)
+            return;
+
+        cachedWrapMode = textComponent.textWrappingMode;
+        cachedOverflowMode = textComponent.overflowMode;
+        cachedAlignment = textComponent.alignment;
+
         textComponent.textWrappingMode = TextWrappingModes.NoWrap;
         textComponent.overflowMode = TextOverflowModes.Masking;
         textComponent.alignment = TextAlignmentOptions.Left;
@@ -136,24 +147,25 @@ public class TextUIPingPong : MonoBehaviour {
         offsetMin = 0f;
         appliedOffset = offsetMin;
 
+        hasData = true;
+
         var rectWidth = rectTr.rect.width;
         cachedRectWidth = rectWidth;
         cachedText = textComponent.text;
-        
+
         float textWidth;
         if (textComponent.enableAutoSizing) {
             var minSize = textComponent.fontSizeMin;
-            
+
             var widthAtMinSize = CalcWidthAtMinSize(minSize);
             if (widthAtMinSize <= rectWidth + Tolerance) {
                 // 크기만 줄여도 영역 내에 글자가 다 보일 때
-                isActive = false;
-                ApplyOffset(offsetMin);
+                SetDisable();
                 return;
             }
             else {
                 LockAutoSize();
-                
+
                 textWidth = widthAtMinSize;
                 textComponent.ForceMeshUpdate();
             }
@@ -166,15 +178,23 @@ public class TextUIPingPong : MonoBehaviour {
         currentOffset = Mathf.Clamp(currentOffset, offsetMin, offsetMax);
 
         if (offsetMax <= Tolerance) {
-            isActive = false;
-            ApplyOffset(offsetMin);
+            SetDisable();
             return;
         }
-        
+
         isActive = true;
     }
-    
+
+    void SetDisable() {
+        isActive = false;
+        ApplyOffset(offsetMin);
+        textComponent.alignment = cachedAlignment;
+    }
+
     void ApplyOffset(float offset) {
+        if (!hasData)
+            return;
+
         var info = textComponent.textInfo;
         int meshCount = info.meshInfo.Length;
 
@@ -183,6 +203,8 @@ public class TextUIPingPong : MonoBehaviour {
 
         for (int i = 0; i < meshCount; i++) {
             var dst = info.meshInfo[i].vertices;
+            if (dst == null)
+                continue;
 
             int len = dst.Length;
             for (int v = 0; v < len; v++)
@@ -192,10 +214,10 @@ public class TextUIPingPong : MonoBehaviour {
             mesh.vertices = dst;
             textComponent.UpdateGeometry(mesh, i);
         }
-        
+
         appliedOffset = offset;
     }
-    
+
     float CalcWidthAtMinSize(float fontSize) {
         // 화면에 영향 안 주고 너비만 계산해야 하므로, 이전 크기로 복귀시키기 전에 ForceMeshUpdate를 호출하면 안 됨.
         var prevAuto = textComponent.enableAutoSizing;
@@ -203,9 +225,9 @@ public class TextUIPingPong : MonoBehaviour {
 
         textComponent.enableAutoSizing = false;
         textComponent.fontSize = fontSize;
-        
+
         var width = textComponent.GetPreferredValues(textComponent.text, Mathf.Infinity, Mathf.Infinity).x;
-        
+
         textComponent.fontSize = prevSize;
         textComponent.enableAutoSizing = prevAuto;
         return width;
@@ -236,9 +258,15 @@ public class TextUIPingPong : MonoBehaviour {
         textComponent.fontSize = cachedFontSize;
         textComponent.ForceMeshUpdate();
     }
-    
-    void ResetLocalData()
-    {
+
+    void ResetLocalData() {
+        if (!hasData)
+            return;
+
+        textComponent.textWrappingMode = cachedWrapMode;
+        textComponent.overflowMode = cachedOverflowMode;
+        textComponent.alignment = cachedAlignment;
+
         RestoreAutoSize();
         pauseTime = 0f;
         moveDir = 1;
