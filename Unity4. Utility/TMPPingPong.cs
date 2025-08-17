@@ -4,11 +4,11 @@ using UnityEngine;
 
 [RequireComponent(typeof(TextMeshProUGUI), typeof(RectTransform))]
 [ExecuteAlways]
-public class TMPPingPong : MonoBehaviour {
+public class TextUIPingPong : MonoBehaviour {
     const float Tolerance = 0.5f;
     
-    public float moveSpeed = 80f;
-    public float stopTimeOnEdge = 0.75f;
+    public float moveSpeed = 60f;
+    public float stopTimeOnEdge = 1.5f;
     public bool unscaledTime = true;
 
     TextMeshProUGUI textComponent;
@@ -16,8 +16,7 @@ public class TMPPingPong : MonoBehaviour {
     float currentOffset;
 
     bool isActive;
-
-    Vector3[][] originVertices;
+    
     float offsetMin;
     float offsetMax;
     string cachedText;
@@ -26,9 +25,7 @@ public class TMPPingPong : MonoBehaviour {
     int moveDir = 1;
     float pauseTime = 0f;
     float appliedOffset = 0f;
-
-    // ½ºÅ©·Ñ Áß¿£ AutoSize¸¦ ²ô°í ÃÖ¼Ò ÆùÆ®·Î "°íÁ¤"Çß´Ù°¡,
-    // ½ºÅ©·ÑÀÌ ÇÊ¿ä ¾ø¾îÁö¸é ¿ø»óº¹±¸ÇÏ±â À§ÇÑ ÇÃ·¡±×
+    
     bool lockedAutoSize;
     float cachedFontSize;
     bool isAutoSize;
@@ -43,7 +40,8 @@ public class TMPPingPong : MonoBehaviour {
         ApplyOffset(offsetMin);
         
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.update += EditorUpdate;
+        if (!Application.isPlaying)
+            UnityEditor.EditorApplication.update += EditorUpdate;
 #endif
     }
 
@@ -52,7 +50,8 @@ public class TMPPingPong : MonoBehaviour {
         RestoreAutoSize();
         
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.update -= EditorUpdate;
+        if (!Application.isPlaying)
+            UnityEditor.EditorApplication.update -= EditorUpdate;
 #endif
     }
 
@@ -126,7 +125,7 @@ public class TMPPingPong : MonoBehaviour {
     }
 
     void RefreshData() {
-        RestoreAutoSize();
+        ResetLocalData();
         
         textComponent.textWrappingMode = TextWrappingModes.NoWrap;
         textComponent.overflowMode = TextOverflowModes.Masking;
@@ -147,7 +146,7 @@ public class TMPPingPong : MonoBehaviour {
             
             var widthAtMinSize = CalcWidthAtMinSize(minSize);
             if (widthAtMinSize <= rectWidth + Tolerance) {
-                // Å©±â¸¸ ÁÙ¿©µµ ¿µ¿ª ³»¿¡ ±ÛÀÚ°¡ ´Ù º¸ÀÏ ¶§
+                // í¬ê¸°ë§Œ ì¤„ì—¬ë„ ì˜ì—­ ë‚´ì— ê¸€ìžê°€ ë‹¤ ë³´ì¼ ë•Œ
                 isActive = false;
                 ApplyOffset(offsetMin);
                 return;
@@ -171,8 +170,7 @@ public class TMPPingPong : MonoBehaviour {
             ApplyOffset(offsetMin);
             return;
         }
-
-        CacheOriginVertices();
+        
         isActive = true;
     }
     
@@ -185,11 +183,10 @@ public class TMPPingPong : MonoBehaviour {
 
         for (int i = 0; i < meshCount; i++) {
             var dst = info.meshInfo[i].vertices;
-            //var src = originVertices[i];
 
             int len = dst.Length;
             for (int v = 0; v < len; v++)
-                dst[v] += shift;// src[v] + shift;
+                dst[v] += shift;
 
             var mesh = info.meshInfo[i].mesh;
             mesh.vertices = dst;
@@ -198,24 +195,9 @@ public class TMPPingPong : MonoBehaviour {
         
         appliedOffset = offset;
     }
-
-    void CacheOriginVertices() {
-        var info = textComponent.textInfo;
-        int subCount = info.meshInfo.Length;
-        if (originVertices == null || originVertices.Length != subCount)
-            originVertices = new Vector3[subCount][];
-
-        for (int i = 0; i < subCount; i++) {
-            var src = info.meshInfo[i].vertices;
-            if (originVertices[i] == null || originVertices[i].Length != src.Length)
-                originVertices[i] = new Vector3[src.Length];
-            
-            Array.Copy(src, originVertices[i], src.Length);
-        }
-    }
     
     float CalcWidthAtMinSize(float fontSize) {
-        // È­¸é¿¡ ¿µÇâ ¾È ÁÖ°í ³Êºñ¸¸ °è»êÇØ¾ß ÇÏ¹Ç·Î, ÀÌÀü Å©±â·Î º¹±Í½ÃÅ°±â Àü¿¡ ForceMeshUpdate¸¦ È£ÃâÇÏ¸é ¾È µÊ.
+        // í™”ë©´ì— ì˜í–¥ ì•ˆ ì£¼ê³  ë„ˆë¹„ë§Œ ê³„ì‚°í•´ì•¼ í•˜ë¯€ë¡œ, ì´ì „ í¬ê¸°ë¡œ ë³µê·€ì‹œí‚¤ê¸° ì „ì— ForceMeshUpdateë¥¼ í˜¸ì¶œí•˜ë©´ ì•ˆ ë¨.
         var prevAuto = textComponent.enableAutoSizing;
         var prevSize = textComponent.fontSize;
 
@@ -253,5 +235,12 @@ public class TMPPingPong : MonoBehaviour {
         textComponent.enableAutoSizing = isAutoSize;
         textComponent.fontSize = cachedFontSize;
         textComponent.ForceMeshUpdate();
+    }
+    
+    void ResetLocalData()
+    {
+        RestoreAutoSize();
+        pauseTime = 0f;
+        moveDir = 1;
     }
 }
