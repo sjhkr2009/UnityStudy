@@ -4,12 +4,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(TextMeshProUGUI), typeof(RectTransform))]
 [ExecuteAlways]
-public class TMPPingPong : MonoBehaviour {
+public class TextUIPingPong : MonoBehaviour {
     const float Tolerance = 0.5f;
 
     public float moveSpeed = 60f;
     public float stopTimeOnEdge = 1.5f;
     public bool unscaledTime = true;
+    public bool showOnEditor;
 
     TextMeshProUGUI textComponent;
     RectTransform rectTr;
@@ -93,6 +94,12 @@ public class TMPPingPong : MonoBehaviour {
         if (Application.isPlaying)
             return;
 
+        if (!showOnEditor)
+        {
+            ResetLocalData();
+            return;
+        }
+
         OnUpdate(Time.unscaledDeltaTime);
         UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
         UnityEditor.SceneView.RepaintAll();
@@ -132,6 +139,9 @@ public class TMPPingPong : MonoBehaviour {
         ResetLocalData();
 
         if (!textComponent)
+            return;
+
+        if (!Application.isPlaying && !showOnEditor)
             return;
 
         cachedWrapMode = textComponent.textWrappingMode;
@@ -249,6 +259,9 @@ public class TMPPingPong : MonoBehaviour {
     }
 
     void RestoreAutoSize() {
+        if (!hasData)
+            return;
+
         if (!lockedAutoSize)
             return;
 
@@ -270,5 +283,7 @@ public class TMPPingPong : MonoBehaviour {
         RestoreAutoSize();
         pauseTime = 0f;
         moveDir = 1;
+
+        hasData = false;
     }
 }
