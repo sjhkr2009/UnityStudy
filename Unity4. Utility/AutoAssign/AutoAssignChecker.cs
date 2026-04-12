@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -22,6 +23,7 @@ public class AutoAssignChecker : EditorWindow
         public string FieldType;
         public string FieldName;
         public string AutoAssignPath;
+        public bool Optional;
         public AutoAssignUtility.FieldResult Result;
     }
 
@@ -47,7 +49,7 @@ public class AutoAssignChecker : EditorWindow
         EditorGUI.BeginDisabledGroup(_isRunning);
         if (GUILayout.Button("실행", GUILayout.Height(28)))
         {
-            RunAsync();
+            RunAsync().Forget();
         }
         EditorGUI.EndDisabledGroup();
 
@@ -109,20 +111,25 @@ public class AutoAssignChecker : EditorWindow
 
     private static void DrawPrefabResult(PrefabCheckResult prefabResult)
     {
-        bool hasFailure = false;
+        bool hasRequiredFailure = false;
+        bool hasOptionalFailure = false;
         foreach (var f in prefabResult.Fields)
         {
             if (f.Result != AutoAssignUtility.FieldResult.Assigned)
             {
-                hasFailure = true;
-                break;
+                if (f.Optional)
+                    hasOptionalFailure = true;
+                else
+                    hasRequiredFailure = true;
             }
         }
 
         var prevBg = GUI.backgroundColor;
-        GUI.backgroundColor = hasFailure
+        GUI.backgroundColor = hasRequiredFailure
             ? new Color(1f, 0.7f, 0.7f)
-            : new Color(0.7f, 1f, 0.7f);
+            : hasOptionalFailure
+                ? new Color(1f, 1f, 0.7f)
+                : new Color(0.7f, 1f, 0.7f);
 
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
         GUI.backgroundColor = prevBg;
@@ -131,26 +138,29 @@ public class AutoAssignChecker : EditorWindow
 
         foreach (var field in prefabResult.Fields)
         {
-            DrawFieldResult(field);
+            DrawFieldResult(prefabResult.PrefabAssetPath, field);
         }
 
         EditorGUILayout.EndVertical();
         EditorGUILayout.Space(2);
     }
 
-    private static void DrawFieldResult(AssignResult result)
+    private static void DrawFieldResult(string prefabAssetPath, AssignResult result)
     {
+        bool isFailure = result.Result != AutoAssignUtility.FieldResult.Assigned;
+        bool isOptionalFailure = isFailure && result.Optional;
+
         var icon = result.Result switch
         {
             AutoAssignUtility.FieldResult.Assigned => "d_GreenCheckmark",
-            _ => "console.erroricon.sml",
+            _ => isOptionalFailure ? "console.warnicon.sml" : "console.erroricon.sml",
         };
 
         var label = result.Result switch
         {
             AutoAssignUtility.FieldResult.Assigned => "할당 성공",
-            AutoAssignUtility.FieldResult.PathNotFound => "경로 탐색 실패",
-            AutoAssignUtility.FieldResult.ComponentNotFound => "컴포넌트 없음",
+            AutoAssignUtility.FieldResult.PathNotFound => isOptionalFailure ? "경로 탐색 실패 (Optional)" : "경로 탐색 실패",
+            AutoAssignUtility.FieldResult.ComponentNotFound => isOptionalFailure ? "컴포넌트 없음 (Optional)" : "컴포넌트 없음",
             AutoAssignUtility.FieldResult.UnsupportedType => "미지원 타입",
             _ => "알 수 없음",
         };
@@ -165,7 +175,7 @@ public class AutoAssignChecker : EditorWindow
         }
     }
 
-    private async Task RunAsync()
+    private async UniTask RunAsync()
     {
         _isRunning = true;
         results.Clear();
@@ -219,7 +229,7 @@ public class AutoAssignChecker : EditorWindow
                     if (cancelled)
                         break;
 
-                    await Awaitable.NextFrameAsync();
+                    await UniTask.Yield();
                 }
             }
         }
@@ -264,9 +274,8 @@ public class AutoAssignChecker : EditorWindow
                 continue;
 
             var type = component.GetType();
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-            foreach (var field in fields)
+            foreach (var field in AutoAssignUtility.GetAllFields(type))
             {
                 var att = field.GetCustomAttribute<AutoAssignAttribute>();
                 if (att == null)
@@ -276,11 +285,7 @@ public class AutoAssignChecker : EditorWindow
                 if ((Object)value != null)
                     continue;
 
-                var targetPath = att.Path;
-                if (string.IsNullOrEmpty(targetPath))
-                    continue;
-
-                var fieldResult = AutoAssignUtility.TryAssignField(component, field, root, targetPath, out _);
+                var fieldResult = AutoAssignUtility.TryAssignField(component, field, att.Path, out _);
 
                 fieldResults.Add(new AssignResult
                 {
@@ -288,7 +293,8 @@ public class AutoAssignChecker : EditorWindow
                     ComponentName = type.Name,
                     FieldType = field.FieldType.Name,
                     FieldName = field.Name,
-                    AutoAssignPath = targetPath,
+                    AutoAssignPath = att.Path,
+                    Optional = att.Optional,
                     Result = fieldResult,
                 });
 

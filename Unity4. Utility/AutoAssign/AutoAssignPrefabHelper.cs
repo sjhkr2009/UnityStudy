@@ -30,8 +30,6 @@ public static class AutoAssignPrefabHelper
         EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
     }
 
-    // ──────────────────────────── Hierarchy GUI ────────────────────────────
-
     private static void OnHierarchyGUI(int instanceID, Rect selectionRect)
     {
         // 경로 찾지 못함
@@ -83,9 +81,8 @@ public static class AutoAssignPrefabHelper
     private static void CheckAssignedTargets(MonoBehaviour component, Transform root)
     {
         var type = component.GetType();
-        var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-        foreach (var field in fields)
+        foreach (var field in AutoAssignUtility.GetAllFields(type))
         {
             var att = field.GetCustomAttribute<AutoAssignAttribute>();
             if (att == null)
@@ -102,7 +99,15 @@ public static class AutoAssignPrefabHelper
             var fullPath = AutoAssignUtility.GetInnerPath(root, targetTr);
             int id = targetTr.gameObject.GetInstanceID();
 
-            if (AutoAssignUtility.MatchesPathSuffix(fullPath, att.Path))
+            bool isSelfAssign = string.IsNullOrEmpty(att.Path);
+            if (isSelfAssign)
+            {
+                if (targetTr == component.transform)
+                    _assignedObjects.Add(id);
+                else
+                    _mismatchedObjects.Add(id);
+            }
+            else if (AutoAssignUtility.MatchesPathSuffix(fullPath, att.Path))
                 _assignedObjects.Add(id);
             else
                 _mismatchedObjects.Add(id);
@@ -155,20 +160,16 @@ public static class AutoAssignPrefabHelper
     private static void ProcessComponentOnSave(MonoBehaviour component, Transform root)
     {
         var type = component.GetType();
-        var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         bool dirty = false;
 
-        foreach (var field in fields)
+        foreach (var field in AutoAssignUtility.GetAllFields(type))
         {
             var att = field.GetCustomAttribute<AutoAssignAttribute>();
             if (att == null)
                 continue;
 
             var targetPath = att.Path;
-            if (string.IsNullOrEmpty(targetPath))
-                continue;
-
-            var result = AutoAssignUtility.TryAssignField(component, field, root, targetPath, out var foundTransform);
+            var result = AutoAssignUtility.TryAssignField(component, field, targetPath, out var foundTransform);
 
             switch (result)
             {
@@ -177,23 +178,31 @@ public static class AutoAssignPrefabHelper
                     break;
 
                 case AutoAssignUtility.FieldResult.PathNotFound:
-                    Debug.LogError(
-                        $"AutoAssign.Save :: '{type.Name}.{field.Name}' | '{targetPath}'를 '{root.name}' 하위에서 찾을 수 없습니다.",
-                        component);
-                    TrackUnresolved(component.gameObject, $"{field.Name} ({targetPath})");
+                    if (!att.Optional)
+                    {
+                        Debug.LogError($"AutoAssign.Save :: '{type.Name}.{field.Name}' | '{targetPath}'를 '{root.name}' 하위에서 찾을 수 없습니다.", component);
+                        TrackUnresolved(component.gameObject, $"{field.Name} ({targetPath})");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"AutoAssign.Save :: '{type.Name}.{field.Name}' | '{targetPath}'를 '{root.name}' 하위에서 찾을 수 없습니다. (Optional)", component);
+                    }
                     break;
 
                 case AutoAssignUtility.FieldResult.ComponentNotFound:
-                    Debug.LogError(
-                        $"AutoAssign.Save :: '{type.Name}.{field.Name}' | '{AutoAssignUtility.GetInnerPath(root, foundTransform)}'에 '{field.FieldType.Name}' 타입의 컴포넌트가 없습니다.",
-                        component);
-                    TrackUnresolved(component.gameObject, $"{field.Name} ({field.FieldType.Name})");
+                    if (!att.Optional)
+                    {
+                        Debug.LogError($"AutoAssign.Save :: '{type.Name}.{field.Name}' | '{AutoAssignUtility.GetInnerPath(root, foundTransform)}'에 '{field.FieldType.Name}' 타입의 컴포넌트가 없습니다.", component);
+                        TrackUnresolved(component.gameObject, $"{field.Name} ({field.FieldType.Name})");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"AutoAssign.Save :: '{type.Name}.{field.Name}' | '{AutoAssignUtility.GetInnerPath(root, foundTransform)}'에 '{field.FieldType.Name}' 타입의 컴포넌트가 없습니다. (Optional)", component);
+                    }
                     break;
 
                 case AutoAssignUtility.FieldResult.UnsupportedType:
-                    Debug.LogError(
-                        $"AutoAssign.Save :: '{type.Name}.{field.Name}' | '{field.FieldType.Name}' 타입은 지원되지 않습니다. GameObject, Transform 또는 Component 타입만 사용할 수 있습니다.",
-                        component);
+                    Debug.LogError($"AutoAssign.Save :: '{type.Name}.{field.Name}' | '{field.FieldType.Name}' 타입은 지원되지 않습니다. GameObject, Transform 또는 Component 타입만 사용할 수 있습니다.", component);
                     TrackUnresolved(component.gameObject, $"{field.Name} (Not Supported)");
                     break;
             }
@@ -206,9 +215,8 @@ public static class AutoAssignPrefabHelper
     private static void CheckFieldsOnOpen(MonoBehaviour component, Transform root)
     {
         var type = component.GetType();
-        var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-        foreach (var field in fields)
+        foreach (var field in AutoAssignUtility.GetAllFields(type))
         {
             var att = field.GetCustomAttribute<AutoAssignAttribute>();
             if (att == null)
@@ -219,10 +227,15 @@ public static class AutoAssignPrefabHelper
             // SerializeField는 비어 있어도 fake null 상태라 Object로 캐스팅해서 검사
             if ((Object)value == null)
             {
-                Debug.LogError(
-                    $"AutoAssign.Open :: '{type.Name}.{field.Name}' | 할당되지 않은 필드가 발견되었습니다. 경로: '{att.Path}'",
-                    component);
-                TrackUnresolved(component.gameObject, $"{field.Name} (\"{att.Path}\")");
+                if (!att.Optional)
+                {
+                    Debug.LogError($"AutoAssign.Open :: '{type.Name}.{field.Name}' | 할당되지 않은 필드가 발견되었습니다. 경로: '{att.Path}'", component);
+                    TrackUnresolved(component.gameObject, $"{field.Name} (\"{att.Path}\")");
+                }
+                else
+                {
+                    Debug.LogWarning($"AutoAssign.Open :: '{type.Name}.{field.Name}' | 할당되지 않은 선택적 필드입니다. 경로: '{att.Path}' (Optional)", component);
+                }
                 continue;
             }
 
@@ -231,13 +244,22 @@ public static class AutoAssignPrefabHelper
             if (assignedTransform == null)
                 continue;
 
+            bool isSelfAssign = string.IsNullOrEmpty(att.Path);
+            if (isSelfAssign)
+            {
+                if (assignedTransform != component.transform)
+                {
+                    Debug.LogError($"AutoAssign.Open :: '{type.Name}.{field.Name}' | 빈 경로(자기 자신)로 지정되었으나 다른 오브젝트가 할당되어 있습니다.", component);
+                    TrackUnresolved(component.gameObject, $"{field.Name} (self ≠ assigned)");
+                }
+                continue;
+            }
+
             var fullPath = AutoAssignUtility.GetInnerPath(root, assignedTransform);
 
             if (!AutoAssignUtility.MatchesPathSuffix(fullPath, att.Path))
             {
-                Debug.LogError(
-                    $"AutoAssign.Open :: '{type.Name}.{field.Name}' | 할당된 오브젝트 '{fullPath}'가 지정된 경로 '{att.Path}'와 일치하지 않습니다.",
-                    component);
+                Debug.LogError($"AutoAssign.Open :: '{type.Name}.{field.Name}' | 할당된 오브젝트 '{fullPath}'가 지정된 경로 '{att.Path}'와 일치하지 않습니다.", component);
                 TrackUnresolved(component.gameObject, $"{field.Name} (\"{att.Path}\" ≠ \"{fullPath}\")");
             }
         }
@@ -254,4 +276,3 @@ public static class AutoAssignPrefabHelper
         list.Add(description);
     }
 }
-

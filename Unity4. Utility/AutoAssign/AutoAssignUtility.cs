@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -36,7 +37,7 @@ public static class AutoAssignUtility
     public static bool MatchesPathSuffix(string fullPath, string expectedPath)
     {
         return fullPath == expectedPath
-            || fullPath.EndsWith($"/{expectedPath}", StringComparison.Ordinal);
+               || fullPath.EndsWith($"/{expectedPath}", StringComparison.Ordinal);
     }
 
     public static Transform FindByPathSuffix(Transform root, string path)
@@ -67,40 +68,64 @@ public static class AutoAssignUtility
             _ => null
         };
     }
-    
-    public static FieldResult TryAssignField(MonoBehaviour component, FieldInfo field, Transform root, string targetPath, out Transform foundTransform)
+
+    public static IEnumerable<FieldInfo> GetAllFields(Type type)
     {
-        foundTransform = FindByPathSuffix(root, targetPath);
+        var current = type;
+        while (current != null && current != typeof(MonoBehaviour))
+        {
+            var fields = current.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            foreach (var field in fields)
+                yield return field;
+            current = current.BaseType;
+        }
+    }
+
+    public static FieldResult TryAssignField(MonoBehaviour component, FieldInfo field, string targetPath, out Transform foundTransform)
+    {
+        var root = component.transform;
+        var isSelfAssign = string.IsNullOrEmpty(targetPath);
+        foundTransform = isSelfAssign ? root : FindByPathSuffix(root, targetPath);
+
         if (foundTransform == null)
             return FieldResult.PathNotFound;
 
         var fieldType = field.FieldType;
+        Object resolved = null;
 
         if (fieldType == typeof(GameObject))
         {
-            field.SetValue(component, foundTransform.gameObject);
-            return FieldResult.Assigned;
+            resolved = foundTransform.gameObject;
+        }
+        else if (fieldType == typeof(Transform))
+        {
+            resolved = foundTransform;
+        }
+        else if (typeof(Component).IsAssignableFrom(fieldType))
+        {
+            resolved = foundTransform.GetComponent(fieldType)
+                       ?? foundTransform.GetComponentInChildren(fieldType, true);
+        }
+        else
+        {
+            return FieldResult.UnsupportedType;
         }
 
-        if (fieldType == typeof(Transform))
-        {
-            field.SetValue(component, foundTransform);
-            return FieldResult.Assigned;
-        }
-
-        if (typeof(Component).IsAssignableFrom(fieldType))
-        {
-            var targetComponent = foundTransform.GetComponent(fieldType);
-            if (targetComponent != null)
-            {
-                field.SetValue(component, targetComponent);
-                return FieldResult.Assigned;
-            }
-
+        if (resolved == null)
             return FieldResult.ComponentNotFound;
+
+        var so = new SerializedObject(component);
+        var sp = so.FindProperty(field.Name);
+        if (sp != null)
+        {
+            sp.objectReferenceValue = resolved;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+        else
+        {
+            field.SetValue(component, resolved);
         }
 
-        return FieldResult.UnsupportedType;
+        return FieldResult.Assigned;
     }
 }
-
